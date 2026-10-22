@@ -1,4 +1,5 @@
 import { DEFAULT_SETTINGS, EMPTY_EQUIPMENT, calculateAttributes } from './index'
+import 装备数据库 from './装备数据.json'
 import {
   GEAR_ITEMS,
   ENCHANTS,
@@ -22,8 +23,8 @@ const selection = (item, overrides = {}) => ({
 })
 const slot = (item) => (item.position === 'ring' ? 'ring1' : item.position)
 
-test('导入全部163件符合品质和加速规则的装备，精炼和镶嵌均产生有效属性', () => {
-  expect(GEAR_ITEMS).toHaveLength(163)
+test('导入全部148件符合品质、加速和无双词条规则的装备，精炼和镶嵌均产生有效属性', () => {
+  expect(GEAR_ITEMS).toHaveLength(148)
   expect(new Set(GEAR_ITEMS.map((item) => item.key)).size).toBe(GEAR_ITEMS.length)
   for (const item of GEAR_ITEMS) {
     const result = calculateLoadout({
@@ -42,7 +43,7 @@ test('精简内功防具、首饰和暗器加入装备库并正确汇总攻击�
   const belt = GEAR_ITEMS.find((row) => row.key === 'armors:112444')
   const ring = GEAR_ITEMS.find((row) => row.key === 'trinkets:49922')
   const ranged = GEAR_ITEMS.find((row) => row.key === 'weapons:47966')
-  expect(GEAR_ITEMS.filter((row) => row.school === '精简')).toHaveLength(107)
+  expect(GEAR_ITEMS.filter((row) => row.school === '精简')).toHaveLength(92)
   for (const item of [belt, ring, ranged]) {
     expect(item.school).toBe('精简')
     expect(item.kind).toBe('内功')
@@ -62,6 +63,23 @@ test('精简内功防具、首饰和暗器加入装备库并正确汇总攻击�
   expect(result.stats.physicalShield).toBe(21)
   expect(result.stats.magicalShield).toBe(26)
 })
+test('仅带无双孔的装备移出装备库，旧配装清理该装备并保留其余部位', () => {
+  const belt = 装备数据库.items.find((row) => row.id === 112453)
+  const wrist = 装备数据库.items.find((row) => row.id === 112482)
+  const hat = GEAR_ITEMS.find((row) => row.position === 'hat')
+  const saved = { belt: selection(belt), wrist: selection(wrist), hat: selection(hat) }
+  for (const item of [belt, wrist]) {
+    expect(item.embed.strain_base).toBe(225)
+    expect(GEAR_ITEMS.some((row) => row.id === item.id)).toBe(false)
+    expect(() => calculateLoadout({ [slot(item)]: selection(item) })).toThrow('装备')
+  }
+  const result = normalizeLoadout(saved)
+  expect(result.slots.belt.key).toBe('')
+  expect(result.slots.wrist.key).toBe('')
+  expect(result.slots.hat).toEqual(saved.hat)
+  expect(saved.belt.key).toBe(belt.key)
+})
+
 test('精炼只增加magic属性，镶嵌按Generator压缩系数单独向下取整', () => {
   const item = GEAR_ITEMS.find((row) => row.id === 112560)
   const bare = calculateLoadout({ wrist: selection(item) }).stats

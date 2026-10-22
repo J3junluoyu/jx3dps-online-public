@@ -14,6 +14,7 @@ import React, { useState } from 'react'
 import { useAppSelector } from '@/hooks'
 import 获取当前数据 from '@/数据/数据工具/获取当前数据'
 import { 团队增益类型 } from '@/@types/团队增益'
+import { 获取团队增益禁用原因 } from '@/数据/数据工具/团队增益限制'
 import 团队增益图标 from '../团队增益图标'
 
 const { 默认数据 = {}, 团队增益 } = 获取当前数据()
@@ -38,6 +39,7 @@ const 可支持快捷设置层数 = [80, 85, 90, 95, 100]
 
 function 团队增益设置弹窗({ open, onCancel, onChangeZengyi, 快捷设置团队增益 }) {
   const 增益数据 = useAppSelector((state) => state.data.增益数据)
+  const 当前奇穴信息 = useAppSelector((state) => state.data.当前奇穴信息)
 
   const 团队增益类型: 团队增益类型[] = (
     [
@@ -181,23 +183,21 @@ function 团队增益设置弹窗({ open, onCancel, onChangeZengyi, 快捷设置
                   const 当前是否存在冲突增益 = (增益数据?.团队增益 || []).find(
                     (a) => item?.冲突增益?.includes(a?.增益名称) && a?.启用,
                   )
+                  const 奇穴禁用原因 = 获取团队增益禁用原因(item, 当前奇穴信息)
+                  const 禁用 = !!奇穴禁用原因 || !!当前是否存在冲突增益
                   return (
                     <div className={`tuandui-zengyi-detail-item`} key={item.增益名称}>
                       <Checkbox
-                        checked={当前增益选项?.启用}
+                        checked={!奇穴禁用原因 && !!当前增益选项?.启用}
                         className='tuandui-zengyi-checkbox'
                         onChange={(e) => onChangeZengyi(e?.target?.checked, item)}
-                        disabled={!!当前是否存在冲突增益}
+                        disabled={禁用}
                       >
                         <div className='tuandui-zengyi-checkbox-item'>
-                          <团队增益图标
-                            data={item}
-                            当前数据={当前增益选项}
-                            disabled={!!当前是否存在冲突增益}
-                          />
+                          <团队增益图标 data={item} 当前数据={当前增益选项} disabled={禁用} />
                           <h1
                             className={`tuandui-zengyi-detail-title ${
-                              当前是否存在冲突增益 ? 'tuandui-zengyi-detail-title-disabled' : ''
+                              禁用 ? 'tuandui-zengyi-detail-title-disabled' : ''
                             }`}
                           >
                             {item.增益名称}
@@ -207,9 +207,9 @@ function 团队增益设置弹窗({ open, onCancel, onChangeZengyi, 快捷设置
                               无界
                             </Tag>
                           ) : null}
-                          {当前是否存在冲突增益 ? (
+                          {禁用 ? (
                             <span className={`tuandui-zengyi-detail-title-disabled-tip`}>
-                              增益和【{当前是否存在冲突增益?.增益名称}】冲突
+                              {奇穴禁用原因 || `增益和【${当前是否存在冲突增益?.增益名称}】冲突`}
                             </span>
                           ) : null}
                         </div>
@@ -220,7 +220,7 @@ function 团队增益设置弹窗({ open, onCancel, onChangeZengyi, 快捷设置
                           <div className={'tuandui-zengyi-content-item'}>
                             <span className='tuandui-zengyi-content-item-title'>覆盖率</span>
                             <InputNumber
-                              disabled={!item?.覆盖率支持手动录入}
+                              disabled={!!奇穴禁用原因 || !item?.覆盖率支持手动录入}
                               className='t-z-c-content'
                               placeholder='请输入覆盖率'
                               min={0}
@@ -243,6 +243,7 @@ function 团队增益设置弹窗({ open, onCancel, onChangeZengyi, 快捷设置
                             <div className={'tuandui-zengyi-content-item'}>
                               <span className='tuandui-zengyi-content-item-title'>层数</span>
                               <Select
+                                disabled={!!奇穴禁用原因}
                                 value={当前增益选项?.层数}
                                 className='t-z-c-content'
                                 placeholder='请选择'

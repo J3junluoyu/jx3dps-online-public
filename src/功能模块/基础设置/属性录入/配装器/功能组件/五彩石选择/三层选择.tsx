@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Button, Select } from 'antd'
 import {
   STONES,
-  ATTRIBUTE_LABELS,
+  formatAttributeDescription,
   getStoneAttributeSelection,
   getStoneAttributeOptions,
   selectStoneAttribute,
@@ -31,7 +31,14 @@ function 三层选择({
   }
   return (
     <div className='wucaishi-wrap wucaishi-mingzun'>
-      <span>陆级五彩石</span>
+      <div className='wucaishi-mingzun-header'>
+        <h1 className='zhuangbei-form-title'>五彩石</h1>
+        {value && (
+          <span className='wucaishi-mingzun-name' title={value}>
+            {value}
+          </span>
+        )}
+      </div>
       {[0, 1, 2].map((层) => {
         const 可选 = getStoneAttributeOptions(属性, 层)
         return (
@@ -51,17 +58,17 @@ function 三层选择({
                 )
               })
               const 数值 = 石头?.attributes[键]
-              const 显示数值 =
-                键 === 'vitality_gain' ? `${((Number(数值) / 1024) * 100).toFixed(2)}%` : 数值
               return {
                 value: 键,
-                label: `${ATTRIBUTE_LABELS[键] || 键}${数值 === undefined ? '' : ` +${显示数值}`}`,
+                label: formatAttributeDescription(
+                  键,
+                  数值 === undefined ? undefined : Number(数值),
+                ),
               }
             })}
           />
         )
       })}
-      {value && <span className='wucaishi-mingzun-value'>{value}</span>}
       <Button
         size='small'
         onClick={() => {

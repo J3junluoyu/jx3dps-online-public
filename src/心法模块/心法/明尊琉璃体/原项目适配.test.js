@@ -47,6 +47,15 @@ afterEach(() => {
   delete global.localStorage
 })
 
+test('最佳五彩石数据使用中文属性和数值，体质百分比仅作显示换算', () => {
+  const stone = 明尊五彩石数据[6].find((row) => row.五彩石名称 === '彩·守护·固本·健体(陆)')
+  expect(stone.装备增益.map((row) => row.增益名称)).toEqual(['全主属性 +46', '体质加成 +7.91%'])
+  expect(stone.装备增益.map((row) => row.增益数值)).toEqual([46, 81])
+  for (const row of 明尊五彩石数据[6]) {
+    expect(row.装备增益.map((gain) => gain.增益名称).join('、')).not.toMatch(/[a-z_]/i)
+  }
+})
+
 test('原配装器完整保留体质孔、仇恨孔、附魔及特例五彩石的计算属性', () => {
   const 武器 = GEAR_ITEMS.find((项) => 项.position === 'primary_weapon')
   const 帽子 = GEAR_ITEMS.find((项) => 项.id === 112319)

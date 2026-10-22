@@ -1,0 +1,258 @@
+/** @jest-environment jsdom */
+
+jest.mock('@/hooks', () => ({ useAppSelector: (select) => select(mockState) }))
+jest.mock('@/功能模块/基础设置/属性录入/配装器/功能组件/方案优化/创建Worker', () => ({
+  创建优化Worker: jest.fn(() => ({ postMessage: jest.fn(), terminate: jest.fn() })),
+}))
+jest.mock('@/功能模块/基础设置/属性录入/配装器/功能组件/方案优化/index.module.less', () => ({}))
+jest.mock('antd', () => {
+  const React = require('react')
+  const element = React.createElement
+  const Group = ({ options, value }) =>
+    element('div', null, `${value.length}/${options.length}部位`)
+  const Checkbox = ({ checked, onChange, disabled, children }) =>
+    element(
+      'label',
+      null,
+      element('input', { type: 'checkbox', checked, onChange, disabled }),
+      children,
+    )
+  Checkbox.Group = Group
+  return {
+    Button: ({ children, ...props }) =>
+      element('button', { onClick: props.onClick, disabled: props.disabled }, children),
+    Modal: ({ open, children, footer, onCancel }) =>
+      open
+        ? element(
+            'section',
+            { role: 'dialog' },
+            element('button', { onClick: onCancel }, '关闭'),
+            children,
+            footer,
+          )
+        : null,
+    Select: ({ value, onChange, options, disabled }) =>
+      element(
+        'select',
+        { value, disabled, onChange: (e) => onChange(e.target.value) },
+        options.map((item) =>
+          element('option', { value: item.value, key: item.value }, item.label),
+        ),
+      ),
+    InputNumber: ({ value, onChange, disabled }) =>
+      element('input', {
+        type: 'number',
+        value,
+        disabled,
+        'aria-label': '最低御劲',
+        onChange: (e) => onChange(Number(e.target.value)),
+      }),
+    Checkbox,
+    Alert: ({ message }) => element('div', { role: 'alert' }, message),
+    Descriptions: ({ items }) =>
+      element(
+        'div',
+        null,
+        items.map((item) => element('div', { key: item.key }, item.label, item.children)),
+      ),
+    Divider: ({ children }) => element('div', null, children),
+    Progress: ({ percent }) => element('progress', { value: percent, max: 100 }),
+    Table: ({ dataSource }) => element('div', null, JSON.stringify(dataSource)),
+    message: { error: jest.fn() },
+  }
+})
+
+import React, { act } from 'react'
+import { createRoot } from 'react-dom/client'
+import { fireEvent, getByRole } from '@testing-library/dom'
+import 方案优化 from '@/功能模块/基础设置/属性录入/配装器/功能组件/方案优化'
+import { 创建优化Worker } from '@/功能模块/基础设置/属性录入/配装器/功能组件/方案优化/创建Worker'
+import { 转换明尊配装 } from '@/数据/数据工具/明尊数据适配'
+import { GEAR_ITEMS, SLOTS, slotPosition } from './装备'
+import { 获取明尊固定秘籍 } from './秘籍'
+import 循环列表 from './计算循环'
+
+global.IS_REACT_ACT_ENVIRONMENT = true
+const mockState = {
+  data: {
+    增益数据: {
+      小吃: [],
+      阵眼: 'T阵',
+      团队增益: [{ 增益名称: '同袍', 启用: true, 层数: 1, 覆盖率: 100 }],
+    },
+    增益启用: true,
+    当前奇穴信息: 循环列表[0].奇穴,
+    当前秘籍信息: 获取明尊固定秘籍(),
+    当前输出计算目标名称: '',
+  },
+}
+const 初始 = {
+  slots: Object.fromEntries(
+    SLOTS.map(([slot]) => {
+      const item = GEAR_ITEMS.find((row) => row.position === slotPosition(slot))
+      return [slot, { key: item.key, strength: 6, embeds: [], enchantId: 0 }]
+    }),
+  ),
+  stone: 0,
+}
+let root
+let container
+beforeEach(() => {
+  创建优化Worker.mockClear()
+  container = document.createElement('div')
+  document.body.appendChild(container)
+  root = createRoot(container)
+})
+afterEach(() => {
+  act(() => root.unmount())
+  container.remove()
+})
+const click = async (text) => {
+  const button = [...container.querySelectorAll('button')].find((item) => item.textContent === text)
+  if (!button) throw new Error(`按钮不存在：${text}`)
+  await act(async () => button.click())
+}
+const render = (extra = {}) => {
+  const props = {
+    循环名称: 循环列表[0].名称,
+    默认镶嵌宝石等级: 8,
+    获取装备信息: jest.fn(async () => 转换明尊配装(初始.slots)),
+    获取候选装备键: () => GEAR_ITEMS.map((item) => item.key),
+    应用方案: jest.fn(),
+    ...extra,
+  }
+  act(() => root.render(React.createElement(方案优化, props)))
+  return props
+}
+const finish = () => {
+  const task = 创建优化Worker.mock.results.at(-1).value
+  const input = task.postMessage.mock.calls[0][0]
+  const metrics = { dps: 12345.678, haste: 1800, gcd: 0.8125, toughness: 8.12345 }
+  const result = {
+    plan: input.initial,
+    before: metrics,
+    after: metrics,
+    evaluations: 100,
+    elapsed: 1000,
+  }
+  act(() => task.onmessage({ data: { type: 'result', result } }))
+  return { task, input, result }
+}
+
+test('方案优化先预览再应用，后台请求保留固定五彩石并清除团队加成', async () => {
+  const props = render()
+  await click('方案优化')
+  expect(container.querySelector('[role="dialog"]')).not.toBeNull()
+  await click('开始优化')
+  const { task, input, result } = finish()
+  expect(input.initial.stone).toBe(0)
+  expect(input.initial.formation).toBe('T阵')
+  expect(input.minToughness).toBe(8)
+  expect(input.includeMowen).toBe(true)
+  expect(input.includeHasteConsumables).toBe(true)
+  expect(input.teamGains).toEqual([])
+  expect(input.settings.gains.toughness_base || 0).toBe(0)
+  expect(input.settings.gains.vitality_gain || 0).toBe(0)
+  expect(props.应用方案).not.toHaveBeenCalled()
+  expect(container.textContent).toContain('12345.68')
+  expect(container.textContent).toContain('8.12%')
+  await click('应用并计算')
+  expect(props.应用方案).toHaveBeenCalledWith(result.plan, 循环列表[0].名称, false)
+  expect(task.terminate).toHaveBeenCalled()
+  expect(container.querySelector('[role="dialog"]')).toBeNull()
+})
+
+test('修改御劲条件后不能应用旧结果，下一次计算使用新要求', async () => {
+  const props = render()
+  await click('方案优化')
+  await click('开始优化')
+  finish()
+  act(() =>
+    fireEvent.change(container.querySelector('input[type="number"]'), { target: { value: '9.5' } }),
+  )
+  const apply = [...container.querySelectorAll('button')].find(
+    (item) => item.textContent === '应用并计算',
+  )
+  expect(apply.disabled).toBe(true)
+  await click('开始优化')
+  const task = 创建优化Worker.mock.results.at(-1).value
+  expect(task.postMessage.mock.calls[0][0].minToughness).toBe(9.5)
+  await click('停止计算')
+  expect(task.terminate).toHaveBeenCalled()
+  expect(props.应用方案).not.toHaveBeenCalled()
+})
+
+test('读取配装期间关闭弹窗会取消任务，不创建遗留后台计算', async () => {
+  let resolve
+  render({
+    获取装备信息: () =>
+      new Promise((done) => {
+        resolve = done
+      }),
+  })
+  await click('方案优化')
+  await click('开始优化')
+  await click('关闭')
+  await act(async () => resolve(转换明尊配装(初始.slots)))
+  expect(创建优化Worker).not.toHaveBeenCalled()
+})
+
+test('莫问阵默认参与优化，取消勾选会清除旧结果并更新后台条件，计算中禁止修改', async () => {
+  render()
+  await click('方案优化')
+  const checkbox = container.querySelector('input[type="checkbox"]')
+  expect(checkbox.checked).toBe(true)
+  await click('开始优化')
+  expect(checkbox.disabled).toBe(true)
+  expect(finish().input.includeMowen).toBe(true)
+  expect(checkbox.disabled).toBe(false)
+  act(() => fireEvent.click(checkbox))
+  expect(checkbox.checked).toBe(false)
+  expect(
+    [...container.querySelectorAll('button')].find((item) => item.textContent === '应用并计算')
+      .disabled,
+  ).toBe(true)
+  await click('开始优化')
+  const task = 创建优化Worker.mock.results.at(-1).value
+  expect(task.postMessage.mock.calls[0][0].includeMowen).toBe(false)
+  await click('停止计算')
+})
+
+test('加速增益默认参与，取消后旧结果失效并更新后台条件，计算期间禁止修改', async () => {
+  render()
+  await click('方案优化')
+  const checkbox = getByRole(container, 'checkbox', { name: '加速增益' })
+  expect(checkbox.checked).toBe(true)
+  await click('开始优化')
+  expect(checkbox.disabled).toBe(true)
+  expect(finish().input.includeHasteConsumables).toBe(true)
+  expect(checkbox.disabled).toBe(false)
+  act(() => fireEvent.click(checkbox))
+  expect(checkbox.checked).toBe(false)
+  expect(getByRole(container, 'button', { name: '应用并计算' }).disabled).toBe(true)
+  expect(container.textContent).toContain('加速药品与食品不参与优化，家园酒品仍参与')
+  await click('开始优化')
+  expect(checkbox.disabled).toBe(true)
+  expect(finish().input.includeHasteConsumables).toBe(false)
+})
+
+test('计入团队增益默认关闭，修改后旧结果失效，开启时传入原配置并在应用时保留', async () => {
+  const props = render()
+  await click('方案优化')
+  const checkbox = getByRole(container, 'checkbox', { name: '计入当前团队增益' })
+  expect(checkbox.checked).toBe(false)
+  await click('开始优化')
+  expect(finish().input.teamGains).toEqual([])
+  act(() => fireEvent.click(checkbox))
+  expect(getByRole(container, 'button', { name: '应用并计算' }).disabled).toBe(true)
+  await click('开始优化')
+  expect(checkbox.disabled).toBe(true)
+  const { input, result } = finish()
+  expect(input.teamGains).toEqual(mockState.data.增益数据.团队增益)
+  expect(input.teamGains).not.toBe(mockState.data.增益数据.团队增益)
+  expect(input.teamGains[0]).not.toBe(mockState.data.增益数据.团队增益[0])
+  expect(container.textContent).toContain('以上秒伤计入当前已启用的团队增益')
+  expect(mockState.data.增益数据.团队增益[0].启用).toBe(true)
+  await click('应用并计算')
+  expect(props.应用方案).toHaveBeenCalledWith(result.plan, 循环列表[0].名称, true)
+})

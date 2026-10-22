@@ -9,9 +9,31 @@
   gap: 8px;
 }
 
-.wucaishi-mingzun-value {
+.wucaishi-mingzun-header {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  height: 26px;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  line-height: 26px;
+}
+
+.wucaishi-mingzun-header .zhuangbei-form-title {
+  flex-shrink: 0;
+  line-height: inherit;
+}
+
+.wucaishi-mingzun-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
   color: #d72ad7;
-  overflow-wrap: anywhere;
+  font-size: 14px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .wucaishi-xuanze-wrap .wucaishi-xuanze {

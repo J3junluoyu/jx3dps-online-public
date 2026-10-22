@@ -91,7 +91,7 @@ function 最佳五彩石设置({ 一键替换五彩石, 对比秒伤, 对比装�
           }),
         )
         // 显示五彩石属性简写
-        const 五彩石属性 = 当前五彩石?.装备增益?.map((item) => item?.增益名称)?.join(' ')
+        const 五彩石属性 = 当前五彩石?.装备增益?.map((item) => item?.增益名称) || []
         全部五彩石秒伤数据.push({
           名称: 当前五彩石?.五彩石名称,
           属性: 五彩石属性,
@@ -188,6 +188,7 @@ function 最佳五彩石设置({ 一键替换五彩石, 对比秒伤, 对比装�
           )}
 
           <Table
+            rowKey='名称'
             className='max-wucaishi-table'
             size='small'
             pagination={false}
@@ -230,8 +231,8 @@ function 最佳五彩石设置({ 一键替换五彩石, 对比秒伤, 对比装�
                 title: '属性',
                 dataIndex: '属性',
                 width: 150,
-                render: (value) => {
-                  return <div>{value}</div>
+                render: (value: string[]) => {
+                  return value.map((属性) => <div key={属性}>{属性}</div>)
                 },
               },
               {
@@ -266,6 +267,6 @@ export default 最佳五彩石设置
 interface 五彩石秒伤数据类型 {
   名称: string
   秒伤: number
-  属性: string
+  属性: string[]
   较当前比较: number // 1 高 2低 3 不变
 }

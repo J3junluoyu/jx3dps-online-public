@@ -5,6 +5,9 @@ import type { 小药小吃数据类型 } from '@/@types/小药小吃'
 import type { 团队增益数据类型, 增益选项数据类型 } from '@/@types/团队增益'
 import { ATTRIBUTE_LABELS } from './装备'
 import { 获取明尊阵眼属性 } from './阵眼'
+import { 获取团队增益禁用原因 } from '@/数据/数据工具/团队增益限制'
+import { calculateAttributes } from './计算'
+import type { EquipmentStats, Settings } from './计算'
 
 type Attributes = Record<string, number>
 interface BuffRecord {
@@ -252,7 +255,17 @@ export const 明尊团队增益: TeamGain[] = [
     ),
     冲突增益: ['虚弱'],
   },
-  team('3980', '4058', '1', '目标减益', '戒火斩', '目标受到各类伤害系数增加21/1024（约2.05%）'),
+  {
+    ...team(
+      '3980',
+      '4058',
+      '1',
+      '目标减益',
+      '戒火斩',
+      '目标受到各类伤害系数增加21/1024（约2.05%）',
+    ),
+    冲突奇穴: [{ id: '44569', 奇穴名称: '炽炎镇恶' }],
+  },
   team('10438', '10100', '3', '食物增益'),
   team('10179', '2563', '1', '食物增益'),
   team('10179', '18428', '1', '食物增益', '同泽'),
@@ -277,6 +290,7 @@ export function 获取明尊增益属性(
   data?: 增益选项数据类型,
   enabled = false,
   常驻层数?: number,
+  talents: Settings['talents'] = [],
 ): Attributes {
   const result: Attributes = {}
   if (!enabled) return result
@@ -296,6 +310,7 @@ export function 获取明尊增益属性(
   for (const item of 明尊团队增益) {
     const selection = selected.get(item.增益名称)
     if (!selection?.启用) continue
+    if (获取团队增益禁用原因(item, talents)) continue
     if (item.冲突增益?.some((name) => applied.has(name))) continue
     const stacks =
       item.增益名称 === 圣浴常驻名称
@@ -315,4 +330,19 @@ export function 获取明尊增益属性(
     applied.add(item.增益名称)
   }
   return result
+}
+
+/** 常驻朝圣层数随当前候选配装的基础体质更新，不能复用保存的旧层数。 */
+export function 获取明尊战斗增益(
+  data: 增益选项数据类型 | undefined,
+  enabled: boolean,
+  equipment: EquipmentStats,
+  settings: Settings,
+): Attributes {
+  const gains = 获取明尊增益属性(data, enabled, undefined, settings.talents)
+  if (enabled && data?.团队增益?.some((row) => row.增益名称 === 圣浴常驻名称 && row.启用)) {
+    const panel = calculateAttributes(equipment, { ...settings, gains })
+    return 获取明尊增益属性(data, enabled, 获取圣浴常驻层数(panel.baseVitality), settings.talents)
+  }
+  return gains
 }

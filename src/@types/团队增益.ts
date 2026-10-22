@@ -37,6 +37,7 @@ export interface 团队增益数据类型 {
   层数选项数组?: number[]
   层数自动计算?: boolean
   冲突增益?: string[]
+  冲突奇穴?: { id: string; 奇穴名称: string }[]
   增益图片: string
   增益描述?: string
   增益来源?: string

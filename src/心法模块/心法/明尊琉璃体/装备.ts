@@ -39,7 +39,10 @@ const database = data as unknown as {
 }
 export const MIN_GEAR_LEVEL = 1110
 export const GEAR_ITEMS = database.items.filter(
-  (row) => row.level >= MIN_GEAR_LEVEL && (row.kind !== '防御' || Number(row.magic.haste_base) > 0),
+  (row) =>
+    row.level >= MIN_GEAR_LEVEL &&
+    (row.kind !== '防御' || Number(row.magic.haste_base) > 0) &&
+    (Number(row.base.strain_base) > 0 || Number(row.magic.strain_base) > 0),
 )
 export function gearAttributeSuffix(item: GearItem): string {
   const has = (...keys: string[]) => keys.some((key) => Number(item.magic[key]) > 0)
@@ -253,6 +256,14 @@ export const ATTRIBUTE_LABELS: Record<string, string> = {
   atModifyCostManaPercent: '内力消耗调整',
   atActiveThreatCoefficient: '招式产生威胁',
 }
+
+export const formatAttributeDescription = (key: string, value?: number) => {
+  const label = ATTRIBUTE_LABELS[key] || key
+  if (value === undefined) return label
+  const amount = key === 'vitality_gain' ? `${((value / 1024) * 100).toFixed(2)}%` : value
+  return `${label} ${value >= 0 ? '+' : ''}${amount}`
+}
+
 const mapping: Record<string, (keyof EquipmentStats)[]> = {
   vitality_base: ['vitality'],
   spunk_base: ['spunk'],

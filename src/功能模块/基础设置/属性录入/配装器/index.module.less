@@ -1,5 +1,45 @@
-.footer {
+.cycleSelect {
   display: flex;
   align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  font-weight: 400;
+}
+
+.footer {
+  display: flex;
+  align-items: flex-end;
   justify-content: space-between;
+  gap: 24px;
+  text-align: left;
+}
+
+.comparison {
+  flex: 1;
+  min-width: 0;
+
+  :global {
+    .dps-diff {
+      display: flex;
+      flex-direction: row;
+      gap: 16px;
+      max-width: 520px;
+    }
+
+    .dps-diff-item {
+      flex: 1;
+      min-width: 0;
+      margin: 0;
+    }
+
+    .dps-diff-dps {
+      white-space: nowrap;
+    }
+  }
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
 }

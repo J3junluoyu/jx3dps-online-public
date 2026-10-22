@@ -20,7 +20,7 @@ import { 明尊秘籍选项 } from '@/心法模块/心法/明尊琉璃体/秘籍
 import { 使用基础循环格式 } from '@/心法模块/心法/明尊琉璃体/计算循环/基础循环'
 import { 计算明尊基础循环 } from './基础循环'
 import { 获取明尊技能显示信息 } from './技能显示'
-import { 获取明尊增益属性, 获取圣浴常驻层数, 圣浴常驻名称 } from '@/心法模块/心法/明尊琉璃体/增益'
+import { 获取明尊增益属性, 获取明尊战斗增益 } from '@/心法模块/心法/明尊琉璃体/增益'
 
 export const 规范明尊奇穴 = (名称: string[] = []) =>
   normalizeTalents(
@@ -51,6 +51,9 @@ export function 获取明尊计算设置(
   装备属性?: EquipmentStats,
 ): Settings {
   const 已选秘籍 = new Set(Object.values(规范明尊秘籍(秘籍)).flat())
+  const 奇穴ID = normalizeTalents(
+    TALENTS.filter((项) => 奇穴.includes(项.name) || 奇穴.includes(项.id)).map((项) => 项.id),
+  )
   const 设置: Settings = {
     ...DEFAULT_SETTINGS,
     ...增益数据?.明尊设置,
@@ -58,22 +61,13 @@ export function 获取明尊计算设置(
     sunlight: true,
     stance: 增益数据?.明尊设置?.stance === 'mainTank' ? 'mainTank' : 'offTank',
     targetLevel: 目标等级,
-    gains: 获取明尊增益属性(增益数据, 增益启用),
-    talents: normalizeTalents(
-      TALENTS.filter((项) => 奇穴.includes(项.name) || 奇穴.includes(项.id)).map((项) => 项.id),
-    ),
+    gains: 获取明尊增益属性(增益数据, 增益启用, undefined, 奇穴ID),
+    talents: 奇穴ID,
     recipes: 明尊秘籍选项.flatMap((组) =>
       组.records.filter((项) => 已选秘籍.has(项.value)).map((项) => 项.recipe_key),
     ),
   }
-  if (
-    装备属性 &&
-    增益启用 &&
-    增益数据?.团队增益?.some((row) => row.增益名称 === 圣浴常驻名称 && row.启用)
-  ) {
-    const 面板 = calculateAttributes(装备属性, 设置)
-    设置.gains = 获取明尊增益属性(增益数据, 增益启用, 获取圣浴常驻层数(面板.baseVitality))
-  }
+  if (装备属性) 设置.gains = 获取明尊战斗增益(增益数据, 增益启用, 装备属性, 设置)
   return 设置
 }
 

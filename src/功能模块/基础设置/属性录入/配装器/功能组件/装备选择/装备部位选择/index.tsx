@@ -20,8 +20,12 @@ import {
 } from '@/@types/装备'
 import { 秒伤计算 } from '@/计算模块/计算函数'
 import { 属性类型 } from '@/@types/属性'
+import type { 循环数据 } from '@/@types/循环'
+import 获取当前数据 from '@/数据/数据工具/获取当前数据'
+import { MIN_GEAR_LEVEL } from '@/心法模块/心法/明尊琉璃体/装备'
 
 import 根据表单选项获取装备信息 from '../../../工具函数/根据表单选项获取装备信息'
+import { 获取寻优循环详情 } from '../../../工具函数/循环加速要求'
 import { 获取最大精炼等级 } from '..'
 
 import 装备详情容器 from './装备详情容器'
@@ -29,6 +33,8 @@ import 渐变特效文字 from './渐变特效文字'
 import styles from './index.module.less'
 import './index.css'
 import classNames from 'classnames'
+
+const 智能对比最低品级 = 获取当前数据().名称 === '明尊琉璃体' ? MIN_GEAR_LEVEL : 18900
 
 interface 装备部位选择入参 {
   value?: number // 装备ID
@@ -44,6 +50,7 @@ interface 装备部位选择入参 {
   对比显示百分比: boolean
   对比加速: boolean
   装备选择范围: 装备选择范围类型
+  寻优循环?: 循环数据
 }
 
 function 装备部位选择(props: 装备部位选择入参, ref) {
@@ -59,12 +66,15 @@ function 装备部位选择(props: 装备部位选择入参, ref) {
     对比显示百分比,
     对比加速,
     装备选择范围,
+    寻优循环,
     onChange,
     ...options
   } = props
 
   const 当前计算结果 = useAppSelector((state) => state?.data?.当前计算结果)
   const 当前装备信息 = useAppSelector((state) => state?.data?.装备信息)
+  const 增益数据 = useAppSelector((state) => state?.data?.增益数据)
+  const 增益启用 = useAppSelector((state) => state?.data?.增益启用)
   const [dpsUpList, setDpsUpList] = useState<
     {
       uuid: string
@@ -152,15 +162,23 @@ function 装备部位选择(props: 装备部位选择入参, ref) {
   }, [allValue, 实际装备列表])
 
   // 获取dps提升装备列表
-  const getDpsUpList = (获取最佳装备?) => {
+  const getDpsUpList = (获取最佳装备?, 指定循环 = 寻优循环) => {
     if (开启装备智能对比) {
       setLoading(true)
       // 获取旧装备列表
       const 当前装备列表信息 = form?.getFieldsValue()
       const 当前装备信息 = 根据表单选项获取装备信息(当前装备列表信息)
+      const 固定循环 = 获取最佳装备 ? 指定循环 : undefined
+      const 原循环详情 = 固定循环
+        ? 获取寻优循环详情(固定循环, 当前装备信息, 增益数据, 增益启用) || 固定循环.循环详情[0]
+        : undefined
 
       const { 秒伤: 旧秒伤 } = dispatch(
-        秒伤计算({ 更新装备信息: 当前装备信息, 计算技能详情: false }),
+        秒伤计算({
+          更新装备信息: 当前装备信息,
+          更新计算循环详情: 原循环详情,
+          计算技能详情: false,
+        }),
       )
 
       // 传入新的装备
@@ -187,16 +205,21 @@ function 装备部位选择(props: 装备部位选择入参, ref) {
                   加速对比条件
                 )
               } else {
-                return item.装备品级 >= 18900 && 加速对比条件
+                return item.装备品级 >= 智能对比最低品级 && 加速对比条件
               }
             } else {
               if (部位 === '武器') {
-                return item.装备品级 >= 18900 && item.装备特效 !== 装备特效枚举.大橙武特效
+                return (
+                  item.装备品级 >= 智能对比最低品级 &&
+                  item.装备特效 !== 装备特效枚举.大橙武特效 &&
+                  加速对比条件
+                )
               }
-              return item.装备品级 >= 18900 && 加速对比条件
+              return item.装备品级 >= 智能对比最低品级 && 加速对比条件
             }
           }
-          const 基本条件 = item.装备品级 >= 18900 || item.装备特效 === 装备特效枚举.大橙武特效
+          const 基本条件 =
+            item.装备品级 >= 智能对比最低品级 || item.装备特效 === 装备特效枚举.大橙武特效
 
           return 基本条件 && 加速对比条件
         })
@@ -221,9 +244,18 @@ function 装备部位选择(props: 装备部位选择入参, ref) {
             ...当前装备列表信息,
             [`${部位索引}`]: 新装备数据,
           })
+          const 固定循环详情 = 固定循环
+            ? 获取寻优循环详情(固定循环, 更新后装备信息, 增益数据, 增益启用)
+            : undefined
+          // 寻优固定所选循环，不能借助自动切换循环获得跨档收益。
+          if (固定循环 && !固定循环详情) return undefined
 
           const { 秒伤: 更新后秒伤 } = dispatch(
-            秒伤计算({ 更新装备信息: 更新后装备信息, 计算技能详情: false }),
+            秒伤计算({
+              更新装备信息: 更新后装备信息,
+              更新计算循环详情: 固定循环详情,
+              计算技能详情: false,
+            }),
           )
 
           const 旧伤害 = 旧秒伤 || 当前计算结果?.秒伤
@@ -241,12 +273,11 @@ function 装备部位选择(props: 装备部位选择入参, ref) {
             dpsPercent: dpsPercent,
           }
         })
+        .filter((item): item is NonNullable<typeof item> => item !== undefined)
 
       setLoading(false)
+      if (!获取最佳装备) setDpsUpList(newDpsUpList)
       if (newDpsUpList?.length) {
-        if (!获取最佳装备) {
-          setDpsUpList(newDpsUpList)
-        }
         // 过滤因加速导致无法计算的情况
         const upDpsList = newDpsUpList?.filter((item) => Math.abs(+item.dpsUp) >= 0)
         upDpsList?.sort((a, b) => +b.dpsUp - +a.dpsUp)
@@ -259,9 +290,9 @@ function 装备部位选择(props: 装备部位选择入参, ref) {
   /**
    * @return 返回 当前是否替换
    */
-  const 选择最佳装备 = async (showTip?) => {
+  const 选择最佳装备 = async (showTip?, 指定循环 = 寻优循环) => {
     setLoading(true)
-    const maxId = await getDpsUpList(true)
+    const maxId = await getDpsUpList(true, 指定循环)
     setLoading(false)
     if (maxId) {
       if (maxId !== allValue?.id) {
@@ -277,11 +308,13 @@ function 装备部位选择(props: 装备部位选择入参, ref) {
         return false
       }
     }
+    if (showTip && 指定循环) message.warning(`当前范围内没有满足${指定循环.名称}加速要求的装备`)
     return false
   }
 
   useImperativeHandle(ref, () => ({
     选择最佳装备: 选择最佳装备,
+    获取候选装备: () => 实际装备列表,
   }))
 
   const cls = classNames('zhuangbei-select', { 'equip-diff-change': 是否更换装备 })
@@ -318,10 +351,7 @@ function 装备部位选择(props: 装备部位选择入参, ref) {
         {...options}
       >
         {实际装备列表.map((item, i) => {
-          const upItem = dpsUpList?.find((up) => up.uuid === `${item?.uid}${item?.id}`) || {
-            dpsUp: 0,
-            dpsPercent: 0,
-          }
+          const upItem = dpsUpList?.find((up) => up.uuid === `${item?.uid}${item?.id}`)
           return (
             <Select.Option
               className={'zhuangbei-select-item'}
@@ -377,9 +407,9 @@ function 装备部位选择(props: 装备部位选择入参, ref) {
                   </span>
                 </div>
                 <div>
-                  {upItem?.dpsUp !== 0 ? (
+                  {开启装备智能对比 && upItem ? (
                     <span
-                      className={`zhuangbei-diff ${+upItem?.dpsUp > 0 ? 'dps-up-color' : 'dps-low-color'}`}
+                      className={`zhuangbei-diff ${upItem.dpsUp === 0 ? '' : +upItem.dpsUp > 0 ? 'dps-up-color' : 'dps-low-color'}`}
                     >
                       {+upItem?.dpsUp > 0 ? '+' : ''}
                       {对比显示百分比 && upItem?.dpsPercent

@@ -6,6 +6,7 @@ import 获取当前数据 from '@/数据/数据工具/获取当前数据'
 import classNames from 'classnames'
 import { 触发秒伤计算 } from '@/计算模块/计算函数'
 import { 更新团队增益轴 } from '@/store/data'
+import { 获取团队增益禁用原因 } from '@/数据/数据工具/团队增益限制'
 
 import 团队增益设置弹窗 from './团队增益设置弹窗'
 import 团队增益轴设置弹窗 from './团队增益轴设置弹窗'
@@ -17,6 +18,7 @@ const { 团队增益 = [] } = 获取当前数据()
 
 function 团队增益选择({ 保存数据并计算 }) {
   const 增益数据 = useAppSelector((state) => state.data.增益数据)
+  const 当前奇穴信息 = useAppSelector((state) => state.data.当前奇穴信息)
   const 新手引导流程状态 = useAppSelector((state) => state.system.新手引导流程状态)
 
   const [设置增益弹窗展示, 更新设置增益弹窗展示] = useState<boolean>(false)
@@ -27,6 +29,7 @@ function 团队增益选择({ 保存数据并计算 }) {
   // const [visible, setVisible] = useState<boolean>(false)
 
   const onChangeZengyi = (e: boolean | null, 增益: 团队增益数据类型, 层数?, 覆盖率?) => {
+    if (获取团队增益禁用原因(增益, 当前奇穴信息)) return
     const exist = 增益数据?.团队增益?.some((item) => item.增益名称 === 增益?.增益名称)
     const newData: 增益选项数据类型 = {
       ...增益数据,
@@ -70,7 +73,13 @@ function 团队增益选择({ 保存数据并计算 }) {
   const 快捷设置团队增益 = (data) => {
     const newData: 增益选项数据类型 = {
       ...增益数据,
-      团队增益: [...(data || [])],
+      团队增益: (data || []).filter(
+        (item) =>
+          !获取团队增益禁用原因(
+            团队增益.find((增益) => 增益.增益名称 === item.增益名称),
+            当前奇穴信息,
+          ),
+      ),
     }
     保存数据并计算(newData)
   }
@@ -80,7 +89,8 @@ function 团队增益选择({ 保存数据并计算 }) {
       团队增益
         .filter((item) => {
           return (
-            (增益数据?.团队增益 || []).find((a) => item?.增益名称 === a?.增益名称)?.启用 || false
+            !!(增益数据?.团队增益 || []).find((a) => item?.增益名称 === a?.增益名称)?.启用 &&
+            !获取团队增益禁用原因(item, 当前奇穴信息)
           )
         })
         .map((item) => {
@@ -91,7 +101,7 @@ function 团队增益选择({ 保存数据并计算 }) {
           }
         }) || []
     )
-  }, [团队增益, 增益数据])
+  }, [团队增益, 增益数据, 当前奇穴信息])
 
   const cls = classNames('tuandui-list', 新手引导流程状态 ? 'onGuide' : '')
 

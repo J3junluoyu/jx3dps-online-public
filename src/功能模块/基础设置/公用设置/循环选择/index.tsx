@@ -15,7 +15,8 @@ import './index.css'
 const { 名称, 装备数据 } = 获取当前数据()
 
 function 循环选择(props) {
-  const { className, 不提示循环, 不更新秒伤 } = props
+  const { className, 不提示循环, 不更新秒伤, value, onChange } = props
+  const 外部控制循环 = !!onChange
   const { modal } = App.useApp()
   const dispatch = useAppDispatch()
   const 当前计算循环名称 = useAppSelector((state) => state?.data?.当前计算循环名称)
@@ -25,11 +26,16 @@ function 循环选择(props) {
   const 实际循环名称 = 当前循环信息?.名称
 
   useEffect(() => {
-    if (名称 === '明尊琉璃体' && 实际循环名称 && 实际循环名称 !== 当前计算循环名称) {
+    if (
+      !外部控制循环 &&
+      名称 === '明尊琉璃体' &&
+      实际循环名称 &&
+      实际循环名称 !== 当前计算循环名称
+    ) {
       dispatch(更新方案数据({ 属性: '当前计算循环名称', 数据: 实际循环名称 }))
       if (!不更新秒伤) dispatch(触发秒伤计算({ 是否更新显示计算结果: true }))
     }
-  }, [dispatch, 实际循环名称, 当前计算循环名称, 不更新秒伤])
+  }, [dispatch, 实际循环名称, 当前计算循环名称, 不更新秒伤, 外部控制循环])
 
   const 切换循环前校验 = (val) => {
     const 目标循环数据 = 全部循环?.find((item) => item?.名称 === val)
@@ -81,6 +87,10 @@ function 循环选择(props) {
   }
 
   const 切换循环 = (val) => {
+    if (外部控制循环) {
+      onChange(val)
+      return
+    }
     const 目标循环数据 = 全部循环?.find((item) => item?.名称 === val)
     dispatch(更新方案数据({ 属性: '当前计算循环名称', 数据: val }))
     dispatch(更新方案数据({ 属性: '当前奇穴信息', 数据: 目标循环数据?.奇穴 }))
@@ -114,7 +124,7 @@ function 循环选择(props) {
       <h1 className='common-label'>循环</h1>
       <div className='common-content'>
         <Select
-          value={实际循环名称 || 当前计算循环名称}
+          value={外部控制循环 ? value : 实际循环名称 || 当前计算循环名称}
           className='cycle-select'
           onChange={(v) => {
             if (不提示循环) {

@@ -269,6 +269,38 @@ test('立地只作用内功防御，虚弱只作用外功防御，戒火使用�
     )
 })
 
+test.each([0, 50, 100])(
+  '炽炎镇恶使%s%%覆盖的戒火易伤失效，其他增益及常驻朝圣保持原规则',
+  (coverage) => {
+    const data = selected(['戒火斩', '秋肃', 圣浴常驻名称])
+    data.团队增益[0].覆盖率 = coverage
+    const original = JSON.stringify(data)
+    const noFire = { ...data, 团队增益: data.团队增益.filter((row) => row.增益名称 !== '戒火斩') }
+    for (const equipment of [undefined, raw]) {
+      const settings = 获取明尊计算设置(['44569'], data, {}, 53, true, equipment)
+      const without = 获取明尊计算设置(['44569'], noFire, {}, 53, true, equipment)
+      expect(settings.gains).toEqual(without.gains)
+      expect(获取明尊增益属性(data, true, undefined, settings.talents)).toEqual(
+        获取明尊增益属性(noFire, true),
+      )
+      const restored = 获取明尊计算设置([], data, {}, 53, true, equipment)
+      const base = 获取明尊计算设置([], noFire, {}, 53, true, equipment)
+      for (const id of ['14701', '4326']) {
+        const skill = SKILLS.find((item) => item.id === id)
+        const restoredHit = calculateSkill(skill, calculateAttributes(raw, restored)).expected
+        const baseHit = calculateSkill(skill, calculateAttributes(raw, base)).expected
+        if (coverage) expect(restoredHit).toBeGreaterThan(baseHit)
+        else expect(restoredHit).toBe(baseHit)
+        expect(calculateSkill(skill, calculateAttributes(raw, settings))).toEqual(
+          calculateSkill(skill, calculateAttributes(raw, without)),
+        )
+      }
+    }
+    expect(JSON.stringify(data)).toBe(original)
+    expect(data.团队增益[0].启用).toBe(true)
+  },
+)
+
 test('内攻料理不增加外功攻击，全攻击磨石同时增加内外功攻击', () => {
   const base = panel(selected())
   const food = 明尊小药小吃.find(

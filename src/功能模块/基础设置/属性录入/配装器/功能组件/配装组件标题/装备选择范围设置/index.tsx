@@ -92,7 +92,11 @@ const 装备选择范围设置: React.FC<装备选择范围设置类型> = (prop
             className='zhuangbei-scrop-out-tag'
             color={系统配置?.主题色}
             closable
-            onClose={() => 删除品级()}
+            onClick={打开弹窗}
+            onClose={(e) => {
+              e.stopPropagation()
+              删除品级()
+            }}
           >
             {装备选择范围?.品级范围?.[0]}-{装备选择范围?.品级范围?.[1]}
           </Tag>
@@ -105,7 +109,11 @@ const 装备选择范围设置: React.FC<装备选择范围设置类型> = (prop
                   color={过滤词条?.[key]}
                   key={`外部过滤类型${key}`}
                   closable
-                  onClose={() => 删除过滤类型(key)}
+                  onClick={打开弹窗}
+                  onClose={(e) => {
+                    e.stopPropagation()
+                    删除过滤类型(key)
+                  }}
                 >
                   过滤{key}
                 </Tag>
@@ -120,7 +128,11 @@ const 装备选择范围设置: React.FC<装备选择范围设置类型> = (prop
                   color={装备词条?.[key]}
                   key={`外部词条${key}`}
                   closable
-                  onClose={() => 删除词条(key)}
+                  onClick={打开弹窗}
+                  onClose={(e) => {
+                    e.stopPropagation()
+                    删除词条(key)
+                  }}
                 >
                   {key}
                 </Tag>

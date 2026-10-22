@@ -9,8 +9,8 @@ import {
   STONES,
   SLOTS,
   slotPosition,
-  gearAttributeSuffix,
   ATTRIBUTE_LABELS,
+  formatAttributeDescription,
   calculateLoadout,
   normalizeLoadout,
 } from '@/心法模块/心法/明尊琉璃体/装备'
@@ -77,12 +77,15 @@ const describeAttributes = (属性: Record<string, number | string>) =>
     .join('、')
 
 export const 明尊装备数据: Record<string, 装备属性信息模型[]> = {}
-for (const 装备 of GEAR_ITEMS) {
+const 明尊装备列表 = [...GEAR_ITEMS].sort(
+  (前, 后) => Number(后.kind === '防御') - Number(前.kind === '防御') || 后.level - 前.level,
+)
+for (const 装备 of 明尊装备列表) {
   const 部位 = 明尊部位映射[SLOTS.find(([键]) => slotPosition(键) === 装备.position)![0]]
   const 数据: 装备属性信息模型 = {
     id: 装备.id,
     uid: 装备.key,
-    装备名称: `${装备.name}·${gearAttributeSuffix(装备)}${装备.school === '精简' ? '（精简内功）' : ''}`,
+    装备名称: `${装备.name.replace(/_[^（(]*/, '')}${装备.school === '精简' ? '（精简内功）' : ''}`,
     装备品级: 装备.level,
     装备主属性: '通用',
     装备类型: 装备.school === '精简' ? 装备类型枚举.副本精简 : 装备类型枚举.普通,
@@ -115,7 +118,7 @@ export const 明尊五彩石数据 = {
     五彩石名称: 石头.name,
     五彩石等级: 6,
     装备增益: Object.entries(石头.attributes).map(([键, 值]) => ({
-      增益名称: 键,
+      增益名称: formatAttributeDescription(键, Number(值)),
       增益类型: 属性映射[键] || 键,
       增益数值: Number(值),
     })),
@@ -166,6 +169,31 @@ export function 获取明尊配装(装备信息: 装备信息数据类型) {
     }
   }
   return normalizeLoadout(配装, STONES.find((石头) => 石头.name === 装备信息.五彩石)?.id || 0)
+}
+
+export function 转换明尊配装(配装: Loadout, 五彩石 = 0): 装备信息数据类型 {
+  const { slots, stone } = normalizeLoadout(配装, 五彩石)
+  const 装备列表 = SLOTS.map(([键]) => {
+    const 槽 = slots[键]
+    const 原始 = GEAR_ITEMS.find((装备) => 装备.key === 槽?.key)
+    const 数据 = 明尊装备数据[明尊部位映射[键]].find((装备) => 装备.id === 原始?.id)
+    return {
+      id: 原始?.id,
+      装备部位: 明尊部位映射[键],
+      当前精炼等级: 槽?.strength || 0,
+      附魔: 明尊附魔数据[ENCHANTS.findIndex((附魔) => 附魔.id === 槽?.enchantId)]?.附魔名称,
+      镶嵌孔数组:
+        数据?.镶嵌孔数组?.map((孔, 索引) => ({
+          ...孔,
+          镶嵌宝石等级: 槽.embeds[索引] || 0,
+        })) || [],
+    }
+  })
+  return 计算明尊装备属性({
+    装备列表,
+    五彩石: STONES.find((石头) => 石头.id === stone)?.name || '',
+    装备增益: {},
+  } as 装备信息数据类型)
 }
 
 export function 计算明尊装备属性(

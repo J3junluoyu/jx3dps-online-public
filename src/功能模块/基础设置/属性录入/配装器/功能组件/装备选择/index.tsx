@@ -7,6 +7,7 @@ import 精炼等级选择 from './精炼等级选择'
 import 镶嵌孔选择 from './镶嵌孔选择'
 import 附魔选择 from './附魔选择'
 import { 装备部位枚举 } from '@/@types/枚举'
+import type { 循环数据 } from '@/@types/循环'
 import {
   装备位置部位枚举,
   装备属性信息模型,
@@ -29,6 +30,7 @@ interface 装备选择入参 {
   对比加速: boolean
   对比显示百分比: boolean
   装备选择范围: 装备选择范围类型
+  寻优循环?: 循环数据
 }
 
 const { 装备数据, 附魔 } = 获取当前数据()
@@ -46,6 +48,7 @@ function 装备选择(props: 装备选择入参, ref) {
     对比显示百分比,
     装备选择范围,
     对比加速,
+    寻优循环,
   } = props
 
   const selectRef = useRef<any>()
@@ -126,6 +129,7 @@ function 装备选择(props: 装备选择入参, ref) {
 
   useImperativeHandle(ref, () => ({
     选择最佳装备: selectRef?.current?.选择最佳装备,
+    获取候选装备: selectRef?.current?.获取候选装备,
   }))
 
   return (
@@ -145,6 +149,7 @@ function 装备选择(props: 装备选择入参, ref) {
           对比显示百分比={对比显示百分比}
           对比加速={对比加速}
           装备选择范围={装备选择范围}
+          寻优循环={寻优循环}
           ref={selectRef}
         />
       </div>

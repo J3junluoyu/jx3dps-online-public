@@ -10,6 +10,8 @@ function 配装组件标题({
   装备选择范围,
   设置装备选择范围,
 }) {
+  const 明尊模式 = 获取当前数据().名称 === '明尊琉璃体'
+
   // 设置所有镶嵌为6/8级
   const setAllXiangQian = (number) => {
     form?.validateFields().then((values) => {
@@ -96,7 +98,7 @@ function 配装组件标题({
       </div>
       <div
         className='zhuangbei-form-left-5'
-        style={获取当前数据().名称 === '明尊琉璃体' ? { visibility: 'hidden' } : undefined}
+        style={明尊模式 ? { visibility: 'hidden' } : undefined}
       >
         <h1 className='zhuangbei-form-title'>大附魔</h1>
         <Dropdown
@@ -113,9 +115,11 @@ function 配装组件标题({
           </Button>
         </Dropdown>
       </div>
-      <div className='zhuangbei-form-left-6'>
-        <h1 className='zhuangbei-form-title'>五彩石</h1>
-      </div>
+      {!明尊模式 && (
+        <div className='zhuangbei-form-left-6'>
+          <h1 className='zhuangbei-form-title'>五彩石</h1>
+        </div>
+      )}
     </div>
   )
 }

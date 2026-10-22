@@ -1,0 +1,56 @@
+.requirements {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 28px;
+  margin: 16px 0;
+
+  label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+  }
+
+  :global(.ant-select) {
+    width: 200px;
+    font-weight: 400;
+  }
+}
+
+.slots {
+  margin-bottom: 16px;
+
+  > span {
+    display: block;
+    margin-bottom: 10px;
+  }
+}
+
+.progress {
+  margin: 16px 0;
+  color: #666;
+}
+
+.changed {
+  color: var(--ant-primary-color);
+  font-weight: 600;
+}
+
+.stone,
+.note {
+  margin: 12px 0 0;
+  color: #666;
+  font-size: 12px;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  > span {
+    color: #999;
+    font-size: 12px;
+  }
+}

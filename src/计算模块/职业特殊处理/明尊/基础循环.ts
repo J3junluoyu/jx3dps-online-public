@@ -12,6 +12,18 @@ import { 基础循环技能 } from '@/心法模块/心法/明尊琉璃体/计算
 import type { 基础循环技能类型 } from '@/心法模块/心法/明尊琉璃体/计算循环/基础循环'
 import { 获取明尊技能显示信息 } from './技能显示'
 
+const 炽炎镇恶触发技能 = new Set([
+  '44567', // 戒火斩
+  '4480', // 驱夜断愁
+  '14701',
+  '4476', // 净世破魔击·日、月
+  '4028',
+  '4029',
+  '4030', // 赤日轮三段
+  '40089', // 银月斩，排除DOT
+  '40088', // 烈日斩
+])
+
 export function 获取基础循环次数(列表: 循环技能详情[]) {
   const 次数 = new Map<string, number>()
   for (const 行 of 列表) {
@@ -50,10 +62,18 @@ export function 计算明尊基础循环(
   设置: Settings,
   列表: 循环技能详情[],
   战斗时间: number,
+  计算技能详情 = true,
 ): 当前计算结果类型 {
   if (!Number.isFinite(战斗时间) || 战斗时间 <= 0) throw new Error('循环时长必须大于零')
   const 次数 = 获取基础循环次数(列表)
   const 武伤分配 = 获取基础循环武伤分配(列表)
+  // 按原始施放次数求和，月破不乘三段；追加戒火不再触发自身，也不新增武伤。
+  const 追加戒火斩 = 设置.talents.includes('44569')
+    ? 基础循环技能.reduce(
+        (合计, 行) => 合计 + (炽炎镇恶触发技能.has(行.技能.id) ? 次数(行.技能名称) : 0),
+        0,
+      )
+    : 0
   const 面板缓存 = new Map<string, ReturnType<typeof calculateAttributes>>()
   // 仍由原Generator计算器校验装备及奇穴，分项状态只改变本条技能。
   calculateAttributes(属性, 设置)
@@ -77,19 +97,27 @@ export function 计算明尊基础循环(
   ) => {
     const 面板 = 获取面板(状态)
     const 结果 = calculateSkill(技能, 面板)
-    const 最小 = calculateSkill(技能, { ...面板, variables: { ...面板.variables, rand: 0 } })
-    const 最大 = calculateSkill(技能, { ...面板, variables: { ...面板.variables, rand: 1 } })
+    const 最小 = 计算技能详情
+      ? calculateSkill(技能, { ...面板, variables: { ...面板.variables, rand: 0 } })
+      : 结果
+    const 最大 = 计算技能详情
+      ? calculateSkill(技能, { ...面板, variables: { ...面板.variables, rand: 1 } })
+      : 结果
     return { ...结果, 数量, 最小, 最大, 总伤: 结果.expected * 数量 }
   }
   const 结果列表: 计算结果技能列表类型[] = []
+  let 总伤 = 0
   for (const 行 of 基础循环技能) {
-    if (!次数(行.技能名称) || !skillAvailable(行.技能, 设置)) continue
+    const 技能数量 = 次数(行.技能名称) + (行.技能名称 === '戒火斩' ? 追加戒火斩 : 0)
+    if (!技能数量 || !skillAvailable(行.技能, 设置)) continue
     const 分项 =
       行.技能名称 === '武伤'
         ? 武伤分配.map((项) =>
             计算分项(项.技能, 项.次数, { 驱夷: false, 光明相: false, 五明: 项.五明 }),
           )
-        : [计算分项(行.技能, 次数(行.技能名称) * 行.命中倍率, 行)]
+        : [计算分项(行.技能, 技能数量 * 行.命中倍率, 行)]
+    总伤 += 分项.reduce((合计, 项) => 合计 + 项.总伤, 0)
+    if (!计算技能详情) continue
     const 数量 = 分项.reduce((总数, 项) => 总数 + 项.数量, 0)
     结果列表.push({
       ...获取明尊技能显示信息(行.技能.id),
@@ -113,6 +141,5 @@ export function 计算明尊基础循环(
       },
     })
   }
-  const 总伤 = 结果列表.reduce((合计, 行) => 合计 + 行.技能总输出, 0)
   return { 总伤, 秒伤: 总伤 / 战斗时间, 秒伤计算时间: 战斗时间, 计算结果技能列表: 结果列表 }
 }

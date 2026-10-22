@@ -7,7 +7,7 @@
 .zhuangbei-scope-icon {
   cursor: pointer;
   color: #333;
-  transition: color .2s;
+  transition: color 0.2s;
   display: inline-flex;
   align-items: center;
 }
@@ -17,14 +17,14 @@
 }
 
 .zhuangbei-scope-icon:hover {
-  color: var(--ant-primary-color)
+  color: var(--ant-primary-color);
 }
 
 .zhuangbei-scope-form {
   padding-top: 16px;
 }
 
-.zhuangbei-scope-form .ant-form-item{
+.zhuangbei-scope-form .ant-form-item {
   margin-bottom: 0px;
 }
 
@@ -53,5 +53,6 @@
 }
 
 .zhuangbei-scrop-out-tag {
+  cursor: pointer;
   margin-right: 6px;
 }
