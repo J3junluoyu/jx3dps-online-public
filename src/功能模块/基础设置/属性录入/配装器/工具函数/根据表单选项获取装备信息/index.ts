@@ -3,10 +3,10 @@ import 根据装备信息获取基础属性 from '../根据装备信息获取基
 import { 装备位置部位枚举 } from '@/@types/装备'
 
 const 根据表单选项获取装备信息 = (data) => {
-  const 装备列表 = Object.keys(data)
-    .filter((key) => 装备位置部位枚举[key])
-    .map((key) => data[key])
-    .filter((data) => !!data)
+  // 保留全部12个位置，空戒指也占位，避免保存/重开时部位索引错位。
+  const 装备列表 = Object.keys(装备位置部位枚举).map(
+    (key) => data[key] || { 装备部位: 装备位置部位枚举[key] },
+  )
 
   const { 大附魔_伤帽, 大附魔_伤衣, 大附魔_伤腰, 大附魔_伤腕, 大附魔_伤鞋, 五彩石 } = data || {}
 

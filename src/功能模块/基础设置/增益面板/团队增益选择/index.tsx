@@ -38,8 +38,8 @@ function 团队增益选择({ 保存数据并计算 }) {
           return {
             ...item,
             启用: e === null ? item?.启用 : e,
-            层数: 层数 || item?.层数,
-            覆盖率: 覆盖率 || item?.覆盖率,
+            层数: 层数 ?? item?.层数,
+            覆盖率: 覆盖率 ?? item?.覆盖率,
           }
         } else {
           return {
@@ -53,8 +53,8 @@ function 团队增益选择({ 保存数据并计算 }) {
         {
           增益名称: 增益?.增益名称,
           启用: e === null ? true : e,
-          层数: 层数 || 增益?.层数 || 1,
-          覆盖率: 覆盖率 || 增益?.覆盖率 || 100,
+          层数: 层数 ?? 增益?.层数 ?? 1,
+          覆盖率: 覆盖率 ?? 增益?.覆盖率 ?? 100,
         },
       ]
     }
@@ -112,18 +112,20 @@ function 团队增益选择({ 保存数据并计算 }) {
         >
           设置增益
         </Button>
-        <Button
-          className={'tuandui-setting-btn'}
-          size='small'
-          onClick={() => {
-            if (新手引导流程状态) {
-              return
-            }
-            更新设置轴增益弹窗展示(true)
-          }}
-        >
-          团队增益轴
-        </Button>
+        {团队增益.some((增益) => 增益.支持快照增益轴) && (
+          <Button
+            className={'tuandui-setting-btn'}
+            size='small'
+            onClick={() => {
+              if (新手引导流程状态) {
+                return
+              }
+              更新设置轴增益弹窗展示(true)
+            }}
+          >
+            团队增益轴
+          </Button>
+        )}
         <Button
           className={'tuandui-setting-btn'}
           size='small'

@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
 import html2canvas from 'html2canvas'
-import { Button, Form, message, Modal, ModalProps } from 'antd'
+import { Alert, Button, Form, message, Modal, ModalProps } from 'antd'
 import { 装备信息数据类型, 装备位置部位枚举, 装备选择范围类型 } from '@/@types/装备'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { 秒伤计算, 触发秒伤计算 } from '@/计算模块/计算函数'
 import { 更新方案数据 } from '@/store/data'
 import { 获取页面参数 } from '@/工具函数/help'
 import { 数据埋点 } from '@/工具函数/tools/log'
+import 获取当前数据 from '@/数据/数据工具/获取当前数据'
 
 import 根据表单选项获取装备信息 from './工具函数/根据表单选项获取装备信息'
 import 配装导入 from './功能组件/配装导入'
@@ -27,6 +28,7 @@ import styles from './index.module.less'
 import './index.css'
 
 function 配装器(props: ModalProps) {
+  const 明尊模式 = 获取当前数据().名称 === '明尊琉璃体'
   const { open, onCancel } = props
   const dispatch = useAppDispatch()
 
@@ -326,29 +328,38 @@ function 配装器(props: ModalProps) {
               )
             })}
           </div>
-          <div className='zhuangbei-set-dafumo-wrapper'>
-            <Form.Item name={`大附魔_伤帽`}>
-              <大附魔选择 开启装备智能对比={开启装备智能对比} form={form} type='帽' />
-            </Form.Item>
-            <Form.Item name={`大附魔_伤衣`}>
-              <大附魔选择 开启装备智能对比={开启装备智能对比} form={form} type='衣' />
-            </Form.Item>
-            <Form.Item name={`大附魔_伤腰`}>
-              <大附魔选择 开启装备智能对比={开启装备智能对比} form={form} type='腰' />
-            </Form.Item>
-            <Form.Item name={`大附魔_伤腕`}>
-              <大附魔选择 开启装备智能对比={开启装备智能对比} form={form} type='腕' />
-            </Form.Item>
-            <Form.Item name={`大附魔_伤鞋`}>
-              <大附魔选择 开启装备智能对比={开启装备智能对比} form={form} type='鞋' />
-            </Form.Item>
-          </div>
+          {!明尊模式 && (
+            <div className='zhuangbei-set-dafumo-wrapper'>
+              <Form.Item name={`大附魔_伤帽`}>
+                <大附魔选择 开启装备智能对比={开启装备智能对比} form={form} type='帽' />
+              </Form.Item>
+              <Form.Item name={`大附魔_伤衣`}>
+                <大附魔选择 开启装备智能对比={开启装备智能对比} form={form} type='衣' />
+              </Form.Item>
+              <Form.Item name={`大附魔_伤腰`}>
+                <大附魔选择 开启装备智能对比={开启装备智能对比} form={form} type='腰' />
+              </Form.Item>
+              <Form.Item name={`大附魔_伤腕`}>
+                <大附魔选择 开启装备智能对比={开启装备智能对比} form={form} type='腕' />
+              </Form.Item>
+              <Form.Item name={`大附魔_伤鞋`}>
+                <大附魔选择 开启装备智能对比={开启装备智能对比} form={form} type='鞋' />
+              </Form.Item>
+            </div>
+          )}
           <div className='zhuangbei-input-set-modal-form-right'>
             <Form.Item name={`五彩石`}>
               <五彩石选择 />
             </Form.Item>
             <面板展示 当前装备信息={当前装备信息 || 装备信息} />
             <装备增益展示 装备增益={当前装备信息?.装备增益 || 装备信息?.装备增益} />
+            {!!当前装备信息?.明尊未计入效果?.length && (
+              <Alert
+                type='info'
+                showIcon
+                message={`未计入：${当前装备信息.明尊未计入效果.join('、')}`}
+              />
+            )}
             <秒伤结果对比
               配装器内动态新秒伤={配装器内动态新秒伤}
               打开配装器时秒伤={打开配装器时秒伤}

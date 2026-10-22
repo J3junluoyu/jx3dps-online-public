@@ -38,15 +38,17 @@ const 可支持快捷设置层数 = [80, 85, 90, 95, 100]
 function 团队增益设置弹窗({ open, onCancel, onChangeZengyi, 快捷设置团队增益 }) {
   const 增益数据 = useAppSelector((state) => state.data.增益数据)
 
-  const 团队增益类型: 团队增益类型[] = [
-    '常用增益',
-    '目标减益',
-    '坦克Buff增益',
-    '治疗Buff增益',
-    '食物增益',
-    '节日增益',
-    '稀缺增益',
-  ]
+  const 团队增益类型: 团队增益类型[] = (
+    [
+      '常用增益',
+      '目标减益',
+      '坦克Buff增益',
+      '治疗Buff增益',
+      '食物增益',
+      '节日增益',
+      '稀缺增益',
+    ] as 团队增益类型[]
+  ).filter((类型) => 团队增益.some((增益) => 增益.团队增益类型 === 类型))
 
   const [当前展开增益类型, 设置当前展开增益类型] = useState<string[]>(团队增益类型)
 
@@ -173,10 +175,10 @@ function 团队增益设置弹窗({ open, onCancel, onChangeZengyi, 快捷设置
                 .filter((item) => item.团队增益类型 === key)
                 .map((item) => {
                   const 当前增益选项 = (增益数据?.团队增益 || []).find(
-                    (a) => item?.增益名称 === a?.增益名称
+                    (a) => item?.增益名称 === a?.增益名称,
                   )
                   const 当前是否存在冲突增益 = (增益数据?.团队增益 || []).find(
-                    (a) => item?.冲突增益?.includes(a?.增益名称) && a?.启用
+                    (a) => item?.冲突增益?.includes(a?.增益名称) && a?.启用,
                   )
                   return (
                     <div className={`tuandui-zengyi-detail-item`} key={item.增益名称}>
@@ -225,7 +227,7 @@ function 团队增益设置弹窗({ open, onCancel, onChangeZengyi, 快捷设置
                               precision={2}
                               max={100}
                               addonAfter={'%'}
-                              onChange={(e) => onChangeZengyi(null, item, item.层数, e)}
+                              onChange={(e) => onChangeZengyi(null, item, undefined, e)}
                               defaultValue={item?.覆盖率}
                             />
                           </div>

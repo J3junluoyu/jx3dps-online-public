@@ -1,0 +1,194 @@
+import 基础循环 from './计算循环/基础循环'
+import {
+  SKILLS,
+  EMPTY_EQUIPMENT,
+  DEFAULT_SETTINGS,
+  calculateAttributes,
+  calculateSkill,
+  percentToGuo,
+} from './计算'
+import { 获取基础循环武伤分配 } from '@/计算模块/职业特殊处理/明尊/基础循环'
+import { 明尊秒伤计算 } from '@/计算模块/职业特殊处理/明尊'
+import { 转换明尊基础属性 } from '@/数据/数据工具/明尊数据适配'
+import { TALENTS, normalizeTalents } from './计算'
+
+const 列表 = 基础循环.循环详情[0].技能详情
+const 属性 = {
+  ...EMPTY_EQUIPMENT,
+  vitality: 8000,
+  attack: 3000,
+  physicalAttack: 500,
+  weaponMin: 104,
+  weaponMax: 173,
+  critical: 1000,
+  overcome: 1500,
+}
+const 设置 = {
+  ...DEFAULT_SETTINGS,
+  stance: 'mainTank',
+  talents: normalizeTalents(['18296', '46492', '14698']),
+}
+const 计算 = (更新属性 = {}, 覆盖 = {}) =>
+  明尊秒伤计算({
+    装备信息: { 装备基础属性: 转换明尊基础属性({ ...属性, ...更新属性 }) },
+    奇穴: 基础循环.奇穴,
+    增益数据: { 明尊设置: { stance: 'mainTank', drive: true, light: true } },
+    秘籍: {},
+    目标等级: 53,
+    技能列表: 列表,
+    战斗时间: 300,
+    ...覆盖,
+  })
+const 查结果 = (结果, 名称) => 结果.计算结果技能列表.find((行) => 行.技能名称 === 名称)
+
+test('300秒基础循环完整保留用户17项次数及零次月破', () => {
+  expect(基础循环.循环详情[0].战斗时间).toBe(300)
+  expect(Object.fromEntries(列表.map((行) => [行.技能名称, 行.技能数量]))).toEqual({
+    驱夷日破: 47,
+    驱夷月破: 0,
+    驱夷五明日破: 9,
+    驱夷光明相日破: 9,
+    驱夷光明相月破: 18,
+    常规月破: 9,
+    日轮1: 76,
+    日轮2: 62,
+    日轮3: 45,
+    无量妙境: 135,
+    烈日斩: 40,
+    银月斩: 10,
+    月斩dot: 82,
+    戒火斩: 23,
+    驱夜断愁: 9,
+    武伤: 388,
+    大漠刀法: 344,
+  })
+  const 结果 = 计算()
+  expect(结果.秒伤计算时间).toBe(300)
+  expect(结果.秒伤).toBe(结果.总伤 / 300)
+  expect(查结果(结果, '驱夷光明相月破').技能数量).toBe(54)
+  expect(查结果(结果, '常规月破').技能数量).toBe(27)
+  expect(查结果(结果, '无量妙境').技能数量).toBe(135)
+  expect(查结果(结果, '月斩dot').技能数量).toBe(82)
+})
+
+test.each([
+  ['驱夷日破', '3967:14701:32', 47, true, false, false],
+  ['驱夷五明日破', '3967:14701:32', 9, true, false, true],
+  ['驱夷光明相日破', '3967:14701:32', 9, true, true, true],
+  ['驱夷光明相月破', '3967:4476:32', 54, true, true, true],
+  ['常规月破', '3967:4476:32', 27, false, false, false],
+  ['无量妙境', '18296:42565:1', 135, false, false, true],
+  ['驱夜断愁', '25355:4480:58', 9, false, false, true],
+  ['日轮1', '3962:4028:33', 76, false, false, false],
+])('%s单独应用驱夷、光明相及五明，不被全局开关污染', (名称, 原始键, 次数, 驱夷, 光明, 五明) => {
+  const 面板 = calculateAttributes(属性, { ...设置, light: false, drive: false })
+  面板.variables.recipe_4489_1 = 驱夷 ? 1 : 0
+  面板.variables.recipe_4545_1 = 光明 ? 1 : 0
+  面板.variables.recipe_4546_1 = 光明 ? 1 : 0
+  if (五明) {
+    面板.variables.magical_damage_addition += 102 / 1024
+    面板.variables.physical_damage_addition += 102 / 1024
+  }
+  const 原始 = calculateSkill(
+    SKILLS.find((项) => 项.key === 原始键),
+    面板,
+  )
+  const 结果 = 查结果(计算(), 名称)
+  expect(结果.技能总输出).toBe(原始.expected * 次数)
+  expect(结果.会心几率).toBeCloseTo(原始.critical, 14)
+})
+
+test('武伤388次拆成65次200%和323次100%，并继承对应五明状态', () => {
+  const 分配 = 获取基础循环武伤分配(列表)
+  expect(分配.map((项) => [项.技能.level, 项.次数, 项.五明])).toEqual([
+    ['5', 47, false],
+    ['5', 18, true],
+    ['1', 260, false],
+    ['1', 63, true],
+  ])
+  expect(分配.reduce((总数, 项) => 总数 + 项.次数, 0)).toBe(388)
+  const 面板 = calculateAttributes(属性, 设置)
+  const 五明面板 = {
+    ...面板,
+    variables: { ...面板.variables, physical_damage_addition: percentToGuo(10) },
+  }
+  const 百分百 = SKILLS.find((项) => 项.key === '3962:19055:1')
+  const 百分二百 = SKILLS.find((项) => 项.key === '3967:19055:5')
+  const 预期 =
+    calculateSkill(百分二百, 面板).expected * 47 +
+    calculateSkill(百分二百, 五明面板).expected * 18 +
+    calculateSkill(百分百, 面板).expected * 260 +
+    calculateSkill(百分百, 五明面板).expected * 63
+  const 实际 = 查结果(计算(), '武伤')
+  expect(实际.技能数量).toBe(388)
+  expect(实际.技能总输出).toBe(预期)
+})
+
+test.each(['武伤', '大漠刀法'])(
+  '%s只使用外功破防，内功破防和主副T的内功转换不影响其伤害',
+  (名称) => {
+    const 原始 = 查结果(计算(), 名称).技能总输出
+    expect(查结果(计算({ overcome: 属性.overcome + 5000 }), 名称).技能总输出).toBe(原始)
+    expect(查结果(计算({ physicalOvercome: 5000 }), 名称).技能总输出).toBeGreaterThan(原始)
+    expect(
+      查结果(计算({}, { 增益数据: { 明尊设置: { stance: 'offTank' } } }), 名称).技能总输出,
+    ).toBe(原始)
+    expect(查结果(计算({ vitality: 18000 }), 名称).技能总输出).toBe(原始)
+    expect(查结果(计算({ overcome: 属性.overcome + 5000 }), '驱夷日破').技能总输出).toBeGreaterThan(
+      查结果(计算(), '驱夷日破').技能总输出,
+    )
+  },
+)
+
+test('无量按阴阳合计135次计算，当前两种属性的原始公式数值一致', () => {
+  for (const stance of ['mainTank', 'offTank']) {
+    const 面板 = calculateAttributes(属性, { ...设置, stance })
+    面板.variables.magical_damage_addition += 102 / 1024
+    const 日 = calculateSkill(
+      SKILLS.find((项) => 项.id === '42565'),
+      面板,
+    )
+    const 月 = calculateSkill(
+      SKILLS.find((项) => 项.id === '42566'),
+      面板,
+    )
+    expect(日.expected).toBe(月.expected)
+  }
+})
+
+test('切换五明奇穴只改变标记项增伤，取消无量时不计算其触发伤害', () => {
+  const 无五明 = 计算(
+    {},
+    {
+      奇穴: normalizeTalents(['18296', '6895', '14698']).map(
+        (id) => TALENTS.find((项) => 项.id === id).name,
+      ),
+    },
+  )
+  expect(查结果(无五明, '驱夷光明相日破').技能总输出).toBeLessThan(
+    查结果(计算(), '驱夷光明相日破').技能总输出,
+  )
+  expect(查结果(无五明, '驱夷日破').技能总输出).toBe(查结果(计算(), '驱夷日破').技能总输出)
+  const 无无量 = 计算(
+    {},
+    {
+      奇穴: normalizeTalents(['25166', '46492', '14698']).map(
+        (id) => TALENTS.find((项) => 项.id === id).name,
+      ),
+    },
+  )
+  expect(查结果(无无量, '无量妙境')).toBeUndefined()
+})
+
+test('武伤填0时不重复自动生成，错误次数与零时长拒绝计算', () => {
+  const 无武伤 = 列表.map((行) => (行.技能名称 === '武伤' ? { ...行, 技能数量: 0 } : 行))
+  expect(查结果(计算({}, { 技能列表: 无武伤 }), '武伤')).toBeUndefined()
+  expect(() => 计算({}, { 战斗时间: 0 })).toThrow('循环时长')
+  expect(() =>
+    计算(
+      {},
+      { 技能列表: 列表.map((行) => (行.技能名称 === '武伤' ? { ...行, 技能数量: 1 } : 行)) },
+    ),
+  ).toThrow('武伤总次数')
+  expect(() => 计算({}, { 技能列表: [...列表, { 技能名称: '未知', 技能数量: 1 }] })).toThrow('未知')
+})

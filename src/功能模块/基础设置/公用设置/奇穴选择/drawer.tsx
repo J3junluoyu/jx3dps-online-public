@@ -5,9 +5,10 @@ import { 更新方案数据 } from '@/store/data'
 import 获取当前数据 from '@/数据/数据工具/获取当前数据'
 import { 触发秒伤计算 } from '@/计算模块/计算函数'
 import 混池奇穴 from './混池奇穴'
+import { 规范明尊奇穴 } from '@/计算模块/职业特殊处理/明尊'
 import './index.css'
 
-const { 奇穴数据 = [] } = 获取当前数据()
+const { 奇穴数据 = [], 名称 } = 获取当前数据()
 
 const 兜底图片 = 'https://icon.jx3box.com/icon/13.png'
 
@@ -42,10 +43,11 @@ const 奇穴选择抽屉: React.FC<any> = (props?: any) => {
       newArray.push(values[特殊奇穴索引])
     }
 
+    const 已校验奇穴 = 名称 === '明尊琉璃体' ? 规范明尊奇穴(newArray) : newArray
     if (onChange) {
-      onChange(newArray)
+      onChange(已校验奇穴)
     } else {
-      dispatch(更新方案数据({ 数据: newArray, 属性: '当前奇穴信息' }))
+      dispatch(更新方案数据({ 数据: 已校验奇穴, 属性: '当前奇穴信息' }))
       dispatch(触发秒伤计算({ 是否更新显示计算结果: true }))
     }
   }

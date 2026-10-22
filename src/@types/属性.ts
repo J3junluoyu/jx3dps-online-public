@@ -122,9 +122,15 @@ export enum 属性类型 {
   郭氏体质转基础攻击 = 'atVitalityToAttackPower',
   郭氏体质转全会心 = 'atVitalityToCriticalStrike',
   郭氏体质转全破防 = 'atVitalityToOvercome',
+  仇恨 = 'atActiveThreatCoefficient',
+  闪避 = 'atDodge',
+  招架 = 'atParryBase',
+  拆招 = 'atParryValueBase',
+  御劲 = 'atToughnessBase',
 }
 
 export interface 属性加成 {
+  不参与精炼?: boolean
   属性: 属性类型
   值: number | any
   // 值: number | ((level: number) => number)

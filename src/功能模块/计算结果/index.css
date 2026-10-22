@@ -25,6 +25,7 @@
 .dps-number-count-wrap {
   width: 100%;
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: flex-end;
 }
@@ -40,6 +41,7 @@
   padding: 16px 0 12px;
   font-size: 16px;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .dps-number-count-time-label {

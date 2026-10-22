@@ -79,26 +79,7 @@ const hasJsxRuntime = (() => {
 })()
 
 const xinfaNameMap = {
-  山海心诀: 'shxj',
-  孤锋诀: 'gfj',
-  凌海诀: 'lhj',
-  太玄经: 'txj',
-  无方: 'wf',
-  花间游: 'hjy',
-  毒经: 'dj',
-  易筋经: 'yjj',
-  分山劲: 'fsj',
-  北傲诀: 'baj',
-  紫霞功: 'zxg',
-  周天功: 'ztg',
-  笑尘诀: 'xcj',
-  天罗诡道: 'lgd',
-  孤锋诀_悟: 'gfj',
-  无方_悟: 'w_wf',
-  周天功_悟: 'ztg',
-  焚影圣诀: 'fysj',
-  幽罗引: 'yly',
-  太玄经_悟: 'w_txj',
+  明尊琉璃体: 'mzllt',
 }
 
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin

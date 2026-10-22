@@ -4,6 +4,7 @@ import { 全部方案数据 } from '@/@types/方案'
 import 获取当前数据 from '@/数据/数据工具/获取当前数据'
 import useCycle from '@/hooks/use-cycle'
 import { 角色默认基础属性, 默认团队增益轴 } from './默认数据'
+import { 规范明尊奇穴, 规范明尊秘籍 } from '@/计算模块/职业特殊处理/明尊'
 // import { deepMerge } from '../help'
 
 const { 缓存映射 = {} as any, 默认数据 = {}, 奇穴数据 = [] } = 获取当前数据()
@@ -27,7 +28,9 @@ export const 加载缓存背景图片显示状态 = () => {
 export const 加载缓存当前输出计算目标名称 = () => {
   const 当前输出计算目标名称 =
     localStorage.getItem(缓存映射.当前输出计算目标名称) || 目标集合[0]?.名称
-  return 当前输出计算目标名称
+  return 目标集合.some((目标) => 目标.名称 === 当前输出计算目标名称)
+    ? 当前输出计算目标名称
+    : 目标集合[0]?.名称
 }
 
 export const 加载缓存当前方案名称 = () => {
@@ -82,6 +85,12 @@ export const 加载缓存全部方案数据 = () => {
     // 修改缓存逻辑，不merge，以免触发bug。有本地方案直接读取本地方案
     if (obj) {
       const newObj = JSON.parse(JSON.stringify(obj))
+      if (获取当前数据().名称 === '明尊琉璃体') {
+        Object.values(newObj).forEach((方案: any) => {
+          方案.当前奇穴信息 = 规范明尊奇穴(方案.当前奇穴信息)
+          方案.当前秘籍信息 = 规范明尊秘籍(方案.当前秘籍信息)
+        })
+      }
       return newObj
     }
     return 默认全部方案数据

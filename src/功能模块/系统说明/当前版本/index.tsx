@@ -8,7 +8,7 @@ import { 更新当前引导步骤, 更新新手引导流程状态 } from '@/stor
 import 计算记录对比 from './计算记录对比'
 import './index.css'
 
-const { 缓存映射 } = 获取当前数据()
+const { 缓存映射, 名称 } = 获取当前数据()
 
 function Log() {
   const dispatch = useAppDispatch()
@@ -87,7 +87,7 @@ function Log() {
 
   return (
     <div className='log-wrap'>
-      <span>当前版本: {log_data?.[0]?.version}</span>
+      <span>当前版本: {名称 === '明尊琉璃体' ? '50级明尊琉璃体' : log_data?.[0]?.version}</span>
       {/* <span onClick={() => setNoticeVisible(true)}>使用前声明</span> */}
       <span className='log' onClick={() => setVisible(true)}>
         更新日志

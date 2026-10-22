@@ -3,8 +3,9 @@ import React, { useMemo } from 'react'
 import { 五彩石增益类型枚举 } from '@/@types/枚举'
 import 获取当前数据 from '@/数据/数据工具/获取当前数据'
 import './index.css'
+import 三层选择 from './三层选择'
 
-const { 五彩石 } = 获取当前数据()
+const { 五彩石, 名称 } = 获取当前数据()
 
 interface WucaishiFilterList {
   value: 五彩石增益类型枚举 | string
@@ -67,6 +68,7 @@ function WuCaiShiXuanZe(props: WuCaiShiXuanZeProps) {
     }
   }
 
+  if (名称 === '明尊琉璃体') return <三层选择 {...props} />
   return (
     <div className='wucaishi-wrap'>
       <div className={'wucaishi-xuanze-wrap'}>

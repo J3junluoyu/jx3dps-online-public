@@ -3,6 +3,17 @@
   position: relative;
 }
 
+.wucaishi-mingzun {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.wucaishi-mingzun-value {
+  color: #d72ad7;
+  overflow-wrap: anywhere;
+}
+
 .wucaishi-xuanze-wrap .wucaishi-xuanze {
   width: calc(100% - 70px);
 }

@@ -5,6 +5,8 @@ import { useAppDispatch, useAppSelector } from '@/hooks'
 import { 更新方案数据 } from '@/store/data'
 import { 触发秒伤计算 } from '@/计算模块/计算函数'
 import { 获取当前职业的所有秘籍信息 } from './utils'
+import 获取当前数据 from '@/数据/数据工具/获取当前数据'
+import { 获取明尊秘籍显示名称 } from '@/心法模块/心法/明尊琉璃体/秘籍'
 import './index.css'
 
 const 当前职业的所有秘籍信息 = 获取当前职业的所有秘籍信息()
@@ -33,6 +35,8 @@ function 秘籍选择抽屉(props?: any) {
   }
 
   const 秘籍名称显示 = (秘籍) => {
+    if (获取当前数据().名称 === '明尊琉璃体') return 获取明尊秘籍显示名称(秘籍)
+    if (秘籍?.includes('：')) return 秘籍
     if (秘籍?.includes('减CD')) {
       const 减CD秒数 = 秘籍?.split('_')?.[1]
       return `减CD${减CD秒数}秒`

@@ -97,16 +97,21 @@
     "@types/react-redux": "^7.1.33"
   },
   "scripts": {
-    "dev": "rimraf build/static/js/getDps.js && node scripts/start.js --stack-size=10000",
-    "start": "node scripts/start.js --stack-size=10000",
+    "dev:mingzun": "pnpm run dev",
+    "build:mingzun": "pnpm run build",
+    "test:mingzun": "jest --config config/jest/mingzun.config.js --runInBand",
+    "typecheck:mingzun": "pnpm run typecheck",
+    "dev": "cross-env BROWSER=none PORT=3000 FAST_REFRESH=false REACT_APP_BUILD_TYPE=local node scripts/start.js",
+    "start": "pnpm run dev",
     "build": "cross-env GENERATE_SOURCEMAP=false PUBLIC_URL=/ node --max-old-space-size=4096 scripts/build.js",
     "build:analyzer": "cross-env BUILD_ANALYZER=true GENERATE_SOURCEMAP=false PUBLIC_URL=/ node --max-old-space-size=4096 scripts/build.js",
-    "build:local": "GENERATE_SOURCEMAP=false REACT_APP_BUILD_TYPE=local PUBLIC_URL=./ node --max-old-space-size=4096 scripts/build.js",
-    "build:localWindows": "cross-env GENERATE_SOURCEMAP=false REACT_APP_BUILD_TYPE=local PUBLIC_URL=./ node --max-old-space-size=4096 scripts/build.js",
-    "test": "node scripts/test.js",
+    "build:local": "cross-env GENERATE_SOURCEMAP=false REACT_APP_BUILD_TYPE=local PUBLIC_URL=./ node --max-old-space-size=4096 scripts/build.js",
+    "build:localWindows": "pnpm run build:local",
+    "test": "jest --config config/jest/mingzun.config.js --runInBand",
     "deploy": "gh-pages -d build",
-    "predeploy": "npm run build",
-    "prepare": "husky"
+    "predeploy": "pnpm run build",
+    "prepare": "husky",
+    "typecheck": "tsc --noEmit"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,css,less,md}": [

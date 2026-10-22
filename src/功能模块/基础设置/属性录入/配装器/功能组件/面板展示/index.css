@@ -96,6 +96,11 @@
   margin: 0;
 }
 
+#zhuangbei-character-item_招式产生威胁 .zhuangbei-character-label {
+  width: 100px;
+  flex-shrink: 0;
+}
+
 .zhuangbei-character-content {
   display: flex;
   flex: 1 1;

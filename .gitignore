@@ -15,6 +15,8 @@ shuadps.js
 
 # production
 /build
+/build-mingzun
+*.tsbuildinfo
 # build.*
 
 # misc

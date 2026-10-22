@@ -7,7 +7,7 @@
   font-weight: 600;
   line-height: 24px;
   margin-bottom: 8px;
-  color:var(--ant-primary-color);
+  color: var(--ant-primary-color);
   display: flex;
   justify-content: space-between;
 }
@@ -17,8 +17,8 @@
 }
 
 .common-title-zengyi {
-  color: #ED4F00;
-  border-color: #ED4F00;
+  color: #ed4f00;
+  border-color: #ed4f00;
 }
 
 .common-title-zengyi:hover,
@@ -42,14 +42,14 @@
   justify-content: space-between;
 }
 
-.common-item>.ant-btn{
-  width:calc(33% - 4px);
+.common-item > .ant-btn {
+  width: calc(33% - 4px);
 }
 
 .common-label {
   width: 36px;
   text-align: left;
-  line-height: 32px;;
+  line-height: 32px;
   font-size: 14px;
   margin: 0 4px 0 0;
 }
@@ -59,4 +59,15 @@
   flex: 1 1;
   flex-direction: column;
   overflow: hidden;
+}
+
+.mingzun-stance-switch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(33% - 4px);
+}
+
+.mingzun-cycle-settings > .ant-btn {
+  width: 100%;
 }

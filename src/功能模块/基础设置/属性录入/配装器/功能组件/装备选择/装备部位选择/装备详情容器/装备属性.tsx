@@ -21,26 +21,24 @@ const 装备属性: React.FC<装备属性类型> = (props) => {
         ) : null}
       </div>
       <div className={styles.dataContent}>
-        {获取属性列表(装备数据)
-          ?.filter((a) => a?.名称 !== '体质')
-          ?.map((item, index) => {
-            return (
-              <div key={index} className={styles.dataItem}>
-                {/* <div className={styles.dataItemLabel}>{item?.名称}</div> */}
-                <Tag className={styles.attrLabel} color={ColorMap?.[item?.名称]}>
-                  {item?.名称}
-                </Tag>
-                <Tag className={styles.dataItemValueNum}>
-                  <div className={styles.dataItemValueWrap}>{item?.数值}</div>
-                  {item?.名称 !== '武伤' ? (
-                    <span className={styles.dataItemValueText}>
-                      {`+ ${精炼加成系数算法(item?.数值, 当前装备信息?.当前精炼等级) - item?.数值}`}
-                    </span>
-                  ) : null}
-                </Tag>
-              </div>
-            )
-          })}
+        {获取属性列表(装备数据)?.map((item, index) => {
+          return (
+            <div key={index} className={styles.dataItem}>
+              {/* <div className={styles.dataItemLabel}>{item?.名称}</div> */}
+              <Tag className={styles.attrLabel} color={ColorMap?.[item?.名称]}>
+                {item?.名称}
+              </Tag>
+              <Tag className={styles.dataItemValueNum}>
+                <div className={styles.dataItemValueWrap}>{item?.数值}</div>
+                {item?.名称 !== '武伤' ? (
+                  <span className={styles.dataItemValueText}>
+                    {`+ ${item.不参与精炼 ? 0 : 精炼加成系数算法(item?.数值, 当前装备信息?.当前精炼等级) - item?.数值}`}
+                  </span>
+                ) : null}
+              </Tag>
+            </div>
+          )
+        })}
       </div>
     </div>
   )
@@ -92,6 +90,7 @@ const 获取属性列表 = (装备: 装备属性信息模型) => {
       列表.push({
         名称: 属性简写枚举[item?.属性],
         数值: item?.值,
+        不参与精炼: item.不参与精炼,
       })
     } else {
       console.error('属性简写枚举没有找到对应属性', item?.属性, 装备)

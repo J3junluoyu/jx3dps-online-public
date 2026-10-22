@@ -15,7 +15,7 @@ function 镶嵌孔选择(props: 镶嵌孔选择入参) {
   const { value, onChange, data, 部位索引 } = props
 
   const list = useMemo(() => {
-    const list = Array.from({ length: 8 }, (v, i) => i + 1)
+    const list = Array.from({ length: 9 }, (v, i) => i)
     list.sort((a, b) => b - a)
     return list
   }, [])

@@ -9,10 +9,13 @@ import { 秒伤计算 } from '@/计算模块/计算函数'
 import { 收益增益属性计算, 获取当前各属性最大附魔 } from '../../工具'
 import { 置换数据信息类型, 置换结果数据类型 } from './interface'
 import { CrownFilled } from '@ant-design/icons'
+import 获取当前数据 from '@/数据/数据工具/获取当前数据'
+import { 获取明尊原始属性 } from '@/计算模块/职业特殊处理/明尊'
 import './index.css'
 
 // 会效收益从175%至300%
 const 收益列表 = 获取当前各属性最大附魔()?.filter((item) => !['武伤', '会效']?.includes(item?.收益))
+const { 名称 } = 获取当前数据()
 // 过滤武伤和会效
 
 function 属性置换收益() {
@@ -102,6 +105,14 @@ function 属性置换收益() {
           -减少数据?.值,
           增益后装备基础数据,
         )
+        // 无法扣除的附魔不构成有效置换，保留空格，避免生成负装备属性。
+        if (
+          名称 === '明尊琉璃体' &&
+          Object.values(获取明尊原始属性(减少数据后装备基础数据)).some(
+            (值) => !Number.isFinite(值) || 值 < 0,
+          )
+        )
+          return
         const { 秒伤: 新秒伤 } = 计算增加后收益(减少数据后装备基础数据)
         const 收益 = Number(新秒伤 - 当前计算结果?.秒伤)
         const 收益结果 = Number(收益.toFixed(0))

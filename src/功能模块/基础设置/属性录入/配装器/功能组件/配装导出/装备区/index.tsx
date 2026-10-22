@@ -8,6 +8,7 @@ import { 获取装备数据描述 } from '../../装备选择/装备部位选择'
 import { 属性简写枚举 } from '@/@types/枚举'
 import classNames from 'classnames'
 import ImageComponent from '@/组件/图片展示'
+import { 格式化附魔名称 } from '../../../工具函数/附魔显示'
 
 const { 装备数据, 五彩石 } = 获取当前数据()
 
@@ -57,7 +58,7 @@ const 装备区 = () => {
                         styles.descTip,
                         item === '精简' ? styles.jingjian : '',
                         item === '特效' ? styles.texiao : '',
-                        item === 'PVX' ? styles.pvx : ''
+                        item === 'PVX' ? styles.pvx : '',
                       )
                       return (
                         <span className={cls} key={`导出装备_特征_${装备?.id}_${index}_${item}`}>
@@ -79,7 +80,7 @@ const 装备区 = () => {
                       styles.descTip,
                       item === '精简' ? styles.jingjian : '',
                       item === '特效' ? styles.texiao : '',
-                      item === 'PVX' ? styles.pvx : ''
+                      item === 'PVX' ? styles.pvx : '',
                     )
                     return (
                       <span className={cls} key={`导出装备_${装备?.id}_${index}_${item}`}>
@@ -106,7 +107,7 @@ const 装备区 = () => {
             <div className={styles.gainWrap}>
               <div className={styles.gain}>
                 <img className={styles.gainIcon} src={图标?.附魔} />
-                {当前装备?.附魔?.replace('+', ' +')}
+                {格式化附魔名称(当前装备?.附魔)}
               </div>
               <div className={styles.gainContent}>
                 {是否有大附魔 ? (

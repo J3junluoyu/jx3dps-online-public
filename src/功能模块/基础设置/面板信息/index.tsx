@@ -45,9 +45,9 @@ function 面板信息() {
     '会效',
     '破防',
     '无双',
-    '破招',
-    '全能',
+    ...(主属性 === '体质' ? [] : ['破招', '全能']),
     '加速',
+    ...(主属性 === '体质' ? ['外防', '内防', '闪避', '御劲', '招式产生威胁'] : []),
   ]
 
   const 显示数据 = useMemo(() => {
@@ -177,7 +177,11 @@ function 面板信息() {
               : {}
           return (
             <div className={`character-item ${index < 4 ? 'character-item-harf' : ''}`} key={item}>
-              <h1 className='character-label'>{item}</h1>
+              <h1
+                className={`character-label ${item === '招式产生威胁' ? 'character-label-long' : ''}`}
+              >
+                {item}
+              </h1>
               <Tooltip
                 placement='topLeft'
                 title={() => 获取面板显示数据数值(item, 显示数据, 显示数据?.装分)}
@@ -214,6 +218,23 @@ export const 获取面板显示数据 = (
   装备分数?: number,
   显示加速等级?: boolean,
 ) => {
+  const 明尊面板 = 角色最终属性?.明尊面板
+  if (明尊面板) {
+    const 百分比 = (值: number) => `${(值 * 100).toFixed(2)}%`
+    if (key === '会心') return 百分比(明尊面板.critical)
+    if (key === '会效') return 百分比(明尊面板.criticalPower)
+    if (key === '破防') return 百分比(明尊面板.overcome)
+    if (key === '无双') return 百分比(明尊面板.strain)
+    if (key === '加速') return 百分比(明尊面板.haste)
+    if (key === '外防') return 百分比(明尊面板.physicalReduction)
+    if (key === '内防') return 百分比(明尊面板.magicalReduction)
+    if (key === '闪避') return 百分比(明尊面板.dodge)
+    if (key === '招架') return 百分比(明尊面板.parry)
+    if (key === '拆招') return 明尊面板.parryValue
+    if (key === '御劲') return 百分比(明尊面板.toughness)
+    if (key === '化劲') return 百分比(明尊面板.decritical)
+    if (key === '招式产生威胁') return 明尊面板.threat
+  }
   switch (key) {
     case '装分':
       return 装备分数 || 0
@@ -266,6 +287,8 @@ export const 获取面板显示数据数值 = (
   装备分数?: number,
 ) => {
   switch (key) {
+    case '招式产生威胁':
+      return '装备提供的招式产生威胁属性值'
     case '装分':
       return 装备分数 || undefined
     case '气血':

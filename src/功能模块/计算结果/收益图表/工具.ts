@@ -17,7 +17,7 @@ export const 获取当前各属性最大附魔 = () => {
     }
   })
   const resList = Object.keys(res)
-    .filter((item) => !['加速', '体质', '气血']?.includes(item))
+    .filter((item) => ['攻击', '无双', '破防', '会心', '会效', '全能'].includes(item))
     .map((key) => {
       return {
         收益: key,
@@ -39,7 +39,16 @@ export const 获取当前各属性最大附魔 = () => {
 export const 获取单点属性收益列表 = () => {
   const { 主属性 } = 获取当前数据()
 
-  const mapKeyList = [主属性, '攻击', '武伤', '无双', '破防', '会心', '会效', '破招']
+  const mapKeyList = [
+    主属性,
+    '攻击',
+    '武伤',
+    '无双',
+    '破防',
+    '会心',
+    '会效',
+    ...(主属性 === '体质' ? [] : ['破招']),
+  ]
   return mapKeyList.map((key) => {
     return {
       收益: key,

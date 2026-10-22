@@ -241,6 +241,7 @@ export interface 装备属性信息模型 {
 
 // 镶嵌孔数据
 export interface 镶嵌孔数组类型 {
+  镶嵌基数?: number
   /**
    * @name 镶嵌孔名
    */
@@ -457,6 +458,7 @@ export enum 大附魔部位枚举 {
 }
 
 export interface 装备信息数据类型 {
+  明尊未计入效果?: string[]
   /**
    * @name 装备基础属性
    * 本部分为装备上所有属性的加成和，方便计算

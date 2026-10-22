@@ -47,7 +47,11 @@ const root = ReactDOM.createRoot(document.getElementById('root') as any)
 const isLocalBuild = process.env.REACT_APP_BUILD_TYPE === 'local'
 
 if (isLocalBuild) {
-  root.render(<计算器 />)
+  root.render(
+    <Suspense fallback={<FullLoading />}>
+      <计算器 />
+    </Suspense>,
+  )
 } else {
   root.render(
     <BrowserRouter>

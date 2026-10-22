@@ -20,11 +20,11 @@ export const 获取全能加成面板 = (当前角色面板: 角色基础属性�
 }
 
 export const 破招全能值加成 = (原值, 全能等级) => {
-  return (原值 || 0) + Math.floor((全能等级 || 0) * 0.5)
+  return 原值 || 0
 }
 
 export const 无双全能值加成 = (原值, 全能等级) => {
-  return (原值 || 0) + Math.floor((全能等级 || 0) * 1.5)
+  return (原值 || 0) + Math.floor((全能等级 || 0) * 1.22)
 }
 
 export const 处理技能最终详情 = (技能最终详情, 计算技能详情) => {

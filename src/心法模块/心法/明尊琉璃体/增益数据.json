@@ -1,0 +1,1304 @@
+{
+  "repository": "https://github.com/J3junluoyu/Generator",
+  "commit": "8fad4eb8b52fa435bc656e7731ccbf40d6d41126",
+  "sources": [
+    "assets/json/buffs.json",
+    "assets/raw/enchants.py",
+    "gains/consumables.py",
+    "gains/teams.py",
+    "base/attribute.py"
+  ],
+  "buffs": {
+    "10438": {
+      "10100": {
+        "3": {
+          "name": "百炼水煮鱼",
+          "interval": 16,
+          "max_stack": 1,
+          "max_tick": 7200,
+          "attributes": {
+            "strain_base": 30
+          }
+        }
+      }
+    },
+    "10179": {
+      "18428": {
+        "1": {
+          "name": "同泽宴",
+          "interval": 57600,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "strain_base": 21
+          }
+        }
+      },
+      "2563": {
+        "1": {
+          "name": "蒸鱼菜盘",
+          "interval": 960,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "strain_base": 15
+          }
+        }
+      }
+    },
+    "10067": {
+      "34523": {
+        "1": {
+          "name": "云芝竹沥羹",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "vitality_base": 126
+          }
+        },
+        "2": {
+          "name": "云芝竹沥羹",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "agility_base": 126
+          }
+        },
+        "3": {
+          "name": "云芝竹沥羹",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "spunk_base": 126
+          }
+        },
+        "4": {
+          "name": "云芝竹沥羹",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "strength_base": 126
+          }
+        },
+        "5": {
+          "name": "云芝竹沥羹",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "spirit_base": 126
+          }
+        },
+        "6": {
+          "name": "云芝竹沥羹·精",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "vitality_base": 158
+          }
+        },
+        "7": {
+          "name": "云芝竹沥羹·精",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "agility_base": 158
+          }
+        },
+        "8": {
+          "name": "云芝竹沥羹·精",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "spunk_base": 158
+          }
+        },
+        "9": {
+          "name": "云芝竹沥羹·精",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "strength_base": 158
+          }
+        },
+        "10": {
+          "name": "云芝竹沥羹·精",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "spirit_base": 158
+          }
+        },
+        "11": {
+          "name": "荏香豆腐羹",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "vitality_base": 63
+          }
+        },
+        "12": {
+          "name": "荏香豆腐羹",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "agility_base": 63
+          }
+        },
+        "13": {
+          "name": "荏香豆腐羹",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "spunk_base": 63
+          }
+        },
+        "14": {
+          "name": "荏香豆腐羹",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "strength_base": 63
+          }
+        },
+        "15": {
+          "name": "荏香豆腐羹",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "spirit_base": 63
+          }
+        }
+      },
+      "34522": {
+        "1": {
+          "name": "渝州小面",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "all_critical_strike_base": 126
+          }
+        },
+        "2": {
+          "name": "山城毛血旺",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "all_overcome_base": 126
+          }
+        },
+        "3": {
+          "name": "藤椒鱼片",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "haste_base": 126
+          }
+        },
+        "4": {
+          "name": "云州刀削面",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "all_attack_power_base": 126
+          }
+        },
+        "5": {
+          "name": "酥油烧饼",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "therapy_power_base": 126
+          }
+        },
+        "6": {
+          "name": "菹菜拌腱肉",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1
+        },
+        "7": {
+          "name": "渝州小面·精",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "all_critical_strike_base": 158
+          }
+        },
+        "8": {
+          "name": "山城毛血旺·精",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "all_overcome_base": 158
+          }
+        },
+        "9": {
+          "name": "藤椒鱼片·精",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "haste_base": 158
+          }
+        },
+        "10": {
+          "name": "云州刀削面·精",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "all_attack_power_base": 158
+          }
+        },
+        "11": {
+          "name": "酥油烧饼·精",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "therapy_power_base": 158
+          }
+        },
+        "12": {
+          "name": "菹菜拌腱肉·精",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1
+        },
+        "13": {
+          "name": "渝州酸辣粉",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "all_critical_strike_base": 63
+          }
+        },
+        "14": {
+          "name": "曲香羊肉泡馍",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "all_overcome_base": 63
+          }
+        },
+        "15": {
+          "name": "萱草蒸鱼",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "haste_base": 63
+          }
+        },
+        "16": {
+          "name": "羊肉臊子面",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "all_attack_power_base": 63
+          }
+        },
+        "17": {
+          "name": "酥油烙馍",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "therapy_power_base": 63
+          }
+        },
+        "18": {
+          "name": "曲香蒸肉",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1
+        }
+      },
+      "34517": {
+        "1": {
+          "name": "巴渝珍馐宴",
+          "interval": 57600,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "vitality_base": 143
+          }
+        },
+        "2": {
+          "name": "巴渝珍馐宴",
+          "interval": 57600,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "agility_base": 143
+          }
+        },
+        "3": {
+          "name": "巴渝珍馐宴",
+          "interval": 57600,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "spunk_base": 143
+          }
+        },
+        "4": {
+          "name": "巴渝珍馐宴",
+          "interval": 57600,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "strength_base": 143
+          }
+        },
+        "5": {
+          "name": "巴渝珍馐宴",
+          "interval": 57600,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "spirit_base": 143
+          }
+        },
+        "6": {
+          "name": "长安珍馐宴",
+          "interval": 57600,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "vitality_base": 179
+          }
+        },
+        "7": {
+          "name": "长安珍馐宴",
+          "interval": 57600,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "agility_base": 179
+          }
+        },
+        "8": {
+          "name": "长安珍馐宴",
+          "interval": 57600,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "spunk_base": 179
+          }
+        },
+        "9": {
+          "name": "长安珍馐宴",
+          "interval": 57600,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "strength_base": 179
+          }
+        },
+        "10": {
+          "name": "长安珍馐宴",
+          "interval": 57600,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "spirit_base": 179
+          }
+        },
+        "11": {
+          "name": "云中珍馐宴",
+          "interval": 57600,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "vitality_base": 72
+          }
+        },
+        "12": {
+          "name": "云中珍馐宴",
+          "interval": 57600,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "agility_base": 72
+          }
+        },
+        "13": {
+          "name": "云中珍馐宴",
+          "interval": 57600,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "spunk_base": 72
+          }
+        },
+        "14": {
+          "name": "云中珍馐宴",
+          "interval": 57600,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "strength_base": 72
+          }
+        },
+        "15": {
+          "name": "云中珍馐宴",
+          "interval": 57600,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "spirit_base": 72
+          }
+        }
+      },
+      "34516": {
+        "1": {
+          "name": "巴山夜雨宴",
+          "interval": 57600,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "physical_attack_power_base": 72,
+            "all_critical_strike_base": 72,
+            "strain_base": 72
+          }
+        },
+        "2": {
+          "name": "嘉陵月夜宴",
+          "interval": 57600,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "magical_attack_power_base": 72,
+            "all_critical_strike_base": 72,
+            "strain_base": 72
+          }
+        },
+        "3": {
+          "name": "椒香暖玉宴",
+          "interval": 57600,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "therapy_power_base": 72,
+            "all_critical_strike_base": 72,
+            "haste_base": 72
+          }
+        },
+        "4": {
+          "name": "红汤沸鼎宴",
+          "interval": 57600,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "vitality_base": 72,
+            "max_life_add": 718
+          }
+        },
+        "5": {
+          "name": "朝天门宴",
+          "interval": 57600,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "vitality_base": 72,
+            "decritical_power_base": 72,
+            "toughness_base": 72
+          }
+        },
+        "6": {
+          "name": "华岳开锋宴",
+          "interval": 57600,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "physical_attack_power_base": 90,
+            "all_critical_strike_base": 90,
+            "strain_base": 90
+          }
+        },
+        "7": {
+          "name": "未央宫庭宴",
+          "interval": 57600,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "magical_attack_power_base": 90,
+            "all_critical_strike_base": 90,
+            "strain_base": 90
+          }
+        },
+        "8": {
+          "name": "渭水清和宴",
+          "interval": 57600,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "therapy_power_base": 90,
+            "all_critical_strike_base": 90,
+            "haste_base": 90
+          }
+        },
+        "9": {
+          "name": "秦川鼎烹宴",
+          "interval": 57600,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "vitality_base": 90,
+            "max_life_add": 897
+          }
+        },
+        "10": {
+          "name": "函谷关宴",
+          "interval": 57600,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "vitality_base": 90,
+            "decritical_power_base": 90,
+            "toughness_base": 90
+          }
+        },
+        "11": {
+          "name": "雁门猎风宴",
+          "interval": 57600,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "physical_attack_power_base": 36,
+            "all_critical_strike_base": 36,
+            "strain_base": 36
+          }
+        },
+        "12": {
+          "name": "胡笳月夜宴",
+          "interval": 57600,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "magical_attack_power_base": 36,
+            "all_critical_strike_base": 36,
+            "strain_base": 36
+          }
+        },
+        "13": {
+          "name": "塞外暖羊宴",
+          "interval": 57600,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "therapy_power_base": 36,
+            "all_critical_strike_base": 36,
+            "haste_base": 36
+          }
+        },
+        "14": {
+          "name": "黄云牧火宴",
+          "interval": 57600,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "vitality_base": 36,
+            "max_life_add": 359
+          }
+        },
+        "15": {
+          "name": "云中关宴",
+          "interval": 57600,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "vitality_base": 36,
+            "decritical_power_base": 36,
+            "toughness_base": 36
+          }
+        },
+        "16": {
+          "name": "巴山夜雨宴",
+          "interval": 57600,
+          "max_stack": 1,
+          "max_tick": 1
+        },
+        "17": {
+          "name": "巴山夜雨宴",
+          "interval": 57600,
+          "max_stack": 1,
+          "max_tick": 1
+        },
+        "18": {
+          "name": "巴山夜雨宴",
+          "interval": 57600,
+          "max_stack": 1,
+          "max_tick": 1
+        }
+      }
+    },
+    "10071": {
+      "34527": {
+        "1": {
+          "name": "五气归元丹",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "vitality_base": 162
+          }
+        },
+        "2": {
+          "name": "五气归元丹",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "agility_base": 162
+          }
+        },
+        "3": {
+          "name": "五气归元丹",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "spunk_base": 162
+          }
+        },
+        "4": {
+          "name": "五气归元丹",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "strength_base": 162
+          }
+        },
+        "5": {
+          "name": "五气归元丹",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "spirit_base": 162
+          }
+        },
+        "6": {
+          "name": "五气归元丹·精",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "vitality_base": 203
+          }
+        },
+        "7": {
+          "name": "五气归元丹·精",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "agility_base": 203
+          }
+        },
+        "8": {
+          "name": "五气归元丹·精",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "spunk_base": 203
+          }
+        },
+        "9": {
+          "name": "五气归元丹·精",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "strength_base": 203
+          }
+        },
+        "10": {
+          "name": "五气归元丹·精",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "spirit_base": 203
+          }
+        },
+        "11": {
+          "name": "五气培元丸",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "vitality_base": 81
+          }
+        },
+        "12": {
+          "name": "五气培元丸",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "agility_base": 81
+          }
+        },
+        "13": {
+          "name": "五气培元丸",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "spunk_base": 81
+          }
+        },
+        "14": {
+          "name": "五气培元丸",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "strength_base": 81
+          }
+        },
+        "15": {
+          "name": "五气培元丸",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "spirit_base": 81
+          }
+        }
+      },
+      "34525": {
+        "1": {
+          "name": "巴山凝神丹",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "all_critical_strike_base": 162
+          }
+        },
+        "2": {
+          "name": "渝州摧锋丹",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "all_overcome_base": 162
+          }
+        },
+        "3": {
+          "name": "函谷疾咏丹",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "haste_base": 162
+          }
+        },
+        "4": {
+          "name": "中原破阵丹",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "all_attack_power_base": 162
+          }
+        },
+        "5": {
+          "name": "河洛生息丹",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "therapy_power_base": 162
+          }
+        },
+        "6": {
+          "name": "云州固阵丹",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1
+        },
+        "7": {
+          "name": "巴山凝神丹·精",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "all_critical_strike_base": 203
+          }
+        },
+        "8": {
+          "name": "渝州摧锋丹·精",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "all_overcome_base": 203
+          }
+        },
+        "9": {
+          "name": "函谷疾咏丹·精",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "haste_base": 203
+          }
+        },
+        "10": {
+          "name": "中原破阵丹·精",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "all_attack_power_base": 203
+          }
+        },
+        "11": {
+          "name": "河洛生息丹·精",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "therapy_power_base": 203
+          }
+        },
+        "12": {
+          "name": "云州固阵丹·精",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1
+        },
+        "13": {
+          "name": "巴山凝神散",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "all_critical_strike_base": 81
+          }
+        },
+        "14": {
+          "name": "渝州摧锋散",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "all_overcome_base": 81
+          }
+        },
+        "15": {
+          "name": "函谷疾咏散",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "haste_base": 81
+          }
+        },
+        "16": {
+          "name": "中原破阵散",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "all_attack_power_base": 81
+          }
+        },
+        "17": {
+          "name": "河洛生息散",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "therapy_power_base": 81
+          }
+        },
+        "18": {
+          "name": "云州固阵散",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1
+        }
+      }
+    },
+    "23768": {
+      "27784": {
+        "1": {
+          "name": "刚吃过精品煎豆腐。",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "weapon_damage_base": 13
+          }
+        }
+      },
+      "27785": {
+        "1": {
+          "name": "刚吃过精品炖豆腐",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "strain_base": 87
+          }
+        }
+      },
+      "27786": {
+        "1": {
+          "name": "刚吃过精品小炒青菜",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "magical_attack_power_base": 87
+          }
+        }
+      },
+      "27787": {
+        "1": {
+          "name": "刚吃过精品清蒸鲈鱼",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "all_overcome_base": 87
+          }
+        }
+      },
+      "27788": {
+        "1": {
+          "name": "刚吃过断浪·炸鱼干",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "all_critical_strike_base": 87
+          }
+        }
+      },
+      "27792": {
+        "1": {
+          "name": "刚吃过精品葫芦叫花鸡",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "physical_attack_power_base": 87
+          }
+        }
+      },
+      "17349": {
+        "2": {
+          "name": "汾酒·旬又三",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "strength_base": 92
+          }
+        }
+      },
+      "17352": {
+        "2": {
+          "name": "关外白酒·旬又三",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "agility_base": 92
+          }
+        }
+      },
+      "17355": {
+        "2": {
+          "name": "高粱酒·旬又三",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "spirit_base": 92
+          }
+        }
+      },
+      "17358": {
+        "2": {
+          "name": "状元红·旬又三",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "spunk_base": 92
+          }
+        }
+      },
+      "17361": {
+        "2": {
+          "name": "女儿红·旬又三",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "haste_base": 92
+          }
+        }
+      },
+      "17365": {
+        "56": {
+          "name": "创意料理·盛",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "max_life_add": -2094,
+            "strain_base": 156
+          }
+        },
+        "57": {
+          "name": "创意料理·盛",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "max_life_add": -2094,
+            "magical_attack_power_base": 156
+          }
+        },
+        "58": {
+          "name": "创意料理·盛",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "max_life_add": -2094,
+            "physical_attack_power_base": 156
+          }
+        },
+        "59": {
+          "name": "创意料理·盛",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "max_life_add": -2094,
+            "all_overcome_base": 156
+          }
+        },
+        "60": {
+          "name": "创意料理·盛",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "max_life_add": -2094,
+            "all_critical_strike_base": 156
+          }
+        }
+      }
+    },
+    "545": {
+      "673": {
+        "11": {
+          "name": "袖气",
+          "interval": 28800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "all_major_base": 45,
+            "magical_shield_base": 86
+          }
+        }
+      }
+    },
+    "567": {
+      "20938": {
+        "1": {
+          "name": "左旋右转",
+          "interval": 16,
+          "max_stack": 100,
+          "max_tick": 1,
+          "attributes": {
+            "strain_base": 7
+          }
+        }
+      }
+    },
+    "246": {
+      "566": {
+        "6": {
+          "name": "立地成佛",
+          "on_target": 1,
+          "interval": 320,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "solar_shield_gain": -154,
+            "neutral_shield_gain": -154,
+            "lunar_shield_gain": -154,
+            "poison_shield_gain": -154
+          }
+        }
+      }
+    },
+    "5939": {
+      "6214": {
+        "1": {
+          "name": "禅语",
+          "interval": 400,
+          "max_stack": 100,
+          "max_tick": 1,
+          "attributes": {
+            "max_life_add": 56,
+            "strain_base": 5
+          }
+        }
+      }
+    },
+    "31208": {
+      "29294": {
+        "1": {
+          "name": "秋肃",
+          "interval": 16,
+          "max_stack": 100,
+          "max_tick": 1,
+          "attributes": {
+            "strain_base": 7
+          }
+        }
+      }
+    },
+    "13422": {
+      "8504": {
+        "1": {
+          "name": "振奋",
+          "interval": 480,
+          "max_stack": 100,
+          "max_tick": 1,
+          "attributes": {
+            "strain_base": 5
+          }
+        }
+      }
+    },
+    "18819": {
+      "23543": {
+        "1": {
+          "name": "庄周梦",
+          "interval": 16,
+          "max_stack": 100,
+          "max_tick": 60,
+          "attributes": {
+            "strain_base": 7
+          }
+        }
+      }
+    },
+    "3980": {
+      "4058": {
+        "1": {
+          "name": "戒火",
+          "on_target": 1,
+          "interval": 240,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "physical_damage_cof": 21,
+            "solar_damage_cof": 21,
+            "neutral_damage_cof": 21,
+            "lunar_damage_cof": 21,
+            "poison_damage_cof": 21
+          }
+        }
+      }
+    },
+    "13050": {
+      "8248": {
+        "1": {
+          "name": "虚弱",
+          "on_target": 1,
+          "interval": 400,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "physical_shield_gain": -51
+          }
+        }
+      }
+    },
+    "44566": {
+      "8248": {
+        "2": {
+          "name": "虚弱",
+          "on_target": 1,
+          "interval": 400,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "physical_shield_gain": -72
+          }
+        }
+      }
+    }
+  },
+  "weaponEnchants": {
+    "苍生·絮泊磨石（疗伤） 疗伤成效提升54点": {
+      "therapy_power_base": 54
+    },
+    "苍生·坠宵磨石（攻击） 全攻击提升54点": {
+      "all_attack_power_base": 54
+    },
+    "苍生·瀑沙磨石（武伤） 武器伤害提升9点": {
+      "weapon_damage_base": 9
+    },
+    "苍生·絮泊焠晶（疗伤） 疗伤成效提升135点": {
+      "therapy_power_base": 135
+    },
+    "苍生·坠宵焠晶（攻击） 全攻击提升135点": {
+      "all_attack_power_base": 135
+    },
+    "苍生·瀑沙焠晶（武伤） 武器伤害提升22点": {
+      "weapon_damage_base": 22
+    },
+    "苍生·絮泊熔锭（疗伤） 疗伤成效提升108点": {
+      "therapy_power_base": 108
+    },
+    "苍生·坠宵熔锭（攻击） 全攻击提升108点": {
+      "all_attack_power_base": 108
+    },
+    "苍生·瀑沙熔锭（武伤） 武器伤害提升18点": {
+      "weapon_damage_base": 18
+    }
+  }
+}

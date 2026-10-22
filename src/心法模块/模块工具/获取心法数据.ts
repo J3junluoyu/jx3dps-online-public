@@ -7,14 +7,14 @@ export const 获取心法数据 = async (心法?): Promise<心法配置类型> =
   if (!应显示心法) {
     应显示心法 = 简写映射?.[页面参数]
   }
-  const 目标心法 = 心法 || 应显示心法
+  const 目标心法 = 心法 || 应显示心法 || '明尊琉璃体'
 
   const 加载数据 = await import(`@/心法模块/心法/${目标心法}/index`)
   const 目标心法数据 = 加载数据?.default
 
   if (window) {
     if (window?.心法 !== 应显示心法) {
-      window.心法 = 应显示心法
+      window.心法 = 目标心法
       if (目标心法数据?.系统配置?.心法图标) {
         修改页面Logo(目标心法数据?.系统配置?.心法图标)
         document.title = `${目标心法}-配装计算器`

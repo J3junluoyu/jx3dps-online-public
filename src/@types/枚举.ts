@@ -51,6 +51,13 @@ export enum 五彩石增益类型枚举 {
 }
 
 export const 属性简写枚举 = {
+  atPhysicsShieldBase: '外防',
+  atMagicShield: '内防',
+  atActiveThreatCoefficient: '仇恨',
+  atDodge: '闪避',
+  atParryBase: '招架',
+  atParryValueBase: '拆招',
+  atToughnessBase: '御劲',
   atBasePotentialAdd: '全属',
   atVitalityBase: '体质',
   atMaxLifeBase: '气血',

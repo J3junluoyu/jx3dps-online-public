@@ -28,7 +28,7 @@ const App: React.FC = () => {
       localStorage.setItem('最后访问心法', 'shxj')
       最后一次访问的心法 = 'shxj'
     }
-    const 跳转心法 = urlXf || 最后一次访问的心法 || 'shxj'
+    const 跳转心法 = urlXf || 最后一次访问的心法 || 'mzllt'
     const query: string[] = []
     if (跳转心法) {
       query.push(`xf=${跳转心法}`)

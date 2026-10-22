@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button, Dropdown } from 'antd'
 import 装备选择范围设置 from './装备选择范围设置'
+import 获取当前数据 from '@/数据/数据工具/获取当前数据'
 
 function 配装组件标题({
   form,
@@ -24,7 +25,7 @@ function 配装组件标题({
               '大附魔_伤腰',
               '大附魔_伤腕',
               '大附魔_伤鞋',
-            ].includes(item)
+            ].includes(item),
         )
         .map((item) => {
           return {
@@ -93,7 +94,10 @@ function 配装组件标题({
           </Button>
         </Dropdown>
       </div>
-      <div className='zhuangbei-form-left-5'>
+      <div
+        className='zhuangbei-form-left-5'
+        style={获取当前数据().名称 === '明尊琉璃体' ? { visibility: 'hidden' } : undefined}
+      >
         <h1 className='zhuangbei-form-title'>大附魔</h1>
         <Dropdown
           menu={{

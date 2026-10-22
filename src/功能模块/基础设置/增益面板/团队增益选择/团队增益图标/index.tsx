@@ -40,7 +40,7 @@ function 团队增益图标(props: 团队增益图标类型) {
           />
           <h1 className={'tuandui-zengyi-img-title'}>增益来源</h1>
           <p className={'tuandui-zengyi-img-text'}>{data?.增益来源}</p>
-          {当前数据?.覆盖率 && 当前数据?.覆盖率 !== 100 ? (
+          {当前数据?.覆盖率 !== undefined && 当前数据?.覆盖率 !== 100 ? (
             <>
               <h1 className={'tuandui-zengyi-img-title'}>覆盖率</h1>
               <p className={'tuandui-zengyi-img-text'}>{当前数据?.覆盖率}%</p>

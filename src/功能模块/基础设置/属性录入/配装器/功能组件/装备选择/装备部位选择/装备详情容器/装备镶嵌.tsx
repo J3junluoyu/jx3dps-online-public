@@ -3,6 +3,7 @@ import styles from './index.module.less'
 import { 属性简写枚举 } from '@/@types/枚举'
 import 图标 from '@/数据/静态数据/图标.json'
 import 获取当前数据 from '@/数据/数据工具/获取当前数据'
+import { embedCoefficient } from '@/心法模块/心法/明尊琉璃体/装备'
 
 interface 装备镶嵌类型 {
   当前装备信息: any
@@ -34,7 +35,10 @@ const 装备镶嵌: React.FC<装备镶嵌类型> = (props) => {
                 {镶嵌孔.镶嵌类型 ? 属性简写枚举[镶嵌孔.镶嵌类型] || '未知' : '未知'}
               </span>
               <div className={styles.stomeValue}>
-                +{该镶嵌孔?.各等级增益数据[等级数据]?.增益数值}
+                +
+                {镶嵌孔.镶嵌基数 !== undefined
+                  ? Math.trunc(镶嵌孔.镶嵌基数 * embedCoefficient(等级数据))
+                  : 该镶嵌孔?.各等级增益数据[等级数据]?.增益数值}
               </div>
             </div>
           )

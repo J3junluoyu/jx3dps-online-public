@@ -1,0 +1,1790 @@
+{
+  "repository": "https://github.com/J3junluoyu/Generator",
+  "commit": "8fad4eb8b52fa435bc656e7731ccbf40d6d41126",
+  "sources": [
+    "https://www.jx3box.com/bps/109665",
+    "https://www.jx3box.com/bps/109685"
+  ],
+  "belongs": {
+    "10243": {
+      "name": "明尊琉璃体",
+      "attributes": {
+        "magical_shield_base": 228,
+        "physical_shield_base": 228,
+        "vitality_to_max_life": 2253,
+        "vitality_to_parry_value": 1280,
+        "vitality_to_dodge": 164,
+        "vitality_to_solar_attack_power": 163,
+        "vitality_to_lunar_attack_power": 163,
+        "max_life_gain": 51,
+        "dodge_base": 457
+      },
+      "recipes": [
+        "recipe_1711_1",
+        "recipe_1154_1",
+        "recipe_1155_1",
+        "recipe_1156_1",
+        "recipe_1157_1",
+        "recipe_1158_1",
+        "recipe_1159_1",
+        "recipe_1160_1",
+        "recipe_1161_1",
+        "recipe_1162_1",
+        "recipe_1163_1"
+      ],
+      "desc": "倚托清净解脱门，普愿离诸生死苦。显化妙法无尽藏，明尊肉身琉璃相。动静随心，身化琉璃。",
+      "critical_type": "lunar",
+      "damage_type": "lunar",
+      "belong_key": "belong_10243"
+    },
+    "3962": {
+      "name": "赤日轮",
+      "recipes": [
+        "recipe_999_1",
+        "recipe_1000_1",
+        "recipe_1001_1",
+        "recipe_1002_1",
+        "recipe_1003_1",
+        "recipe_1004_1",
+        "recipe_1005_1",
+        "recipe_1006_1"
+      ],
+      "desc": "三段招式，需连续施展，每次施展获得20点日灵。\\n第一段：对目标造成<SUB 4028 0>阳性内功伤害和100%武器伤害。\\n第二段：对目标及其周围5尺内至多3个敌对目标造成<SUB 4029 0>阳性内功伤害和100%武器伤害。\\n第三段：对目标及其周围6尺内至多6个敌对目标造成<SUB 4030 0>阳性内功伤害和100%武器伤害。<TALENT 3988 1 伤害提高5%><TALENT 3988 2 伤害提高10%><TALENT 4004 2 获得的日灵提高20%><TALENT 5988 1 命中眩晕效果的目标，伤害提高15%；第3段额外获得10点日灵><TALENT 18632 1 命中目标背后将获得“明光”气劲，每层增加自身6%阴、阳性基础攻击力，最多叠加4层，持续30秒><TALENT 18635 1 使下一个“幽月轮”额外获得20点月魂><TALENT 5971 1 日月凌天><TALENT 5969 1 无幽不烛><TALENT 37274 1 无往不复><TALENT 5979 1 天地诛戮><TALENT 6740 1 食肉众生><TALENT 36093 1 净恶瑕诛><TALENT 44446 1 回灵送轮><TALENT 46195 1 加距离>",
+      "belong_key": "belong_3962"
+    },
+    "3969": {
+      "name": "光明相",
+      "recipes": [
+        "recipe_1029_1",
+        "recipe_1030_1",
+        "recipe_1031_1",
+        "recipe_1033_1",
+        "recipe_1034_1",
+        "recipe_1035_1"
+      ],
+      "desc": "使自身<BUFF 4423 1 time>内<BUFF 4423 1 desc>。<TALENT 6726 1 获得“光明相”效果时额外获得“圣法光明”气劲，持续5秒。每秒解除自身控制效果（击倒除外），若成功解除，则自身下次攻击附带该效果><TALENT 16851 1 效果持续期间内，造成伤害的40%转化为自身气血值><TALENT 21757 1 在自身范围内生成8尺“羁影”效果，效果持续期间范围内自身被命中的几率降低35%，最多4名敌对玩家目标招式命中降低35%且持续期间视觉会产生影响，效果持续6秒><TALENT 25160 1 五明乐见><TALENT 30776 1 影随光生><TALENT 6749 1 涅槃路><TALENT 18818 1 归寂道><TALENT 18296 1 性命海><TALENT 21835 1 孤月无心><TALENT 6771 1 光明心><TALENT 41889 1 灵光破晓><TALENT 44486 1 晦明化相><TALENT 46194 1 日月同辉><TALENT 37337 1 崇光斩恶>",
+      "belong_key": "belong_3969"
+    },
+    "3960": {
+      "name": "银月斩",
+      "recipes": [
+        "recipe_992_1",
+        "recipe_993_1",
+        "recipe_994_1",
+        "recipe_995_1",
+        "recipe_996_1",
+        "recipe_997_1",
+        "recipe_998_1"
+      ],
+      "desc": "获得40点月魂，对目标造成<SUB 40089 0>阴性内功伤害和100%武器伤害。命中后附带“银月斩”效果，使目标<BUFF 4202 0 desc>，持续<BUFF 4202 0 time>。<TALENT 5970 1 会心后获得的月魂提高50%><TALENT 25166 1 变为2层充能招式。命中“烈日”效果的目标时，造成<SUB 26709 1>阴性内功伤害><TALENT 18279 1 净身明礼><TALENT 5972 1 腾焰飞芒><TALENT 5978 1 洞若观火><TALENT 6741 1 圣光明><TALENT 44446 1 回灵送轮><TALENT 46194 1 日月同辉>",
+      "belong_key": "belong_3960"
+    },
+    "3963": {
+      "name": "烈日斩",
+      "recipes": [
+        "recipe_1007_1",
+        "recipe_1008_1",
+        "recipe_1009_1",
+        "recipe_1010_1",
+        "recipe_1011_1",
+        "recipe_1012_1",
+        "recipe_1013_1"
+      ],
+      "desc": "获得40点日灵，对目标造成<SUB 40088 0>阳性内功伤害和100%武器伤害。命中后附带“烈日”效果，使目标受到自身“赤日轮”伤害提高10%，持续<BUFF 4418 1 time>。<TALENT 5970 1 会心后获得的日灵提高50%><TALENT 25166 1 变为2层充能招式，命中“银月斩”持续伤害效果的目标时，造成<SUB 26708 1>阳性内功伤害><TALENT 18279 1 净身明礼><TALENT 5972 1 腾焰飞芒><TALENT 5978 1 洞若观火><TALENT 34395 1 日月同辉><TALENT 6741 1 圣光明><TALENT 44446 1 回灵送轮><TALENT 46195 1 加距离><TALENT 46194 1 日月同辉>",
+      "belong_key": "belong_3963"
+    },
+    "3966": {
+      "name": "生死劫",
+      "recipes": [
+        "recipe_1621_1",
+        "recipe_1622_1",
+        "recipe_1623_1",
+        "recipe_1624_1",
+        "recipe_1625_1",
+        "recipe_1626_1",
+        "recipe_1627_1",
+        "recipe_1628_1",
+        "recipe_5207_1"
+      ],
+      "desc": "耗灵技，需消耗满日或满月，两者对应效果不同。\\n满日：对目标造成<SUB 6257 0>阳性内功伤害和100%武器伤害，并使其<BUFF 4029 0 desc>，持续4秒。\\n满月：对目标造成<SUB 6258 0>阴性内功伤害和100%武器伤害，并使其<BUFF 4030 2 desc>，持续12秒。<TALENT 32623 1 施展“生死劫”后6秒内对敌对玩家施展的“无明魂锁”的眩晕效果降低2秒，在目标气血值高于40%的时受到攻击不会苏醒><TALENT 32640 1 施展“生死劫·日”“生死劫·月”后6秒内可施展二段招式“晦明·日”“晦明·月”对目标造成阳性内功伤害或阴性内功伤害且附带额外效果。“晦明·日”会为目标施加6秒“陨日”效果，使目标伤害随机降低10%到50%并每秒降低的值依次变化，“晦明·月”使目标身上属于自身的“月劫”效果提升5%且无法被驱散和刷新，但目标每次受到自身阳性内功伤害后减少4秒持续时间><TALENT 22888 1 诛邪镇魔><TALENT 5967 1 燎原烈火><TALENT 32622 1 赤日赫炎><TALENT 34372 1 靡业报劫><TALENT 6727 1 善恶如梦><TALENT 17567 1 用晦而明><TALENT 30928 1 采曜生明><TALENT 6760 1 纵遇善缘><TALENT 41889 1 光明相增强劫><TALENT 5968 1 辉耀红尘><TALENT 46263 1 劫转珥芒><TALENT 46195 1 加距离><TALENT 40190 1 寂灭劫灰>",
+      "belong_key": "belong_3966"
+    },
+    "3967": {
+      "name": "净世破魔击",
+      "recipes": [
+        "recipe_1014_1",
+        "recipe_1015_1",
+        "recipe_1016_1",
+        "recipe_1017_1",
+        "recipe_1018_1",
+        "recipe_1019_1",
+        "recipe_1020_1",
+        "recipe_1021_1",
+        "recipe_5206_1"
+      ],
+      "desc": "耗灵技，需消耗满日或满月，两者对应效果不同。\\n满日：对自身面向180度15尺扇形区域内至多5个敌对目标造成至多<SUB 14701 0>阳性内功伤害和200%武器伤害。优先命中当前选择的目标，且其会受到全额伤害；其余目标则受到半额伤害。\\n满月：快速冲向侠士或4尺外目标，使其眩晕2秒；并连续攻击三次，每次对目标造成<SUB 4476 0>阴性内功伤害和100%武器伤害。<TALENT 6732 1 “净世破魔击·日”的范围扩大到360度；“净世破魔击·月”可以解除自身锁足减速不利效果><TALENT 3993 2 伤害提高6%><TALENT 3993 3 伤害提高9%><TALENT 3997 1 净世破魔击·日命中目标后有50%几率使目标灼烧，使目标<BUFF 4464 1 desc>(+<SKILLEx {D0} {TotalSolarAP 0.2396}>)，持续8秒。净世破魔击·月施展后立刻获得10点日灵、月魂><TALENT 6755 1 威胁值提高30%，施展后恢复5%气血值><TALENT 4005 2 招式附带大量威胁><EnchantID 10097 施展“净世破魔击”，有35%的几率使自身获得“暗尘”效果，可立即施展“驱夜断愁”。><EnchantID 10098 施展“净世破魔击”后随机恢复10至80点日灵和月魂。><TALENT 6895 1 施展后使自身加速率提高2%，可叠加5层，持续20秒><TALENT 25166 1 净体不畏><TALENT 22888 1 诛邪镇魔><TALENT 5985 1 幽隐尘迹><TALENT 5967 1 燎原烈火><TALENT 5968 1 辉耀红尘><TALENT 40190 1 寂灭劫灰><TALENT 25178 1 昭昭><TALENT 14698 1 驱夷逐法><TALENT 41889 1 灵光破晓><TALENT 44487 1 玄月影寒><TALENT 46265 1 时烬寂灭><TALENT 18626 1 伏明众生>",
+      "belong_key": "belong_3967"
+    },
+    "3959": {
+      "name": "幽月轮",
+      "recipes": [
+        "recipe_984_1",
+        "recipe_985_1",
+        "recipe_986_1",
+        "recipe_987_1",
+        "recipe_988_1",
+        "recipe_989_1",
+        "recipe_990_1",
+        "recipe_991_1"
+      ],
+      "desc": "三段招式，需连续施展，每次施展获得20点月魂。\\n第一段：对目标造成<SUB 4024 0>阴性内功伤害和100%武器伤害。\\n第二段：对目标造成<SUB 4025 0>阴性内功伤害和100%武器伤害，本段会心额外提高5%。\\n第三段：对目标造成<SUB 4026 0>阴性内功伤害和100%武器伤害，本段会心额外提高10%。<TALENT 4004 2 获得的月魂提高20%><TALENT 5988 1 命中眩晕效果的目标，伤害提高15%；第3段额外获得10点月魂><TALENT 18632 1 命中目标背后将获得“明光”气劲，每层增加自身6%阴、阳性基础攻击力，最多叠加4层，持续30秒><TALENT 18635 1 使下一个“赤日轮”额外获得20点日灵><TALENT 5971 1 日月凌天><TALENT 5969 1 无幽不烛><TALENT 37274 1 无往不复><TALENT 5979 1 天地诛戮><TALENT 6740 1 食肉众生><TALENT 36093 1 净恶瑕诛><TALENT 44446 1 回灵送轮><TALENT 46195 1 加距离>",
+      "belong_key": "belong_3959"
+    },
+    "3980": {
+      "name": "戒火斩",
+      "recipes": [
+        "recipe_1613_1",
+        "recipe_1614_1",
+        "recipe_1615_1",
+        "recipe_1616_1",
+        "recipe_1617_1",
+        "recipe_1618_1",
+        "recipe_1619_1",
+        "recipe_1620_1"
+      ],
+      "desc": "对目标造成<SUB 44567 1>阳性内功伤害，并使其<BUFF 4058 1 desc>，持续<BUFF 4058 1 time>。自身每95点体质使该伤害提高100%。<TALENT 6766 1 施展后获得20点日灵、月魂><EnchantID 10096 戒火斩使目标的易伤效果由2%提高到5%><TALENT 44569 1 炽炎镇恶>",
+      "belong_key": "belong_3980"
+    },
+    "14678": {
+      "name": "圣浴明心",
+      "desc": "完整运功“朝圣言”使自身“朝圣”效果延长5分钟，但层数衰减至十分之一；“朝圣”每层提供的无双等级提高至41点。",
+      "belong_key": "belong_14678"
+    },
+    "14679": {
+      "name": "耀火生瑞",
+      "desc": "“朝圣言”效果期间团队成员不再获得无双等级提升效果，但是受到的所有伤害降低30%。",
+      "belong_key": "belong_14679"
+    },
+    "14680": {
+      "name": "流沙渡",
+      "desc": "“朝圣言”施展时会消耗掉所有日灵、月魂，每2点日灵、月魂将降低1秒“朝圣言”调息时间。",
+      "belong_key": "belong_14680"
+    },
+    "14922": {
+      "name": "心火叹",
+      "attributes": {
+        "solar_damage_base": 20,
+        "solar_damage_rand": 1
+      },
+      "desc": "消耗一次满日和满月后方可施展，立刻攻击目标造成大量威胁值，并使自身吸收下一次受到的伤害效果，最多不超过自身气血值上限的20%。",
+      "belong_key": "belong_14922"
+    },
+    "5990": {
+      "name": "知我罪我",
+      "desc": "“幻光步”落地时，对周围8尺内的6个目标造成<SUB 6734 0>阴性内功伤害，强迫其攻击自身并使其眩晕3秒。",
+      "belong_key": "belong_5990"
+    },
+    "6743": {
+      "name": "慈悲心",
+      "recipes": [
+        "recipe_1324_1"
+      ],
+      "desc": "“慈悲愿”调息时间降低5秒。",
+      "belong_key": "belong_6743"
+    },
+    "6896": {
+      "name": "伐魔忏罪",
+      "desc": "当自身气血值低于40%时，受到伤害后立刻重置“贪魔体”的调息时间，并使自身每秒回复8%气血最大值，持续5秒，该效果每80秒最多触发一次。",
+      "belong_key": "belong_6896"
+    },
+    "25355": {
+      "name": "怜世人",
+      "desc": "“驱夜断愁”可以在“明尊琉璃体”心法下无视方位直接施展，在目标正面施展时获得10%最大气血值的护盾，在目标背后施展时返还60%调息时间。",
+      "belong_key": "belong_25355"
+    },
+    "26717": {
+      "name": "极本溯源",
+      "attributes": {
+        "all_shield_ignore": 461
+      },
+      "desc": "招式无视目标45%防御等级，“明尊”气劲每1点体质额外提高0.09点内功会心等级。",
+      "belong_key": "belong_26717"
+    },
+    "3984": {
+      "name": "渡厄力",
+      "recipes": [
+        "recipe_1065_1",
+        "recipe_1066_1",
+        "recipe_1067_1",
+        "recipe_1070_1",
+        "recipe_1071_1"
+      ],
+      "desc": "为自身周围8尺范围内最多25个团队成员添加一层护盾，可化解相当于该团队成员10%气血最大值的伤害，持续10秒。<TALENT 4010 1 每点体质可额外化解3点伤害，该效果只对自己生效><TALENT 6003 1 每点体质可额外化解3点伤害，该效果只对自己生效><TALENT 6004 1 化解伤害的比例提高到15%>",
+      "belong_key": "belong_3984"
+    },
+    "3971": {
+      "name": "极乐引",
+      "desc": "在自身当前位置生成15尺“极乐引”，4秒内可施展二段招式，<SUB 3972 0>\\n“明尊琉璃体”心法下强制“极乐引”范围内及被二段招式命中的目标攻击自身，持续4秒，并使自身造成的威胁值提高100%，周围30尺范围内所有团队成员获得无威胁气劲，持续8秒。",
+      "belong_key": "belong_3971"
+    },
+    "3981": {
+      "name": "归寂道",
+      "desc": "使目标<BUFF 4429 4 desc>，持续<BUFF 4429 4 time>。",
+      "belong_key": "belong_3981"
+    },
+    "25166": {
+      "name": "净体不畏",
+      "desc": "“烈日斩”“银月斩”命中自身异色斩不利效果的目标造成的伤害提高50%。“净世破魔击”命中自身同色斩不利效果的目标造成<SUB 26708 0>对应属性内功额外伤害，若目标非侠士则此伤害提高75%。",
+      "belong_key": "belong_25166"
+    },
+    "14675": {
+      "name": "宿角生辉",
+      "desc": "“慈悲愿”外功闪避效果降低至15%，持续10秒，效果期间自身威胁值提高30%。",
+      "belong_key": "belong_14675"
+    },
+    "14674": {
+      "name": "殇未悔",
+      "desc": "“慈悲愿”外功闪避几率提高至60%。",
+      "belong_key": "belong_14674"
+    },
+    "18296": {
+      "name": "无量妙境",
+      "desc": "“光明相”效果生效获得满灵时，原有的溢出灵魂会被转化为异色灵魂，每转化20点灵魂对当前目标额外追加一段<SUB 42565 0>对应属性内功伤害。",
+      "belong_key": "belong_18296"
+    },
+    "6895": {
+      "name": "妙镜惊寂",
+      "desc": "施展“净世破魔击”使自身获得2%可突破上限的额外加速率，可叠加5层，持续20秒。",
+      "belong_key": "belong_6895"
+    },
+    "14677": {
+      "name": "辟滞扈沙",
+      "desc": "自身气血值低于60%，受到攻击伤害超过自身气血最大值20%，则该次伤害降低30%。",
+      "belong_key": "belong_14677"
+    },
+    "46492": {
+      "name": "五明乐见",
+      "recipes": [
+        "recipe_6541_1"
+      ],
+      "desc": "“光明相”调息时间降低5秒，生效次数提高至3次，施展后5秒内自身造成伤害提高10%。",
+      "belong_key": "belong_46492"
+    },
+    "18298": {
+      "name": "忏罪归清",
+      "desc": "受到伤害则使自身御劲提高5%，持续8秒。",
+      "belong_key": "belong_18298"
+    },
+    "6760": {
+      "name": "纵遇善缘",
+      "recipes": [
+        "recipe_5822_1"
+      ],
+      "desc": "“生死劫”调息时间提高至25秒，施展后抵挡下一次受到的伤害，持续2秒。若抵挡的伤害来源为本次“生死劫”的目标，则立即对其造成<SUB 40255 0>阳性内功伤害，并使自身<BUFF 30432 1 desc>，持续30秒。",
+      "belong_key": "belong_6760"
+    },
+    "6898": {
+      "name": "超凡入圣",
+      "attributes": {
+        "max_life_gain": 102
+      },
+      "desc": "基础气血上限提高10%，被疗伤成效提高10%。",
+      "belong_key": "belong_6898"
+    },
+    "21835": {
+      "name": "孤月无心",
+      "recipes": [
+        "recipe_2739_1"
+      ],
+      "desc": "“光明相”可充能2层，充能时间提高20秒。满月状态下施展“光明相”可将自身内功防御属性转换为外功防御属性，满日状态施展“光明相”可将自身外功防御属性转换为内功防御属性，持续10秒。",
+      "belong_key": "belong_21835"
+    },
+    "6771": {
+      "name": "光明心",
+      "desc": "施展“光明相”获得50%最大气血值的护盾，持续5秒。若护盾被提前击破，则使“光明相”调息期间自身受到的伤害降低10%；否则根据结束时的剩余护盾量返还“光明相”至多50%剩余调息时间。",
+      "belong_key": "belong_6771"
+    },
+    "3961": {
+      "name": "寒月耀",
+      "attributes": {
+        "lunar_damage_base": 2,
+        "lunar_damage_rand": 1,
+        "physical_attack_power_gain": -1024
+      },
+      "desc": "打断目标运功，并对其造成<SKILL LunarDamage>点(+<SKILLEx {D0} {SkillLunarAP}>)阴性内功伤害和100%武器伤害。命中正在运功的侠士目标后使自身获得满月。",
+      "belong_key": "belong_3961"
+    },
+    "5974": {
+      "name": "血泪成悦",
+      "desc": "造成伤害的10%转化为自身气血。",
+      "belong_key": "belong_5974"
+    },
+    "18279": {
+      "name": "净身明礼",
+      "recipes": [
+        "recipe_5149_1",
+        "recipe_5150_1"
+      ],
+      "desc": "“烈日斩”“银月斩”伤害提高25%，施展时对目标周围6尺的5个目标造成<SUB 40931 1>阳性或<SUB 40932 1>阴性内功伤害，并附带“烈日”或“银月斩”效果。",
+      "belong_key": "belong_18279"
+    },
+    "6718": {
+      "name": "秽身浴露",
+      "desc": "“贪魔体”施展后卸除自身所有混元、阳性、阴性、毒性及持续伤害不利效果，期间每秒回复4%最大气血值，提前结束则获取剩余恢复值。",
+      "belong_key": "belong_6718"
+    },
+    "6766": {
+      "name": "斩火",
+      "desc": "施展“戒火斩”获得40点日灵。",
+      "belong_key": "belong_6766"
+    },
+    "6897": {
+      "name": "破死忘生",
+      "desc": "外功闪避后使自身回复5%气血最大值，该效果1秒内最多触发一次。",
+      "belong_key": "belong_6897"
+    },
+    "6748": {
+      "name": "归寂无息",
+      "desc": "“慈悲愿”可以对目标6尺范围内最多6个目标生效。",
+      "belong_key": "belong_6748"
+    },
+    "6763": {
+      "name": "除荡旷劫",
+      "desc": "消耗满日后，使自身的外功基础防御等级提高18%，持续10秒；消耗满月后，使自身的内功防御等级提高18%，持续10秒。",
+      "belong_key": "belong_6763"
+    },
+    "6753": {
+      "name": "圣火燃心",
+      "desc": "消耗满日或满月后，恢复自身5%气血值。",
+      "belong_key": "belong_6753"
+    },
+    "6000": {
+      "name": "月尽天明",
+      "desc": "施展“日月净世”、“大圣明尊法”套路招式造成阴性或阳性伤害时，朝圣言的调息时间降低1秒。",
+      "belong_key": "belong_6000"
+    },
+    "14698": {
+      "name": "驱夷逐法",
+      "desc": "日灵月魂均高于60点时，“净世破魔击”伤害提高40%。",
+      "belong_key": "belong_14698"
+    },
+    "44569": {
+      "name": "炽炎镇恶",
+      "desc": "“戒火斩”附带的“戒火”效果不再使其受到的伤害提高，效果期间自身《日月净世》、《大圣明尊法》套路招式造成伤害时额外追加触发一次“戒火斩”伤害。",
+      "belong_key": "belong_44569"
+    }
+  },
+  "skills": {
+    "10243": {
+      "4326": {
+        "1": {
+          "name": "大漠刀法",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(int(physical_attack_power * 0.011120336047659092) + int(weapon_damage + rand * weapon_damage_rand))) * (1 + 0.2001953125 * recipe_1711_1 + physical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + physical_overcome)) * shield_constant / (int(physical_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (physical_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + physical_damage_scale))"
+            }
+          ],
+          "critical_strike": "physical_critical_strike",
+          "skill_attribute": {
+            "frames": "16",
+            "physical_attack_power_cof": "0.011120336047659092",
+            "weapon_damage_cof": "1.0",
+            "damage_addition": "0.2001953125 * recipe_1711_1",
+            "damage_gain": "205 * recipe_1711_1"
+          }
+        }
+      }
+    },
+    "3962": {
+      "4028": {
+        "33": {
+          "name": "赤日轮",
+          "comment": "1段",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(13 + rand * 2 + int(solar_attack_power * 0.3284476466816277))) * (1 + 0.099609375 * recipe_5557_1 + 0.0302734375 * recipe_999_1 + 0.0400390625 * recipe_1000_1 + 0.0498046875 * recipe_1001_1 + magical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + solar_overcome)) * shield_constant / (int(solar_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (solar_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + solar_damage_scale))",
+              "source_attribute": {
+                "solar_damage_base": "13",
+                "solar_damage_rand": "2"
+              }
+            }
+          ],
+          "critical_strike": "solar_critical_strike + 0.03 * recipe_1004_1 + 0.04 * recipe_1005_1",
+          "critical_attribute": {
+            "solar_critical_strike_offset": "0.03 * recipe_1004_1 + 0.04 * recipe_1005_1",
+            "solar_critical_strike_rate": "300 * recipe_1004_1 + 400 * recipe_1005_1"
+          },
+          "skill_attribute": {
+            "frames": "510",
+            "magical_attack_power_cof": "0.3284476466816277",
+            "damage_addition": "0.099609375 * recipe_5557_1 + 0.0302734375 * recipe_999_1 + 0.0400390625 * recipe_1000_1 + 0.0498046875 * recipe_1001_1",
+            "damage_gain": "102 * recipe_5557_1 + 31 * recipe_999_1 + 41 * recipe_1000_1 + 51 * recipe_1001_1"
+          }
+        }
+      },
+      "4029": {
+        "33": {
+          "name": "赤日轮",
+          "comment": "2段",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(14 + rand * 2 + int(solar_attack_power * 0.3284476466816277))) * (1 + 0.099609375 * recipe_5557_1 + 0.0302734375 * recipe_999_1 + 0.0400390625 * recipe_1000_1 + 0.0498046875 * recipe_1001_1 + magical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + solar_overcome)) * shield_constant / (int(solar_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (solar_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + solar_damage_scale))",
+              "source_attribute": {
+                "solar_damage_base": "14",
+                "solar_damage_rand": "2"
+              }
+            }
+          ],
+          "critical_strike": "solar_critical_strike + 0.03 * recipe_1004_1 + 0.04 * recipe_1005_1",
+          "critical_attribute": {
+            "solar_critical_strike_offset": "0.03 * recipe_1004_1 + 0.04 * recipe_1005_1",
+            "solar_critical_strike_rate": "300 * recipe_1004_1 + 400 * recipe_1005_1"
+          },
+          "skill_attribute": {
+            "frames": "510",
+            "magical_attack_power_cof": "0.3284476466816277",
+            "damage_addition": "0.099609375 * recipe_5557_1 + 0.0302734375 * recipe_999_1 + 0.0400390625 * recipe_1000_1 + 0.0498046875 * recipe_1001_1",
+            "damage_gain": "102 * recipe_5557_1 + 31 * recipe_999_1 + 41 * recipe_1000_1 + 51 * recipe_1001_1"
+          }
+        }
+      },
+      "4030": {
+        "33": {
+          "name": "赤日轮",
+          "comment": "3段",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(15 + rand * 2 + int(solar_attack_power * 0.40959353586179453))) * (1 + 0.099609375 * recipe_5557_1 + 0.0302734375 * recipe_999_1 + 0.0400390625 * recipe_1000_1 + 0.0498046875 * recipe_1001_1 + magical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + solar_overcome)) * shield_constant / (int(solar_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (solar_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + solar_damage_scale))",
+              "source_attribute": {
+                "solar_damage_base": "15",
+                "solar_damage_rand": "2"
+              }
+            }
+          ],
+          "critical_strike": "solar_critical_strike + 0.03 * recipe_1004_1 + 0.04 * recipe_1005_1",
+          "critical_attribute": {
+            "solar_critical_strike_offset": "0.03 * recipe_1004_1 + 0.04 * recipe_1005_1",
+            "solar_critical_strike_rate": "300 * recipe_1004_1 + 400 * recipe_1005_1"
+          },
+          "skill_attribute": {
+            "frames": "636",
+            "magical_attack_power_cof": "0.40959353586179453",
+            "damage_addition": "0.099609375 * recipe_5557_1 + 0.0302734375 * recipe_999_1 + 0.0400390625 * recipe_1000_1 + 0.0498046875 * recipe_1001_1",
+            "damage_gain": "102 * recipe_5557_1 + 31 * recipe_999_1 + 41 * recipe_1000_1 + 51 * recipe_1001_1"
+          }
+        }
+      },
+      "19055": {
+        "1": {
+          "name": "武伤·赤日轮",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(int((int(base_physical_attack_power * physical_attack_power_addition) + extra_physical_attack_power) * 0.011120336047659092) + int(weapon_damage + rand * weapon_damage_rand))) * (1 + physical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + physical_overcome)) * shield_constant / (int(physical_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (physical_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + physical_damage_scale))",
+              "source_attribute": {
+                "physical_attack_power_addition": "-1.0",
+                "physical_attack_power_gain": "-1024"
+              }
+            }
+          ],
+          "critical_strike": "physical_critical_strike",
+          "skill_attribute": {
+            "frames": "16",
+            "physical_attack_power_cof": "0.011120336047659092",
+            "weapon_damage_cof": "1.0"
+          }
+        }
+      }
+    },
+    "3963": {
+      "40088": {
+        "32": {
+          "name": "烈日斩",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(15 + rand + int(solar_attack_power * 0.36837657627821774)) * (1 + 0.5 * buff_1_1)) * (1 + 0.0302734375 * recipe_1007_1 + 0.0400390625 * recipe_1008_1 + 0.0498046875 * recipe_1009_1 + 0.25 * recipe_5149_1 + magical_damage_addition)) * (1 + skill_damage_addition)) * (1 + 0.099609375 * recipe_1013_1 + move_state_damage_addition)) * (1 + solar_overcome)) * shield_constant / (int(solar_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (solar_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + solar_damage_scale))",
+              "source_attribute": {
+                "solar_damage_base": "15",
+                "solar_damage_rand": "1",
+                "move_state_damage_addition": "0.099609375 * recipe_1013_1",
+                "move_state_damage_gain": "102 * recipe_1013_1"
+              }
+            }
+          ],
+          "critical_strike": "solar_critical_strike + 0.03 * recipe_1010_1 + 0.04 * recipe_1011_1",
+          "critical_attribute": {
+            "solar_critical_strike_offset": "0.03 * recipe_1010_1 + 0.04 * recipe_1011_1",
+            "solar_critical_strike_rate": "300 * recipe_1010_1 + 400 * recipe_1011_1"
+          },
+          "skill_attribute": {
+            "frames": "572",
+            "magical_attack_power_cof": "0.36837657627821774",
+            "skill_damage_scale": "0.5 * buff_1_1",
+            "skill_damage_cof": "512 * buff_1_1",
+            "damage_addition": "0.0302734375 * recipe_1007_1 + 0.0400390625 * recipe_1008_1 + 0.0498046875 * recipe_1009_1 + 0.25 * recipe_5149_1",
+            "damage_gain": "31 * recipe_1007_1 + 41 * recipe_1008_1 + 51 * recipe_1009_1 + 256 * recipe_5149_1"
+          }
+        }
+      },
+      "19055": {
+        "2": {
+          "name": "武伤·烈日斩",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(int((int(base_physical_attack_power * physical_attack_power_addition) + extra_physical_attack_power) * 0.011120336047659092) + int(weapon_damage + rand * weapon_damage_rand))) * (1 + physical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + physical_overcome)) * shield_constant / (int(physical_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (physical_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + physical_damage_scale))",
+              "source_attribute": {
+                "physical_attack_power_addition": "-1.0",
+                "physical_attack_power_gain": "-1024"
+              }
+            }
+          ],
+          "critical_strike": "physical_critical_strike",
+          "skill_attribute": {
+            "frames": "16",
+            "physical_attack_power_cof": "0.011120336047659092",
+            "weapon_damage_cof": "1.0"
+          }
+        }
+      }
+    },
+    "3966": {
+      "6257": {
+        "1": {
+          "name": "生死劫·日",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(7 + rand + int(solar_attack_power * 0.04314900456405697))) * (1 + 0.0302734375 * recipe_1621_1 + 0.0400390625 * recipe_1622_1 + 0.0498046875 * recipe_1623_1 + magical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + solar_overcome)) * shield_constant / (int(solar_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (solar_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + solar_damage_scale))",
+              "source_attribute": {
+                "solar_damage_base": "7",
+                "solar_damage_rand": "1",
+                "magical_damage_addition": "0.0302734375 * recipe_1621_1 + 0.0400390625 * recipe_1622_1 + 0.0498046875 * recipe_1623_1"
+              }
+            }
+          ],
+          "critical_strike": "solar_critical_strike + recipe_4545_1",
+          "critical_attribute": {
+            "solar_critical_strike_offset": "recipe_4545_1",
+            "solar_critical_strike_rate": "10000 * recipe_4545_1"
+          },
+          "skill_attribute": {
+            "frames": "67",
+            "magical_attack_power_cof": "0.04314900456405697"
+          }
+        }
+      },
+      "6258": {
+        "1": {
+          "name": "生死劫·月",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(7 + rand + int(lunar_attack_power * 0.04314900456405697))) * (1 + 0.0302734375 * recipe_1621_1 + 0.0400390625 * recipe_1622_1 + 0.0498046875 * recipe_1623_1 + magical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + lunar_overcome)) * shield_constant / (int(lunar_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (lunar_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + lunar_damage_scale))",
+              "source_attribute": {
+                "lunar_damage_base": "7",
+                "lunar_damage_rand": "1",
+                "magical_damage_addition": "0.0302734375 * recipe_1621_1 + 0.0400390625 * recipe_1622_1 + 0.0498046875 * recipe_1623_1"
+              }
+            }
+          ],
+          "critical_strike": "lunar_critical_strike + recipe_4545_1",
+          "critical_attribute": {
+            "lunar_critical_strike_offset": "recipe_4545_1",
+            "lunar_critical_strike_rate": "10000 * recipe_4545_1"
+          },
+          "skill_attribute": {
+            "frames": "67",
+            "magical_attack_power_cof": "0.04314900456405697"
+          }
+        }
+      },
+      "19055": {
+        "3": {
+          "name": "武伤·生死劫·日",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(int((int(base_physical_attack_power * physical_attack_power_addition) + extra_physical_attack_power) * 0.011120336047659092) + int(weapon_damage + rand * weapon_damage_rand))) * (1 + physical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + physical_overcome)) * shield_constant / (int(physical_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (physical_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + physical_damage_scale))",
+              "source_attribute": {
+                "physical_attack_power_addition": "-1.0",
+                "physical_attack_power_gain": "-1024"
+              }
+            }
+          ],
+          "critical_strike": "physical_critical_strike",
+          "skill_attribute": {
+            "frames": "16",
+            "physical_attack_power_cof": "0.011120336047659092",
+            "weapon_damage_cof": "1.0"
+          }
+        },
+        "4": {
+          "name": "武伤·生死劫·月",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(int((int(base_physical_attack_power * physical_attack_power_addition) + extra_physical_attack_power) * 0.011120336047659092) + int(weapon_damage + rand * weapon_damage_rand))) * (1 + physical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + physical_overcome)) * shield_constant / (int(physical_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (physical_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + physical_damage_scale))",
+              "source_attribute": {
+                "physical_attack_power_addition": "-1.0",
+                "physical_attack_power_gain": "-1024"
+              }
+            }
+          ],
+          "critical_strike": "physical_critical_strike",
+          "skill_attribute": {
+            "frames": "16",
+            "physical_attack_power_cof": "0.011120336047659092",
+            "weapon_damage_cof": "1.0"
+          }
+        }
+      }
+    },
+    "3967": {
+      "14701": {
+        "32": {
+          "name": "净世破魔击·日",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(9 + rand + int(solar_attack_power * 0.5203641147426572))) * (1 + 0.400390625 * recipe_4489_1 + 0.0302734375 * recipe_1014_1 + 0.0400390625 * recipe_1015_1 + 0.0498046875 * recipe_1016_1 + magical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + solar_overcome)) * shield_constant / (int(solar_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (solar_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + solar_damage_scale))",
+              "source_attribute": {
+                "solar_damage_base": "9",
+                "solar_damage_rand": "1"
+              }
+            }
+          ],
+          "critical_strike": "solar_critical_strike + recipe_4546_1 + 0.03 * recipe_1017_1 + 0.04 * recipe_1018_1 + 0.05 * recipe_1019_1",
+          "critical_attribute": {
+            "solar_critical_strike_offset": "recipe_4546_1 + 0.03 * recipe_1017_1 + 0.04 * recipe_1018_1 + 0.05 * recipe_1019_1",
+            "solar_critical_strike_rate": "10000 * recipe_4546_1 + 300 * recipe_1017_1 + 400 * recipe_1018_1 + 500 * recipe_1019_1"
+          },
+          "skill_attribute": {
+            "frames": "808",
+            "magical_attack_power_cof": "0.5203641147426572",
+            "damage_addition": "0.400390625 * recipe_4489_1 + 0.0302734375 * recipe_1014_1 + 0.0400390625 * recipe_1015_1 + 0.0498046875 * recipe_1016_1",
+            "damage_gain": "410 * recipe_4489_1 + 31 * recipe_1014_1 + 41 * recipe_1015_1 + 51 * recipe_1016_1"
+          }
+        }
+      },
+      "4476": {
+        "32": {
+          "name": "净世破魔击·月",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(7 + int(lunar_attack_power * 0.1732400332497213))) * (1 + 0.400390625 * recipe_4489_1 + 0.0302734375 * recipe_1014_1 + 0.0400390625 * recipe_1015_1 + 0.0498046875 * recipe_1016_1 + magical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + lunar_overcome)) * shield_constant / (int(lunar_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (lunar_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + lunar_damage_scale))",
+              "source_attribute": {
+                "lunar_damage_base": "7"
+              }
+            }
+          ],
+          "critical_strike": "lunar_critical_strike + recipe_4546_1 + 0.03 * recipe_1017_1 + 0.04 * recipe_1018_1 + 0.05 * recipe_1019_1",
+          "critical_attribute": {
+            "lunar_critical_strike_offset": "recipe_4546_1 + 0.03 * recipe_1017_1 + 0.04 * recipe_1018_1 + 0.05 * recipe_1019_1",
+            "lunar_critical_strike_rate": "10000 * recipe_4546_1 + 300 * recipe_1017_1 + 400 * recipe_1018_1 + 500 * recipe_1019_1"
+          },
+          "skill_attribute": {
+            "frames": "269",
+            "magical_attack_power_cof": "0.1732400332497213",
+            "damage_addition": "0.400390625 * recipe_4489_1 + 0.0302734375 * recipe_1014_1 + 0.0400390625 * recipe_1015_1 + 0.0498046875 * recipe_1016_1",
+            "damage_gain": "410 * recipe_4489_1 + 31 * recipe_1014_1 + 41 * recipe_1015_1 + 51 * recipe_1016_1"
+          }
+        }
+      },
+      "19055": {
+        "5": {
+          "name": "武伤·净世破魔击·日",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(int((int(base_physical_attack_power * physical_attack_power_addition) + extra_physical_attack_power) * 0.011120336047659092) + int((weapon_damage + rand * weapon_damage_rand) * 2.0))) * (1 + physical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + physical_overcome)) * shield_constant / (int(physical_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (physical_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + physical_damage_scale))",
+              "source_attribute": {
+                "physical_attack_power_addition": "-1.0",
+                "physical_attack_power_gain": "-1024"
+              }
+            }
+          ],
+          "critical_strike": "physical_critical_strike",
+          "skill_attribute": {
+            "frames": "16",
+            "physical_attack_power_cof": "0.011120336047659092",
+            "weapon_damage_cof": "2.0"
+          }
+        },
+        "6": {
+          "name": "武伤·净世破魔击·月",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(int((int(base_physical_attack_power * physical_attack_power_addition) + extra_physical_attack_power) * 0.011120336047659092) + int(weapon_damage + rand * weapon_damage_rand))) * (1 + physical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + physical_overcome)) * shield_constant / (int(physical_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (physical_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + physical_damage_scale))",
+              "source_attribute": {
+                "physical_attack_power_addition": "-1.0",
+                "physical_attack_power_gain": "-1024"
+              }
+            }
+          ],
+          "critical_strike": "physical_critical_strike",
+          "skill_attribute": {
+            "frames": "16",
+            "physical_attack_power_cof": "0.011120336047659092",
+            "weapon_damage_cof": "1.0"
+          }
+        }
+      }
+    },
+    "3959": {
+      "4024": {
+        "24": {
+          "name": "幽月轮",
+          "comment": "1段",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(7 + int(lunar_attack_power * 0.25245387744940795))) * (1 + 0.0302734375 * recipe_984_1 + 0.0400390625 * recipe_985_1 + magical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + lunar_overcome)) * shield_constant / (int(lunar_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (lunar_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + lunar_damage_scale))",
+              "source_attribute": {
+                "lunar_damage_base": "7"
+              }
+            }
+          ],
+          "critical_strike": "lunar_critical_strike + 0.03 * recipe_988_1 + 0.04 * recipe_989_1 + 0.05 * recipe_990_1",
+          "critical_attribute": {
+            "lunar_critical_strike_offset": "0.03 * recipe_988_1 + 0.04 * recipe_989_1 + 0.05 * recipe_990_1",
+            "lunar_critical_strike_rate": "300 * recipe_988_1 + 400 * recipe_989_1 + 500 * recipe_990_1"
+          },
+          "skill_attribute": {
+            "frames": "392",
+            "magical_attack_power_cof": "0.25245387744940795",
+            "damage_addition": "0.0302734375 * recipe_984_1 + 0.0400390625 * recipe_985_1",
+            "damage_gain": "31 * recipe_984_1 + 41 * recipe_985_1"
+          }
+        }
+      },
+      "4025": {
+        "24": {
+          "name": "幽月轮",
+          "comment": "2段",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(7 + int(lunar_attack_power * 0.25245387744940795))) * (1 + 0.0302734375 * recipe_984_1 + 0.0400390625 * recipe_985_1 + magical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + lunar_overcome)) * shield_constant / (int(lunar_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (lunar_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + lunar_damage_scale))",
+              "source_attribute": {
+                "lunar_damage_base": "7"
+              }
+            }
+          ],
+          "critical_strike": "lunar_critical_strike + 0.05 + 0.03 * recipe_988_1 + 0.04 * recipe_989_1 + 0.05 * recipe_990_1",
+          "critical_attribute": {
+            "lunar_critical_strike_offset": "0.05 + 0.03 * recipe_988_1 + 0.04 * recipe_989_1 + 0.05 * recipe_990_1",
+            "lunar_critical_strike_rate": "500 + 300 * recipe_988_1 + 400 * recipe_989_1 + 500 * recipe_990_1"
+          },
+          "skill_attribute": {
+            "frames": "392",
+            "magical_attack_power_cof": "0.25245387744940795",
+            "damage_addition": "0.0302734375 * recipe_984_1 + 0.0400390625 * recipe_985_1",
+            "damage_gain": "31 * recipe_984_1 + 41 * recipe_985_1"
+          }
+        }
+      },
+      "4026": {
+        "24": {
+          "name": "幽月轮",
+          "comment": "3段",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(7 + int(lunar_attack_power * 0.2885187170850377))) * (1 + 0.0302734375 * recipe_984_1 + 0.0400390625 * recipe_985_1 + magical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + lunar_overcome)) * shield_constant / (int(lunar_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (lunar_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + lunar_damage_scale))",
+              "source_attribute": {
+                "lunar_damage_base": "7"
+              }
+            }
+          ],
+          "critical_strike": "lunar_critical_strike + 0.1 + 0.03 * recipe_988_1 + 0.04 * recipe_989_1 + 0.05 * recipe_990_1",
+          "critical_attribute": {
+            "lunar_critical_strike_offset": "0.1 + 0.03 * recipe_988_1 + 0.04 * recipe_989_1 + 0.05 * recipe_990_1",
+            "lunar_critical_strike_rate": "1000 + 300 * recipe_988_1 + 400 * recipe_989_1 + 500 * recipe_990_1"
+          },
+          "skill_attribute": {
+            "frames": "448",
+            "magical_attack_power_cof": "0.2885187170850377",
+            "damage_addition": "0.0302734375 * recipe_984_1 + 0.0400390625 * recipe_985_1",
+            "damage_gain": "31 * recipe_984_1 + 41 * recipe_985_1"
+          }
+        }
+      },
+      "19055": {
+        "7": {
+          "name": "武伤·幽月轮",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(int((int(base_physical_attack_power * physical_attack_power_addition) + extra_physical_attack_power) * 0.011120336047659092) + int(weapon_damage + rand * weapon_damage_rand))) * (1 + physical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + physical_overcome)) * shield_constant / (int(physical_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (physical_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + physical_damage_scale))",
+              "source_attribute": {
+                "physical_attack_power_addition": "-1.0",
+                "physical_attack_power_gain": "-1024"
+              }
+            }
+          ],
+          "critical_strike": "physical_critical_strike",
+          "skill_attribute": {
+            "frames": "16",
+            "physical_attack_power_cof": "0.011120336047659092",
+            "weapon_damage_cof": "1.0"
+          }
+        }
+      }
+    },
+    "3960": {
+      "40089": {
+        "18": {
+          "name": "银月斩",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(9 + rand + int(lunar_attack_power * 0.18483230313260227)) * (1 + 0.5 * buff_1_1)) * (1 + 0.25 * recipe_5150_1 + magical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + lunar_overcome)) * shield_constant / (int(lunar_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (lunar_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + lunar_damage_scale))",
+              "source_attribute": {
+                "lunar_damage_base": "9",
+                "lunar_damage_rand": "1"
+              }
+            }
+          ],
+          "critical_strike": "lunar_critical_strike + 0.03 * recipe_992_1 + 0.04 * recipe_993_1 + 0.05 * recipe_994_1",
+          "critical_attribute": {
+            "lunar_critical_strike_offset": "0.03 * recipe_992_1 + 0.04 * recipe_993_1 + 0.05 * recipe_994_1",
+            "lunar_critical_strike_rate": "300 * recipe_992_1 + 400 * recipe_993_1 + 500 * recipe_994_1"
+          },
+          "skill_attribute": {
+            "frames": "287",
+            "magical_attack_power_cof": "0.18483230313260227",
+            "skill_damage_scale": "0.5 * buff_1_1",
+            "skill_damage_cof": "512 * buff_1_1",
+            "damage_addition": "0.25 * recipe_5150_1",
+            "damage_gain": "256 * recipe_5150_1"
+          }
+        }
+      },
+      "19055": {
+        "8": {
+          "name": "武伤·银月斩",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(int((int(base_physical_attack_power * physical_attack_power_addition) + extra_physical_attack_power) * 0.011120336047659092) + int(weapon_damage + rand * weapon_damage_rand))) * (1 + physical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + physical_overcome)) * shield_constant / (int(physical_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (physical_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + physical_damage_scale))",
+              "source_attribute": {
+                "physical_attack_power_addition": "-1.0",
+                "physical_attack_power_gain": "-1024"
+              }
+            }
+          ],
+          "critical_strike": "physical_critical_strike",
+          "skill_attribute": {
+            "frames": "16",
+            "physical_attack_power_cof": "0.011120336047659092",
+            "weapon_damage_cof": "1.0"
+          }
+        }
+      }
+    },
+    "3980": {
+      "44567": {
+        "1": {
+          "name": "戒火斩",
+          "comment": "伤害提高0%",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(28 + rand * 2 + int(solar_attack_power * 0.010304239895894202))) * (1 + magical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + solar_overcome)) * shield_constant / (int(solar_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (solar_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + solar_damage_scale))",
+              "source_attribute": {
+                "solar_damage_base": "28",
+                "solar_damage_rand": "2"
+              }
+            }
+          ],
+          "critical_strike": "solar_critical_strike",
+          "skill_attribute": {
+            "frames": "16",
+            "magical_attack_power_cof": "0.010304239895894202"
+          }
+        },
+        "2": {
+          "name": "戒火斩",
+          "comment": "伤害提高100%",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(28 + rand * 2 + int(solar_attack_power * 0.020608479791788405))) * (1 + magical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + solar_overcome)) * shield_constant / (int(solar_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (solar_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + solar_damage_scale))",
+              "source_attribute": {
+                "solar_damage_base": "28",
+                "solar_damage_rand": "2"
+              }
+            }
+          ],
+          "critical_strike": "solar_critical_strike",
+          "skill_attribute": {
+            "frames": "32",
+            "magical_attack_power_cof": "0.020608479791788405"
+          }
+        },
+        "3": {
+          "name": "戒火斩",
+          "comment": "伤害提高200%",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(28 + rand * 2 + int(solar_attack_power * 0.030912719687682607))) * (1 + magical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + solar_overcome)) * shield_constant / (int(solar_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (solar_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + solar_damage_scale))",
+              "source_attribute": {
+                "solar_damage_base": "28",
+                "solar_damage_rand": "2"
+              }
+            }
+          ],
+          "critical_strike": "solar_critical_strike",
+          "skill_attribute": {
+            "frames": "48",
+            "magical_attack_power_cof": "0.030912719687682607"
+          }
+        },
+        "4": {
+          "name": "戒火斩",
+          "comment": "伤害提高300%",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(28 + rand * 2 + int(solar_attack_power * 0.04121695958357681))) * (1 + magical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + solar_overcome)) * shield_constant / (int(solar_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (solar_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + solar_damage_scale))",
+              "source_attribute": {
+                "solar_damage_base": "28",
+                "solar_damage_rand": "2"
+              }
+            }
+          ],
+          "critical_strike": "solar_critical_strike",
+          "skill_attribute": {
+            "frames": "64",
+            "magical_attack_power_cof": "0.04121695958357681"
+          }
+        },
+        "5": {
+          "name": "戒火斩",
+          "comment": "伤害提高400%",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(28 + rand * 2 + int(solar_attack_power * 0.05152119947947101))) * (1 + magical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + solar_overcome)) * shield_constant / (int(solar_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (solar_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + solar_damage_scale))",
+              "source_attribute": {
+                "solar_damage_base": "28",
+                "solar_damage_rand": "2"
+              }
+            }
+          ],
+          "critical_strike": "solar_critical_strike",
+          "skill_attribute": {
+            "frames": "80",
+            "magical_attack_power_cof": "0.05152119947947101"
+          }
+        },
+        "6": {
+          "name": "戒火斩",
+          "comment": "伤害提高500%",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(28 + rand * 2 + int(solar_attack_power * 0.061825439375365214))) * (1 + magical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + solar_overcome)) * shield_constant / (int(solar_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (solar_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + solar_damage_scale))",
+              "source_attribute": {
+                "solar_damage_base": "28",
+                "solar_damage_rand": "2"
+              }
+            }
+          ],
+          "critical_strike": "solar_critical_strike",
+          "skill_attribute": {
+            "frames": "96",
+            "magical_attack_power_cof": "0.061825439375365214"
+          }
+        },
+        "7": {
+          "name": "戒火斩",
+          "comment": "伤害提高600%",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(28 + rand * 2 + int(solar_attack_power * 0.07212967927125942))) * (1 + magical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + solar_overcome)) * shield_constant / (int(solar_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (solar_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + solar_damage_scale))",
+              "source_attribute": {
+                "solar_damage_base": "28",
+                "solar_damage_rand": "2"
+              }
+            }
+          ],
+          "critical_strike": "solar_critical_strike",
+          "skill_attribute": {
+            "frames": "112",
+            "magical_attack_power_cof": "0.07212967927125942"
+          }
+        },
+        "8": {
+          "name": "戒火斩",
+          "comment": "伤害提高700%",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(28 + rand * 2 + int(solar_attack_power * 0.08243391916715362))) * (1 + magical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + solar_overcome)) * shield_constant / (int(solar_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (solar_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + solar_damage_scale))",
+              "source_attribute": {
+                "solar_damage_base": "28",
+                "solar_damage_rand": "2"
+              }
+            }
+          ],
+          "critical_strike": "solar_critical_strike",
+          "skill_attribute": {
+            "frames": "128",
+            "magical_attack_power_cof": "0.08243391916715362"
+          }
+        },
+        "9": {
+          "name": "戒火斩",
+          "comment": "伤害提高800%",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(28 + rand * 2 + int(solar_attack_power * 0.09273815906304782))) * (1 + magical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + solar_overcome)) * shield_constant / (int(solar_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (solar_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + solar_damage_scale))",
+              "source_attribute": {
+                "solar_damage_base": "28",
+                "solar_damage_rand": "2"
+              }
+            }
+          ],
+          "critical_strike": "solar_critical_strike",
+          "skill_attribute": {
+            "frames": "144",
+            "magical_attack_power_cof": "0.09273815906304782"
+          }
+        },
+        "10": {
+          "name": "戒火斩",
+          "comment": "伤害提高900%",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(28 + rand * 2 + int(solar_attack_power * 0.10304239895894202))) * (1 + magical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + solar_overcome)) * shield_constant / (int(solar_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (solar_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + solar_damage_scale))",
+              "source_attribute": {
+                "solar_damage_base": "28",
+                "solar_damage_rand": "2"
+              }
+            }
+          ],
+          "critical_strike": "solar_critical_strike",
+          "skill_attribute": {
+            "frames": "160",
+            "magical_attack_power_cof": "0.10304239895894202"
+          }
+        },
+        "11": {
+          "name": "戒火斩",
+          "comment": "伤害提高1000%",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(28 + rand * 2 + int(solar_attack_power * 0.11334663885483623))) * (1 + magical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + solar_overcome)) * shield_constant / (int(solar_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (solar_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + solar_damage_scale))",
+              "source_attribute": {
+                "solar_damage_base": "28",
+                "solar_damage_rand": "2"
+              }
+            }
+          ],
+          "critical_strike": "solar_critical_strike",
+          "skill_attribute": {
+            "frames": "176",
+            "magical_attack_power_cof": "0.11334663885483623"
+          }
+        }
+      }
+    },
+    "14922": {
+      "14922": {
+        "1": {
+          "name": "心火叹",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(20 + rand + int(solar_attack_power * 0.09789027901099492))) * (1 + magical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + solar_overcome)) * shield_constant / (int(solar_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (solar_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + solar_damage_scale))",
+              "source_attribute": {
+                "solar_damage_base": "20",
+                "solar_damage_rand": "1"
+              }
+            }
+          ],
+          "critical_strike": "solar_critical_strike",
+          "skill_attribute": {
+            "frames": "152",
+            "magical_attack_power_cof": "0.09789027901099492"
+          }
+        }
+      }
+    },
+    "5990": {
+      "6734": {
+        "1": {
+          "name": "幻光步",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(29 + rand + int(lunar_attack_power * 0.06440149934933877))) * (1 + magical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + lunar_overcome)) * shield_constant / (int(lunar_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (lunar_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + lunar_damage_scale))",
+              "source_attribute": {
+                "lunar_damage_base": "29",
+                "lunar_damage_rand": "1"
+              }
+            }
+          ],
+          "critical_strike": "lunar_critical_strike",
+          "skill_attribute": {
+            "frames": "100",
+            "magical_attack_power_cof": "0.06440149934933877"
+          }
+        }
+      }
+    },
+    "25355": {
+      "4480": {
+        "58": {
+          "name": "驱夜断愁",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(12 + rand + int(lunar_attack_power * 0.6820118781094975))) * (1 + magical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + lunar_overcome)) * shield_constant / (int(lunar_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (lunar_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + lunar_damage_scale))",
+              "source_attribute": {
+                "lunar_damage_base": "12",
+                "lunar_damage_rand": "1"
+              }
+            }
+          ],
+          "critical_strike": "lunar_critical_strike",
+          "skill_attribute": {
+            "frames": "1059",
+            "magical_attack_power_cof": "0.6820118781094975"
+          }
+        }
+      }
+    },
+    "25166": {
+      "26708": {
+        "1": {
+          "name": "净体不畏·日",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(10 + rand * 2 + int(solar_attack_power * 0.1719520032627345))) * (1 + magical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + solar_overcome)) * shield_constant / (int(solar_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (solar_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1.75 + pve_damage_addition)) * (1 + solar_damage_scale))",
+              "source_attribute": {
+                "solar_damage_base": "10",
+                "solar_damage_rand": "2",
+                "pve_damage_addition": "0.75",
+                "pve_damage_gain": "768"
+              }
+            }
+          ],
+          "critical_strike": "solar_critical_strike",
+          "skill_attribute": {
+            "frames": "267",
+            "magical_attack_power_cof": "0.1719520032627345"
+          }
+        }
+      },
+      "26709": {
+        "1": {
+          "name": "净体不畏·月",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(10 + rand * 2 + int(lunar_attack_power * 0.1719520032627345))) * (1 + magical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + lunar_overcome)) * shield_constant / (int(lunar_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (lunar_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1.75 + pve_damage_addition)) * (1 + lunar_damage_scale))",
+              "source_attribute": {
+                "lunar_damage_base": "10",
+                "lunar_damage_rand": "2",
+                "pve_damage_addition": "0.75",
+                "pve_damage_gain": "768"
+              }
+            }
+          ],
+          "critical_strike": "lunar_critical_strike",
+          "skill_attribute": {
+            "frames": "267",
+            "magical_attack_power_cof": "0.1719520032627345"
+          }
+        }
+      }
+    },
+    "18296": {
+      "42565": {
+        "1": {
+          "name": "无量妙境",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(2 + rand + int(solar_attack_power * 0.3451920365124558))) * (1 + magical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + solar_overcome)) * shield_constant / (int(solar_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (solar_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + solar_damage_scale))",
+              "source_attribute": {
+                "solar_damage_base": "2",
+                "solar_damage_rand": "1"
+              }
+            }
+          ],
+          "critical_strike": "solar_critical_strike",
+          "skill_attribute": {
+            "frames": "536",
+            "magical_attack_power_cof": "0.3451920365124558"
+          }
+        }
+      },
+      "42566": {
+        "1": {
+          "name": "无量妙境",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(2 + rand + int(lunar_attack_power * 0.3451920365124558))) * (1 + magical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + lunar_overcome)) * shield_constant / (int(lunar_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (lunar_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + lunar_damage_scale))",
+              "source_attribute": {
+                "lunar_damage_base": "2",
+                "lunar_damage_rand": "1"
+              }
+            }
+          ],
+          "critical_strike": "lunar_critical_strike",
+          "skill_attribute": {
+            "frames": "536",
+            "magical_attack_power_cof": "0.3451920365124558"
+          }
+        }
+      }
+    },
+    "6760": {
+      "40255": {
+        "1": {
+          "name": "纵遇善缘",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(19 + rand * 19 + int(solar_attack_power * 3.0912719687682606))) * (1 + magical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + solar_overcome)) * shield_constant / (int(solar_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + solar_critical_strike * (solar_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + solar_damage_scale))",
+              "source_attribute": {
+                "solar_damage_base": "19",
+                "solar_damage_rand": "19"
+              }
+            }
+          ],
+          "critical_strike": "0",
+          "skill_attribute": {
+            "frames": "4800",
+            "magical_attack_power_cof": "3.0912719687682606"
+          }
+        }
+      }
+    },
+    "3961": {
+      "3961": {
+        "1": {
+          "name": "寒月耀",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(2 + rand + int(lunar_attack_power * 0.010304239895894202))) * (1 + magical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + lunar_overcome)) * shield_constant / (int(lunar_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (lunar_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + lunar_damage_scale))",
+              "source_attribute": {
+                "lunar_damage_base": "2",
+                "lunar_damage_rand": "1"
+              }
+            },
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(int((int(base_physical_attack_power * physical_attack_power_addition) + extra_physical_attack_power) * 0.011120336047659092) + int(weapon_damage + rand * weapon_damage_rand))) * (1 + physical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + physical_overcome)) * shield_constant / (int(physical_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (lunar_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + physical_damage_scale))",
+              "source_attribute": {
+                "physical_attack_power_addition": "-1.0",
+                "physical_attack_power_gain": "-1024"
+              }
+            }
+          ],
+          "critical_strike": "lunar_critical_strike",
+          "skill_attribute": {
+            "frames": "16",
+            "magical_attack_power_cof": "0.010304239895894202",
+            "physical_attack_power_cof": "0.011120336047659092",
+            "weapon_damage_cof": "1.0"
+          }
+        }
+      }
+    },
+    "18279": {
+      "40931": {
+        "1": {
+          "name": "净身明礼·日",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(3 + int(solar_attack_power * 0.11527868383531639))) * (1 + magical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + solar_overcome)) * shield_constant / (int(solar_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (solar_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + solar_damage_scale))",
+              "source_attribute": {
+                "solar_damage_base": "3"
+              }
+            }
+          ],
+          "critical_strike": "solar_critical_strike",
+          "skill_attribute": {
+            "frames": "179",
+            "magical_attack_power_cof": "0.11527868383531639"
+          }
+        }
+      },
+      "40932": {
+        "1": {
+          "name": "净身明礼·月",
+          "damages": [
+            {
+              "damage": "int(int(int(int(int(int(int(int(int(int(int(int(3 + int(lunar_attack_power * 0.06504551434283215))) * (1 + magical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + lunar_overcome)) * shield_constant / (int(lunar_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (lunar_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + lunar_damage_scale))",
+              "source_attribute": {
+                "lunar_damage_base": "3"
+              }
+            }
+          ],
+          "critical_strike": "lunar_critical_strike",
+          "skill_attribute": {
+            "frames": "101",
+            "magical_attack_power_cof": "0.06504551434283215"
+          }
+        }
+      }
+    }
+  },
+  "buffs": {
+    "10243": {
+      "17885": {
+        "4": {
+          "name": "明尊·宿敌",
+          "comment": "主T",
+          "interval": 1200,
+          "max_stack": 1,
+          "max_tick": 4,
+          "attributes": {
+            "vitality_to_solar_attack_power": 1828,
+            "vitality_to_magical_overcome": 549,
+            "vitality_to_lunar_attack_power": 1828
+          }
+        },
+        "7": {
+          "name": "明尊·宿敌",
+          "comment": "主T极本溯源",
+          "interval": 1200,
+          "max_stack": 1,
+          "max_tick": 4,
+          "attributes": {
+            "vitality_to_solar_attack_power": 1828,
+            "vitality_to_magical_overcome": 549,
+            "vitality_to_lunar_attack_power": 1828,
+            "vitality_to_magical_critical_strike": 90
+          }
+        }
+      },
+      "29938": {
+        "4": {
+          "name": "明尊",
+          "comment": "副T",
+          "interval": 4800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "vitality_to_solar_attack_power": 610,
+            "vitality_to_magical_overcome": 184,
+            "vitality_to_lunar_attack_power": 610
+          }
+        },
+        "7": {
+          "name": "明尊",
+          "comment": "副T极本溯源",
+          "interval": 4800,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "vitality_to_solar_attack_power": 610,
+            "vitality_to_magical_overcome": 184,
+            "vitality_to_lunar_attack_power": 610,
+            "vitality_to_magical_critical_strike": 90
+          }
+        }
+      }
+    },
+    "3962": {
+      "28355": {
+        "1": {
+          "name": "烈日",
+          "comment": "自身",
+          "interval": 8,
+          "max_stack": 1,
+          "max_tick": 1,
+          "recipes": [
+            "recipe_5557_1"
+          ]
+        }
+      }
+    },
+    "3969": {
+      "4423": {
+        "1": {
+          "name": "光明相",
+          "interval": 160,
+          "max_stack": 3,
+          "max_tick": 1,
+          "recipes": [
+            "recipe_4545_1",
+            "recipe_4546_1"
+          ]
+        }
+      }
+    },
+    "25166": {
+      "1": {
+        "1": {
+          "name": "净体不畏",
+          "interval": 1,
+          "max_stack": 1,
+          "max_tick": 1,
+          "skills": {
+            "40088": {},
+            "40089": {}
+          },
+          "buff_key": "buff_1_1"
+        }
+      }
+    },
+    "14698": {
+      "12578": {
+        "2": {
+          "name": "驱夷逐法",
+          "interval": 14,
+          "max_stack": 1,
+          "max_tick": 1,
+          "recipes": [
+            "recipe_4489_1"
+          ]
+        }
+      }
+    }
+  },
+  "dots": {
+    "3960": {
+      "4202": {
+        "18": {
+          "name": "银月斩(DOT)",
+          "interval": "32",
+          "max_stack": 1,
+          "max_tick": 9,
+          "skills": {
+            "13359": {
+              "18": {
+                "name": "银月斩",
+                "comment": "",
+                "damages": [
+                  {
+                    "damage": "int(int(int(int(int(int(int(int(int(int(int(int(1 + int(lunar_attack_power * 0.0369235262936209))) * (1 + magical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + lunar_overcome)) * shield_constant / (int(lunar_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (lunar_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + lunar_damage_scale))",
+                    "source_attribute": {
+                      "lunar_damage_base": "1"
+                    }
+                  }
+                ],
+                "critical_strike": "lunar_critical_strike + 0.03 * recipe_992_1 + 0.04 * recipe_993_1 + 0.05 * recipe_994_1",
+                "critical_attribute": {
+                  "lunar_critical_strike_offset": "0.03 * recipe_992_1 + 0.04 * recipe_993_1 + 0.05 * recipe_994_1",
+                  "lunar_critical_strike_rate": "300 * recipe_992_1 + 400 * recipe_993_1 + 500 * recipe_994_1"
+                },
+                "skill_attribute": {
+                  "frames": "344",
+                  "magical_attack_power_cof": "0.0369235262936209"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "recipes": {
+    "3962": [
+      {
+        "name": "《日月净世·赤日轮》参悟残页",
+        "desc": "伤害提高3%。",
+        "recipe_key": "recipe_999_1"
+      },
+      {
+        "name": "《日月净世·赤日轮》参悟断篇",
+        "desc": "伤害提高4%。",
+        "recipe_key": "recipe_1000_1"
+      },
+      {
+        "name": "《日月净世·赤日轮》参悟绝章",
+        "desc": "伤害提高5%。",
+        "recipe_key": "recipe_1001_1"
+      },
+      {
+        "name": "《日月净世·赤日轮》详解残页",
+        "desc": "命中提高1%。",
+        "recipe_key": "recipe_1002_1"
+      },
+      {
+        "name": "《日月净世·赤日轮》详解断篇",
+        "desc": "命中提高2%。",
+        "recipe_key": "recipe_1003_1"
+      },
+      {
+        "name": "《日月净世·赤日轮》秘诀残页",
+        "desc": "会心提高3%。",
+        "recipe_key": "recipe_1004_1"
+      },
+      {
+        "name": "《日月净世·赤日轮》秘诀断篇",
+        "desc": "会心提高4%。",
+        "recipe_key": "recipe_1005_1"
+      },
+      {
+        "name": "《日月净世·赤日轮》人偶图残页",
+        "desc": "第三段伤害每命中一个目标额外获得4点日灵。",
+        "recipe_key": "recipe_1006_1"
+      }
+    ],
+    "3969": [
+      {
+        "name": "《幻魔妙相·光明相》穴位图残页",
+        "desc": "调息时间减少10秒。",
+        "recipe_key": "recipe_1029_1"
+      },
+      {
+        "name": "《幻魔妙相·光明相》穴位图断篇",
+        "desc": "调息时间减少10秒。",
+        "recipe_key": "recipe_1030_1"
+      },
+      {
+        "name": "《幻魔妙相·光明相》穴位图绝章",
+        "desc": "调息时间减少10秒。",
+        "recipe_key": "recipe_1031_1"
+      },
+      {
+        "name": "《幻魔妙相·光明相》人偶图绝章",
+        "desc": "使自身日灵、月魂的获取速度提高20%，持续6秒。",
+        "recipe_key": "recipe_1033_1"
+      },
+      {
+        "name": "《幻魔妙相·光明相》人偶图残页",
+        "desc": "使自身每秒回复1%气血上限，持续5秒。",
+        "recipe_key": "recipe_1034_1"
+      },
+      {
+        "name": "《幻魔妙相·光明相》人偶图断篇",
+        "desc": "卸除自身混元、阳性、阴性、毒性不利效果各一个。",
+        "recipe_key": "recipe_1035_1"
+      }
+    ],
+    "3960": [
+      {
+        "name": "《日月净世·银月斩》秘诀残页",
+        "desc": "会心提高3%。",
+        "recipe_key": "recipe_992_1"
+      },
+      {
+        "name": "《日月净世·银月斩》秘诀断篇",
+        "desc": "会心提高4%。",
+        "recipe_key": "recipe_993_1"
+      },
+      {
+        "name": "《日月净世·银月斩》秘诀绝章",
+        "desc": "会心提高5%。",
+        "recipe_key": "recipe_994_1"
+      },
+      {
+        "name": "《日月净世·银月斩》真传残页",
+        "desc": "招式的有效距离增加2尺。",
+        "recipe_key": "recipe_995_1"
+      },
+      {
+        "name": "《日月净世·银月斩》真传断篇",
+        "desc": "招式的有效距离增加2尺。",
+        "recipe_key": "recipe_996_1"
+      },
+      {
+        "name": "《日月净世·银月斩》人偶图残页",
+        "desc": "使目标造成伤害降低5%，持续5秒。",
+        "recipe_key": "recipe_997_1"
+      },
+      {
+        "name": "《日月净世·银月斩》人偶图断篇",
+        "desc": "额外获得5点月魂。",
+        "recipe_key": "recipe_998_1"
+      }
+    ],
+    "3963": [
+      {
+        "name": "《日月净世·烈日斩》参悟残页",
+        "desc": "伤害提高3%。",
+        "recipe_key": "recipe_1007_1"
+      },
+      {
+        "name": "《日月净世·烈日斩》参悟断篇",
+        "desc": "伤害提高4%。",
+        "recipe_key": "recipe_1008_1"
+      },
+      {
+        "name": "《日月净世·烈日斩》参悟绝章",
+        "desc": "伤害提高5%。",
+        "recipe_key": "recipe_1009_1"
+      },
+      {
+        "name": "《日月净世·烈日斩》秘诀残页",
+        "desc": "会心提高3%。",
+        "recipe_key": "recipe_1010_1"
+      },
+      {
+        "name": "《日月净世·烈日斩》秘诀断篇",
+        "desc": "会心提高4%。",
+        "recipe_key": "recipe_1011_1"
+      },
+      {
+        "name": "《日月净世·烈日斩》人偶图残页",
+        "desc": "施展后使自身内、外功防御提高5%，持续5秒。",
+        "recipe_key": "recipe_1012_1"
+      },
+      {
+        "name": "《日月净世·烈日斩》人偶图断篇",
+        "desc": "对原地静止的目标伤害提高10%。",
+        "recipe_key": "recipe_1013_1"
+      }
+    ],
+    "3966": [
+      {
+        "name": "《日月净世·生死劫》参悟残页",
+        "desc": "伤害提高3%。",
+        "recipe_key": "recipe_1621_1"
+      },
+      {
+        "name": "《日月净世·生死劫》参悟断篇",
+        "desc": "伤害提高4%。",
+        "recipe_key": "recipe_1622_1"
+      },
+      {
+        "name": "《日月净世·生死劫》参悟绝章",
+        "desc": "伤害提高5%。",
+        "recipe_key": "recipe_1623_1"
+      },
+      {
+        "name": "《日月净世·生死劫》真传残页",
+        "desc": "招式的有效距离增加1尺。",
+        "recipe_key": "recipe_1624_1"
+      },
+      {
+        "name": "《日月净世·生死劫》真传断篇",
+        "desc": "招式的有效距离增加1尺。",
+        "recipe_key": "recipe_1625_1"
+      },
+      {
+        "name": "《日月净世·生死劫》人偶图残页",
+        "desc": "眩晕和目标被疗伤成效减少的效果持续时间增加1秒。",
+        "recipe_key": "recipe_1626_1"
+      },
+      {
+        "name": "《日月净世·生死劫》详解残页",
+        "desc": "命中提高1%。",
+        "recipe_key": "recipe_1627_1"
+      },
+      {
+        "name": "《日月净世·生死劫》详解断篇",
+        "desc": "命中提高2%。",
+        "recipe_key": "recipe_1628_1"
+      },
+      {
+        "name": "《日月净世·生死劫》人偶图断篇",
+        "desc": "“生死劫·日”使目标受到治疗效果降低30%，持续12秒。",
+        "recipe_key": "recipe_5207_1"
+      }
+    ],
+    "3967": [
+      {
+        "name": "《日月净世·净世破魔击》参悟残页",
+        "desc": "伤害提高3%。",
+        "recipe_key": "recipe_1014_1"
+      },
+      {
+        "name": "《日月净世·净世破魔击》参悟断篇",
+        "desc": "伤害提高4%。",
+        "recipe_key": "recipe_1015_1"
+      },
+      {
+        "name": "《日月净世·净世破魔击》参悟绝章",
+        "desc": "伤害提高5%。",
+        "recipe_key": "recipe_1016_1"
+      },
+      {
+        "name": "《日月净世·净世破魔击》秘诀残页",
+        "desc": "会心提高3%。",
+        "recipe_key": "recipe_1017_1"
+      },
+      {
+        "name": "《日月净世·净世破魔击》秘诀断篇",
+        "desc": "会心提高4%。",
+        "recipe_key": "recipe_1018_1"
+      },
+      {
+        "name": "《日月净世·净世破魔击》秘诀绝章",
+        "desc": "会心提高5%。",
+        "recipe_key": "recipe_1019_1"
+      },
+      {
+        "name": "《日月净世·净世破魔击》人偶图残页",
+        "desc": "施展招式会心后可卸除目标混元、阳性、阴性、毒性增益气劲各一个。",
+        "recipe_key": "recipe_1020_1"
+      },
+      {
+        "name": "《日月净世·净世破魔击》人偶图断篇",
+        "desc": "施展后移动速度提高40%，持续8秒。",
+        "recipe_key": "recipe_1021_1"
+      },
+      {
+        "name": "《日月净世·净世破魔击》人偶图绝章",
+        "desc": "消耗满月施展获得20点月魂。",
+        "recipe_key": "recipe_5206_1"
+      }
+    ],
+    "3959": [
+      {
+        "name": "《日月净世·幽月轮》参悟残页",
+        "desc": "伤害提高3%。",
+        "recipe_key": "recipe_984_1"
+      },
+      {
+        "name": "《日月净世·幽月轮》参悟断篇",
+        "desc": "伤害提高4%。",
+        "recipe_key": "recipe_985_1"
+      },
+      {
+        "name": "《日月净世·幽月轮》详解残页",
+        "desc": "命中提高1%。",
+        "recipe_key": "recipe_986_1"
+      },
+      {
+        "name": "《日月净世·幽月轮》详解断篇",
+        "desc": "命中提高2%。",
+        "recipe_key": "recipe_987_1"
+      },
+      {
+        "name": "《日月净世·幽月轮》秘诀残页",
+        "desc": "会心提高3%。",
+        "recipe_key": "recipe_988_1"
+      },
+      {
+        "name": "《日月净世·幽月轮》秘诀断篇",
+        "desc": "会心提高4%。",
+        "recipe_key": "recipe_989_1"
+      },
+      {
+        "name": "《日月净世·幽月轮》秘诀绝章",
+        "desc": "会心提高5%。",
+        "recipe_key": "recipe_990_1"
+      },
+      {
+        "name": "《日月净世·幽月轮》人偶图残页",
+        "desc": "会心后额外获得5点月魂。",
+        "recipe_key": "recipe_991_1"
+      }
+    ],
+    "3980": [
+      {
+        "name": "《大圣明尊法·戒火斩》详解残页",
+        "desc": "命中提高1%。",
+        "recipe_key": "recipe_1613_1"
+      },
+      {
+        "name": "《大圣明尊法·戒火斩》详解断篇",
+        "desc": "命中提高2%。",
+        "recipe_key": "recipe_1614_1"
+      },
+      {
+        "name": "《大圣明尊法·戒火斩》穴位图残页",
+        "desc": "调息时间减少1秒。",
+        "recipe_key": "recipe_1615_1"
+      },
+      {
+        "name": "《大圣明尊法·戒火斩》真传残页",
+        "desc": "招式的有效距离增加2尺。",
+        "recipe_key": "recipe_1616_1"
+      },
+      {
+        "name": "《大圣明尊法·戒火斩》真传断篇",
+        "desc": "招式的有效距离增加3尺。",
+        "recipe_key": "recipe_1617_1"
+      },
+      {
+        "name": "《大圣明尊法·戒火斩》注释残页",
+        "desc": "威胁提高10%。",
+        "recipe_key": "recipe_1618_1"
+      },
+      {
+        "name": "《大圣明尊法·戒火斩》注释断篇",
+        "desc": "威胁提高15%。",
+        "recipe_key": "recipe_1619_1"
+      },
+      {
+        "name": "《大圣明尊法·戒火斩》注释绝章",
+        "desc": "威胁提高20%。",
+        "recipe_key": "recipe_1620_1"
+      }
+    ]
+  }
+}

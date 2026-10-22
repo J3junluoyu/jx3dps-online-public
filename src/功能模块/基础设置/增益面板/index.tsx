@@ -11,7 +11,7 @@ import 阵眼选择 from './阵眼选择'
 import 计算最佳增益 from './计算最佳增益'
 import './index.css'
 
-const { 默认数据 = {} } = 获取当前数据()
+const { 默认数据 = {}, 名称, 阵眼 } = 获取当前数据()
 const { 增益快捷设置数据 = [] } = 默认数据
 
 function 增益面板() {
@@ -39,9 +39,9 @@ function 增益面板() {
   }
 
   return (
-    <div className="zengyi-wrapper" id="Guide_13">
-      <h1 className="zengyi-title">
-        <div className="zengyi-title-text">
+    <div className='zengyi-wrapper' id='Guide_13'>
+      <h1 className='zengyi-title'>
+        <div className='zengyi-title-text'>
           增益设置
           {增益快捷设置数据?.length ? (
             <Dropdown
@@ -49,38 +49,35 @@ function 增益面板() {
                 <Menu>
                   {增益快捷设置数据.map((item) => {
                     return (
-                      <Menu.Item
-                        key={item?.快捷名称}
-                        onClick={() => 保存数据并计算({ ...item })}
-                      >
+                      <Menu.Item key={item?.快捷名称} onClick={() => 保存数据并计算({ ...item })}>
                         {item?.快捷名称}
                       </Menu.Item>
                     )
                   })}
                 </Menu>
               }
-              placement="topLeft"
+              placement='topLeft'
             >
-              <Button size="small" style={{ marginLeft: 8, marginRight: 8 }}>
+              <Button size='small' style={{ marginLeft: 8, marginRight: 8 }}>
                 快捷设置
               </Button>
             </Dropdown>
           ) : null}
-          <计算最佳增益 保存数据并计算={保存数据并计算} />
+          {名称 !== '明尊琉璃体' && <计算最佳增益 保存数据并计算={保存数据并计算} />}
         </div>
         <div className={'zengyi-operator'}>
           <Checkbox
-            className="zengyi-operator-checkbox"
+            className='zengyi-operator-checkbox'
             checked={!!开启智能对比}
             onChange={(e) => 设置开启智能对比(e?.target?.checked)}
           >
-            <Tooltip title="对阵眼、小药做智能dps对比，仅在增益效果启用情况下生效，开启将增加性能损耗">
+            <Tooltip title='对阵眼、小药做智能dps对比，仅在增益效果启用情况下生效，开启将增加性能损耗'>
               对比
             </Tooltip>
           </Checkbox>
-          <span id="Guide_14">
+          <span id='Guide_14'>
             <Checkbox
-              className="zengyi-operator-checkbox"
+              className='zengyi-operator-checkbox'
               checked={!!增益启用}
               onChange={(e) => 切换增益启用状态(e?.target?.checked)}
             >
@@ -89,15 +86,14 @@ function 增益面板() {
           </span>
         </div>
       </h1>
-      <阵眼选择
-        value={增益数据?.阵眼 || undefined}
-        开启智能对比={开启智能对比}
-        onChange={修改阵眼数据}
-      />
-      <小药小吃选择
-        保存数据并计算={保存数据并计算}
-        开启智能对比={开启智能对比}
-      />
+      {!!阵眼?.length && (
+        <阵眼选择
+          value={增益数据?.阵眼 || undefined}
+          开启智能对比={开启智能对比}
+          onChange={修改阵眼数据}
+        />
+      )}
+      <小药小吃选择 保存数据并计算={保存数据并计算} 开启智能对比={开启智能对比} />
       <团队增益选择 保存数据并计算={保存数据并计算} />
     </div>
   )

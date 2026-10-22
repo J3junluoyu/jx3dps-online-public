@@ -3,7 +3,7 @@ import 获取当前数据 from '@/数据/数据工具/获取当前数据'
 import { 基础属性计算 } from '../../工具函数/根据装备信息获取基础属性'
 import { 装备位置部位枚举 } from '@/@types/装备'
 
-const { 附魔 } = 获取当前数据()
+const { 附魔, 性能功能关闭数组 = [] } = 获取当前数据()
 
 export const 修改装备属性 = (装备基础属性: 角色基础属性类型, 当前附魔数据) => {
   let 计算后属性 = { ...装备基础属性 }
@@ -20,6 +20,7 @@ export const 修改装备属性 = (装备基础属性: 角色基础属性类型,
 }
 
 export const 初始化所有组合 = (计算部位, 过滤挑战附魔) => {
+  if (性能功能关闭数组.includes('一键附魔')) return []
   const res = {}
   // 先找出该装备部位支持的同种类的最大数值的附魔
   Object.keys(装备位置部位枚举)
@@ -90,7 +91,7 @@ function filterUniqueObjects(arr) {
           const firstKey = Object.keys(item as any)?.[0]
           return `${firstKey}+${item?.[firstKey]}`
         })
-        .sort()
+        .sort(),
     )
 
   const seen = new Set()

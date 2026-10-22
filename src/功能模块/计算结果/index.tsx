@@ -13,7 +13,7 @@ import 技能统计图表 from './技能统计图表'
 import './index.css'
 import useCycle from '@/hooks/use-cycle'
 
-const { 系统配置, 缓存映射 } = 获取当前数据()
+const { 系统配置, 缓存映射, 名称 } = 获取当前数据()
 
 type 循环要求 = {
   加速?: string
@@ -123,7 +123,7 @@ function 计算结果() {
         {当前计算结果?.秒伤 ? (
           <div className={'dps-number-count'}>
             <div id='Guide_8' className={'dps-number-count-text'}>
-              {当前计算结果?.秒伤}
+              {名称 === '明尊琉璃体' ? 当前计算结果.秒伤.toFixed(2) : 当前计算结果.秒伤}
             </div>
             <Button
               className={'dps-number-count-skill-btn'}
@@ -134,12 +134,17 @@ function 计算结果() {
             >
               技能详情
             </Button>
-            {!增益启用 ? (
+            {!增益启用 && 名称 !== '明尊琉璃体' ? (
               <div className={'dps-number-count-gain-tip'}>
                 当前为纯木桩计算，计算属性收益时建议
                 <b style={{ textDecorationLine: 'underline' }}>开启增益</b>。
               </div>
             ) : null}
+          </div>
+        ) : 名称 === '明尊琉璃体' ? (
+          <div className='dps-number-count-no-result'>
+            <h1>尚未填写技能次数</h1>
+            <p>在“技能次数 / 增益”中填写实际命中次数后计算。</p>
           </div>
         ) : (
           <div className={'dps-number-count-no-result'}>

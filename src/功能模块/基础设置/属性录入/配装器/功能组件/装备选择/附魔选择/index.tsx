@@ -4,6 +4,7 @@ import { 附魔数据类型 } from '@/@types/附魔'
 import { 秒伤计算 } from '@/计算模块/计算函数'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import 根据表单选项获取装备信息 from '../../../工具函数/根据表单选项获取装备信息'
+import { 格式化附魔名称 } from '../../../工具函数/附魔显示'
 import './index.css'
 import classNames from 'classnames'
 import { 装备位置部位枚举 } from '@/@types/装备'
@@ -96,10 +97,15 @@ function 附魔选择(props: 附魔选择入参) {
       allowClear
       showSearch
       filterOption={(input, option) => {
-        return option?.value?.toString()?.includes(input) || false
+        return (
+          option?.label?.toString()?.includes(input) ||
+          option?.value?.toString()?.includes(input) ||
+          false
+        )
       }}
-      popupMatchSelectWidth={开启装备智能对比 ? 260 : 200}
+      popupMatchSelectWidth={开启装备智能对比 ? 380 : 320}
       optionFilterProp='label'
+      optionLabelProp='label'
       onDropdownVisibleChange={(e) => {
         if (e) {
           getDpsUpList()
@@ -118,20 +124,18 @@ function 附魔选择(props: 附魔选择入参) {
           dpsPercent: 0,
         }
 
-        const 附魔名称数组 = item.附魔名称?.split('+')
-
-        const 附魔属性 = 附魔名称数组[0]
-        const 附魔值 = 附魔名称数组[1]
+        const 附魔显示名称 = 格式化附魔名称(item.附魔名称)
         const 颜色: any = item?.挑战附魔 ? '橙' : item?.附魔颜色 || '紫'
 
         return (
-          <Select.Option key={item.附魔名称} value={item.附魔名称} label={item.附魔名称}>
+          <Select.Option
+            key={item.附魔名称}
+            value={item.附魔名称}
+            label={附魔显示名称}
+            title={附魔显示名称}
+          >
             <div className='fumo-diff-wrap'>
-              <span className='fumo-diff-name-wrap'>
-                {附魔属性}
-                {'+'}
-                {附魔值}
-              </span>
+              <span className='fumo-diff-name-wrap'>{附魔显示名称}</span>
               <div className='fumo-diff-right'>
                 {upItem?.dpsUp !== 0 && 开启装备智能对比 ? (
                   <span
