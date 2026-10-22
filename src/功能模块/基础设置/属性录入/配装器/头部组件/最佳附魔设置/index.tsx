@@ -238,7 +238,7 @@ function 最佳附魔设置({ 一键替换附魔, 对比秒伤, 对比装备信�
         <div className={'max-fumo-wrap'}>
           <div className='max-fumo-content'>
             <h1 className={'max-fumo-title'}>替换前</h1>
-            <h1 className='max-fumo-dps'>{对比秒伤}</h1>
+            <h1 className='max-fumo-dps'>{Number(对比秒伤 || 0).toFixed(2)}</h1>
             <div>
               {(当前附魔信息?.当前附魔 || []).map((item, index) => {
                 return (
@@ -253,7 +253,7 @@ function 最佳附魔设置({ 一键替换附魔, 对比秒伤, 对比装备信�
           <div className='max-fumo-content'>
             <h1 className={'max-fumo-title'}>替换后</h1>
             <h1 className='max-fumo-dps dps-up-color'>
-              {最大Dps}
+              {最大Dps.toFixed(2)}
               <RiseOutlined className='max-fumo-dps-icon' />
             </h1>
             <div>

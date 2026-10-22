@@ -1,0 +1,857 @@
+{
+  "repository": "https://github.com/J3junluoyu/Generator",
+  "commit": "8fad4eb8b52fa435bc656e7731ccbf40d6d41126",
+  "sources": [
+    "assets/raw/skills.py",
+    "base/attribute.py",
+    "base/expression.py",
+    "base/constant.py",
+    "qt/classes/skill.py"
+  ],
+  "formulaHashes": {
+    "3962:19055:1": "790469e6287a22a68213795107a3f60e586e4b61bf532ef0b0ceb504677a65d8",
+    "3963:19055:2": "790469e6287a22a68213795107a3f60e586e4b61bf532ef0b0ceb504677a65d8",
+    "3966:19055:3": "790469e6287a22a68213795107a3f60e586e4b61bf532ef0b0ceb504677a65d8",
+    "3966:19055:4": "790469e6287a22a68213795107a3f60e586e4b61bf532ef0b0ceb504677a65d8",
+    "3967:19055:5": "ba17b1b3c495a6965289e8bc3a322ee30ced06a2f4ab21261ea67a471c648f2d",
+    "3967:19055:6": "790469e6287a22a68213795107a3f60e586e4b61bf532ef0b0ceb504677a65d8",
+    "3959:19055:7": "790469e6287a22a68213795107a3f60e586e4b61bf532ef0b0ceb504677a65d8",
+    "3960:19055:8": "790469e6287a22a68213795107a3f60e586e4b61bf532ef0b0ceb504677a65d8",
+    "10243:4326:1": "5a748faf14799aea25b5eb165097de5518aa7df661b5f1a654ef78cd501277b7"
+  },
+  "weaponAliases": {
+    "3979:19055:9": {
+      "sourceKungfu": 10242,
+      "reusedKey": "3967:19055:5",
+      "formulaHash": "ba17b1b3c495a6965289e8bc3a322ee30ced06a2f4ab21261ea67a471c648f2d"
+    }
+  },
+  "cases": [
+    {
+      "name": "基础外攻，无百分比增益",
+      "equipment": {
+        "vitality": 5000,
+        "attack": 1000,
+        "physicalAttack": 400,
+        "overcome": 500,
+        "physicalOvercome": 300,
+        "critical": 300,
+        "magicalCritical": 200,
+        "criticalPower": 150,
+        "weaponMin": 100,
+        "weaponMax": 150
+      },
+      "gains": {},
+      "panel": {
+        "base_physical_attack_power": 403,
+        "extra_physical_attack_power": 0,
+        "physical_attack_power_addition": 0.0,
+        "physical_attack_power": 403,
+        "physical_overcome": 0.029003186496270535,
+        "physical_critical_strike": 0.03195657269962609,
+        "physical_critical_power": 1.7928008902585173,
+        "strain": 0.0,
+        "vitality": 5018,
+        "toughnessPower": 0.0
+      },
+      "skills": {
+        "3962:19055:1": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [66, 118],
+            [83, 148],
+            [100, 179]
+          ]
+        },
+        "3963:19055:2": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [66, 118],
+            [83, 148],
+            [100, 179]
+          ]
+        },
+        "3966:19055:3": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [66, 118],
+            [83, 148],
+            [100, 179]
+          ]
+        },
+        "3966:19055:4": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [66, 118],
+            [83, 148],
+            [100, 179]
+          ]
+        },
+        "3967:19055:5": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [134, 240],
+            [168, 300],
+            [201, 360]
+          ]
+        },
+        "3967:19055:6": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [66, 118],
+            [83, 148],
+            [100, 179]
+          ]
+        },
+        "3959:19055:7": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [66, 118],
+            [83, 148],
+            [100, 179]
+          ]
+        },
+        "3960:19055:8": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [66, 118],
+            [83, 148],
+            [100, 179]
+          ]
+        },
+        "10243:4326:1": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [82, 147],
+            [102, 183],
+            [123, 220]
+          ]
+        }
+      }
+    },
+    {
+      "name": "通用攻击增加72",
+      "equipment": {
+        "vitality": 5000,
+        "attack": 1072,
+        "physicalAttack": 472,
+        "overcome": 500,
+        "physicalOvercome": 300,
+        "critical": 300,
+        "magicalCritical": 200,
+        "criticalPower": 150,
+        "weaponMin": 100,
+        "weaponMax": 150
+      },
+      "gains": {},
+      "panel": {
+        "base_physical_attack_power": 475,
+        "extra_physical_attack_power": 0,
+        "physical_attack_power_addition": 0.0,
+        "physical_attack_power": 475,
+        "physical_overcome": 0.029003186496270535,
+        "physical_critical_strike": 0.03195657269962609,
+        "physical_critical_power": 1.7928008902585173,
+        "strain": 0.0,
+        "vitality": 5018,
+        "toughnessPower": 0.0
+      },
+      "skills": {
+        "3962:19055:1": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [66, 118],
+            [83, 148],
+            [100, 179]
+          ]
+        },
+        "3963:19055:2": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [66, 118],
+            [83, 148],
+            [100, 179]
+          ]
+        },
+        "3966:19055:3": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [66, 118],
+            [83, 148],
+            [100, 179]
+          ]
+        },
+        "3966:19055:4": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [66, 118],
+            [83, 148],
+            [100, 179]
+          ]
+        },
+        "3967:19055:5": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [134, 240],
+            [168, 300],
+            [201, 360]
+          ]
+        },
+        "3967:19055:6": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [66, 118],
+            [83, 148],
+            [100, 179]
+          ]
+        },
+        "3959:19055:7": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [66, 118],
+            [83, 148],
+            [100, 179]
+          ]
+        },
+        "3960:19055:8": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [66, 118],
+            [83, 148],
+            [100, 179]
+          ]
+        },
+        "10243:4326:1": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [84, 150],
+            [104, 187],
+            [124, 223]
+          ]
+        }
+      }
+    },
+    {
+      "name": "通用破防增加72",
+      "equipment": {
+        "vitality": 5000,
+        "attack": 1000,
+        "physicalAttack": 400,
+        "overcome": 572,
+        "physicalOvercome": 372,
+        "critical": 300,
+        "magicalCritical": 200,
+        "criticalPower": 150,
+        "weaponMin": 100,
+        "weaponMax": 150
+      },
+      "gains": {},
+      "panel": {
+        "base_physical_attack_power": 403,
+        "extra_physical_attack_power": 0,
+        "physical_attack_power_addition": 0.0,
+        "physical_attack_power": 403,
+        "physical_overcome": 0.035940825791059505,
+        "physical_critical_strike": 0.03195657269962609,
+        "physical_critical_power": 1.7928008902585173,
+        "strain": 0.0,
+        "vitality": 5018,
+        "toughnessPower": 0.0
+      },
+      "skills": {
+        "3962:19055:1": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [67, 119],
+            [84, 150],
+            [101, 181]
+          ]
+        },
+        "3963:19055:2": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [67, 119],
+            [84, 150],
+            [101, 181]
+          ]
+        },
+        "3966:19055:3": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [67, 119],
+            [84, 150],
+            [101, 181]
+          ]
+        },
+        "3966:19055:4": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [67, 119],
+            [84, 150],
+            [101, 181]
+          ]
+        },
+        "3967:19055:5": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [135, 242],
+            [169, 302],
+            [203, 363]
+          ]
+        },
+        "3967:19055:6": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [67, 119],
+            [84, 150],
+            [101, 181]
+          ]
+        },
+        "3959:19055:7": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [67, 119],
+            [84, 150],
+            [101, 181]
+          ]
+        },
+        "3960:19055:8": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [67, 119],
+            [84, 150],
+            [101, 181]
+          ]
+        },
+        "10243:4326:1": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [83, 148],
+            [103, 185],
+            [124, 221]
+          ]
+        }
+      }
+    },
+    {
+      "name": "外攻百分比增益205",
+      "equipment": {
+        "vitality": 5000,
+        "attack": 1000,
+        "physicalAttack": 400,
+        "overcome": 500,
+        "physicalOvercome": 300,
+        "critical": 300,
+        "magicalCritical": 200,
+        "criticalPower": 150,
+        "weaponMin": 100,
+        "weaponMax": 150
+      },
+      "gains": {
+        "physical_attack_power_gain": 205
+      },
+      "panel": {
+        "base_physical_attack_power": 403,
+        "extra_physical_attack_power": 0,
+        "physical_attack_power_addition": 0.2001953125,
+        "physical_attack_power": 483,
+        "physical_overcome": 0.029003186496270535,
+        "physical_critical_strike": 0.03195657269962609,
+        "physical_critical_power": 1.7928008902585173,
+        "strain": 0.0,
+        "vitality": 5018,
+        "toughnessPower": 0.0
+      },
+      "skills": {
+        "3962:19055:1": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [66, 118],
+            [83, 148],
+            [100, 179]
+          ]
+        },
+        "3963:19055:2": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [66, 118],
+            [83, 148],
+            [100, 179]
+          ]
+        },
+        "3966:19055:3": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [66, 118],
+            [83, 148],
+            [100, 179]
+          ]
+        },
+        "3966:19055:4": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [66, 118],
+            [83, 148],
+            [100, 179]
+          ]
+        },
+        "3967:19055:5": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [134, 240],
+            [168, 300],
+            [201, 360]
+          ]
+        },
+        "3967:19055:6": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [66, 118],
+            [83, 148],
+            [100, 179]
+          ]
+        },
+        "3959:19055:7": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [66, 118],
+            [83, 148],
+            [100, 179]
+          ]
+        },
+        "3960:19055:8": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [66, 118],
+            [83, 148],
+            [100, 179]
+          ]
+        },
+        "10243:4326:1": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [84, 150],
+            [104, 187],
+            [124, 223]
+          ]
+        }
+      }
+    },
+    {
+      "name": "外攻百分比增益下增加基础外攻72",
+      "equipment": {
+        "vitality": 5000,
+        "attack": 1000,
+        "physicalAttack": 472,
+        "overcome": 500,
+        "physicalOvercome": 300,
+        "critical": 300,
+        "magicalCritical": 200,
+        "criticalPower": 150,
+        "weaponMin": 100,
+        "weaponMax": 150
+      },
+      "gains": {
+        "physical_attack_power_gain": 205
+      },
+      "panel": {
+        "base_physical_attack_power": 475,
+        "extra_physical_attack_power": 0,
+        "physical_attack_power_addition": 0.2001953125,
+        "physical_attack_power": 570,
+        "physical_overcome": 0.029003186496270535,
+        "physical_critical_strike": 0.03195657269962609,
+        "physical_critical_power": 1.7928008902585173,
+        "strain": 0.0,
+        "vitality": 5018,
+        "toughnessPower": 0.0
+      },
+      "skills": {
+        "3962:19055:1": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [67, 119],
+            [84, 150],
+            [101, 181]
+          ]
+        },
+        "3963:19055:2": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [67, 119],
+            [84, 150],
+            [101, 181]
+          ]
+        },
+        "3966:19055:3": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [67, 119],
+            [84, 150],
+            [101, 181]
+          ]
+        },
+        "3966:19055:4": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [67, 119],
+            [84, 150],
+            [101, 181]
+          ]
+        },
+        "3967:19055:5": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [134, 240],
+            [169, 302],
+            [202, 362]
+          ]
+        },
+        "3967:19055:6": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [67, 119],
+            [84, 150],
+            [101, 181]
+          ]
+        },
+        "3959:19055:7": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [67, 119],
+            [84, 150],
+            [101, 181]
+          ]
+        },
+        "3960:19055:8": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [67, 119],
+            [84, 150],
+            [101, 181]
+          ]
+        },
+        "10243:4326:1": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [85, 152],
+            [105, 188],
+            [125, 225]
+          ]
+        }
+      }
+    },
+    {
+      "name": "体质转换的额外外攻",
+      "equipment": {
+        "vitality": 5000,
+        "attack": 1000,
+        "physicalAttack": 400,
+        "overcome": 500,
+        "physicalOvercome": 300,
+        "critical": 300,
+        "magicalCritical": 200,
+        "criticalPower": 150,
+        "weaponMin": 100,
+        "weaponMax": 150
+      },
+      "gains": {
+        "vitality_to_physical_attack_power": 128
+      },
+      "panel": {
+        "base_physical_attack_power": 403,
+        "extra_physical_attack_power": 627,
+        "physical_attack_power_addition": 0.0,
+        "physical_attack_power": 1030,
+        "physical_overcome": 0.029003186496270535,
+        "physical_critical_strike": 0.03195657269962609,
+        "physical_critical_power": 1.7928008902585173,
+        "strain": 0.0,
+        "vitality": 5018,
+        "toughnessPower": 0.0
+      },
+      "skills": {
+        "3962:19055:1": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [71, 127],
+            [87, 156],
+            [104, 187]
+          ]
+        },
+        "3963:19055:2": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [71, 127],
+            [87, 156],
+            [104, 187]
+          ]
+        },
+        "3966:19055:3": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [71, 127],
+            [87, 156],
+            [104, 187]
+          ]
+        },
+        "3966:19055:4": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [71, 127],
+            [87, 156],
+            [104, 187]
+          ]
+        },
+        "3967:19055:5": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [137, 246],
+            [171, 307],
+            [205, 368]
+          ]
+        },
+        "3967:19055:6": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [71, 127],
+            [87, 156],
+            [104, 187]
+          ]
+        },
+        "3959:19055:7": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [71, 127],
+            [87, 156],
+            [104, 187]
+          ]
+        },
+        "3960:19055:8": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [71, 127],
+            [87, 156],
+            [104, 187]
+          ]
+        },
+        "10243:4326:1": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [88, 158],
+            [108, 194],
+            [129, 231]
+          ]
+        }
+      }
+    },
+    {
+      "name": "虚弱与戒火",
+      "equipment": {
+        "vitality": 5000,
+        "attack": 1000,
+        "physicalAttack": 400,
+        "overcome": 500,
+        "physicalOvercome": 300,
+        "critical": 300,
+        "magicalCritical": 200,
+        "criticalPower": 150,
+        "weaponMin": 100,
+        "weaponMax": 150
+      },
+      "gains": {
+        "physical_shield_gain": -51,
+        "physical_damage_cof": 21
+      },
+      "panel": {
+        "base_physical_attack_power": 403,
+        "extra_physical_attack_power": 0,
+        "physical_attack_power_addition": 0.0,
+        "physical_attack_power": 403,
+        "physical_overcome": 0.029003186496270535,
+        "physical_critical_strike": 0.03195657269962609,
+        "physical_critical_power": 1.7928008902585173,
+        "strain": 0.0,
+        "vitality": 5018,
+        "toughnessPower": 0.0
+      },
+      "skills": {
+        "3962:19055:1": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [68, 121],
+            [85, 153],
+            [104, 185]
+          ]
+        },
+        "3963:19055:2": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [68, 121],
+            [85, 153],
+            [104, 185]
+          ]
+        },
+        "3966:19055:3": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [68, 121],
+            [85, 153],
+            [104, 185]
+          ]
+        },
+        "3966:19055:4": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [68, 121],
+            [85, 153],
+            [104, 185]
+          ]
+        },
+        "3967:19055:5": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [138, 247],
+            [173, 310],
+            [208, 372]
+          ]
+        },
+        "3967:19055:6": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [68, 121],
+            [85, 153],
+            [104, 185]
+          ]
+        },
+        "3959:19055:7": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [68, 121],
+            [85, 153],
+            [104, 185]
+          ]
+        },
+        "3960:19055:8": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [68, 121],
+            [85, 153],
+            [104, 185]
+          ]
+        },
+        "10243:4326:1": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [85, 153],
+            [106, 190],
+            [126, 227]
+          ]
+        }
+      }
+    },
+    {
+      "name": "御劲酒92",
+      "equipment": {
+        "vitality": 5000,
+        "attack": 1000,
+        "physicalAttack": 400,
+        "overcome": 500,
+        "physicalOvercome": 300,
+        "critical": 300,
+        "magicalCritical": 200,
+        "criticalPower": 150,
+        "weaponMin": 100,
+        "weaponMax": 150,
+        "toughness": 92
+      },
+      "gains": {},
+      "panel": {
+        "base_physical_attack_power": 403,
+        "extra_physical_attack_power": 0,
+        "physical_attack_power_addition": 0.0,
+        "physical_attack_power": 403,
+        "physical_overcome": 0.029003186496270535,
+        "physical_critical_strike": 0.03195657269962609,
+        "physical_critical_power": 1.7928008902585173,
+        "strain": 0.0,
+        "vitality": 5018,
+        "toughnessPower": 0.009763531511797952
+      },
+      "skills": {
+        "3962:19055:1": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [66, 118],
+            [83, 148],
+            [100, 179]
+          ]
+        },
+        "3963:19055:2": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [66, 118],
+            [83, 148],
+            [100, 179]
+          ]
+        },
+        "3966:19055:3": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [66, 118],
+            [83, 148],
+            [100, 179]
+          ]
+        },
+        "3966:19055:4": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [66, 118],
+            [83, 148],
+            [100, 179]
+          ]
+        },
+        "3967:19055:5": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [134, 240],
+            [168, 300],
+            [201, 360]
+          ]
+        },
+        "3967:19055:6": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [66, 118],
+            [83, 148],
+            [100, 179]
+          ]
+        },
+        "3959:19055:7": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [66, 118],
+            [83, 148],
+            [100, 179]
+          ]
+        },
+        "3960:19055:8": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [66, 118],
+            [83, 148],
+            [100, 179]
+          ]
+        },
+        "10243:4326:1": {
+          "critical": 0.03195657269962609,
+          "samples": [
+            [82, 147],
+            [102, 183],
+            [123, 220]
+          ]
+        }
+      }
+    }
+  ]
+}

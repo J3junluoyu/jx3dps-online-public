@@ -1,9 +1,12 @@
 import { 属性简写枚举 } from '@/@types/枚举'
 import { 角色基础属性类型 } from '@/@types/角色'
 import 获取当前数据 from '@/数据/数据工具/获取当前数据'
+import { EMPTY_EQUIPMENT } from '@/心法模块/心法/明尊琉璃体/计算'
 
 export const 获取当前各属性最大附魔 = () => {
-  const { 附魔 } = 获取当前数据()
+  const { 名称, 附魔 } = 获取当前数据()
+  if (名称 === '明尊琉璃体')
+    return ['破防', '会心', '无双', '攻击', '体质', '会效'].map((收益) => ({ 收益, 值: 72 }))
   const res = {}
   附魔?.forEach((item) => {
     if (item?.挑战附魔 || item?.阆风仙玉) {
@@ -42,7 +45,6 @@ export const 获取单点属性收益列表 = () => {
   const mapKeyList = [
     主属性,
     '攻击',
-    '武伤',
     '无双',
     '破防',
     '会心',
@@ -62,9 +64,16 @@ export const 收益增益属性计算 = (
   值,
   角色最终属性: 角色基础属性类型,
 ): 角色基础属性类型 => {
-  const { 主属性 } = 获取当前数据()
+  const { 名称, 主属性 } = 获取当前数据()
 
   const 最终属性 = { ...角色最终属性 }
+  if (名称 === '明尊琉璃体' && ['攻击', '破防'].includes(属性)) {
+    // 通用攻击和破防同时增加内外功；克隆原始属性，避免污染下一项对比。
+    const 明尊属性 = { ...EMPTY_EQUIPMENT, ...角色最终属性.明尊属性 }
+    if (属性 === '攻击') 明尊属性.physicalAttack += 值
+    else 明尊属性.physicalOvercome += 值
+    最终属性.明尊属性 = 明尊属性
+  }
   switch (属性) {
     case 主属性:
       最终属性[主属性] += 值

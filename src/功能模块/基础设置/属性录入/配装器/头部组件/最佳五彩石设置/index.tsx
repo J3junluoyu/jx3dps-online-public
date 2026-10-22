@@ -156,7 +156,9 @@ function 最佳五彩石设置({ 一键替换五彩石, 对比秒伤, 对比装�
             <div className='max-wucaishi-wrap-content'>
               <div className='max-wucaishi-content'>
                 <h1 className={'max-wucaishi-title'}>替换前</h1>
-                <h1 className='max-wucaishi-dps dps-low-color'>{对比秒伤}</h1>
+                <h1 className='max-wucaishi-dps dps-low-color'>
+                  {Number(对比秒伤 || 0).toFixed(2)}
+                </h1>
                 <div>
                   <div className={`max-wucaishi-item`}>
                     <span className='max-wucaishi-value'>{对比装备信息?.五彩石 || '无五彩石'}</span>
@@ -166,7 +168,7 @@ function 最佳五彩石设置({ 一键替换五彩石, 对比秒伤, 对比装�
               <div className='max-wucaishi-content'>
                 <h1 className={'max-wucaishi-title'}>替换为最佳后</h1>
                 <h1 className='max-wucaishi-dps dps-up-color'>
-                  {最大Dps}
+                  {最大Dps.toFixed(2)}
                   <RiseOutlined className='max-wucaishi-dps-icon' />
                 </h1>
                 <div>
@@ -237,6 +239,7 @@ function 最佳五彩石设置({ 一键替换五彩石, 对比秒伤, 对比装�
                 width: 150,
                 title: '秒伤',
                 dataIndex: '秒伤',
+                render: (value) => Number(value || 0).toFixed(2),
                 sorter: (a: any, b: any) => {
                   return (b.秒伤 || 0) - (a.秒伤 || 0)
                 },

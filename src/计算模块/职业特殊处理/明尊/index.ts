@@ -19,7 +19,8 @@ import type { Settings, EquipmentStats } from '@/心法模块/心法/明尊琉�
 import { 明尊秘籍选项 } from '@/心法模块/心法/明尊琉璃体/秘籍'
 import { 使用基础循环格式 } from '@/心法模块/心法/明尊琉璃体/计算循环/基础循环'
 import { 计算明尊基础循环 } from './基础循环'
-import { 获取明尊增益属性 } from '@/心法模块/心法/明尊琉璃体/增益'
+import { 获取明尊技能显示信息 } from './技能显示'
+import { 获取明尊增益属性, 获取圣浴常驻层数, 圣浴常驻名称 } from '@/心法模块/心法/明尊琉璃体/增益'
 
 export const 规范明尊奇穴 = (名称: string[] = []) =>
   normalizeTalents(
@@ -47,11 +48,14 @@ export function 获取明尊计算设置(
   秘籍: 选中秘籍信息 = {},
   目标等级 = 53,
   增益启用 = false,
+  装备属性?: EquipmentStats,
 ): Settings {
   const 已选秘籍 = new Set(Object.values(规范明尊秘籍(秘籍)).flat())
-  return {
+  const 设置: Settings = {
     ...DEFAULT_SETTINGS,
     ...增益数据?.明尊设置,
+    // 烈日增伤常驻，兼容旧方案中保存的关闭状态。
+    sunlight: true,
     stance: 增益数据?.明尊设置?.stance === 'mainTank' ? 'mainTank' : 'offTank',
     targetLevel: 目标等级,
     gains: 获取明尊增益属性(增益数据, 增益启用),
@@ -62,6 +66,15 @@ export function 获取明尊计算设置(
       组.records.filter((项) => 已选秘籍.has(项.value)).map((项) => 项.recipe_key),
     ),
   }
+  if (
+    装备属性 &&
+    增益启用 &&
+    增益数据?.团队增益?.some((row) => row.增益名称 === 圣浴常驻名称 && row.启用)
+  ) {
+    const 面板 = calculateAttributes(装备属性, 设置)
+    设置.gains = 获取明尊增益属性(增益数据, 增益启用, 获取圣浴常驻层数(面板.baseVitality))
+  }
+  return 设置
 }
 
 export function 获取明尊原始属性(基础属性?: 角色基础属性类型): EquipmentStats {
@@ -100,7 +113,7 @@ export function 获取明尊显示面板(
   增益启用 = false,
 ): 角色基础属性类型 {
   const 原始 = 获取明尊原始属性(装备信息?.装备基础属性)
-  const 面板 = calculateAttributes(原始, 获取明尊计算设置(奇穴, 增益数据, {}, 53, 增益启用))
+  const 面板 = calculateAttributes(原始, 获取明尊计算设置(奇穴, 增益数据, {}, 53, 增益启用, 原始))
   return {
     ...装备信息.装备基础属性,
     明尊面板: 面板,
@@ -126,7 +139,15 @@ export function 明尊秒伤计算(参数: {
   战斗时间: number
   增益启用?: boolean
 }): 当前计算结果类型 {
-  const 设置 = 获取明尊计算设置(参数.奇穴, 参数.增益数据, 参数.秘籍, 参数.目标等级, 参数.增益启用)
+  const 原始 = 获取明尊原始属性(参数.装备信息?.装备基础属性)
+  const 设置 = 获取明尊计算设置(
+    参数.奇穴,
+    参数.增益数据,
+    参数.秘籍,
+    参数.目标等级,
+    参数.增益启用,
+    原始,
+  )
   if (使用基础循环格式(参数.技能列表)) {
     return 计算明尊基础循环(
       获取明尊原始属性(参数.装备信息?.装备基础属性),
@@ -163,6 +184,7 @@ export function 明尊秒伤计算(参数: {
           variables: { ...结果.panel.variables, rand: 1 },
         })
         return {
+          ...获取明尊技能显示信息(行.id),
           技能ID: 行.id,
           技能名称: 行.label,
           技能等级: 行.level,

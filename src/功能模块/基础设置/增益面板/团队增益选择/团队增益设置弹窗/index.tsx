@@ -23,6 +23,7 @@ import './index.css'
 
 const 一键设置坦克增益列表 = [
   '振奋',
+  '寒啸千军',
   '号令三军',
   '朝圣',
   '圣浴明心',
@@ -223,7 +224,7 @@ function 团队增益设置弹窗({ open, onCancel, onChangeZengyi, 快捷设置
                               className='t-z-c-content'
                               placeholder='请输入覆盖率'
                               min={0}
-                              value={当前增益选项?.覆盖率}
+                              value={当前增益选项?.覆盖率 ?? item.覆盖率}
                               precision={2}
                               max={100}
                               addonAfter={'%'}
@@ -231,7 +232,14 @@ function 团队增益设置弹窗({ open, onCancel, onChangeZengyi, 快捷设置
                               defaultValue={item?.覆盖率}
                             />
                           </div>
-                          {item?.层数选项数组?.length ? (
+                          {item?.层数自动计算 ? (
+                            <div className='tuandui-zengyi-content-item'>
+                              <span className='tuandui-zengyi-content-item-title'>自动层数</span>
+                              <span className='t-z-c-content'>
+                                {当前增益选项?.层数 ?? item.层数}层
+                              </span>
+                            </div>
+                          ) : item?.层数选项数组?.length ? (
                             <div className={'tuandui-zengyi-content-item'}>
                               <span className='tuandui-zengyi-content-item-title'>层数</span>
                               <Select

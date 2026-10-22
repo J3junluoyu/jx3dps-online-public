@@ -19,7 +19,6 @@
   flex: 1;
 }
 
-
 .xiaochi-diff-item {
   display: flex;
   align-items: center;
@@ -39,9 +38,13 @@
 }
 
 .xiaochi-zi {
-  color:#ff2dff
+  color: #ff2dff;
 }
 
 .xiaochi-lan {
-  color: rgb(0, 126, 255)
+  color: rgb(0, 126, 255);
+}
+
+.xiaochi-jin {
+  color: #d4a017;
 }

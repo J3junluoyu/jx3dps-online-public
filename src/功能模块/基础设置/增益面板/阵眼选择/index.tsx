@@ -13,7 +13,7 @@ const PaiMingMap = {
   3: `${GLOBAL_CDN_PREFIX}/paiming_3.png`,
 }
 
-const { 阵眼 } = 获取当前数据()
+const { 阵眼 = [] } = 获取当前数据()
 interface 阵眼选择类型 extends SelectProps {
   开启智能对比?: boolean
 }
@@ -87,7 +87,7 @@ const 阵眼选择: React.FC<阵眼选择类型> = (props) => {
             className={'zhenyan-option'}
             key={item.阵眼名称}
             value={item.阵眼名称}
-            label={<div>123{item.阵眼名称}</div>}
+            label={item.阵眼标题 || item.阵眼名称}
           >
             <Tooltip
               title={

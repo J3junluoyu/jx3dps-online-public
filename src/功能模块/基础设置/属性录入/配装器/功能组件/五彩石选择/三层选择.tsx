@@ -42,7 +42,22 @@ function 三层选择({
             value={属性[层] || undefined}
             disabled={层 > 0 && (!属性[层 - 1] || !可选.length)}
             onChange={(值) => 选择属性(层, 值)}
-            options={可选.map((键) => ({ value: 键, label: ATTRIBUTE_LABELS[键] || 键 }))}
+            options={可选.map((键) => {
+              const 石头 = STONES.find((项) => {
+                const 属性键 = Object.keys(项.attributes)
+                return (
+                  属性键[层] === 键 &&
+                  属性.slice(0, 层).every((已选, 索引) => 属性键[索引] === 已选)
+                )
+              })
+              const 数值 = 石头?.attributes[键]
+              const 显示数值 =
+                键 === 'vitality_gain' ? `${((Number(数值) / 1024) * 100).toFixed(2)}%` : 数值
+              return {
+                value: 键,
+                label: `${ATTRIBUTE_LABELS[键] || 键}${数值 === undefined ? '' : ` +${显示数值}`}`,
+              }
+            })}
           />
         )
       })}

@@ -1,4 +1,6 @@
 import 基础循环 from './计算循环/基础循环'
+import 零点七五循环 from './计算循环/0.75GCD循环'
+import { 推导基础循环次数 } from './计算循环/基础循环'
 import {
   SKILLS,
   EMPTY_EQUIPMENT,
@@ -8,7 +10,7 @@ import {
   percentToGuo,
 } from './计算'
 import { 获取基础循环武伤分配 } from '@/计算模块/职业特殊处理/明尊/基础循环'
-import { 明尊秒伤计算 } from '@/计算模块/职业特殊处理/明尊'
+import { 获取明尊计算设置, 明尊秒伤计算 } from '@/计算模块/职业特殊处理/明尊'
 import { 转换明尊基础属性 } from '@/数据/数据工具/明尊数据适配'
 import { TALENTS, normalizeTalents } from './计算'
 
@@ -41,7 +43,9 @@ const 计算 = (更新属性 = {}, 覆盖 = {}) =>
   })
 const 查结果 = (结果, 名称) => 结果.计算结果技能列表.find((行) => 行.技能名称 === 名称)
 
-test('300秒基础循环完整保留用户17项次数及零次月破', () => {
+test('0.8125GCD循环完整保留300秒17项次数及零次月破', () => {
+  expect(基础循环.名称).toBe('0.8125GCD循环')
+  expect(基础循环.循环详情[0].循环加速等级).toBe(3)
   expect(基础循环.循环详情[0].战斗时间).toBe(300)
   expect(Object.fromEntries(列表.map((行) => [行.技能名称, 行.技能数量]))).toEqual({
     驱夷日破: 47,
@@ -71,6 +75,89 @@ test('300秒基础循环完整保留用户17项次数及零次月破', () => {
   expect(查结果(结果, '月斩dot').技能数量).toBe(82)
 })
 
+test('0.75GCD循环使用新一组数据，月破、无量和武伤按规则推导', () => {
+  expect(零点七五循环.名称).toBe('0.75GCD循环')
+  const 详情 = 零点七五循环.循环详情[0]
+  expect(详情.战斗时间).toBe(300)
+  expect(详情.循环加速等级).toBe(4)
+  expect(Object.fromEntries(详情.技能详情.map((行) => [行.技能名称, 行.技能数量]))).toEqual({
+    驱夷日破: 52,
+    驱夷月破: 0,
+    驱夷五明日破: 9,
+    驱夷光明相日破: 9,
+    驱夷光明相月破: 18,
+    常规月破: 9,
+    日轮1: 81,
+    日轮2: 68,
+    日轮3: 44,
+    无量妙境: 135,
+    烈日斩: 44,
+    银月斩: 10,
+    月斩dot: 85,
+    戒火斩: 23,
+    驱夜断愁: 9,
+    武伤: 407,
+    大漠刀法: 371,
+  })
+  expect(
+    获取基础循环武伤分配(详情.技能详情).map((项) => [项.技能.level, 项.次数, 项.五明]),
+  ).toEqual([
+    ['5', 52, false],
+    ['5', 27, true],
+    ['1', 274, false],
+    ['1', 54, true],
+  ])
+  const 结果 = 计算({}, { 技能列表: 详情.技能详情 })
+  expect(结果.秒伤计算时间).toBe(300)
+  expect(查结果(结果, '武伤').技能数量).toBe(407)
+  expect(查结果(结果, '大漠刀法').技能数量).toBe(371)
+})
+
+test('驱夜次数变化时所有派生技能和武伤遵循同一规则，DOT和戒火不额外产生武伤', () => {
+  const 输入 = {
+    驱夷日破: 47,
+    日轮1: 76,
+    日轮2: 62,
+    日轮3: 45,
+    烈日斩: 40,
+    银月斩: 10,
+    月斩dot: 999,
+    戒火斩: 999,
+    驱夜断愁: 10,
+    大漠刀法: 999,
+  }
+  expect(推导基础循环次数(输入)).toEqual({
+    ...输入,
+    驱夷月破: 0,
+    常规月破: 10,
+    驱夷光明相月破: 20,
+    驱夷五明日破: 10,
+    驱夷光明相日破: 10,
+    无量妙境: 150,
+    武伤: 400,
+  })
+})
+
+test('烈日默认常驻，旧方案关闭烈日或关闭团队增益均不移除赤日轮增伤', () => {
+  expect(DEFAULT_SETTINGS.sunlight).toBe(true)
+  for (const 增益启用 of [false, true]) {
+    const 增益数据 = { 明尊设置: { stance: 'mainTank', sunlight: false } }
+    expect(获取明尊计算设置(基础循环.奇穴, 增益数据, {}, 53, 增益启用).sunlight).toBe(true)
+    const 结果 = 计算({}, { 增益数据, 增益启用 })
+    for (const [名称, key, 次数] of [
+      ['日轮1', '3962:4028:33', 76],
+      ['日轮2', '3962:4029:33', 62],
+      ['日轮3', '3962:4030:33', 45],
+    ]) {
+      const 技能 = SKILLS.find((项) => 项.key === key)
+      const 常驻 = calculateSkill(技能, calculateAttributes(属性, { ...设置, sunlight: true }))
+      const 无烈日 = calculateSkill(技能, calculateAttributes(属性, { ...设置, sunlight: false }))
+      expect(查结果(结果, 名称).技能总输出).toBe(常驻.expected * 次数)
+      expect(常驻.expected).toBeGreaterThan(无烈日.expected)
+    }
+  }
+})
+
 test.each([
   ['驱夷日破', '3967:14701:32', 47, true, false, false],
   ['驱夷五明日破', '3967:14701:32', 9, true, false, true],
@@ -98,13 +185,13 @@ test.each([
   expect(结果.会心几率).toBeCloseTo(原始.critical, 14)
 })
 
-test('武伤388次拆成65次200%和323次100%，并继承对应五明状态', () => {
+test('武伤388次拆成74次200%和314次100%，驱夜继承200%武伤及五明状态', () => {
   const 分配 = 获取基础循环武伤分配(列表)
   expect(分配.map((项) => [项.技能.level, 项.次数, 项.五明])).toEqual([
     ['5', 47, false],
-    ['5', 18, true],
+    ['5', 27, true],
     ['1', 260, false],
-    ['1', 63, true],
+    ['1', 54, true],
   ])
   expect(分配.reduce((总数, 项) => 总数 + 项.次数, 0)).toBe(388)
   const 面板 = calculateAttributes(属性, 设置)
@@ -116,9 +203,9 @@ test('武伤388次拆成65次200%和323次100%，并继承对应五明状态', (
   const 百分二百 = SKILLS.find((项) => 项.key === '3967:19055:5')
   const 预期 =
     calculateSkill(百分二百, 面板).expected * 47 +
-    calculateSkill(百分二百, 五明面板).expected * 18 +
+    calculateSkill(百分二百, 五明面板).expected * 27 +
     calculateSkill(百分百, 面板).expected * 260 +
-    calculateSkill(百分百, 五明面板).expected * 63
+    calculateSkill(百分百, 五明面板).expected * 54
   const 实际 = 查结果(计算(), '武伤')
   expect(实际.技能数量).toBe(388)
   expect(实际.技能总输出).toBe(预期)

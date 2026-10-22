@@ -100,6 +100,15 @@ function 团队增益选择({ 保存数据并计算 }) {
       <div className='tuandui-zengyi-header'>
         <h1 className='tuandui-title'>团队增益</h1>
         <Button
+          className='zengyi-clear-btn'
+          size='small'
+          aria-label='清空团队增益'
+          title='清空全部团队增益，包含圣浴常驻'
+          onClick={() => 快捷设置团队增益([])}
+        >
+          清空增益
+        </Button>
+        <Button
           className={'tuandui-setting-btn'}
           danger
           size='small'

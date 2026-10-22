@@ -64,6 +64,21 @@ export const 获取实际帧数 = (原始帧数, 加速等级, 郭氏加速等�
   return Math.floor((1024 * 原始帧数) / (郭氏普通加速百分比 + 郭氏额外加速百分比 + 1024))
 }
 
+export const 获取下一档加速信息 = (加速等级 = 0) => {
+  const 当前加速 = Math.max(0, 加速等级)
+  const 原始帧数 = 基础GCD * 16
+  const 当前帧数 = 获取实际帧数(原始帧数, 当前加速)
+  // 再缩短一帧需要严格超过当前帧数对应的郭氏加速边界。
+  const 所需郭氏加速 = Math.floor((1024 * 原始帧数) / 当前帧数 - 1024) + 1
+  if (所需郭氏加速 > 256) return undefined
+  const 下一档加速值 = Math.ceil((所需郭氏加速 * 自身属性系数.急速) / 1024)
+  return {
+    下一档加速值,
+    差值: Math.max(0, Math.ceil(下一档加速值 - 当前加速)),
+    下一档GCD: (当前帧数 - 1) / 16,
+  }
+}
+
 /**
  * @param 作用总间隔 channelFrame
  * @param 单次作用间隔 channelInterval

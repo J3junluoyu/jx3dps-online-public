@@ -11,7 +11,7 @@ import 阵眼选择 from './阵眼选择'
 import 计算最佳增益 from './计算最佳增益'
 import './index.css'
 
-const { 默认数据 = {}, 名称, 阵眼 } = 获取当前数据()
+const { 默认数据 = {}, 名称, 阵眼 = [] } = 获取当前数据()
 const { 增益快捷设置数据 = [] } = 默认数据
 
 function 增益面板() {
@@ -43,6 +43,15 @@ function 增益面板() {
       <h1 className='zengyi-title'>
         <div className='zengyi-title-text'>
           增益设置
+          <Button
+            className='zengyi-clear-btn'
+            size='small'
+            aria-label='清空非团队增益'
+            title='清空阵眼、药品、食品、磨石、酒品和宴席等选项'
+            onClick={() => 保存数据并计算({ ...增益数据, 阵眼: '', 小吃: [] })}
+          >
+            清空增益
+          </Button>
           {增益快捷设置数据?.length ? (
             <Dropdown
               overlay={
@@ -86,12 +95,20 @@ function 增益面板() {
           </span>
         </div>
       </h1>
-      {!!阵眼?.length && (
-        <阵眼选择
-          value={增益数据?.阵眼 || undefined}
-          开启智能对比={开启智能对比}
-          onChange={修改阵眼数据}
-        />
+      {(名称 === '明尊琉璃体' || !!阵眼.length) && (
+        <div
+          className={名称 === '明尊琉璃体' ? 'zengyi-xiaochi-item zengyi-zhenyan-item' : undefined}
+        >
+          {名称 === '明尊琉璃体' && <h1 className='zengyi-xiaochi-title'>阵眼</h1>}
+          <阵眼选择
+            aria-label='阵眼'
+            value={增益数据?.阵眼 || undefined}
+            disabled={!阵眼.length}
+            placeholder={阵眼.length ? '请选择阵眼' : '暂无可选阵眼'}
+            开启智能对比={开启智能对比}
+            onChange={修改阵眼数据}
+          />
+        </div>
       )}
       <小药小吃选择 保存数据并计算={保存数据并计算} 开启智能对比={开启智能对比} />
       <团队增益选择 保存数据并计算={保存数据并计算} />

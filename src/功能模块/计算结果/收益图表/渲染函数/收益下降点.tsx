@@ -35,6 +35,7 @@ export const 渲染会心收益下降点折线图 = (chart, 收益下降点, 当
     .position('比例*收益')
     .size(3)
     .color(系统配置?.收益柱形图颜色 || 系统配置?.主题色)
+    .tooltip('比例*收益', (_, 收益) => ({ name: '收益', value: Number(收益).toFixed(2) }))
 
   if (收益下降点) {
     chart.annotation().dataMarker({
@@ -86,7 +87,7 @@ export const 获取会心收益下降点图表数据 = (type, data, 装备信息
           名称 === '明尊琉璃体'
             ? `${(((最终计算会心等级 + 当前增益会心差值) / 自身属性系数.会心) * 100).toFixed(2)}%`
             : item.label,
-        收益: Number(新秒伤.toFixed(3)),
+        收益: 新秒伤,
       }
     })
     return res.filter((item, index) => index === 0 || item.比例 !== res[index - 1].比例)

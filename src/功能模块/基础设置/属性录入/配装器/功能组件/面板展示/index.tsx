@@ -7,13 +7,14 @@ import { useAppSelector } from '@/hooks'
 import { 获取角色需要展示的面板数据 } from '@/功能模块/基础设置/面板信息/工具'
 import 获取当前数据 from '@/数据/数据工具/获取当前数据'
 import { 获取面板显示数据数值, 获取面板显示数据 } from '@/功能模块/基础设置/面板信息'
+import { 获取实际帧数, 获取下一档加速信息 } from '@/工具函数/data'
 import './index.css'
 
 interface 面板展示入参 {
   当前装备信息: 装备信息数据类型
 }
 
-const { 主属性 } = 获取当前数据()
+const { 主属性, 基础GCD = 1.5 } = 获取当前数据()
 
 function 面板展示(props: 面板展示入参) {
   const { 当前装备信息 } = props
@@ -53,7 +54,6 @@ function 面板展示(props: 面板展示入参) {
   }, [当前装备信息, 当前奇穴信息, 装备信息, 增益数据, 增益启用, 显示增益后面板])
 
   const mapKeyList = [
-    '装分',
     '气血',
     主属性,
     '攻击',
@@ -63,6 +63,7 @@ function 面板展示(props: 面板展示入参) {
     '无双',
     ...(主属性 === '体质' ? [] : ['破招', '全能']),
     '加速',
+    ...(主属性 === '体质' ? ['GCD', '下档加速'] : []),
     ...(主属性 === '体质' ? ['外防', '内防', '闪避', '御劲', '招式产生威胁'] : []),
   ]
 
@@ -73,24 +74,54 @@ function 面板展示(props: 面板展示入参) {
       } zhuangbei-character-show`}
     >
       <div className='zhuangbei-show-zengyi-tag'>
-        <div className='tag-active' />
-        <div
+        <button
+          type='button'
+          aria-pressed={!显示增益后面板}
           onClick={() => 切换显示增益后面板(false)}
           className='show-zengyi-tag-item hide-zengyi-charactor'
         >
           无增益面板
-        </div>
-        <div
+        </button>
+        <button
+          type='button'
+          aria-pressed={显示增益后面板}
           onClick={() => 切换显示增益后面板(true)}
           className='show-zengyi-tag-item shouw-zengyi-charactor'
         >
           增益后面板
-        </div>
+        </button>
       </div>
-      {mapKeyList.map((item, index) => {
+      {mapKeyList.map((item) => {
+        if (item === '下档加速') {
+          const 下一档 = 获取下一档加速信息(显示数据.数据.明尊面板?.hasteRating || 0)
+          return (
+            <Tooltip
+              key={item}
+              title={下一档 ? `下一档需要${下一档.下一档加速值}点加速` : undefined}
+            >
+              <div className='zhuangbei-character-haste-next'>
+                {下一档 ? (
+                  <>
+                    <span>下一档 {下一档.下一档GCD}s</span>
+                    <strong>还差{下一档.差值}点</strong>
+                  </>
+                ) : (
+                  <span>已达最高GCD档位</span>
+                )}
+              </div>
+            </Tooltip>
+          )
+        }
         const 对比枚举属性名 = 显示文案和实际属性枚举[item]
         const 对比枚举结果 = 显示数据?.对比枚举?.[对比枚举属性名]
         const 有变化 = 对比枚举结果 && 对比枚举结果 !== '-1'
+        const 明尊面板 = 显示数据.数据.明尊面板
+        const 内容 =
+          item === '加速' && 明尊面板
+            ? `${(明尊面板.haste * 100).toFixed(2)}%`
+            : item === 'GCD'
+              ? `${获取实际帧数(基础GCD * 16, 明尊面板?.hasteRating || 0) / 16}s`
+              : 获取面板显示数据(item, 显示数据.数据, 显示数据.数据.装分)
         const cls = classnames(
           'zhuangbei-character-content-normal',
           有变化
@@ -102,9 +133,10 @@ function 面板展示(props: 面板展示入参) {
         return (
           <div
             id={`zhuangbei-character-item_${item}`}
-            className={`zhuangbei-character-item ${
-              index === mapKeyList.length - 1 ? 'zhuangbei-character-item-last' : ''
-            }`}
+            className={classnames('zhuangbei-character-item', {
+              'zhuangbei-character-item-wide': ['气血', '招式产生威胁'].includes(item),
+              'zhuangbei-character-item-defense': ['外防', '内防'].includes(item),
+            })}
             key={item}
           >
             <h1 className='zhuangbei-character-label'>{item}</h1>
@@ -115,15 +147,17 @@ function 面板展示(props: 面板展示入参) {
               }
               title={
                 <div>
-                  <p>{获取面板显示数据数值(item, 显示数据?.数据, 显示数据?.数据?.装分)}</p>
+                  <p>
+                    {item === 'GCD'
+                      ? '当前加速下的公共调息时间'
+                      : 获取面板显示数据数值(item, 显示数据?.数据, 显示数据?.数据?.装分)}
+                  </p>
                   {有变化 ? <p>较原面板[{对比枚举结果}]</p> : null}
                 </div>
               }
             >
               <div className='zhuangbei-character-content'>
-                <span className={cls}>
-                  {获取面板显示数据(item, 显示数据?.数据, 显示数据?.数据?.装分)}
-                </span>
+                <span className={cls}>{内容}</span>
               </div>
             </Tooltip>
           </div>

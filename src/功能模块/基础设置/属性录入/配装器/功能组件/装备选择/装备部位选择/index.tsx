@@ -352,6 +352,7 @@ function 装备部位选择(props: 装备部位选择入参, ref) {
                       const 装备描述文本样式 = classnames(
                         'zhuangbei-miaoshu-label',
                         a === '精简' ? 'zhuangbei-miaoshu-label-jingjian' : '',
+                        a === '体' ? 'zhuangbei-miaoshu-label-tizhi' : '',
                         a === '特效' ? 'zhuangbei-miaoshu-label-texiao' : '',
                         a === 'PVX' ? 'zhuangbei-miaoshu-label-pvx' : '',
                       )
@@ -383,7 +384,9 @@ function 装备部位选择(props: 装备部位选择入参, ref) {
                       {+upItem?.dpsUp > 0 ? '+' : ''}
                       {对比显示百分比 && upItem?.dpsPercent
                         ? `${upItem?.dpsPercent}%`
-                        : `${upItem?.dpsUp}`}
+                        : typeof upItem?.dpsUp === 'number'
+                          ? upItem.dpsUp.toFixed(2)
+                          : upItem?.dpsUp}
                     </span>
                   ) : null}
                   <span className={'zhuangbei-select-level'}>{item.装备品级}</span>
@@ -443,6 +446,9 @@ export const 获取装备数据描述 = (data: 装备属性信息模型, 携带�
       strList.push('特效')
     } else if ([装备类型枚举.副本精简, 装备类型枚举.试炼精简].includes(装备类型)) {
       strList.push('精简')
+    }
+    if (data.镶嵌孔数组?.some((孔) => 孔.镶嵌类型 === 属性类型.体质)) {
+      strList.push('体')
     }
   }
   if (携带增益) {

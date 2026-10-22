@@ -116,7 +116,7 @@ const 大附魔选择: ForwardRefExoticComponent<大附魔选择类型> = forwar
                 className={`zhuangbei-diff ${upItem?.dpsUp > 0 ? 'dps-up-color' : 'dps-low-color'}`}
               >
                 {upItem?.dpsUp > 0 ? '+' : ''}
-                {upItem?.dpsUp}
+                {upItem?.dpsUp?.toFixed(2)}
               </span>
             ) : null}
           </Select.Option>

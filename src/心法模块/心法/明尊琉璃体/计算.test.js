@@ -31,7 +31,7 @@ test('额外增伤百分比按郭氏规则四舍五入到1/1024', () => {
   expect(panel.variables.magical_damage_addition).toBe(102 / 1024)
 })
 
-test('50级属性换算符合魔盒速查表，低等级因子不为负', () => {
+test('50级属性换算使用当前等级因子，区分御劲与御劲减伤', () => {
   expect(levelFactor(1)).toBe(330)
   expect(levelFactor(30)).toBe(330)
   expect(levelFactor(50)).toBe(990)
@@ -45,9 +45,21 @@ test('50级属性换算符合魔盒速查表，低等级因子不为负', () => 
     dodge: 13356.09,
     parry: 15674.67,
     toughness: 19025.82,
+    toughnessPower: 9422.82,
     decritical: 5148,
   }))
     expect(ratingScale(name)).toBeCloseTo(value, 7)
+})
+
+test('同一御劲等级分别换算被会心几率降低与会心伤害降低，不改变输出', () => {
+  const base = calculateAttributes(gear(), settings())
+  const panel = calculateAttributes(
+    gear({ toughness: 100 }),
+    settings({ gains: { toughness_base: 92 } }),
+  )
+  expect(panel.toughness).toBeCloseTo(192 / 19025.82, 12)
+  expect(panel.toughnessPower).toBeCloseTo(192 / 9422.82, 12)
+  expect(panel.variables).toEqual(base.variables)
 })
 test('51至54级木桩使用各自等级的防御系数', () => {
   TARGETS.forEach((target, index) =>
@@ -72,6 +84,38 @@ test('裸身基础属性与心法只计入一次', () => {
   expect(panel.magicalShield).toBe(508)
   expect(panel.criticalRating).toBe(4)
   expect(panel.dodgeRating).toBe(459)
+})
+
+test('朝圣按基础体质每95点向下取整，上限100层', () => {
+  for (const [baseVitality, stacks] of [
+    [18, 0],
+    [94, 0],
+    [95, 1],
+    [949, 9],
+    [950, 10],
+    [9499, 99],
+    [9500, 100],
+    [19000, 100],
+  ]) {
+    const panel = calculateAttributes(gear({ vitality: baseVitality - 18 }), settings())
+    expect(panel.baseVitality).toBe(baseVitality)
+    expect(panel.pilgrimageStacks).toBe(stacks)
+  }
+})
+
+test('朝圣计入生效的固定体质和全主属性，排除装备及增益体质百分比加成', () => {
+  const equipment = gear({ vitality: 932, vitalityGain: 100 })
+  const base = calculateAttributes(equipment, settings())
+  expect(base.baseVitality).toBe(950)
+  expect(base.vitality).toBe(1900)
+  expect(base.pilgrimageStacks).toBe(10)
+  const gained = calculateAttributes(
+    equipment,
+    settings({ gains: { vitality_base: 203, all_major_base: 45, vitality_gain: 1024 } }),
+  )
+  expect(gained.baseVitality).toBe(1198)
+  expect(gained.vitality).toBe(3594)
+  expect(gained.pilgrimageStacks).toBe(12)
 })
 test('副T、主T气劲直接取Generator精确整数，互相替换', () => {
   const equipment = gear({ vitality: 1006 }) // Total vitality = 1024.
@@ -177,7 +221,7 @@ test('戒火斩在95点体质边界选档，超过950体质仍使用第11档且�
   const cycle = calculateCycle(gear({ vitality: 9482 }), settings(), { [skill.key]: 1 }, 60)
   expect(cycle.rows.find((row) => row.id === '44567').level).toBe('11')
 })
-test('武伤独立计算，不重复加入外功攻击', () => {
+test('没有外攻百分比或额外外攻时，武伤不计基础外攻', () => {
   const skill = SKILLS.find((item) => item.id === '19055')
   const first = calculateSkill(
     skill,

@@ -17,7 +17,7 @@ function 团队增益图标(props: 团队增益图标类型) {
   const 团队增益轴 = useAppSelector((state) => state.data.团队增益轴)
 
   const 轴数据启用 = useMemo(() => {
-    return 团队增益轴?.[data?.增益名称]?.是否启用快照
+    return data?.支持快照增益轴 && 团队增益轴?.[data?.增益名称]?.是否启用快照
   }, [团队增益轴, data])
 
   const 增益描述 = useMemo(() => {
@@ -38,8 +38,6 @@ function 团队增益图标(props: 团队增益图标类型) {
             className={'tuandui-zengyi-img-text'}
             dangerouslySetInnerHTML={{ __html: 增益描述 || '' }}
           />
-          <h1 className={'tuandui-zengyi-img-title'}>增益来源</h1>
-          <p className={'tuandui-zengyi-img-text'}>{data?.增益来源}</p>
           {当前数据?.覆盖率 !== undefined && 当前数据?.覆盖率 !== 100 ? (
             <>
               <h1 className={'tuandui-zengyi-img-title'}>覆盖率</h1>

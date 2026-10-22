@@ -1,0 +1,56 @@
+{
+  "repository": "https://github.com/J3junluoyu/Generator",
+  "commit": "8fad4eb8b52fa435bc656e7731ccbf40d6d41126",
+  "sources": ["assets/json/recipes.json:10242/3979", "assets/raw/skills.py:10242/3979/4480/58"],
+  "group": "3979",
+  "name": "驱夜断愁",
+  "damage_addition": "0.0302734375 * recipe_1051_1 + 0.0400390625 * recipe_1052_1 + 0.0498046875 * recipe_1053_1",
+  "critical_strike_offset": "0.03 * recipe_1054_1 + 0.04 * recipe_1055_1 + 0.05 * recipe_1056_1",
+  "recipes": [
+    {
+      "name": "《御暗烬灭令·驱夜断愁》详解残页",
+      "desc": "命中提高2%。",
+      "recipe_key": "recipe_1032_1"
+    },
+    {
+      "name": "《御暗烬灭令·驱夜断愁》真传残页",
+      "desc": "招式的有效距离增加1尺。",
+      "recipe_key": "recipe_1045_1"
+    },
+    {
+      "name": "《御暗烬灭令·驱夜断愁》真传断篇",
+      "desc": "招式的有效距离增加1尺。",
+      "recipe_key": "recipe_1050_1"
+    },
+    {
+      "name": "《御暗烬灭令·驱夜断愁》参悟残页",
+      "desc": "伤害提高3%。",
+      "recipe_key": "recipe_1051_1"
+    },
+    {
+      "name": "《御暗烬灭令·驱夜断愁》参悟断篇",
+      "desc": "伤害提高4%。",
+      "recipe_key": "recipe_1052_1"
+    },
+    {
+      "name": "《御暗烬灭令·驱夜断愁》参悟绝章",
+      "desc": "伤害提高5%。",
+      "recipe_key": "recipe_1053_1"
+    },
+    {
+      "name": "《御暗烬灭令·驱夜断愁》秘诀残页",
+      "desc": "会心提高3%。",
+      "recipe_key": "recipe_1054_1"
+    },
+    {
+      "name": "《御暗烬灭令·驱夜断愁》秘诀断篇",
+      "desc": "会心提高4%。",
+      "recipe_key": "recipe_1055_1"
+    },
+    {
+      "name": "《御暗烬灭令·驱夜断愁》秘诀绝章",
+      "desc": "会心提高5%。",
+      "recipe_key": "recipe_1056_1"
+    }
+  ]
+}

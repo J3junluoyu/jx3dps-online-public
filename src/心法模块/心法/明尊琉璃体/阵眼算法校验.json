@@ -1,0 +1,648 @@
+{
+  "commit": "8fad4eb8b52fa435bc656e7731ccbf40d6d41126",
+  "equipment": {
+    "vitality": 5000,
+    "attack": 1500,
+    "physicalAttack": 400,
+    "overcome": 1000,
+    "physicalOvercome": 500,
+    "critical": 300,
+    "criticalPower": 200,
+    "strain": 600,
+    "toughness": 100,
+    "weaponMin": 100,
+    "weaponMax": 150
+  },
+  "cases": [
+    {
+      "formation": "",
+      "stance": "offTank",
+      "panel": {
+        "vitality": 5018,
+        "attack": 5291,
+        "baseMagicalAttack": 1503,
+        "extraMagicalAttack": 3788,
+        "critical": 0.07831462717507051,
+        "criticalPower": 1.8070678536780231,
+        "overcomeRating": 1902,
+        "baseOvercomeRating": 1001,
+        "extraOvercomeRating": 901,
+        "strain": 0.0851567522917811,
+        "toughness": 0.005256015246649028,
+        "toughnessPower": 0.010612534251954296
+      },
+      "skills": {
+        "25355:4480:58": {
+          "hit": 3047,
+          "criticalHit": 5506,
+          "critical": 0.07831462717507051
+        },
+        "10243:4326:1": {
+          "hit": 113,
+          "criticalHit": 206,
+          "critical": 0.03195657269962609
+        },
+        "3962:19055:1": {
+          "hit": 92,
+          "criticalHit": 167,
+          "critical": 0.03195657269962609
+        }
+      }
+    },
+    {
+      "formation": "冰心阵",
+      "stance": "offTank",
+      "panel": {
+        "vitality": 5018,
+        "attack": 5439,
+        "baseMagicalAttack": 1503,
+        "extraMagicalAttack": 3788,
+        "critical": 0.10831462717507051,
+        "criticalPower": 1.8568725411780231,
+        "overcomeRating": 1902,
+        "baseOvercomeRating": 1001,
+        "extraOvercomeRating": 901,
+        "strain": 0.0851567522917811,
+        "toughness": 0.005256015246649028,
+        "toughnessPower": 0.010612534251954296
+      },
+      "skills": {
+        "25355:4480:58": {
+          "hit": 3131,
+          "criticalHit": 5815,
+          "critical": 0.10831462717507051
+        },
+        "10243:4326:1": {
+          "hit": 113,
+          "criticalHit": 206,
+          "critical": 0.03195657269962609
+        },
+        "3962:19055:1": {
+          "hit": 92,
+          "criticalHit": 167,
+          "critical": 0.03195657269962609
+        }
+      }
+    },
+    {
+      "formation": "田螺阵",
+      "stance": "offTank",
+      "panel": {
+        "vitality": 5018,
+        "attack": 5365,
+        "baseMagicalAttack": 1503,
+        "extraMagicalAttack": 3788,
+        "critical": 0.12831462717507053,
+        "criticalPower": 1.9535522286780231,
+        "overcomeRating": 1902,
+        "baseOvercomeRating": 1001,
+        "extraOvercomeRating": 901,
+        "strain": 0.0851567522917811,
+        "toughness": 0.005256015246649028,
+        "toughnessPower": 0.010612534251954296
+      },
+      "skills": {
+        "25355:4480:58": {
+          "hit": 3155,
+          "criticalHit": 6165,
+          "critical": 0.12831462717507053
+        },
+        "10243:4326:1": {
+          "hit": 116,
+          "criticalHit": 226,
+          "critical": 0.08195657269962608
+        },
+        "3962:19055:1": {
+          "hit": 94,
+          "criticalHit": 184,
+          "critical": 0.08195657269962608
+        }
+      }
+    },
+    {
+      "formation": "毒经阵",
+      "stance": "offTank",
+      "panel": {
+        "vitality": 5018,
+        "attack": 5365,
+        "baseMagicalAttack": 1503,
+        "extraMagicalAttack": 3788,
+        "critical": 0.10831462717507051,
+        "criticalPower": 1.9066772286780231,
+        "overcomeRating": 1951,
+        "baseOvercomeRating": 1001,
+        "extraOvercomeRating": 901,
+        "strain": 0.0851567522917811,
+        "toughness": 0.005256015246649028,
+        "toughnessPower": 0.010612534251954296
+      },
+      "skills": {
+        "25355:4480:58": {
+          "hit": 3101,
+          "criticalHit": 5914,
+          "critical": 0.10831462717507051
+        },
+        "10243:4326:1": {
+          "hit": 113,
+          "criticalHit": 206,
+          "critical": 0.03195657269962609
+        },
+        "3962:19055:1": {
+          "hit": 92,
+          "criticalHit": 167,
+          "critical": 0.03195657269962609
+        }
+      }
+    },
+    {
+      "formation": "无界阵",
+      "stance": "offTank",
+      "panel": {
+        "vitality": 5018,
+        "attack": 5291,
+        "baseMagicalAttack": 1503,
+        "extraMagicalAttack": 3788,
+        "critical": 0.07831462717507051,
+        "criticalPower": 1.8070678536780231,
+        "overcomeRating": 1902,
+        "baseOvercomeRating": 1001,
+        "extraOvercomeRating": 901,
+        "strain": 0.1867192522917811,
+        "toughness": 0.005256015246649028,
+        "toughnessPower": 0.010612534251954296
+      },
+      "skills": {
+        "25355:4480:58": {
+          "hit": 3500,
+          "criticalHit": 6326,
+          "critical": 0.07831462717507051
+        },
+        "10243:4326:1": {
+          "hit": 129,
+          "criticalHit": 234,
+          "critical": 0.03195657269962609
+        },
+        "3962:19055:1": {
+          "hit": 105,
+          "criticalHit": 189,
+          "critical": 0.03195657269962609
+        }
+      }
+    },
+    {
+      "formation": "万灵阵",
+      "stance": "offTank",
+      "panel": {
+        "vitality": 5018,
+        "attack": 5291,
+        "baseMagicalAttack": 1503,
+        "extraMagicalAttack": 3788,
+        "critical": 0.10831462717507051,
+        "criticalPower": 1.9476928536780231,
+        "overcomeRating": 1902,
+        "baseOvercomeRating": 1001,
+        "extraOvercomeRating": 901,
+        "strain": 0.1046880022917811,
+        "toughness": 0.005256015246649028,
+        "toughnessPower": 0.010612534251954296
+      },
+      "skills": {
+        "25355:4480:58": {
+          "hit": 3289,
+          "criticalHit": 6407,
+          "critical": 0.10831462717507051
+        },
+        "10243:4326:1": {
+          "hit": 121,
+          "criticalHit": 237,
+          "critical": 0.06195657269962609
+        },
+        "3962:19055:1": {
+          "hit": 99,
+          "criticalHit": 193,
+          "critical": 0.06195657269962609
+        }
+      }
+    },
+    {
+      "formation": "气纯阵",
+      "stance": "offTank",
+      "panel": {
+        "vitality": 5018,
+        "attack": 5291,
+        "baseMagicalAttack": 1503,
+        "extraMagicalAttack": 3788,
+        "critical": 0.1583146271750705,
+        "criticalPower": 1.9574584786780231,
+        "overcomeRating": 1902,
+        "baseOvercomeRating": 1001,
+        "extraOvercomeRating": 901,
+        "strain": 0.1046880022917811,
+        "toughness": 0.005256015246649028,
+        "toughnessPower": 0.010612534251954296
+      },
+      "skills": {
+        "25355:4480:58": {
+          "hit": 3101,
+          "criticalHit": 6071,
+          "critical": 0.1583146271750705
+        },
+        "10243:4326:1": {
+          "hit": 115,
+          "criticalHit": 209,
+          "critical": 0.03195657269962609
+        },
+        "3962:19055:1": {
+          "hit": 93,
+          "criticalHit": 170,
+          "critical": 0.03195657269962609
+        }
+      }
+    },
+    {
+      "formation": "莫问阵",
+      "stance": "offTank",
+      "panel": {
+        "vitality": 5018,
+        "attack": 5440,
+        "baseMagicalAttack": 1503,
+        "extraMagicalAttack": 3788,
+        "critical": 0.1583146271750705,
+        "criticalPower": 1.8070678536780231,
+        "overcomeRating": 1902,
+        "baseOvercomeRating": 1001,
+        "extraOvercomeRating": 901,
+        "strain": 0.1046880022917811,
+        "toughness": 0.03525601524664903,
+        "toughnessPower": 0.010612534251954296
+      },
+      "skills": {
+        "25355:4480:58": {
+          "hit": 3190,
+          "criticalHit": 5765,
+          "critical": 0.1583146271750705
+        },
+        "10243:4326:1": {
+          "hit": 115,
+          "criticalHit": 209,
+          "critical": 0.03195657269962609
+        },
+        "3962:19055:1": {
+          "hit": 93,
+          "criticalHit": 170,
+          "critical": 0.03195657269962609
+        }
+      }
+    },
+    {
+      "formation": "T阵",
+      "stance": "offTank",
+      "panel": {
+        "vitality": 5169,
+        "attack": 5404,
+        "baseMagicalAttack": 1503,
+        "extraMagicalAttack": 3901,
+        "critical": 0.07968119113919926,
+        "criticalPower": 1.8070678536780231,
+        "overcomeRating": 1929,
+        "baseOvercomeRating": 1001,
+        "extraOvercomeRating": 928,
+        "strain": 0.0851567522917811,
+        "toughness": 0.005256015246649028,
+        "toughnessPower": 0.010612534251954296
+      },
+      "skills": {
+        "25355:4480:58": {
+          "hit": 3118,
+          "criticalHit": 5636,
+          "critical": 0.07968119113919926
+        },
+        "10243:4326:1": {
+          "hit": 113,
+          "criticalHit": 206,
+          "critical": 0.03195657269962609
+        },
+        "3962:19055:1": {
+          "hit": 92,
+          "criticalHit": 167,
+          "critical": 0.03195657269962609
+        }
+      }
+    },
+    {
+      "formation": "",
+      "stance": "mainTank",
+      "panel": {
+        "vitality": 5018,
+        "attack": 11259,
+        "baseMagicalAttack": 1503,
+        "extraMagicalAttack": 9756,
+        "critical": 0.07831462717507051,
+        "criticalPower": 1.8070678536780231,
+        "overcomeRating": 3691,
+        "baseOvercomeRating": 1001,
+        "extraOvercomeRating": 2690,
+        "strain": 0.0851567522917811,
+        "toughness": 0.005256015246649028,
+        "toughnessPower": 0.010612534251954296
+      },
+      "skills": {
+        "25355:4480:58": {
+          "hit": 7417,
+          "criticalHit": 13403,
+          "critical": 0.07831462717507051
+        },
+        "10243:4326:1": {
+          "hit": 113,
+          "criticalHit": 206,
+          "critical": 0.03195657269962609
+        },
+        "3962:19055:1": {
+          "hit": 92,
+          "criticalHit": 167,
+          "critical": 0.03195657269962609
+        }
+      }
+    },
+    {
+      "formation": "冰心阵",
+      "stance": "mainTank",
+      "panel": {
+        "vitality": 5018,
+        "attack": 11407,
+        "baseMagicalAttack": 1503,
+        "extraMagicalAttack": 9756,
+        "critical": 0.10831462717507051,
+        "criticalPower": 1.8568725411780231,
+        "overcomeRating": 3691,
+        "baseOvercomeRating": 1001,
+        "extraOvercomeRating": 2690,
+        "strain": 0.0851567522917811,
+        "toughness": 0.005256015246649028,
+        "toughnessPower": 0.010612534251954296
+      },
+      "skills": {
+        "25355:4480:58": {
+          "hit": 7514,
+          "criticalHit": 13954,
+          "critical": 0.10831462717507051
+        },
+        "10243:4326:1": {
+          "hit": 113,
+          "criticalHit": 206,
+          "critical": 0.03195657269962609
+        },
+        "3962:19055:1": {
+          "hit": 92,
+          "criticalHit": 167,
+          "critical": 0.03195657269962609
+        }
+      }
+    },
+    {
+      "formation": "田螺阵",
+      "stance": "mainTank",
+      "panel": {
+        "vitality": 5018,
+        "attack": 11333,
+        "baseMagicalAttack": 1503,
+        "extraMagicalAttack": 9756,
+        "critical": 0.12831462717507053,
+        "criticalPower": 1.9535522286780231,
+        "overcomeRating": 3691,
+        "baseOvercomeRating": 1001,
+        "extraOvercomeRating": 2690,
+        "strain": 0.0851567522917811,
+        "toughness": 0.005256015246649028,
+        "toughnessPower": 0.010612534251954296
+      },
+      "skills": {
+        "25355:4480:58": {
+          "hit": 7628,
+          "criticalHit": 14902,
+          "critical": 0.12831462717507053
+        },
+        "10243:4326:1": {
+          "hit": 116,
+          "criticalHit": 226,
+          "critical": 0.08195657269962608
+        },
+        "3962:19055:1": {
+          "hit": 94,
+          "criticalHit": 184,
+          "critical": 0.08195657269962608
+        }
+      }
+    },
+    {
+      "formation": "毒经阵",
+      "stance": "mainTank",
+      "panel": {
+        "vitality": 5018,
+        "attack": 11333,
+        "baseMagicalAttack": 1503,
+        "extraMagicalAttack": 9756,
+        "critical": 0.10831462717507051,
+        "criticalPower": 1.9066772286780231,
+        "overcomeRating": 3740,
+        "baseOvercomeRating": 1001,
+        "extraOvercomeRating": 2690,
+        "strain": 0.0851567522917811,
+        "toughness": 0.005256015246649028,
+        "toughnessPower": 0.010612534251954296
+      },
+      "skills": {
+        "25355:4480:58": {
+          "hit": 7493,
+          "criticalHit": 14286,
+          "critical": 0.10831462717507051
+        },
+        "10243:4326:1": {
+          "hit": 113,
+          "criticalHit": 206,
+          "critical": 0.03195657269962609
+        },
+        "3962:19055:1": {
+          "hit": 92,
+          "criticalHit": 167,
+          "critical": 0.03195657269962609
+        }
+      }
+    },
+    {
+      "formation": "无界阵",
+      "stance": "mainTank",
+      "panel": {
+        "vitality": 5018,
+        "attack": 11259,
+        "baseMagicalAttack": 1503,
+        "extraMagicalAttack": 9756,
+        "critical": 0.07831462717507051,
+        "criticalPower": 1.8070678536780231,
+        "overcomeRating": 3691,
+        "baseOvercomeRating": 1001,
+        "extraOvercomeRating": 2690,
+        "strain": 0.1867192522917811,
+        "toughness": 0.005256015246649028,
+        "toughnessPower": 0.010612534251954296
+      },
+      "skills": {
+        "25355:4480:58": {
+          "hit": 8524,
+          "criticalHit": 15403,
+          "critical": 0.07831462717507051
+        },
+        "10243:4326:1": {
+          "hit": 129,
+          "criticalHit": 234,
+          "critical": 0.03195657269962609
+        },
+        "3962:19055:1": {
+          "hit": 105,
+          "criticalHit": 189,
+          "critical": 0.03195657269962609
+        }
+      }
+    },
+    {
+      "formation": "万灵阵",
+      "stance": "mainTank",
+      "panel": {
+        "vitality": 5018,
+        "attack": 11259,
+        "baseMagicalAttack": 1503,
+        "extraMagicalAttack": 9756,
+        "critical": 0.10831462717507051,
+        "criticalPower": 1.9476928536780231,
+        "overcomeRating": 3691,
+        "baseOvercomeRating": 1001,
+        "extraOvercomeRating": 2690,
+        "strain": 0.1046880022917811,
+        "toughness": 0.005256015246649028,
+        "toughnessPower": 0.010612534251954296
+      },
+      "skills": {
+        "25355:4480:58": {
+          "hit": 8007,
+          "criticalHit": 15597,
+          "critical": 0.10831462717507051
+        },
+        "10243:4326:1": {
+          "hit": 121,
+          "criticalHit": 237,
+          "critical": 0.06195657269962609
+        },
+        "3962:19055:1": {
+          "hit": 99,
+          "criticalHit": 193,
+          "critical": 0.06195657269962609
+        }
+      }
+    },
+    {
+      "formation": "气纯阵",
+      "stance": "mainTank",
+      "panel": {
+        "vitality": 5018,
+        "attack": 11259,
+        "baseMagicalAttack": 1503,
+        "extraMagicalAttack": 9756,
+        "critical": 0.1583146271750705,
+        "criticalPower": 1.9574584786780231,
+        "overcomeRating": 3691,
+        "baseOvercomeRating": 1001,
+        "extraOvercomeRating": 2690,
+        "strain": 0.1046880022917811,
+        "toughness": 0.005256015246649028,
+        "toughnessPower": 0.010612534251954296
+      },
+      "skills": {
+        "25355:4480:58": {
+          "hit": 7550,
+          "criticalHit": 14779,
+          "critical": 0.1583146271750705
+        },
+        "10243:4326:1": {
+          "hit": 115,
+          "criticalHit": 209,
+          "critical": 0.03195657269962609
+        },
+        "3962:19055:1": {
+          "hit": 93,
+          "criticalHit": 170,
+          "critical": 0.03195657269962609
+        }
+      }
+    },
+    {
+      "formation": "莫问阵",
+      "stance": "mainTank",
+      "panel": {
+        "vitality": 5018,
+        "attack": 11408,
+        "baseMagicalAttack": 1503,
+        "extraMagicalAttack": 9756,
+        "critical": 0.1583146271750705,
+        "criticalPower": 1.8070678536780231,
+        "overcomeRating": 3691,
+        "baseOvercomeRating": 1001,
+        "extraOvercomeRating": 2690,
+        "strain": 0.1046880022917811,
+        "toughness": 0.03525601524664903,
+        "toughnessPower": 0.010612534251954296
+      },
+      "skills": {
+        "25355:4480:58": {
+          "hit": 7652,
+          "criticalHit": 13827,
+          "critical": 0.1583146271750705
+        },
+        "10243:4326:1": {
+          "hit": 115,
+          "criticalHit": 209,
+          "critical": 0.03195657269962609
+        },
+        "3962:19055:1": {
+          "hit": 93,
+          "criticalHit": 170,
+          "critical": 0.03195657269962609
+        }
+      }
+    },
+    {
+      "formation": "T阵",
+      "stance": "mainTank",
+      "panel": {
+        "vitality": 5169,
+        "attack": 11553,
+        "baseMagicalAttack": 1503,
+        "extraMagicalAttack": 10050,
+        "critical": 0.07968119113919926,
+        "criticalPower": 1.8070678536780231,
+        "overcomeRating": 3772,
+        "baseOvercomeRating": 1001,
+        "extraOvercomeRating": 2771,
+        "strain": 0.0851567522917811,
+        "toughness": 0.005256015246649028,
+        "toughnessPower": 0.010612534251954296
+      },
+      "skills": {
+        "25355:4480:58": {
+          "hit": 7655,
+          "criticalHit": 13835,
+          "critical": 0.07968119113919926
+        },
+        "10243:4326:1": {
+          "hit": 113,
+          "criticalHit": 206,
+          "critical": 0.03195657269962609
+        },
+        "3962:19055:1": {
+          "hit": 92,
+          "criticalHit": 167,
+          "critical": 0.03195657269962609
+        }
+      }
+    }
+  ]
+}

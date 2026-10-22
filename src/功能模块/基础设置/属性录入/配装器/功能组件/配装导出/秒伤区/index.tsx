@@ -75,7 +75,9 @@ const 秒伤区 = () => {
       <div className={styles.header}>
         <div className={styles.dps}>
           <h1 className={styles.dpsNum}>
-            {是否展示伤害 ? 更换装备后秒伤 || 当前计算结果?.秒伤 : '-------'}
+            {是否展示伤害
+              ? Number(更换装备后秒伤 || 当前计算结果?.秒伤 || 0).toFixed(2)
+              : '-------'}
           </h1>
           <span className={styles.dpsTip}>数值仅供参考</span>
         </div>

@@ -20,6 +20,14 @@
   padding-inline-end: 0;
 }
 
+.character-pilgrimage-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+  font-size: 12px;
+}
+
 .character-item-wrap {
   display: flex;
   flex-wrap: wrap;
@@ -73,6 +81,11 @@
   display: flex;
   flex: 1 1;
   justify-content: space-between;
+}
+
+.character-pilgrimage-stacks {
+  white-space: nowrap;
+  font-size: 12px;
 }
 
 .character-content-max {

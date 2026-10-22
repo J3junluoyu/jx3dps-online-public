@@ -55,6 +55,11 @@
   color: #f34242;
 }
 
+.zhuangbei-miaoshu-label-tizhi {
+  color: #f34242;
+  font-weight: 600;
+}
+
 .zhuangbei-miaoshu-label-texiao {
   color: transparent;
   display: inline-flex;

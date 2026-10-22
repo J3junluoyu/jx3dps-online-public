@@ -1,93 +1,107 @@
 .zhuangbei-character-show {
-  display: flex;
-  flex-wrap: wrap;
-  padding: 12px 16px 12px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px 16px;
+  padding: 12px;
   border-radius: 2px;
   border: 1px solid #d9d9d9;
   margin-bottom: 12px;
   overflow: hidden;
   position: relative;
-  transition: .2s;
-}
-
-.zhuangbei-character-show:hover {
-  padding-top: 32px;
-}
-.zhuangbei-character-show:hover .zhuangbei-show-zengyi-tag{
-  top: -1px;
 }
 
 .zhuangbei-character-show.zhuangbei-character-zengyi {
-  border-color: var(--ant-primary-color)
+  border-color: var(--ant-primary-color);
 }
 
 .zhuangbei-show-zengyi-tag {
-  position: absolute;
-  top: -23px;
-  left: 0;
-  background-color: #fff;
-  width: 264px;
-  height: 22px;
+  grid-column: 1 / -1;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  padding: 2px;
+  margin-bottom: 4px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  transition: .2s;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
 }
 
-.tag-active{
-  position: absolute;
-  z-index: 0;
-  width: 88px;
-  height: 24px;
-  background-color: var(--ant-primary-color);
-  left: 50%;
-  transition: .2s;
-}
-
-.zhuangbei-character-zengyi .shouw-zengyi-charactor {
-  color: #fff;
-}
-
-.zhuangbei-character-wuzengyi .tag-active {
-  margin-left: -88px;
-}
-
-.zhuangbei-character-wuzengyi .hide-zengyi-charactor{
-  color: #fff;
+.zhuangbei-character-zengyi .shouw-zengyi-charactor,
+.zhuangbei-character-wuzengyi .hide-zengyi-charactor {
+  color: var(--ant-primary-color);
+  background-color: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
 }
 
 .show-zengyi-tag-item {
-  padding: 0 8px;
-  position: relative;
-  z-index: 1;
-  color: var(--ant-primary-color);
-  transition: .2s;
+  flex: 1;
+  min-width: 0;
+  padding: 0 4px;
+  border: 0;
+  border-radius: 2px;
+  background-color: transparent;
+  color: #666;
+  font: inherit;
+  font-size: 12px;
+  line-height: 24px;
   cursor: pointer;
-  font-weight: 400;
 }
 
 .show-zengyi-tag-item:hover {
-  font-weight: 500;
+  color: var(--ant-primary-color);
 }
 
 .zhuangbei-character-item {
-  width: 50%;
   display: flex;
+  min-width: 0;
   height: 24px;
 }
 
-.zhuangbei-character-item-last {
-  width: 100%;
-  padding-right: 58px;
+.zhuangbei-character-item-wide {
+  grid-column: 1 / -1;
 }
 
-.zhuangbei-character-item:nth-child(-n+10) {
-  margin-bottom: 8px;
+.zhuangbei-character-haste-next {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 6px;
+  border-radius: 2px;
+  background-color: #fafafa;
+  color: #777;
+  font-size: 12px;
+  line-height: 20px;
+  font-variant-numeric: tabular-nums;
+}
+
+.zhuangbei-character-haste-next strong {
+  color: var(--ant-primary-color);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.zhuangbei-character-item-defense,
+#zhuangbei-character-item_招式产生威胁 {
+  border-top: 1px solid #eee;
+  padding-top: 6px;
+  margin-top: 2px;
+  height: 31px;
+}
+
+#zhuangbei-character-item_气血 {
+  padding-bottom: 6px;
+  margin-bottom: 2px;
+  height: 31px;
+  border-bottom: 1px solid #eee;
+}
+
+#zhuangbei-character-item_气血 .zhuangbei-character-content-normal {
+  font-size: 18px;
 }
 
 .zhuangbei-character-label {
   width: 40px;
+  flex-shrink: 0;
   text-align: left;
   line-height: 24px;
   font-size: 14px;
@@ -104,6 +118,7 @@
 .zhuangbei-character-content {
   display: flex;
   flex: 1 1;
+  min-width: 0;
   justify-content: space-between;
   overflow: hidden;
   line-height: 24px;
@@ -115,7 +130,10 @@
   font-weight: 600;
   display: flex;
   flex: 1 1;
-  justify-content: space-between;
+  justify-content: flex-end;
+  gap: 8px;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
 
 .zhuangbei-character-content-normal.zhuangbei-character-content-upper {
@@ -123,7 +141,7 @@
 }
 
 .zhuangbei-character-content-normal.zhuangbei-character-content-down {
-  color: #F34242;
+  color: #f34242;
 }
 
 .zhuangbei-character-max-title-tip {

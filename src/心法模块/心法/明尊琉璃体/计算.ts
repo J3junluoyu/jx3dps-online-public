@@ -1,11 +1,12 @@
 import reference from './参考数据.json'
+import 驱夜秘籍 from './驱夜断愁秘籍.json'
 import { evaluateExpression } from './表达式'
 
 export const LEVEL = 50
 export const GLOBAL_COEFFICIENTS = {
   critical: 9.609,
   criticalPower: 3.54,
-  toughness: 19.218,
+  toughness: 19.218, // 御劲：降低被会心几率。
   decritical: 5.2,
   hit: 9.195,
   dodge: 13.491,
@@ -14,7 +15,7 @@ export const GLOBAL_COEFFICIENTS = {
   shield: 10.912,
   overcome: 10.483,
   haste: 10.21,
-  toughnessPower: 9.518,
+  toughnessPower: 9.518, // 御劲减伤：降低受到的会心伤害。
 }
 export const SKILL_SCALES = { magical: 97.04743, physical: 89.92534, healing: 53.31663 }
 export const levelFactor = (level: number) => (level <= 30 ? 330 : 33 * level - 660)
@@ -138,7 +139,7 @@ export const DEFAULT_SETTINGS: Settings = {
   targetLevel: 53,
   talents: [...DEFAULT_TALENTS],
   recipes: [],
-  sunlight: false,
+  sunlight: true,
   light: false,
   differentSlash: false,
   drive: false,
@@ -169,11 +170,14 @@ export const SOURCE = {
 export const TALENTS = [...TALENT_LAYOUT.flatMap((tier) => tier.ids), ...POOL_TALENT_IDS].map(
   (id) => ({ id, ...belongs[id] }),
 )
-export const RECIPES = Object.entries(reference.recipes).map(([group, records]) => ({
-  group,
-  name: belongs[group]?.name || group,
-  records,
-}))
+export const RECIPES = [
+  ...Object.entries(reference.recipes).map(([group, records]) => ({
+    group,
+    name: belongs[group]?.name || group,
+    records,
+  })),
+  { group: 驱夜秘籍.group, name: 驱夜秘籍.name, records: 驱夜秘籍.recipes },
+]
 
 export function validateSettings(settings: Settings) {
   if (!TARGETS.some((target) => target.level === settings.targetLevel))
@@ -243,26 +247,34 @@ export function calculateAttributes(equipment: EquipmentStats, settings: Setting
   if (settings.drive && settings.talents.includes('14698')) recipes.recipe_4489_1 = 1
   const gain = (key: string) => attributes[key] || 0
   const major = (base: number, key: string) => base + gain(`${key}_base`) + gain('all_major_base')
+  const baseVitality = major(18 + equipment.vitality, 'vitality')
   const vitality = Math.trunc(
-    major(18 + equipment.vitality, 'vitality') *
-      (1 + percentToGuo(equipment.vitalityGain) + gain('vitality_gain') / 1024),
+    baseVitality * (1 + percentToGuo(equipment.vitalityGain) + gain('vitality_gain') / 1024),
   )
+  const pilgrimageStacks = Math.min(100, Math.max(0, Math.floor(baseVitality / 95)))
   const spunk = major(17 + equipment.spunk, 'spunk')
   const spirit = major(18 + equipment.spirit, 'spirit')
   const strength = major(17 + equipment.strength, 'strength')
   const agility = major(18 + equipment.agility, 'agility')
   const fromVitality = (key: string) => Math.trunc((vitality * (attributes[key] || 0)) / 1024)
-  const attack =
+  const baseMagicalAttack =
     equipment.attack +
     gain('all_attack_power_base') +
     gain('magical_attack_power_base') +
-    Math.trunc(spunk * 0.195) +
-    fromVitality('vitality_to_lunar_attack_power')
-  const physicalAttack =
+    Math.trunc(spunk * 0.195)
+  const extraMagicalAttack = fromVitality('vitality_to_lunar_attack_power')
+  const attack =
+    Math.trunc(baseMagicalAttack * (1 + gain('magical_attack_power_gain') / 1024)) +
+    extraMagicalAttack
+  const basePhysicalAttack =
     equipment.physicalAttack +
     gain('all_attack_power_base') +
     gain('physical_attack_power_base') +
     Math.trunc(strength * 0.195)
+  const physicalAttackAddition = gain('physical_attack_power_gain') / 1024
+  const extraPhysicalAttack = fromVitality('vitality_to_physical_attack_power')
+  const physicalAttack =
+    Math.trunc(basePhysicalAttack * (1 + physicalAttackAddition)) + extraPhysicalAttack
   const criticalRating =
     equipment.critical +
     equipment.magicalCritical +
@@ -276,24 +288,36 @@ export function calculateAttributes(equipment: EquipmentStats, settings: Setting
     gain('all_critical_strike_base') +
     gain('physical_critical_strike_base') +
     Math.trunc(agility * 0.25)
-  const critical = Math.min(1, criticalRating / ratingScale('critical'))
-  const physicalCritical = Math.min(1, physicalCriticalRating / ratingScale('critical'))
+  const critical = Math.min(
+    1,
+    criticalRating / ratingScale('critical') + gain('lunar_critical_strike_rate') / 10000,
+  )
+  const physicalCritical = Math.min(
+    1,
+    physicalCriticalRating / ratingScale('critical') +
+      gain('physical_critical_strike_rate') / 10000,
+  )
   const criticalPower = Math.min(
     3,
     1.75 +
-      (equipment.criticalPower + equipment.magicalCriticalPower) / ratingScale('criticalPower'),
+      (equipment.criticalPower + equipment.magicalCriticalPower) / ratingScale('criticalPower') +
+      (gain('magical_critical_power_rate') + gain('lunar_critical_power_rate')) / 1024,
   )
   const physicalCriticalPower = Math.min(
     3,
     1.75 +
-      (equipment.criticalPower + equipment.physicalCriticalPower) / ratingScale('criticalPower'),
+      (equipment.criticalPower + equipment.physicalCriticalPower) / ratingScale('criticalPower') +
+      gain('physical_critical_power_rate') / 1024,
   )
-  const overcomeRating =
+  const baseOvercomeRating =
     equipment.overcome +
     gain('all_overcome_base') +
     gain('magical_overcome_base') +
-    Math.trunc(spunk * 0.061) +
-    fromVitality('vitality_to_magical_overcome')
+    Math.trunc(spunk * 0.061)
+  const extraOvercomeRating = fromVitality('vitality_to_magical_overcome')
+  // 阵法只放大基础破防；主副T气劲的体质转换破防在倍率之后单独加入。
+  const overcomeRating =
+    Math.trunc(baseOvercomeRating * (1 + gain('lunar_overcome_gain') / 1024)) + extraOvercomeRating
   const overcome = overcomeRating / ratingScale('overcome')
   const physicalOvercome =
     (equipment.physicalOvercome +
@@ -302,7 +326,7 @@ export function calculateAttributes(equipment: EquipmentStats, settings: Setting
       Math.trunc(strength * 0.061)) /
     ratingScale('overcome')
   const strainRating = Math.trunc(equipment.strain + gain('strain_base') + equipment.pvx * 1.22)
-  const strain = strainRating / ratingScale('strain')
+  const strain = strainRating / ratingScale('strain') + gain('strain_rate') / 1024
   const health =
     Math.trunc(
       (4136 + equipment.health + vitality * 10) * (1 + (attributes.max_life_gain || 0) / 1024),
@@ -314,6 +338,7 @@ export function calculateAttributes(equipment: EquipmentStats, settings: Setting
   const magicalShield = 280 + (attributes.magical_shield_base || 0) + equipment.magicalShield
   const dodgeRating =
     equipment.dodge + (attributes.dodge_base || 0) + fromVitality('vitality_to_dodge')
+  const toughnessRating = equipment.toughness + gain('toughness_base')
   const nonlinear = (rating: number, attribute: keyof typeof GLOBAL_COEFFICIENTS) =>
     rating / (rating + ratingScale(attribute))
   const target = TARGETS.find((item) => item.level === settings.targetLevel)!
@@ -333,9 +358,9 @@ export function calculateAttributes(equipment: EquipmentStats, settings: Setting
     solar_attack_power: attack,
     lunar_attack_power: attack,
     physical_attack_power: physicalAttack,
-    base_physical_attack_power: physicalAttack,
-    extra_physical_attack_power: 0,
-    physical_attack_power_addition: 1,
+    base_physical_attack_power: basePhysicalAttack,
+    extra_physical_attack_power: extraPhysicalAttack,
+    physical_attack_power_addition: physicalAttackAddition,
     solar_critical_strike: critical,
     lunar_critical_strike: critical,
     physical_critical_strike: physicalCritical,
@@ -348,8 +373,12 @@ export function calculateAttributes(equipment: EquipmentStats, settings: Setting
     solar_damage_scale: gain('solar_damage_cof') / 1024,
     lunar_damage_scale: gain('lunar_damage_cof') / 1024,
     physical_damage_scale: gain('physical_damage_cof') / 1024,
-    magical_damage_addition: percentToGuo(settings.damageBonus),
-    physical_damage_addition: percentToGuo(settings.damageBonus),
+    magical_damage_addition:
+      percentToGuo(settings.damageBonus) +
+      (gain('all_damage_gain') + gain('magical_damage_gain')) / 1024,
+    physical_damage_addition:
+      percentToGuo(settings.damageBonus) +
+      (gain('all_damage_gain') + gain('physical_damage_gain')) / 1024,
     skill_damage_addition: 0,
     move_state_damage_addition: 0,
     pve_damage_addition: percentToGuo(settings.pveBonus),
@@ -359,9 +388,13 @@ export function calculateAttributes(equipment: EquipmentStats, settings: Setting
     buff_1_1: settings.differentSlash && settings.talents.includes('25166') ? 1 : 0,
   }
   return {
+    baseVitality,
     vitality,
+    pilgrimageStacks,
     spunk,
     attack,
+    baseMagicalAttack,
+    extraMagicalAttack,
     physicalAttack,
     health,
     critical,
@@ -369,6 +402,8 @@ export function calculateAttributes(equipment: EquipmentStats, settings: Setting
     criticalPower,
     overcome,
     overcomeRating,
+    baseOvercomeRating,
+    extraOvercomeRating,
     strain,
     strainRating,
     haste: Math.min(0.25, (equipment.haste + gain('haste_base')) / ratingScale('haste')),
@@ -381,7 +416,8 @@ export function calculateAttributes(equipment: EquipmentStats, settings: Setting
     dodge: nonlinear(dodgeRating, 'dodge'),
     parry: Math.min(1, 0.03 + nonlinear(equipment.parry, 'parry')),
     parryValue: equipment.parryValue + fromVitality('vitality_to_parry_value'),
-    toughness: (equipment.toughness + gain('toughness_base')) / ratingScale('toughness'),
+    toughness: toughnessRating / ratingScale('toughness') + gain('toughness_rate') / 10000,
+    toughnessPower: toughnessRating / ratingScale('toughnessPower'),
     decritical: nonlinear(equipment.decritical + equipment.pvx, 'decritical'),
     targetReduction: nonlinearTarget(target.shield, target.level),
     threat: equipment.threat,
@@ -446,6 +482,15 @@ const JIE_HUO_ZHAN_LEVELS = Object.entries(skillGroups['3980']['44567']).sort(
 
 export function calculateSkill(skill: Skill, panel: ReturnType<typeof calculateAttributes>) {
   const variables = { ...panel.variables }
+  if (skill.group === '25355' && skill.id === '4480') {
+    // 明尊怜世人导出式未带秘籍变量，按考拉同名招式在原增伤、会心通道补齐。
+    // 明尊驱夜不计算背后30%增伤。
+    variables.magical_damage_addition += evaluateExpression(驱夜秘籍.damage_addition, variables)
+    variables.lunar_critical_strike += evaluateExpression(
+      驱夜秘籍.critical_strike_offset,
+      variables,
+    )
+  }
   // Use Generator's original formula for each vitality tier, capped at its highest tier.
   const [level, record] =
     skill.id === '44567'
@@ -456,12 +501,11 @@ export function calculateSkill(skill: Skill, panel: ReturnType<typeof calculateA
   const critical = Math.min(1, Math.max(0, evaluateExpression(record.critical_strike, variables)))
   const damage = (isCritical: number) =>
     record.damages.reduce((total, part) => {
-      const current: Attributes = { ...variables, is_critical: isCritical }
-      // Other source_attribute bonuses are already substituted in the generated formula.
-      // Attack-power overrides alone retain this explicit variable in Generator output.
-      const addition = part.source_attribute?.physical_attack_power_addition
-      if (addition) current.physical_attack_power_addition += evaluateExpression(addition, current)
-      return total + Math.max(0, evaluateExpression(part.damage, current))
+      // 与考拉桌面端一样直接计算导出的公式；source_attribute只记录导出元数据。
+      return (
+        total +
+        Math.max(0, evaluateExpression(part.damage, { ...variables, is_critical: isCritical }))
+      )
     }, 0)
   const hit = damage(0)
   const criticalHit = damage(1)

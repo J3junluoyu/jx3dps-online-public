@@ -11,14 +11,15 @@ import { 角色基础属性类型 } from '@/@types/角色'
 import { 获取判断增益后技能系数 } from '@/计算模块/统一工具函数/技能增益启用计算'
 import DpsKernelOptimizer from '@/计算模块/dps-kernel-optimizer'
 import { 获取计算目标信息 } from '@/计算模块/统一工具函数/工具函数'
-import { 获取加速等级 } from '@/工具函数/data'
+import { 获取加速等级, 获取实际帧数 } from '@/工具函数/data'
 import { 数据埋点 } from '@/工具函数/tools/log'
 import { 判断团队增益轴快照计算 } from '@/数据/团队增益/tools'
 
 import { 获取角色需要展示的面板数据 } from './工具'
+import 圣浴常驻 from './圣浴常驻'
 import './index.css'
 
-const { 主属性, 性能功能关闭数组 = [] } = 获取当前数据()
+const { 名称, 主属性, 基础GCD = 1.5, 性能功能关闭数组 = [] } = 获取当前数据()
 
 function 面板信息() {
   const 当前奇穴信息 = useAppSelector((state) => state?.data?.当前奇穴信息)
@@ -37,7 +38,6 @@ function 面板信息() {
   const [显示增益后面板, 切换显示增益后面板] = useState<boolean>(false)
 
   const mapKeyList = [
-    '装分',
     '气血',
     主属性,
     '攻击',
@@ -119,6 +119,7 @@ function 面板信息() {
     <div className={'character-show'}>
       <div className={'character-title-wrapper'}>
         <h1 className={'character-title'}>角色属性</h1>
+        {名称 === '明尊琉璃体' && <圣浴常驻 />}
         <div>
           <Checkbox
             checked={显示增益后面板}
@@ -170,13 +171,13 @@ function 面板信息() {
         </div>
       </div>
       <div className={`character-item-wrap`}>
-        {mapKeyList.map((item, index) => {
+        {mapKeyList.map((item) => {
           const 最优属性: any =
             开启优化算法 && 最大秒伤数据?.面板
               ? 获取最优属性展示(item, 最大秒伤数据?.面板, 显示数据)
               : {}
           return (
-            <div className={`character-item ${index < 4 ? 'character-item-harf' : ''}`} key={item}>
+            <div className='character-item' key={item}>
               <h1
                 className={`character-label ${item === '招式产生威胁' ? 'character-label-long' : ''}`}
               >
@@ -188,7 +189,16 @@ function 面板信息() {
               >
                 <div className='character-content'>
                   <span className='character-content-normal'>
-                    {获取面板显示数据(item, 显示数据, 显示数据?.装分, true)}
+                    {item === '体质' && 显示数据.明尊面板 ? (
+                      <>
+                        <span>{显示数据.体质}</span>
+                        <span className='character-pilgrimage-stacks'>
+                          朝圣{显示数据.明尊面板.pilgrimageStacks}层
+                        </span>
+                      </>
+                    ) : (
+                      获取面板显示数据(item, 显示数据, 显示数据?.装分, true)
+                    )}
                   </span>
                   {开启优化算法 && 最优属性 && 最优属性?.value !== '-1' ? (
                     <span
@@ -225,7 +235,13 @@ export const 获取面板显示数据 = (
     if (key === '会效') return 百分比(明尊面板.criticalPower)
     if (key === '破防') return 百分比(明尊面板.overcome)
     if (key === '无双') return 百分比(明尊面板.strain)
-    if (key === '加速') return 百分比(明尊面板.haste)
+    if (key === '加速')
+      return (
+        <>
+          <span>{百分比(明尊面板.haste)}</span>
+          <span>{获取实际帧数(基础GCD * 16, 明尊面板.hasteRating) / 16}s</span>
+        </>
+      )
     if (key === '外防') return 百分比(明尊面板.physicalReduction)
     if (key === '内防') return 百分比(明尊面板.magicalReduction)
     if (key === '闪避') return 百分比(明尊面板.dodge)
@@ -286,6 +302,16 @@ export const 获取面板显示数据数值 = (
   角色最终属性: 角色基础属性类型,
   装备分数?: number,
 ) => {
+  if (key === '体质' && 角色最终属性.明尊面板) {
+    const 面板 = 角色最终属性.明尊面板
+    return (
+      <div>
+        <p>基础体质：{面板.baseVitality}</p>
+        <p>每满95点基础体质提供1层朝圣，向下取整，最多100层。</p>
+        <p>基础体质计入已生效的固定体质和全主属性增益，不计入体质百分比加成。</p>
+      </div>
+    )
+  }
   switch (key) {
     case '招式产生威胁':
       return '装备提供的招式产生威胁属性值'

@@ -3,7 +3,7 @@ import { 数据埋点 } from '@/工具函数/tools/log'
 
 function 秒伤结果对比({ 配装器内动态新秒伤, 打开配装器时秒伤 }) {
   const 百分比变化率 = (((配装器内动态新秒伤 - 打开配装器时秒伤) / 打开配装器时秒伤) * 100).toFixed(
-    2
+    2,
   )
   const 秒伤增加 = 配装器内动态新秒伤 > 打开配装器时秒伤
 
@@ -20,7 +20,9 @@ function 秒伤结果对比({ 配装器内动态新秒伤, 打开配装器时秒
       <div className={'dps-diff'}>
         <div className='dps-diff-item'>
           <div className='dps-diff-title'>更换前</div>
-          <p className='dps-diff-dps'>{打开配装器时秒伤 ? 打开配装器时秒伤 : <加速符不合文案 />}</p>
+          <p className='dps-diff-dps'>
+            {打开配装器时秒伤 ? Number(打开配装器时秒伤).toFixed(2) : <加速符不合文案 />}
+          </p>
         </div>
         <div className='dps-diff-item'>
           <div className='dps-diff-header'>
@@ -33,7 +35,7 @@ function 秒伤结果对比({ 配装器内动态新秒伤, 打开配装器时秒
             ) : null}
           </div>
           <p className={`dps-diff-dps ${秒伤增加 ? 'dps-up-color' : 'dps-low-color'}`}>
-            {配装器内动态新秒伤}
+            {Number(配装器内动态新秒伤).toFixed(2)}
           </p>
         </div>
       </div>
@@ -41,7 +43,9 @@ function 秒伤结果对比({ 配装器内动态新秒伤, 打开配装器时秒
       <div className={'dps-diff'}>
         <div className='dps-diff-item'>
           <div className='dps-diff-title'>更换前</div>
-          <p className='dps-diff-dps'>{打开配装器时秒伤 ? 打开配装器时秒伤 : <加速符不合文案 />}</p>
+          <p className='dps-diff-dps'>
+            {打开配装器时秒伤 ? Number(打开配装器时秒伤).toFixed(2) : <加速符不合文案 />}
+          </p>
         </div>
         <div className='dps-diff-item'>
           <div className='dps-diff-header'>

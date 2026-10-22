@@ -1,5 +1,17 @@
 import { 明尊秘籍选项, 获取明尊秘籍显示名称 } from './秘籍'
-import { RECIPES, SKILLS, EMPTY_EQUIPMENT, DEFAULT_SETTINGS, calculateCycle } from './计算'
+import {
+  RECIPES,
+  SKILLS,
+  EMPTY_EQUIPMENT,
+  DEFAULT_SETTINGS,
+  calculateAttributes,
+  calculateSkill,
+  calculateCycle,
+} from './计算'
+import 驱夜秘籍 from './驱夜断愁秘籍.json'
+import reference from './参考数据.json'
+import { evaluateExpression } from './表达式'
+import 技能系数 from './技能系数'
 import { 获取明尊计算设置, 规范明尊秘籍, 明尊秒伤计算 } from '@/计算模块/职业特殊处理/明尊'
 import { 转换明尊基础属性 } from '@/数据/数据工具/明尊数据适配'
 
@@ -16,10 +28,97 @@ test.each([
   ['银月斩', ['会心3%', '会心4%', '会心5%']],
   ['净世破魔击', ['伤害3%', '伤害4%', '伤害5%', '会心3%', '会心4%', '会心5%', '回月魂20点']],
   ['生死劫', ['伤害3%', '伤害4%', '伤害5%']],
+  ['驱夜断愁', ['伤害3%', '伤害4%', '伤害5%', '会心3%', '会心4%', '会心5%']],
 ])('%s只提供指定秘籍，显示简写并保留独立存储值', (名称, 文字) => {
   const 选项 = 明尊秘籍选项.find((组) => 组.name === 名称).records
   expect(选项.map((项) => 获取明尊秘籍显示名称(项.value))).toEqual(文字)
   expect(new Set(选项.map((项) => 项.value)).size).toBe(选项.length)
+})
+
+test.each([
+  ['recipe_1051_1', 31 / 1024],
+  ['recipe_1052_1', 41 / 1024],
+  ['recipe_1053_1', 51 / 1024],
+])('驱夜伤害秘籍%s按考拉郭氏系数叠入原增伤区，只作用于驱夜', (recipe, bonus) => {
+  const gear = { ...EMPTY_EQUIPMENT, vitality: 3000, attack: 2000 }
+  const base = calculateAttributes(gear, { ...DEFAULT_SETTINGS, damageBonus: 10 })
+  const panel = calculateAttributes(gear, {
+    ...DEFAULT_SETTINGS,
+    damageBonus: 10,
+    recipes: [recipe],
+  })
+  const skill = SKILLS.find((row) => row.id === '4480')
+  const result = calculateSkill(skill, panel)
+  const expectedVariables = {
+    ...base.variables,
+    magical_damage_addition: base.variables.magical_damage_addition + bonus,
+    is_critical: 0,
+  }
+  expect(result.hit).toBe(evaluateExpression(skill.record.damages[0].damage, expectedVariables))
+  expect(result.hit).toBeGreaterThan(calculateSkill(skill, base).hit)
+  expect(result.critical).toBe(calculateSkill(skill, base).critical)
+  for (const other of SKILLS.filter((row) => ['14701', '4476', '19055'].includes(row.id)))
+    expect(calculateSkill(other, panel)).toEqual(calculateSkill(other, base))
+  expect(panel.variables.magical_damage_addition).toBe(base.variables.magical_damage_addition)
+})
+
+test.each([
+  ['recipe_1054_1', 0.03],
+  ['recipe_1055_1', 0.04],
+  ['recipe_1056_1', 0.05],
+])('驱夜会心秘籍%s只提高驱夜会心率，命中及会心伤害数值不变', (recipe, bonus) => {
+  const gear = { ...EMPTY_EQUIPMENT, vitality: 3000, attack: 2000 }
+  const base = calculateAttributes(gear, DEFAULT_SETTINGS)
+  const panel = calculateAttributes(gear, { ...DEFAULT_SETTINGS, recipes: [recipe] })
+  const skill = SKILLS.find((row) => row.id === '4480')
+  const before = calculateSkill(skill, base)
+  const after = calculateSkill(skill, panel)
+  expect(after.critical - before.critical).toBeCloseTo(bonus, 12)
+  expect(after.hit).toBe(before.hit)
+  expect(after.criticalHit).toBe(before.criticalHit)
+  expect(after.expected).toBeGreaterThan(before.expected)
+  expect(
+    calculateSkill(
+      SKILLS.find((row) => row.id === '4476'),
+      panel,
+    ),
+  ).toEqual(
+    calculateSkill(
+      SKILLS.find((row) => row.id === '4476'),
+      base,
+    ),
+  )
+  expect(panel.variables.lunar_critical_strike).toBe(base.variables.lunar_critical_strike)
+  expect(
+    calculateSkill(skill, {
+      ...panel,
+      variables: { ...panel.variables, lunar_critical_strike: 0.99 },
+    }).critical,
+  ).toBe(1)
+})
+
+test('驱夜秘籍使用同版本考拉资料，保存恢复及最多四本限制沿用原框架', () => {
+  expect(驱夜秘籍.commit).toBe(reference.commit)
+  const recipes = ['recipe_1051_1', 'recipe_1052_1', 'recipe_1053_1', 'recipe_1056_1']
+  const saved = 规范明尊秘籍({ 驱夜断愁: recipes })
+  expect(saved.驱夜断愁).toEqual(recipes.map(原名))
+  expect(获取明尊计算设置([], undefined, saved).recipes).toEqual(recipes)
+  const tooMany = [...recipes, 'recipe_1054_1']
+  expect(() =>
+    calculateAttributes(EMPTY_EQUIPMENT, { ...DEFAULT_SETTINGS, recipes: tooMany }),
+  ).toThrow('每个招式最多选择四本秘籍')
+  const normalized = 规范明尊秘籍({ 驱夜断愁: [...tooMany, 'recipe_1032_1', 'recipe_1045_1'] })
+  expect(normalized.驱夜断愁).toHaveLength(4)
+  expect(normalized.驱夜断愁.some((name) => /命中|距离/.test(name))).toBe(false)
+})
+
+test('原项目秘籍抽屉将怜世人驱夜关联到通用驱夜秘籍分组', () => {
+  const skill = 技能系数.find((row) => row.技能ID === '4480')
+  expect(skill.秘籍依赖技能).toBe('驱夜断愁')
+  expect(skill.技能增益列表.map((row) => row.增益名称)).toEqual(
+    明尊秘籍选项.find((group) => group.name === '驱夜断愁').records.map((row) => row.value),
+  )
+  expect(skill.技能增益列表).toHaveLength(6)
 })
 
 test('旧名称和原始ID均能恢复，移除项不再参与计算，同名简写不串选其他技能', () => {

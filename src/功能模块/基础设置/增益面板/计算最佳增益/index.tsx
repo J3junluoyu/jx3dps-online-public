@@ -259,7 +259,7 @@ function 计算最佳增益({ 保存数据并计算 }) {
         <div className={'max-gain-wrap'}>
           <div className='max-gain-content'>
             <h1 className={'max-gain-title'}>替换前</h1>
-            <h1 className='max-gain-dps'>{当前秒伤}</h1>
+            <h1 className='max-gain-dps'>{当前秒伤.toFixed(2)}</h1>
             <div>
               {Object.keys(当前增益展示).map((key, index) => {
                 return (
@@ -274,7 +274,7 @@ function 计算最佳增益({ 保存数据并计算 }) {
           <div className='max-gain-content'>
             <h1 className={'max-gain-title'}>替换后</h1>
             <h1 className='max-gain-dps dps-up-color'>
-              {最大Dps}
+              {最大Dps.toFixed(2)}
               <RiseOutlined className='max-gain-dps-icon' />
             </h1>
             <div>

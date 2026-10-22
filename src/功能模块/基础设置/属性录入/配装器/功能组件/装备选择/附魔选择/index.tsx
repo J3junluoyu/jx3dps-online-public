@@ -144,7 +144,11 @@ function 附魔选择(props: 附魔选择入参) {
                     }`}
                   >
                     {+upItem?.dpsUp > 0 ? '+' : ''}
-                    {对比显示百分比 ? `${upItem?.dpsPercent}%` : `${upItem?.dpsUp}`}
+                    {对比显示百分比
+                      ? `${upItem?.dpsPercent}%`
+                      : typeof upItem?.dpsUp === 'number'
+                        ? upItem.dpsUp.toFixed(2)
+                        : upItem?.dpsUp}
                   </span>
                 ) : null}
                 <span className={`fumo-name-number fumo-name-${颜色枚举?.[颜色]?.样式}`}>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { App, Divider, Popover, Select, Tooltip } from 'antd'
 import { 更新方案数据 } from '@/store/data'
@@ -12,7 +12,7 @@ import { 装备位置部位枚举, 装备特效枚举 } from '@/@types/装备'
 import classNames from 'classnames'
 import './index.css'
 
-const { 装备数据 } = 获取当前数据()
+const { 名称, 装备数据 } = 获取当前数据()
 
 function 循环选择(props) {
   const { className, 不提示循环, 不更新秒伤 } = props
@@ -21,7 +21,15 @@ function 循环选择(props) {
   const 当前计算循环名称 = useAppSelector((state) => state?.data?.当前计算循环名称)
   const 装备信息 = useAppSelector((state) => state?.data?.装备信息)
 
-  const { 全部循环 = [], 计算循环详情 } = useCycle()
+  const { 全部循环 = [], 当前循环信息, 计算循环详情 } = useCycle()
+  const 实际循环名称 = 当前循环信息?.名称
+
+  useEffect(() => {
+    if (名称 === '明尊琉璃体' && 实际循环名称 && 实际循环名称 !== 当前计算循环名称) {
+      dispatch(更新方案数据({ 属性: '当前计算循环名称', 数据: 实际循环名称 }))
+      if (!不更新秒伤) dispatch(触发秒伤计算({ 是否更新显示计算结果: true }))
+    }
+  }, [dispatch, 实际循环名称, 当前计算循环名称, 不更新秒伤])
 
   const 切换循环前校验 = (val) => {
     const 目标循环数据 = 全部循环?.find((item) => item?.名称 === val)
@@ -106,7 +114,7 @@ function 循环选择(props) {
       <h1 className='common-label'>循环</h1>
       <div className='common-content'>
         <Select
-          value={当前计算循环名称}
+          value={实际循环名称 || 当前计算循环名称}
           className='cycle-select'
           onChange={(v) => {
             if (不提示循环) {

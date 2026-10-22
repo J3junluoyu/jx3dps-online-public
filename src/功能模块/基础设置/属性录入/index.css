@@ -5,8 +5,9 @@
   padding-bottom: 12px;
 }
 
-.character-set .character-set-btn,.character-set .ant-badge {
-  width: calc(50% - 6px);
+.character-set .character-set-btn,
+.character-set .ant-badge {
+  width: 100%;
 }
 
 .character-set-in-btn {

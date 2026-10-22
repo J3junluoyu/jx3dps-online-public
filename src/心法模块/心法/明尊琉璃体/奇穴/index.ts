@@ -1,5 +1,8 @@
 import { TALENTS, TALENT_LAYOUT, POOL_TALENT_IDS } from '../计算'
 import type { 奇穴列表数据类型 } from '@/@types/奇穴'
+import 图标数据 from './图标.json'
+
+const 奇穴图标 = 图标数据.records as Record<string, { name: string; icon: number }>
 
 const 获取奇穴 = (id: string) => {
   const 奇穴 = TALENTS.find((item) => item.id === id)!
@@ -7,7 +10,7 @@ const 获取奇穴 = (id: string) => {
     id,
     奇穴名称: 奇穴.name,
     奇穴描述: 奇穴.desc || '',
-    奇穴图片: 'https://icon.jx3box.com/icon/13.png',
+    奇穴图片: `https://icon.jx3box.com/icon/${奇穴图标[id]?.icon || 13}.png`,
   }
 }
 

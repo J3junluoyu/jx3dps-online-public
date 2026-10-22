@@ -2,13 +2,65 @@
   "repository": "https://github.com/J3junluoyu/Generator",
   "commit": "8fad4eb8b52fa435bc656e7731ccbf40d6d41126",
   "sources": [
+    "assets/json/belongs.json",
     "assets/json/buffs.json",
     "assets/raw/enchants.py",
     "gains/consumables.py",
     "gains/teams.py",
     "base/attribute.py"
   ],
+  "belongs": {
+    "15072": {
+      "name": "寒啸千军",
+      "desc": "消耗20点格挡值，鼓舞友方士气，每95点基础体质使自身无双等级提高15点，半径20尺内最多25名友方目标无双等级提高3点，持续15秒。",
+      "belong_key": "belong_15072"
+    }
+  },
   "buffs": {
+    "2234": {
+      "24742": {
+        "1": {
+          "name": "仙王蛊鼎",
+          "interval": 30,
+          "max_stack": 100,
+          "max_tick": 16,
+          "attributes": { "strain_base": 26 }
+        }
+      }
+    },
+    "14678": {
+      "4246": {
+        "2": {
+          "name": "朝圣",
+          "interval": 16,
+          "max_stack": 100,
+          "max_tick": 1,
+          "attributes": { "strain_base": 41 }
+        }
+      }
+    },
+    "15072": {
+      "33210": {
+        "2": {
+          "name": "寒啸千军",
+          "interval": 240,
+          "max_stack": 100,
+          "max_tick": 1,
+          "attributes": { "strain_base": 15 }
+        }
+      }
+    },
+    "15115": {
+      "23107": {
+        "1": {
+          "name": "号令三军",
+          "interval": 16,
+          "max_stack": 100,
+          "max_tick": 30,
+          "attributes": { "strain_base": 34 }
+        }
+      }
+    },
     "10438": {
       "10100": {
         "3": {

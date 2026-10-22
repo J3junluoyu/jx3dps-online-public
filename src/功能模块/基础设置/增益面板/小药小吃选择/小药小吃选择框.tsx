@@ -10,6 +10,8 @@ interface 小药小吃选择框入参 extends SelectProps {
   data?: 小药小吃数据类型[]
 }
 
+const 小吃品级样式 = { 蓝: 'xiaochi-lan', 紫: 'xiaochi-zi', 金: 'xiaochi-jin' }
+
 const 小药小吃选择框: React.FC<小药小吃选择框入参> = (props) => {
   const { 开启智能对比, data, ...rest } = props
 
@@ -68,6 +70,9 @@ const 小药小吃选择框: React.FC<小药小吃选择框入参> = (props) => 
       }}
     >
       {(data || []).map((item) => {
+        const 小吃显示名称 = item.小吃名称.startsWith('创意料理')
+          ? item.小吃名称.replace('额外气血', '气血').replace('内功攻击', '攻击')
+          : item.小吃名称
         const upDps = (
           dpsUpList?.find((up) => up.key === `${item?.小吃名称}`) || {
             dpsUp: 0,
@@ -87,16 +92,15 @@ const 小药小吃选择框: React.FC<小药小吃选择框入参> = (props) => 
         )
 
         return (
-          <Select.Option key={item?.小吃名称} value={item?.小吃名称} label={item.小吃名称}>
+          <Select.Option key={item?.小吃名称} value={item?.小吃名称} label={小吃显示名称}>
             <div className={'xiaochi-diff-item'}>
               <Tooltip title={小吃详情} placement='left'>
                 <div className={'xiaochi-diff-item-name'}>
                   {item?.图标 ? <img className={'xiaochi-diff-item-img'} src={item?.图标} /> : null}
-                  {item?.小吃名称?.split('（')?.[0]}
-                  {/* {item?.小吃名称} */}
-                  {item?.小吃名称?.split('（')?.[1] ? (
-                    <span className={`${item?.小吃品级 === '紫' ? 'xiaochi-zi' : 'xiaochi-lan'}`}>
-                      （{item?.小吃名称?.split('（')?.[1]}
+                  {小吃显示名称.split('（')[0]}
+                  {小吃显示名称.split('（')[1] ? (
+                    <span className={小吃品级样式[item.小吃品级]}>
+                      （{小吃显示名称.split('（')[1]}
                     </span>
                   ) : null}
                 </div>
@@ -104,7 +108,7 @@ const 小药小吃选择框: React.FC<小药小吃选择框入参> = (props) => 
               {upDps !== 0 ? (
                 <span className={`${upDps > 0 ? 'dps-up-color' : 'dps-low-color'}`}>
                   {upDps > 0 ? '+' : ''}
-                  {upDps}
+                  {upDps.toFixed(2)}
                 </span>
               ) : null}
             </div>

@@ -35,6 +35,7 @@ export interface 团队增益数据类型 {
   增益心法端?: '旗舰' | '无界'
   覆盖率支持手动录入?: boolean
   层数选项数组?: number[]
+  层数自动计算?: boolean
   冲突增益?: string[]
   增益图片: string
   增益描述?: string

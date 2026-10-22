@@ -167,7 +167,7 @@ function 团队增益轴设置弹窗({ open, onCancel }) {
                           item?.启用 ? 'dps-up-color' : 'dps-low-color'
                         }`}
                       >
-                        {item?.秒伤差值}
+                        {item?.秒伤差值.toFixed(2)}
                         <span>({item?.秒伤比例}%)</span>
                       </span>
                     </div>
