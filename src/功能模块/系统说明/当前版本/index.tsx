@@ -87,7 +87,9 @@ function Log() {
 
   return (
     <div className='log-wrap'>
-      <span>当前版本: {名称 === '明尊琉璃体' ? '50级明尊琉璃体' : log_data?.[0]?.version}</span>
+      <span>
+        {名称 === '明尊琉璃体' ? '[苍生铸世] 明尊琉璃体' : `当前版本: ${log_data?.[0]?.version}`}
+      </span>
       {/* <span onClick={() => setNoticeVisible(true)}>使用前声明</span> */}
       <span className='log' onClick={() => setVisible(true)}>
         更新日志

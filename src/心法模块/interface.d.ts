@@ -17,6 +17,11 @@ export interface 心法配置类型 {
    */
   数据提供: string
   /**
+   * @name 测试人员
+   * 本心法模块的测试人员
+   */
+  测试人员?: string
+  /**
    * @name 名称
    * 对应心法名称
    */

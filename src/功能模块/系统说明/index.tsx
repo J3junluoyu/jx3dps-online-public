@@ -5,14 +5,15 @@ import { Tooltip } from 'antd'
 import styles from './index.module.less'
 import './index.css'
 
-const { 模块负责人, 数据提供 } = 获取当前数据()
+const { 模块负责人, 数据提供, 测试人员 } = 获取当前数据()
 
 function 顶部说明() {
   return (
     <>
       <h1 className={'title-tip'}>
         <span className={styles.label}>模块负责人：{模块负责人 || '-'}；</span>
-        {数据提供}
+        <span>数据：{数据提供}</span>
+        {测试人员 && <span>；测试：{测试人员}</span>}
         <span className='service-tip'>
           ；服务支持：
           <Tooltip

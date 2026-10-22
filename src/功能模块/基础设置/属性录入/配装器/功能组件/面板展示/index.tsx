@@ -142,16 +142,20 @@ function 面板展示(props: 面板展示入参) {
             <h1 className='zhuangbei-character-label'>{item}</h1>
             <Tooltip
               placement='left'
+              color={item === '加速' ? '#262626' : undefined}
+              styles={item === '加速' ? { root: { maxWidth: 340 } } : undefined}
               getPopupContainer={() =>
-                document.getElementById(`zhuangbei-character-item_${item}`) as any
+                item === '加速'
+                  ? document.body
+                  : (document.getElementById(`zhuangbei-character-item_${item}`) as any)
               }
               title={
                 <div>
-                  <p>
+                  <div>
                     {item === 'GCD'
                       ? '当前加速下的公共调息时间'
                       : 获取面板显示数据数值(item, 显示数据?.数据, 显示数据?.数据?.装分)}
-                  </p>
+                  </div>
                   {有变化 ? <p>较原面板[{对比枚举结果}]</p> : null}
                 </div>
               }

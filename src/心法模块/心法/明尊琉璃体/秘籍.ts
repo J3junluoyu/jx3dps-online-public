@@ -1,4 +1,5 @@
 import { RECIPES } from './计算'
+import type { 选中秘籍信息 } from '@/@types/秘籍'
 
 const 精简技能 = new Set([
   '赤日轮',
@@ -41,3 +42,26 @@ const 秘籍显示名称 = new Map(
 )
 
 export const 获取明尊秘籍显示名称 = (名称: string) => 秘籍显示名称.get(名称) || 名称
+
+// 按用户当前选中配置锁定；银月斩、生死劫各保留当前的三本秘籍。
+const 固定秘籍ID: Record<string, string[]> = {
+  幽月轮: ['recipe_984_1', 'recipe_985_1', 'recipe_989_1', 'recipe_990_1'],
+  银月斩: ['recipe_992_1', 'recipe_993_1', 'recipe_994_1'],
+  赤日轮: ['recipe_999_1', 'recipe_1000_1', 'recipe_1001_1', 'recipe_1005_1'],
+  烈日斩: ['recipe_1008_1', 'recipe_1009_1', 'recipe_1011_1', 'recipe_1013_1'],
+  生死劫: ['recipe_1621_1', 'recipe_1622_1', 'recipe_1623_1'],
+  净世破魔击: ['recipe_1015_1', 'recipe_1016_1', 'recipe_1019_1', 'recipe_5206_1'],
+  驱夜断愁: ['recipe_1052_1', 'recipe_1053_1', 'recipe_1055_1', 'recipe_1056_1'],
+}
+
+export const 获取明尊固定秘籍 = (): 选中秘籍信息 =>
+  Object.fromEntries(
+    明尊秘籍选项
+      .filter((组) => 固定秘籍ID[组.name])
+      .map((组) => [
+        组.name,
+        组.records
+          .filter((项) => 固定秘籍ID[组.name]?.includes(项.recipe_key))
+          .map((项) => 项.value),
+      ]),
+  )

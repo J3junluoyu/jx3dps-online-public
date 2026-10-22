@@ -105,3 +105,42 @@
   color: #999;
   margin-left: 4px;
 }
+
+.character-haste-tooltip {
+  min-width: 260px;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.character-haste-tooltip-title {
+  margin-bottom: 4px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.character-haste-tooltip table {
+  width: 100%;
+  margin: 8px 0;
+  border-collapse: collapse;
+  white-space: nowrap;
+}
+
+.character-haste-tooltip th,
+.character-haste-tooltip td {
+  padding: 3px 8px;
+  text-align: left;
+}
+
+.character-haste-tooltip th {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.character-haste-current {
+  background: rgba(255, 255, 255, 0.15);
+  font-weight: 600;
+}
+
+.character-haste-tooltip-note {
+  margin-top: 4px;
+  color: rgba(255, 255, 255, 0.65);
+}

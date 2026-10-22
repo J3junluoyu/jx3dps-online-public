@@ -6,18 +6,22 @@ import { 更新方案数据 } from '@/store/data'
 import { 触发秒伤计算 } from '@/计算模块/计算函数'
 import { 获取当前职业的所有秘籍信息 } from './utils'
 import 获取当前数据 from '@/数据/数据工具/获取当前数据'
-import { 获取明尊秘籍显示名称 } from '@/心法模块/心法/明尊琉璃体/秘籍'
+import { 获取明尊固定秘籍, 获取明尊秘籍显示名称 } from '@/心法模块/心法/明尊琉璃体/秘籍'
+import { LockOutlined } from '@ant-design/icons'
 import './index.css'
 
 const 当前职业的所有秘籍信息 = 获取当前职业的所有秘籍信息()
+const 秘籍已锁定 = 获取当前数据().名称 === '明尊琉璃体'
 
 function 秘籍选择抽屉(props?: any) {
   const { value, onChange, open, onClose } = props || {}
 
   const dispatch = useAppDispatch()
-  const 当前秘籍信息 = value || useAppSelector((state) => state?.data?.当前秘籍信息)
+  const 保存的秘籍信息 = useAppSelector((state) => state?.data?.当前秘籍信息)
+  const 当前秘籍信息 = 秘籍已锁定 ? 获取明尊固定秘籍() : value || 保存的秘籍信息
 
   const 选择秘籍 = (新秘籍列表: string[], 技能信息: 技能秘籍信息) => {
+    if (秘籍已锁定) return
     if (新秘籍列表?.length > 4) {
       message.error('一个技能最多选择四个秘籍')
       return
@@ -53,7 +57,8 @@ function 秘籍选择抽屉(props?: any) {
 
   return (
     <Drawer
-      title={'秘籍设置'}
+      title={秘籍已锁定 ? '秘籍设置（已锁定）' : '秘籍设置'}
+      className={秘籍已锁定 ? 'miji-locked-drawer' : undefined}
       width={500}
       open={open}
       mask={false}
@@ -62,11 +67,17 @@ function 秘籍选择抽屉(props?: any) {
         onClose()
       }}
     >
+      {秘籍已锁定 && (
+        <div className='miji-locked-tip'>
+          <LockOutlined /> 当前秘籍已锁定，仅供查看。
+        </div>
+      )}
       {当前职业的所有秘籍信息.map((技能) => {
         return (
           <div className={'miji-selected-item'} key={技能.技能名称}>
             <h1 className={'miji-skill-title'}>{技能.技能名称}</h1>
             <Checkbox.Group
+              disabled={秘籍已锁定}
               value={当前秘籍信息?.[技能?.技能名称] || []}
               onChange={(新秘籍列表) => 选择秘籍(新秘籍列表 as string[], 技能)}
             >

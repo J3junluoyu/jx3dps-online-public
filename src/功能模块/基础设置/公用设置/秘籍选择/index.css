@@ -2,6 +2,20 @@
   width: calc(50% - 4px);
 }
 
+.miji-locked-tip {
+  margin-bottom: 16px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  background-color: #faf7f2;
+  color: var(--ant-primary-color);
+  font-size: 13px;
+}
+
+.miji-locked-drawer .ant-checkbox-checked.ant-checkbox-disabled + span {
+  color: var(--ant-primary-color);
+  font-weight: 600;
+}
+
 .miji-selected-item {
   margin-bottom: 16px;
 }
@@ -10,7 +24,7 @@
   font-size: 16px;
   color: var(--ant-primary-color);
   font-weight: 600;
-  margin-bottom:8px;
+  margin-bottom: 8px;
 }
 
 .miji-selected-item .ant-checkbox-group {

@@ -17,6 +17,7 @@ import { 判断团队增益轴快照计算 } from '@/数据/团队增益/tools'
 
 import { 获取角色需要展示的面板数据 } from './工具'
 import 圣浴常驻 from './圣浴常驻'
+import 加速说明 from './加速说明'
 import './index.css'
 
 const { 名称, 主属性, 基础GCD = 1.5, 性能功能关闭数组 = [] } = 获取当前数据()
@@ -185,6 +186,8 @@ function 面板信息() {
               </h1>
               <Tooltip
                 placement='topLeft'
+                color={item === '加速' ? '#262626' : undefined}
+                styles={item === '加速' ? { root: { maxWidth: 340 } } : undefined}
                 title={() => 获取面板显示数据数值(item, 显示数据, 显示数据?.装分)}
               >
                 <div className='character-content'>
@@ -302,6 +305,9 @@ export const 获取面板显示数据数值 = (
   角色最终属性: 角色基础属性类型,
   装备分数?: number,
 ) => {
+  if (key === '加速' && 角色最终属性.明尊面板) {
+    return <加速说明 加速值={角色最终属性.明尊面板.hasteRating} />
+  }
   if (key === '体质' && 角色最终属性.明尊面板) {
     const 面板 = 角色最终属性.明尊面板
     return (
