@@ -6,6 +6,7 @@ import { 延迟设定 } from '@/数据/常量'
 import { 计算记录类型 } from '@/@types/计算'
 import { 数据埋点 } from '@/工具函数/tools/log'
 import { 秒伤计算 } from '@/计算模块/计算函数'
+import { 更新增益面板显示状态 } from '@/store/system'
 
 import 结果统计 from './结果统计'
 import 收益图表 from './收益图表'
@@ -32,6 +33,13 @@ function 计算结果() {
   const skillRef = useRef<any>()
 
   const dispatch = useAppDispatch()
+
+  const 收起增益面板 = (event: React.MouseEvent<HTMLDivElement>) => {
+    // 弹窗通过Portal渲染在结果区域外，点击其内容时保持增益面板状态。
+    if (增益面板显示状态 && event.currentTarget.contains(event.target as Node)) {
+      dispatch(更新增益面板显示状态(false))
+    }
+  }
 
   const { 当前循环信息 } = useCycle()
 
@@ -116,6 +124,7 @@ function 计算结果() {
     <div
       className={`dps ${增益面板显示状态 ? `dps-zengyi-visible` : ''}`}
       style={{ backgroundColor: 系统配置?.背景色 || 'rgba(0, 0, 0, 0.5)' }}
+      onClickCapture={收起增益面板}
     >
       <h1 className={'dps-title'}>伤害计算</h1>
       <Divider />

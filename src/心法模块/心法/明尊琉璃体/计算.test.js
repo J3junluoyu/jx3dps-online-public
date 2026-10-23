@@ -117,6 +117,53 @@ test('朝圣计入生效的固定体质和全主属性，排除装备及增益�
   expect(gained.vitality).toBe(3594)
   expect(gained.pilgrimageStacks).toBe(12)
 })
+test.each(['mainTank', 'offTank'])('%s按当前总体质整层减仇，再加150%', (stance) => {
+  for (const [vitality, stacks, threatRate] of [
+    [9999, 0, 2.5],
+    [10000, 1, 2.400390625],
+    [10535, 1, 2.400390625],
+    [19999, 1, 2.400390625],
+    [20000, 2, 2.30078125],
+    [1000000, 100, -7.4609375],
+    [1010000, 100, -7.4609375],
+  ]) {
+    const panel = calculateAttributes(
+      gear({ vitality: vitality - 18, threat: 1024 }),
+      settings({ stance }),
+    )
+    expect(panel.vitality).toBe(vitality)
+    expect(panel.threatReductionStacks).toBe(stacks)
+    expect(panel.threatRate).toBe(threatRate)
+    expect(panel.threat).toBe(1024)
+  }
+})
+
+test('减仇包含装备和生效增益的体质百分比，无T气劲时不减仇', () => {
+  const equipment = gear({ vitality: 4982, threat: 1024 })
+  const bare = calculateAttributes(equipment, settings({ stance: 'mainTank' }))
+  const viaEquipment = calculateAttributes(
+    { ...equipment, vitalityGain: 100 },
+    settings({ stance: 'mainTank' }),
+  )
+  const viaGain = calculateAttributes(
+    equipment,
+    settings({ stance: 'mainTank', gains: { vitality_gain: 1024 } }),
+  )
+  expect(bare.threatRate).toBe(2.5)
+  for (const panel of [viaEquipment, viaGain]) {
+    expect(panel.baseVitality).toBe(5000)
+    expect(panel.vitality).toBe(10000)
+    expect(panel.threatReductionStacks).toBe(1)
+    expect(panel.threatRate).toBe(2.400390625)
+  }
+  const noStance = calculateAttributes(
+    { ...equipment, vitalityGain: 100 },
+    settings({ stance: 'none' }),
+  )
+  expect(noStance.threatReductionStacks).toBe(0)
+  expect(noStance.threatRate).toBe(2.5)
+})
+
 test('副T、主T气劲直接取Generator精确整数，互相替换', () => {
   const equipment = gear({ vitality: 1006 }) // Total vitality = 1024.
   const plain = calculateAttributes(equipment, settings())

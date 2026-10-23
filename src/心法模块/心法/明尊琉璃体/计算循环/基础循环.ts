@@ -1,6 +1,7 @@
 import type { 循环数据, 循环技能详情 } from '@/@types/循环'
-import { SKILLS, TALENTS, normalizeTalents } from '../计算'
+import { SKILLS } from '../计算'
 import type { Skill } from '../计算'
+import 默认奇穴 from '../默认奇穴'
 
 export interface 基础循环输入次数 {
   驱夷日破: number
@@ -134,9 +135,7 @@ export function 创建明尊基础循环(
     类型: '默认',
     提供者: '用户',
     备注: `300秒循环，GCD为${(16 - 循环加速等级) / 16}秒时自动选用。以驱夜断愁次数推导月破、五明日破、光明相日破及无量次数。月破每次3段，DOT按跳数，无量按合计触发数。武伤${次数.武伤}次中${双倍武伤}次为200%（含驱夜${次数.驱夜断愁}次）、${次数.武伤 - 双倍武伤}次为100%；逐项使用驱夷、光明相和五明状态。`,
-    奇穴: normalizeTalents(['18296', '46492', '14698']).map(
-      (id) => TALENTS.find((项) => 项.id === id)!.name,
-    ),
+    奇穴: [...默认奇穴],
     循环详情: [
       {
         循环加速等级,

@@ -65,6 +65,7 @@ interface 头部组件类型 {
    */
   设置对比加速: (e: boolean) => void
   form: any
+  children?: React.ReactNode
 }
 
 function 头部组件(props: 头部组件类型) {
@@ -80,6 +81,7 @@ function 头部组件(props: 头部组件类型) {
     对比加速,
     设置对比加速,
     遍历寻优,
+    children,
   } = props
   const { modal } = App.useApp()
 
@@ -201,6 +203,7 @@ function 头部组件(props: 头部组件类型) {
             </div>
           </Checkbox>
         </span>
+        {children}
         {开启装备智能对比 && !性能功能关闭数组.includes('遍历寻优') ? (
           <>
             <Button onClick={遍历寻优提示} size='small'>

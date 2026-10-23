@@ -80,8 +80,7 @@
   white-space: nowrap;
 }
 
-.zhuangbei-character-item-defense,
-#zhuangbei-character-item_招式产生威胁 {
+.zhuangbei-character-item-defense {
   border-top: 1px solid #eee;
   padding-top: 6px;
   margin-top: 2px;
@@ -108,11 +107,6 @@
   font-weight: 400;
   /* color: var(--ant-primary-color); */
   margin: 0;
-}
-
-#zhuangbei-character-item_招式产生威胁 .zhuangbei-character-label {
-  width: 100px;
-  flex-shrink: 0;
 }
 
 .zhuangbei-character-content {

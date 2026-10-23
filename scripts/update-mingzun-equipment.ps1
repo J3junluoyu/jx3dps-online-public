@@ -49,3 +49,4 @@ $output = [ordered]@{ commit = $commit; items = $items; enchants = $enchants; st
 $destination = Join-Path $PSScriptRoot '../src/心法模块/心法/明尊琉璃体/装备数据.json'
 $output | ConvertTo-Json -Depth 30 | Set-Content -LiteralPath $destination -Encoding utf8
 Write-Output "Equipment: $($items.Count); enchants: $($enchants.Count); stones: $($stones.Count)"
+& (Join-Path $PSScriptRoot 'update-mingzun-threat.ps1')

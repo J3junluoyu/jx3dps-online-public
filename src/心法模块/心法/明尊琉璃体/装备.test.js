@@ -262,19 +262,48 @@ test('保留1110品边界，清理低品与无加速防御装、归正附魔，�
   expect(() => calculateLoadout({ tertiary_weapon: saved.tertiary_weapon })).toThrow('附魔')
 })
 
-test('保留全部20个原始仇恨孔，当前帽子两孔均可镶嵌且不会伪造仇恨收益', () => {
-  expect(GEAR_ITEMS.filter((row) => 'atActiveThreatCoefficient' in row.embed)).toHaveLength(20)
+test('读取考拉31件装备的威胁词条及20个威胁孔，精炼和镶嵌按原始系数分别取整', () => {
+  expect(GEAR_ITEMS.filter((row) => 'threat_gain' in row.magic)).toHaveLength(31)
+  expect(GEAR_ITEMS.filter((row) => 'threat_gain' in row.embed)).toHaveLength(20)
   const item = GEAR_ITEMS.find((row) => row.id === 112319)
-  expect(Object.keys(item.embed)).toEqual(['vitality_base', 'atActiveThreatCoefficient'])
-  const first = calculateLoadout({ hat: selection(item, { embeds: [8, 0] }) })
-  const both = calculateLoadout({ hat: selection(item, { embeds: [8, 8] }) })
-  expect(both.stats).toEqual(first.stats)
-  expect(both.warnings).not.toContain('仇恨')
+  expect(Object.keys(item.embed)).toEqual(['vitality_base', 'threat_gain'])
+  const bare = calculateLoadout({ hat: selection(item) })
+  const first = calculateLoadout({ hat: selection(item, { strength: 6, embeds: [8, 0] }) })
+  const both = calculateLoadout({ hat: selection(item, { strength: 6, embeds: [8, 8] }) })
+  expect(bare.stats.threat).toBe(205)
+  expect(first.stats.threat).toBe(220)
+  expect(both.stats.threat).toBe(222)
+  expect(both.stats).toEqual({ ...first.stats, threat: 222 })
+  expect(both.warnings).not.toContain('招式产生威胁')
+  const wrist = GEAR_ITEMS.find((row) => row.id === 112560)
+  expect(
+    calculateLoadout({
+      hat: selection(item, { strength: 6, embeds: [8, 8] }),
+      wrist: selection(wrist, { strength: 6, embeds: [8, 8] }),
+    }).stats.threat,
+  ).toBe(448)
+})
+
+test('威胁归一字段与旧字段同时出现时只统计一次，不进入DPS乘区', () => {
+  const item = GEAR_ITEMS.find((row) => row.id === 112319)
+  item.magic.atActiveThreatCoefficient = 205
+  try {
+    const { stats } = calculateLoadout({ hat: selection(item, { strength: 6 }) })
+    expect(stats.threat).toBe(220)
+    const withThreat = calculateAttributes(stats, DEFAULT_SETTINGS)
+    expect(withThreat).toEqual({
+      ...calculateAttributes({ ...stats, threat: 0 }, DEFAULT_SETTINGS),
+      threat: 220,
+      threatRate: 1.5 + 220 / 1024,
+    })
+  } finally {
+    delete item.magic.atActiveThreatCoefficient
+  }
 })
 
 test('恢复前置仇恨孔时迁移旧镶嵌到原属性孔，刷新后不再重复迁移', () => {
   const item = GEAR_ITEMS.find((row) => row.id === 112145)
-  expect(Object.keys(item.embed)).toEqual(['atActiveThreatCoefficient', 'physical_shield_base'])
+  expect(Object.keys(item.embed)).toEqual(['threat_gain', 'physical_shield_base'])
   const itemSlot = slot(item)
   const saved = { [itemSlot]: selection(item, { embeds: [8] }) }
   const migrated = normalizeLoadout(saved, 0, 1)

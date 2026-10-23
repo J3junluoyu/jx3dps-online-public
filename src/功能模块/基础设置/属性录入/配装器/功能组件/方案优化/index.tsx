@@ -121,7 +121,7 @@ function 方案优化(props: 方案优化入参) {
       worker.current.onerror = () => {
         if (currentRun !== runId.current) return
         停止计算()
-        message.error('计算中断，请缩小装备范围后重试')
+        message.error('方案优化计算中断，请刷新页面后重试')
       }
       worker.current.postMessage({
         initial: before,

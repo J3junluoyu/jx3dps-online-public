@@ -251,6 +251,10 @@ export function calculateAttributes(equipment: EquipmentStats, settings: Setting
   const vitality = Math.trunc(
     baseVitality * (1 + percentToGuo(equipment.vitalityGain) + gain('vitality_gain') / 1024),
   )
+  // 测试服9557：减仇Buff 18609按当前总体质每10000点一层，每层-102/1024，上限100层。
+  const threatReductionStacks =
+    settings.stance === 'none' ? 0 : Math.min(100, Math.floor(vitality / 10000))
+  const threatRate = 1.5 + (equipment.threat - threatReductionStacks * 102) / 1024
   const pilgrimageStacks = Math.min(100, Math.max(0, Math.floor(baseVitality / 95)))
   const spunk = major(17 + equipment.spunk, 'spunk')
   const spirit = major(18 + equipment.spirit, 'spirit')
@@ -421,6 +425,8 @@ export function calculateAttributes(equipment: EquipmentStats, settings: Setting
     decritical: nonlinear(equipment.decritical + equipment.pvx, 'decritical'),
     targetReduction: nonlinearTarget(target.shield, target.level),
     threat: equipment.threat,
+    threatReductionStacks,
+    threatRate,
     variables,
   }
 }

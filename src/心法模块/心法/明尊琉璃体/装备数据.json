@@ -21,7 +21,8 @@
         "magical_shield_base": 244,
         "haste_base": 109,
         "toughness_base": 109,
-        "strain_base": 364
+        "strain_base": 364,
+        "threat_gain": 178.0
       },
       "embed": {
         "magical_shield_base": 225,
@@ -56,11 +57,12 @@
         "magical_shield_base": 314,
         "haste_base": 140,
         "toughness_base": 140,
-        "strain_base": 468
+        "strain_base": 468,
+        "threat_gain": 178.0
       },
       "embed": {
         "vitality_base": 225,
-        "atActiveThreatCoefficient": 0
+        "threat_gain": 21.0
       },
       "setId": 6981,
       "sets": {
@@ -91,7 +93,8 @@
         "magical_shield_base": 353,
         "haste_base": 109,
         "toughness_base": 109,
-        "strain_base": 364
+        "strain_base": 364,
+        "threat_gain": 178.0
       },
       "embed": {
         "vitality_base": 225,
@@ -127,11 +130,12 @@
         "magical_shield_base": 314,
         "haste_base": 140,
         "toughness_base": 140,
-        "strain_base": 468
+        "strain_base": 468,
+        "threat_gain": 178.0
       },
       "embed": {
         "vitality_base": 225,
-        "atActiveThreatCoefficient": 0
+        "threat_gain": 21.0
       },
       "setId": 6999,
       "sets": {
@@ -163,11 +167,12 @@
         "magical_shield_base": 353,
         "haste_base": 109,
         "toughness_base": 109,
-        "strain_base": 364
+        "strain_base": 364,
+        "threat_gain": 178.0
       },
       "embed": {
         "vitality_base": 225,
-        "atActiveThreatCoefficient": 0
+        "threat_gain": 21.0
       },
       "setId": 0,
       "sets": {}
@@ -192,7 +197,8 @@
         "magical_shield_base": 244,
         "haste_base": 109,
         "toughness_base": 109,
-        "strain_base": 364
+        "strain_base": 364,
+        "threat_gain": 178.0
       },
       "embed": {
         "magical_shield_base": 225,
@@ -221,10 +227,11 @@
         "magical_shield_base": 244,
         "haste_base": 109,
         "toughness_base": 109,
-        "strain_base": 364
+        "strain_base": 364,
+        "threat_gain": 178.0
       },
       "embed": {
-        "atActiveThreatCoefficient": 0,
+        "threat_gain": 21.0,
         "physical_shield_base": 225
       },
       "setId": 0,
@@ -250,7 +257,8 @@
         "magical_shield_base": 244,
         "haste_base": 109,
         "toughness_base": 109,
-        "strain_base": 364
+        "strain_base": 364,
+        "threat_gain": 178.0
       },
       "embed": {
         "magical_shield_base": 225,
@@ -279,7 +287,8 @@
         "magical_shield_base": 353,
         "haste_base": 109,
         "toughness_base": 109,
-        "strain_base": 364
+        "strain_base": 364,
+        "threat_gain": 178.0
       },
       "embed": {
         "physical_shield_base": 225,
@@ -308,7 +317,8 @@
         "magical_shield_base": 454,
         "haste_base": 140,
         "toughness_base": 140,
-        "strain_base": 468
+        "strain_base": 468,
+        "threat_gain": 178.0
       },
       "embed": {
         "vitality_base": 225,
@@ -337,10 +347,11 @@
         "magical_shield_base": 504,
         "haste_base": 155,
         "toughness_base": 155,
-        "strain_base": 520
+        "strain_base": 520,
+        "threat_gain": 178.0
       },
       "embed": {
-        "atActiveThreatCoefficient": 0,
+        "threat_gain": 21.0,
         "magical_shield_base": 225
       },
       "setId": 0,
@@ -366,7 +377,8 @@
         "magical_shield_base": 349,
         "haste_base": 155,
         "toughness_base": 155,
-        "strain_base": 520
+        "strain_base": 520,
+        "threat_gain": 178.0
       },
       "embed": {
         "vitality_base": 225,
@@ -395,7 +407,8 @@
         "magical_shield_base": 407,
         "haste_base": 125,
         "toughness_base": 125,
-        "strain_base": 451
+        "strain_base": 451,
+        "threat_gain": 205.0
       },
       "embed": {
         "vitality_base": 225,
@@ -431,11 +444,12 @@
         "magical_shield_base": 362,
         "haste_base": 161,
         "toughness_base": 161,
-        "strain_base": 580
+        "strain_base": 580,
+        "threat_gain": 205.0
       },
       "embed": {
         "vitality_base": 225,
-        "atActiveThreatCoefficient": 0
+        "threat_gain": 21.0
       },
       "setId": 6999,
       "sets": {
@@ -467,11 +481,12 @@
         "magical_shield_base": 407,
         "haste_base": 125,
         "toughness_base": 125,
-        "strain_base": 451
+        "strain_base": 451,
+        "threat_gain": 205.0
       },
       "embed": {
         "vitality_base": 225,
-        "atActiveThreatCoefficient": 0
+        "threat_gain": 21.0
       },
       "setId": 0,
       "sets": {}
@@ -496,7 +511,8 @@
         "magical_shield_base": 282,
         "haste_base": 125,
         "toughness_base": 125,
-        "strain_base": 451
+        "strain_base": 451,
+        "threat_gain": 205.0
       },
       "embed": {
         "magical_shield_base": 225,
@@ -525,10 +541,11 @@
         "magical_shield_base": 282,
         "haste_base": 125,
         "toughness_base": 125,
-        "strain_base": 451
+        "strain_base": 451,
+        "threat_gain": 205.0
       },
       "embed": {
-        "atActiveThreatCoefficient": 0,
+        "threat_gain": 21.0,
         "physical_shield_base": 225
       },
       "setId": 0,
@@ -554,7 +571,8 @@
         "magical_shield_base": 282,
         "haste_base": 125,
         "toughness_base": 125,
-        "strain_base": 451
+        "strain_base": 451,
+        "threat_gain": 205.0
       },
       "embed": {
         "magical_shield_base": 225,
@@ -583,7 +601,8 @@
         "magical_shield_base": 407,
         "haste_base": 125,
         "toughness_base": 125,
-        "strain_base": 451
+        "strain_base": 451,
+        "threat_gain": 205.0
       },
       "embed": {
         "physical_shield_base": 225,
@@ -612,7 +631,8 @@
         "magical_shield_base": 523,
         "haste_base": 161,
         "toughness_base": 161,
-        "strain_base": 580
+        "strain_base": 580,
+        "threat_gain": 205.0
       },
       "embed": {
         "vitality_base": 225,
@@ -641,10 +661,11 @@
         "magical_shield_base": 581,
         "haste_base": 179,
         "toughness_base": 179,
-        "strain_base": 644
+        "strain_base": 644,
+        "threat_gain": 205.0
       },
       "embed": {
-        "atActiveThreatCoefficient": 0,
+        "threat_gain": 21.0,
         "magical_shield_base": 225
       },
       "setId": 0,
@@ -670,7 +691,8 @@
         "magical_shield_base": 402,
         "haste_base": 179,
         "toughness_base": 179,
-        "strain_base": 644
+        "strain_base": 644,
+        "threat_gain": 205.0
       },
       "embed": {
         "vitality_base": 225,
@@ -1495,11 +1517,12 @@
         "magical_shield_base": 413,
         "haste_base": 127,
         "toughness_base": 127,
-        "strain_base": 461
+        "strain_base": 461,
+        "threat_gain": 208.0
       },
       "embed": {
         "vitality_base": 225,
-        "atActiveThreatCoefficient": 0
+        "threat_gain": 21.0
       },
       "setId": 7019,
       "sets": {
@@ -1531,11 +1554,12 @@
         "magical_shield_base": 590,
         "haste_base": 182,
         "toughness_base": 182,
-        "strain_base": 659
+        "strain_base": 659,
+        "threat_gain": 208.0
       },
       "embed": {
         "physical_shield_base": 225,
-        "atActiveThreatCoefficient": 0
+        "threat_gain": 21.0
       },
       "setId": 7019,
       "sets": {
@@ -1567,7 +1591,8 @@
         "magical_shield_base": 409,
         "haste_base": 182,
         "toughness_base": 182,
-        "strain_base": 659
+        "strain_base": 659,
+        "threat_gain": 208.0
       },
       "embed": {
         "physical_shield_base": 225,
@@ -1603,11 +1628,12 @@
         "magical_shield_base": 504,
         "haste_base": 155,
         "toughness_base": 155,
-        "strain_base": 520
+        "strain_base": 520,
+        "threat_gain": 178.0
       },
       "embed": {
         "physical_shield_base": 225,
-        "atActiveThreatCoefficient": 0
+        "threat_gain": 21.0
       },
       "setId": 0,
       "sets": {}
@@ -1632,11 +1658,12 @@
         "magical_shield_base": 581,
         "haste_base": 179,
         "toughness_base": 179,
-        "strain_base": 644
+        "strain_base": 644,
+        "threat_gain": 205.0
       },
       "embed": {
         "physical_shield_base": 225,
-        "atActiveThreatCoefficient": 0
+        "threat_gain": 21.0
       },
       "setId": 0,
       "sets": {}
@@ -1997,11 +2024,12 @@
         "magical_shield_base": 581,
         "haste_base": 179,
         "toughness_base": 179,
-        "strain_base": 644
+        "strain_base": 644,
+        "threat_gain": 112.0
       },
       "embed": {
         "physical_shield_base": 225,
-        "atActiveThreatCoefficient": 0
+        "threat_gain": 21.0
       },
       "setId": 0,
       "sets": {}
@@ -2026,11 +2054,12 @@
         "magical_shield_base": 362,
         "haste_base": 161,
         "toughness_base": 161,
-        "strain_base": 580
+        "strain_base": 580,
+        "threat_gain": 112.0
       },
       "embed": {
         "vitality_base": 225,
-        "atActiveThreatCoefficient": 0
+        "threat_gain": 21.0
       },
       "setId": 0,
       "sets": {}
@@ -2055,11 +2084,12 @@
         "magical_shield_base": 504,
         "haste_base": 155,
         "toughness_base": 155,
-        "strain_base": 520
+        "strain_base": 520,
+        "threat_gain": 178.0
       },
       "embed": {
         "physical_shield_base": 225,
-        "atActiveThreatCoefficient": 0
+        "threat_gain": 21.0
       },
       "setId": 0,
       "sets": {}
@@ -2084,11 +2114,12 @@
         "magical_shield_base": 314,
         "haste_base": 140,
         "toughness_base": 140,
-        "strain_base": 468
+        "strain_base": 468,
+        "threat_gain": 178.0
       },
       "embed": {
         "vitality_base": 225,
-        "atActiveThreatCoefficient": 0
+        "threat_gain": 21.0
       },
       "setId": 0,
       "sets": {}
@@ -3643,7 +3674,7 @@
         "strain_base": 386
       },
       "embed": {
-        "atActiveThreatCoefficient": 0
+        "threat_gain": 21.0
       },
       "setId": 0,
       "sets": {}
@@ -3698,7 +3729,7 @@
         "strain_base": 312
       },
       "embed": {
-        "atActiveThreatCoefficient": 0
+        "threat_gain": 21.0
       },
       "setId": 0,
       "sets": {}
@@ -3723,7 +3754,7 @@
         "strain_base": 351
       },
       "embed": {
-        "atActiveThreatCoefficient": 0
+        "threat_gain": 21.0
       },
       "setId": 0,
       "sets": {}
@@ -20333,5 +20364,9 @@
         "strain_base": 208
       }
     }
-  ]
+  ],
+  "threatSource": {
+    "repository": "https://github.com/IcyTide/Generator",
+    "commit": "b7d609a4a87f92a7b3907efe9141bdfdfb8c3f9e"
+  }
 }

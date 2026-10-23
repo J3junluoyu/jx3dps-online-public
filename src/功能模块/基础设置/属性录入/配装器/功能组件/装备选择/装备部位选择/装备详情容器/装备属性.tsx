@@ -4,6 +4,7 @@ import styles from './index.module.less'
 import { 属性简写枚举 } from '@/@types/枚举'
 import { 精炼加成系数算法 } from '../../../../工具函数/根据装备信息获取基础属性'
 import { Tag } from 'antd'
+import { 属性类型 } from '@/@types/属性'
 
 interface 装备属性类型 {
   装备数据: 装备属性信息模型
@@ -86,6 +87,7 @@ const 获取属性列表 = (装备: 装备属性信息模型) => {
     })
   }
   装备?.装备增益?.forEach((item) => {
+    if (item.属性 === 属性类型.仇恨) return
     if (属性简写枚举[item?.属性]) {
       列表.push({
         名称: 属性简写枚举[item?.属性],

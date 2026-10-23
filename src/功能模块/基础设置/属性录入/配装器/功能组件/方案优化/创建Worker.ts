@@ -1,6 +1,6 @@
-// Worker 独立入口不继承原项目的 CommonJS 导出配置。
+// Worker独立入口不继承CommonJS导出，并从自身地址解析依赖，兼容子目录部署。
 export const 创建优化Worker = () =>
   new Worker(
-    /* webpackEntryOptions: { library: false, name: "mingzun-plan-optimizer" } */
+    /* webpackEntryOptions: { library: false, publicPath: "auto", name: "mingzun-plan-optimizer" } */
     new URL('./worker.ts', import.meta.url),
   )

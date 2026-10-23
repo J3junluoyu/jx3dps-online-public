@@ -35,6 +35,9 @@ jobs:
         env:
           CI: 'false'
 
+      - name: Verify optimizer worker in deployment build
+        run: pnpm run test:mingzun-worker
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4
         with:

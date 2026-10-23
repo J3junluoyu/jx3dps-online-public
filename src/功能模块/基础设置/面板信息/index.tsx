@@ -252,7 +252,7 @@ export const 获取面板显示数据 = (
     if (key === '拆招') return 明尊面板.parryValue
     if (key === '御劲') return 百分比(明尊面板.toughness)
     if (key === '化劲') return 百分比(明尊面板.decritical)
-    if (key === '招式产生威胁') return 明尊面板.threat
+    if (key === '招式产生威胁') return 百分比(明尊面板.threatRate)
   }
   switch (key) {
     case '装分':
@@ -320,7 +320,7 @@ export const 获取面板显示数据数值 = (
   }
   switch (key) {
     case '招式产生威胁':
-      return '装备提供的招式产生威胁属性值'
+      return '计算装备，精炼及镶嵌等的威胁加成，并扣除T气劲减仇'
     case '装分':
       return 装备分数 || undefined
     case '气血':

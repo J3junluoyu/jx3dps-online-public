@@ -3,8 +3,7 @@
  */
 import React, { forwardRef, useEffect, useImperativeHandle, useMemo, useState } from 'react'
 import classnames from 'classnames'
-import { Button, message, Popover, Select } from 'antd'
-import { BulbOutlined } from '@ant-design/icons'
+import { message, Select } from 'antd'
 
 import ImageComponent from '@/组件/图片展示'
 import { useAppDispatch, useAppSelector } from '@/hooks'
@@ -426,32 +425,6 @@ function 装备部位选择(props: 装备部位选择入参, ref) {
           )
         })}
       </Select>
-      {开启装备智能对比 ? (
-        <Popover
-          title='选择当前提升最大(Beta)'
-          placement='right'
-          mouseEnterDelay={1}
-          content={
-            <div>
-              <p>仅选择在其他部位装备不变情况下，</p>
-              <p>
-                当前部位替换后
-                <span className={styles.important}>当前</span>
-                秒伤最高的装备，
-              </p>
-              <p>仅为智能对比功能的快速选择能力</p>
-              <p>由于切换装备后属性收益变化，可能出现当前切换至的装备并非切换后最佳装备的情况</p>
-            </div>
-          }
-        >
-          <Button
-            onClick={() => 选择最佳装备(true)}
-            size='small'
-            className={styles.diffIcon}
-            icon={<BulbOutlined />}
-          />
-        </Popover>
-      ) : null}
     </div>
   )
 }

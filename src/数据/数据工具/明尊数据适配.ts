@@ -58,6 +58,7 @@ const 属性映射: Record<string, 属性类型> = {
   max_life_add: 属性类型.额外气血上限,
   vitality_gain: 属性类型.郭氏体质,
   atActiveThreatCoefficient: 属性类型.仇恨,
+  threat_gain: 属性类型.仇恨,
   dodge_base: 属性类型.闪避,
   parry_base: 属性类型.招架,
   parry_value_base: 属性类型.拆招,
@@ -213,6 +214,20 @@ export function 计算明尊装备属性(
     装备镶嵌附魔属性: 转换明尊基础属性(EMPTY_EQUIPMENT),
     明尊未计入效果: 结果.warnings,
     装备增益: {},
+  }
+}
+
+/** Refresh the newly supported field in saved plans without replacing their other stats. */
+export function 更新明尊装备威胁(装备信息: 装备信息数据类型) {
+  if (!装备信息?.装备列表?.some((装备) => 装备?.id)) return 装备信息
+  const { slots } = 获取明尊配装(装备信息)
+  const { threat } = calculateLoadout(slots).stats
+  return {
+    ...装备信息,
+    装备基础属性: {
+      ...装备信息.装备基础属性,
+      明尊属性: { ...EMPTY_EQUIPMENT, ...装备信息.装备基础属性?.明尊属性, threat },
+    },
   }
 }
 

@@ -3,6 +3,8 @@ import { EMPTY_EQUIPMENT } from './计算'
 import type { EquipmentStats } from './计算'
 
 type Attributes = Record<string, number | string>
+const isThreatAttribute = (key: string) =>
+  key === 'threat_gain' || key === 'atActiveThreatCoefficient'
 export interface GearItem {
   key: string
   id: number
@@ -194,7 +196,7 @@ export function normalizeLoadout(slots: Loadout, stone = 0, embedFormatVersion =
             item && embedFormatVersion < 2
               ? Object.keys(item.embed).map((attribute) => {
                   const legacyKeys = Object.keys(item.embed).filter(
-                    (key) => key !== 'atActiveThreatCoefficient',
+                    (key) => !isThreatAttribute(key),
                   )
                   const index = legacyKeys.indexOf(attribute)
                   return index < 0 ? 0 : selection.embeds[index] || 0
@@ -255,6 +257,7 @@ export const ATTRIBUTE_LABELS: Record<string, string> = {
   atManaReplenishExt: '每秒内力恢复',
   atModifyCostManaPercent: '内力消耗调整',
   atActiveThreatCoefficient: '招式产生威胁',
+  threat_gain: '招式产生威胁',
 }
 
 export const formatAttributeDescription = (key: string, value?: number) => {
@@ -301,6 +304,7 @@ const mapping: Record<string, (keyof EquipmentStats)[]> = {
   toughness_base: ['toughness'],
   decritical_power_base: ['decritical'],
   atActiveThreatCoefficient: ['threat'],
+  threat_gain: ['threat'],
 }
 const unsupportedLabels: Record<string, string> = {
   recipe: '技能秘籍或套装招式效果',
@@ -321,6 +325,8 @@ export function calculateLoadout(loadout: Loadout, stoneId = 0) {
   let hasPrimary = false
   const add = (attributes: Attributes, multiplier = 1, refine = false) => {
     for (const [key, value] of Object.entries(attributes)) {
+      // The normalized field supersedes its legacy alias on the same attribute source.
+      if (key === 'atActiveThreatCoefficient' && 'threat_gain' in attributes) continue
       if (unsupportedLabels[key]) {
         if (value) warnings.add(unsupportedLabels[key])
         continue

@@ -64,7 +64,7 @@ function 面板展示(props: 面板展示入参) {
     ...(主属性 === '体质' ? [] : ['破招', '全能']),
     '加速',
     ...(主属性 === '体质' ? ['GCD', '下档加速'] : []),
-    ...(主属性 === '体质' ? ['外防', '内防', '闪避', '御劲', '招式产生威胁'] : []),
+    ...(主属性 === '体质' ? ['外防', '内防', '闪避', '御劲'] : []),
   ]
 
   return (
@@ -134,7 +134,7 @@ function 面板展示(props: 面板展示入参) {
           <div
             id={`zhuangbei-character-item_${item}`}
             className={classnames('zhuangbei-character-item', {
-              'zhuangbei-character-item-wide': ['气血', '招式产生威胁'].includes(item),
+              'zhuangbei-character-item-wide': item === '气血',
               'zhuangbei-character-item-defense': ['外防', '内防'].includes(item),
             })}
             key={item}
@@ -189,5 +189,4 @@ export const 显示文案和实际属性枚举 = {
   无双: '无双等级',
   全能: '全能等级',
   加速: '加速等级',
-  招式产生威胁: '明尊招式威胁',
 }
