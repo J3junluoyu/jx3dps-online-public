@@ -13,6 +13,7 @@ import {
   formatAttributeDescription,
   calculateLoadout,
   normalizeLoadout,
+  findGearItem,
 } from '@/心法模块/心法/明尊琉璃体/装备'
 import type { EquipmentStats, Settings } from '@/心法模块/心法/明尊琉璃体/计算'
 import {
@@ -97,6 +98,11 @@ for (const 装备 of 明尊装备列表) {
     所属门派: 装备.school === '精简' ? '通用' : 装备.school,
     装备部位: 部位,
     最大精炼等级: 装备.maxStrength,
+    装备黄字特效: 装备.specialEffects?.map((effect) => ({
+      标识: effect.key,
+      说明: effect.description,
+      已计入计算: false,
+    })),
     装备增益: [...转换属性(装备.base), ...转换属性(装备.magic, true)],
     镶嵌孔数组: Object.entries(装备.embed).map(([键, 值]) => ({
       镶嵌类型: 属性映射[键],
@@ -107,6 +113,24 @@ for (const 装备 of 明尊装备列表) {
       Number(装备.base.weapon_damage_base || 0) + Number(装备.base.weapon_damage_rand || 0),
   }
   ;(明尊装备数据[部位] ||= []).push(数据)
+}
+/** 导入旧ID时使用同属性的保留项，选择器本身只展示合并后的装备。 */
+export function 获取明尊装备条目(部位: string, id?: number) {
+  const 槽 = SLOTS.find(([键]) => 明尊部位映射[键] === 部位)?.[0]
+  if (!槽 || !id) return undefined
+  const 装备 = findGearItem(id, slotPosition(槽))
+  return 明尊装备数据[部位]?.find((项) => 项.uid === 装备?.key)
+}
+
+function 规范明尊装备列表(装备信息: 装备信息数据类型) {
+  let 已更新 = false
+  const 列表 = 装备信息.装备列表?.map((项) => {
+    const 装备 = 获取明尊装备条目(项?.装备部位, 项?.id)
+    if (!装备 || 装备.id === 项.id) return 项
+    已更新 = true
+    return { ...项, id: 装备.id }
+  })
+  return 已更新 ? 列表 : 装备信息.装备列表
 }
 export const 明尊附魔数据 = ENCHANTS.map((附魔) => ({
   附魔名称: `${附魔.name}（${describeAttributes(附魔.attributes)}）`,
@@ -161,9 +185,7 @@ export function 获取明尊配装(装备信息: 装备信息数据类型) {
       键 === 'ring1' || 键 === 'ring2'
         ? 戒指[键 === 'ring1' ? 0 : 1]
         : 装备信息.装备列表?.find((装备) => 装备?.装备部位 === 明尊部位映射[键])
-    const 原始装备 = GEAR_ITEMS.find(
-      (装备) => 装备.id === 已选?.id && 装备.position === slotPosition(键),
-    )
+    const 原始装备 = 已选?.id ? findGearItem(已选.id, slotPosition(键)) : undefined
     配装[键] = {
       key: 原始装备?.key || '',
       strength: 已选?.当前精炼等级 || 0,
@@ -214,6 +236,7 @@ export function 计算明尊装备属性(
   const 结果 = calculateLoadout(slots, 设置?.计算五彩石 === false ? 0 : stone)
   return {
     ...装备信息,
+    装备列表: 规范明尊装备列表(装备信息),
     装备基础属性: 转换明尊基础属性(结果.stats),
     装备镶嵌附魔属性: 转换明尊基础属性(EMPTY_EQUIPMENT),
     明尊未计入效果: 结果.warnings,
@@ -228,6 +251,7 @@ export function 更新明尊装备威胁(装备信息: 装备信息数据类型)
   const { threat } = calculateLoadout(slots).stats
   return {
     ...装备信息,
+    装备列表: 规范明尊装备列表(装备信息),
     装备基础属性: {
       ...装备信息.装备基础属性,
       明尊属性: { ...EMPTY_EQUIPMENT, ...装备信息.装备基础属性?.明尊属性, threat },

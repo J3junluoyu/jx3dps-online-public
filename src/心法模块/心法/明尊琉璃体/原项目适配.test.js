@@ -8,6 +8,7 @@ import {
   计算明尊装备属性,
   迁移明尊缓存,
   更新明尊装备威胁,
+  获取明尊装备条目,
 } from '@/数据/数据工具/明尊数据适配'
 import { 获取明尊原始属性, 获取明尊显示面板, 明尊秒伤计算 } from '@/计算模块/职业特殊处理/明尊'
 import { GEAR_ITEMS, ENCHANTS, SLOTS, calculateLoadout } from './装备'
@@ -46,6 +47,31 @@ const 制作配装 = (slots, stone = 0) => ({
 
 afterEach(() => {
   delete global.localStorage
+})
+
+test('无修旧ID导入与缓存恢复映射到保留装备，精炼、附魔及孔等级完整保留', () => {
+  const canonical = GEAR_ITEMS.find(row => row.id === 112699)
+  const enchantId = ENCHANTS.find(row => row.position === 'hat').id
+  const slots = { hat: { key: canonical.key, strength: 6, embeds: [8, 7], enchantId } }
+  const original = 制作配装(slots)
+  const old = {
+    ...original,
+    装备列表: original.装备列表.map(row => row.id === canonical.id
+      ? { ...row, id: 112783 } : row),
+  }
+  expect(获取明尊装备条目('帽子', 112783).id).toBe(canonical.id)
+  expect(获取明尊装备条目('衣服', 112783)).toBeUndefined()
+  expect(获取明尊配装(old).slots.hat).toEqual(slots.hat)
+  const calculated = 计算明尊装备属性(old)
+  expect(calculated.装备列表.find(row => row.id === canonical.id)).toEqual(
+    original.装备列表.find(row => row.id === canonical.id),
+  )
+  expect(获取明尊原始属性(calculated.装备基础属性)).toEqual(calculateLoadout(slots).stats)
+  const cached = 更新明尊装备威胁(old)
+  expect(cached.装备列表.find(row => row.id === canonical.id)).toEqual(
+    original.装备列表.find(row => row.id === canonical.id),
+  )
+  expect(old.装备列表.some(row => row.id === 112783)).toBe(true)
 })
 
 test('最佳五彩石数据使用中文属性和数值，体质百分比仅作显示换算', () => {

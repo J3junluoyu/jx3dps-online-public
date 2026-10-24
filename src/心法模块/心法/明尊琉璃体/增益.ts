@@ -332,26 +332,6 @@ export function 获取明尊增益属性(
   return result
 }
 
-/** 单独记录团队戒火斩，供带有自身戒火时间轴的循环去重。 */
-export function 获取明尊戒火增益(
-  data: 增益选项数据类型 | undefined,
-  enabled: boolean,
-  talents: Settings['talents'],
-): number {
-  return (
-    获取明尊增益属性(
-      {
-        阵眼: '',
-        小吃: [],
-        团队增益: (data?.团队增益 || []).filter((项) => 项.增益名称 === '戒火斩'),
-      },
-      enabled,
-      undefined,
-      talents,
-    ).solar_damage_cof || 0
-  )
-}
-
 /** 常驻朝圣层数随当前候选配装的基础体质更新，不能复用保存的旧层数。 */
 export function 获取明尊战斗增益(
   data: 增益选项数据类型 | undefined,

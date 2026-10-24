@@ -3,6 +3,7 @@ import { Alert, Button, Spin, Upload, message } from 'antd'
 import { InboxOutlined } from '@ant-design/icons'
 import styles from './index.module.less'
 import 获取当前数据 from '@/数据/数据工具/获取当前数据'
+import { 获取明尊装备条目 } from '@/数据/数据工具/明尊数据适配'
 import { 装备位置部位枚举, 装备属性信息模型, 装备类型枚举, 选择装备数据类型 } from '@/@types/装备'
 const { Dragger } = Upload
 const { 装备数据, 附魔, 名称: 心法名称, 五彩石, 功法 } = 获取当前数据()
@@ -68,7 +69,10 @@ function Generator装备导入({ onOk }) {
         return
       }
       const 装备部位 = 装备位置部位枚举[部位索引]
-      const 找到对应装备 = 装备数据[装备部位]?.find((item) => item?.id === 数据?.id)
+      const 找到对应装备 =
+        心法名称 === '明尊琉璃体'
+          ? 获取明尊装备条目(装备部位, 数据?.id)
+          : 装备数据[装备部位]?.find((item) => item?.id === 数据?.id)
       if (找到对应装备) {
         支持的装备.push({ ...找到对应装备, 装备部位 })
         let 附魔名称 = undefined
@@ -82,7 +86,7 @@ function Generator装备导入({ onOk }) {
         }
         const 最大精炼等级 = 获取最大精炼等级(找到对应装备)
         最终装备对象[部位索引] = {
-          id: 数据?.id,
+          id: 找到对应装备.id,
           当前精炼等级: 最大精炼等级 || 6,
           镶嵌孔数组:
             找到对应装备?.镶嵌孔数组?.map((item, index) => {

@@ -2,6 +2,7 @@ import { DEFAULT_SETTINGS, EMPTY_EQUIPMENT, calculateAttributes } from './index'
 import 装备数据库 from './装备数据.json'
 import {
   GEAR_ITEMS,
+  findGearItem,
   ENCHANTS,
   STONES,
   calculateLoadout,
@@ -23,8 +24,8 @@ const selection = (item, overrides = {}) => ({
 })
 const slot = (item) => (item.position === 'ring' ? 'ring1' : item.position)
 
-test('导入全部151件符合品质、加速和无双词条规则的装备，精炼和镶嵌均产生有效属性', () => {
-  expect(GEAR_ITEMS).toHaveLength(151)
+test('无修去重后124件装备符合品质、加速和无双规则，精炼和镶嵌均产生有效属性', () => {
+  expect(GEAR_ITEMS).toHaveLength(124)
   expect(new Set(GEAR_ITEMS.map((item) => item.key)).size).toBe(GEAR_ITEMS.length)
   for (const item of GEAR_ITEMS) {
     const result = calculateLoadout({
@@ -37,6 +38,47 @@ test('导入全部151件符合品质、加速和无双词条规则的装备，�
     expect(Object.values(result.stats).every(Number.isFinite)).toBe(true)
     expect(() => calculateAttributes(result.stats, DEFAULT_SETTINGS)).not.toThrow()
   }
+})
+
+test('27条完全重复无修合并，旧键和旧ID保留精炼、孔位、附魔及黄字计算', () => {
+  const aliases = 装备数据库.items.filter(row => {
+    const canonical = findGearItem(row.key)
+    return canonical && canonical.key !== row.key
+  })
+  expect(aliases).toHaveLength(27)
+  for (const raw of aliases) {
+    const canonical = findGearItem(raw.key)
+    const { key: oldKey, id: oldId, ...oldAttributes } = raw
+    const { key: newKey, id: newId, ...newAttributes } = canonical
+    expect(raw.name).toMatch(/^无修/)
+    expect(oldAttributes).toEqual(newAttributes)
+    expect(Object.entries(raw.embed)).toEqual(Object.entries(canonical.embed))
+    expect(findGearItem(raw.id, raw.position)).toBe(canonical)
+    expect(findGearItem(raw.id, 'invalid')).toBeUndefined()
+    expect(GEAR_ITEMS.some(row => row.key === raw.key)).toBe(false)
+    const selected = selection(raw, {
+      strength: raw.maxStrength,
+      embeds: Object.keys(raw.embed).map((_, index) => 8 - index),
+      enchantId: ENCHANTS.find(row => row.position === raw.position)?.id || 0,
+    })
+    const saved = { [slot(raw)]: selected }
+    const normalized = normalizeLoadout(saved)
+    expect(normalized.slots[slot(raw)]).toEqual({ ...selected, key: canonical.key })
+    expect(calculateLoadout(saved)).toEqual(calculateLoadout(normalized.slots))
+    expect(saved[slot(raw)].key).toBe(raw.key)
+  }
+})
+
+test('同名无修的不同词条、孔位和黄字版本仍各自保留', () => {
+  expect(GEAR_ITEMS.filter(row => row.id === 112699)).toHaveLength(1)
+  expect(findGearItem(112783, 'hat').id).toBe(112699)
+  // 相同基础属性但无黄字的测试版本，不与有黄字版本混为同件装备。
+  expect(findGearItem(114853, 'hat').id).toBe(114853)
+  expect(findGearItem(114853, 'hat').specialEffects).toBeUndefined()
+  expect(findGearItem(112699, 'hat').specialEffects.length).toBeGreaterThan(0)
+  expect([112699, 112700, 112701].map(id => findGearItem(id, 'hat').id)).toEqual([
+    112699, 112700, 112701,
+  ])
 })
 
 test.each([
@@ -95,7 +137,7 @@ test('精简内功防具、首饰和暗器加入装备库并正确汇总攻击�
   const belt = GEAR_ITEMS.find((row) => row.key === 'armors:112444')
   const ring = GEAR_ITEMS.find((row) => row.key === 'trinkets:49922')
   const ranged = GEAR_ITEMS.find((row) => row.key === 'weapons:47966')
-  expect(GEAR_ITEMS.filter((row) => row.school === '精简')).toHaveLength(92)
+  expect(GEAR_ITEMS.filter((row) => row.school === '精简')).toHaveLength(65)
   for (const item of [belt, ring, ranged]) {
     expect(item.school).toBe('精简')
     expect(item.kind).toBe('内功')

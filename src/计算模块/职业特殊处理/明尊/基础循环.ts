@@ -29,7 +29,6 @@ type 计算行 = Pick<
   '技能名称' | '技能' | '命中倍率' | '驱夷' | '光明相' | '五明'
 > & {
   技能数量: number
-  戒火?: boolean
 }
 
 function 获取理论循环行(列表: 循环技能详情[], 设置: Settings): 计算行[] {
@@ -57,7 +56,6 @@ function 获取理论循环行(列表: 循环技能详情[], 设置: Settings): 
         驱夷: false,
         光明相: false,
         五明: 状态.五明,
-        戒火: false,
       })
     }
   }
@@ -119,20 +117,12 @@ export function 计算明尊基础循环(
   const 面板缓存 = new Map<string, ReturnType<typeof calculateAttributes>>()
   // 仍由原Generator计算器校验装备及奇穴，分项状态只改变本条技能。
   calculateAttributes(属性, 设置)
-  const 获取面板 = (状态: Pick<计算行, '驱夷' | '光明相' | '五明' | '戒火'>) => {
-    const 键 = `${状态.驱夷}:${状态.光明相}:${状态.五明}:${状态.戒火}`
+  const 获取面板 = (状态: Pick<计算行, '驱夷' | '光明相' | '五明'>) => {
+    const 键 = `${状态.驱夷}:${状态.光明相}:${状态.五明}`
     if (!面板缓存.has(键)) {
-      const gains = { ...设置.gains }
-      if (状态.戒火 && !设置.talents.includes('44569')) {
-        // 自身时间轴与团队戒火取较高覆盖，不重复叠加同一个目标减益。
-        const 补足系数 = Math.max(0, 21 - (设置.jieGain || 0))
-        for (const key of ['solar_damage_cof', 'lunar_damage_cof', 'physical_damage_cof']) {
-          gains[key] = (gains[key] || 0) + 补足系数
-        }
-      }
+      // 戒火易伤统一由团队增益控制，历史时间轴中的戒火标记不再自动增加易伤。
       const 面板 = calculateAttributes(属性, {
         ...设置,
-        gains,
         drive: 状态.驱夷,
         light: 状态.光明相,
       })
@@ -148,7 +138,7 @@ export function 计算明尊基础循环(
   const 计算分项 = (
     技能: Skill,
     数量: number,
-    状态: Pick<计算行, '驱夷' | '光明相' | '五明' | '戒火'>,
+    状态: Pick<计算行, '驱夷' | '光明相' | '五明'>,
   ) => {
     const 面板 = 获取面板(状态)
     const 结果 = calculateSkill(技能, 面板)

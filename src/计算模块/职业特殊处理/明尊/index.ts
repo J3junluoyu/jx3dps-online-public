@@ -23,7 +23,6 @@ import { 获取明尊技能显示信息 } from './技能显示'
 import {
   获取明尊增益属性,
   获取明尊战斗增益,
-  获取明尊戒火增益,
 } from '@/心法模块/心法/明尊琉璃体/增益'
 
 export const 规范明尊奇穴 = (名称: string[] = []) =>
@@ -66,7 +65,6 @@ export function 获取明尊计算设置(
     stance: 增益数据?.明尊设置?.stance === 'mainTank' ? 'mainTank' : 'offTank',
     targetLevel: 目标等级,
     gains: 获取明尊增益属性(增益数据, 增益启用, undefined, 奇穴ID),
-    jieGain: 获取明尊戒火增益(增益数据, 增益启用, 奇穴ID),
     talents: 奇穴ID,
     recipes: 明尊秘籍选项.flatMap((组) =>
       组.records.filter((项) => 已选秘籍.has(项.value)).map((项) => 项.recipe_key),

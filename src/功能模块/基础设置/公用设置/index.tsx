@@ -1,6 +1,5 @@
 import React from 'react'
 
-import 方案选择 from './方案选择'
 import 目标选择 from './目标选择'
 import 循环选择 from './循环选择'
 import 延迟选择 from './延迟选择'
@@ -12,25 +11,16 @@ import 获取当前数据 from '@/数据/数据工具/获取当前数据'
 
 import './index.css'
 
-const 循环模拟 = React.lazy(() => import('./循环模拟'))
-
 function 公用设置() {
   return (
     <div className={'common-set'}>
-      {获取当前数据().名称 !== '明尊琉璃体' && <方案选择 />}
       <目标选择 />
       <循环选择 />
       <延迟选择 />
       <div className='common-item' style={{ height: 'unset' }}>
         <秘籍选择 />
         <奇穴选择 />
-        {获取当前数据().名称 === '明尊琉璃体' ? (
-          <气劲切换 />
-        ) : (
-          <React.Suspense fallback={null}>
-            <循环模拟 />
-          </React.Suspense>
-        )}
+        <气劲切换 />
       </div>
       {获取当前数据().名称 === '明尊琉璃体' && (
         <div className='common-item mingzun-cycle-settings'>

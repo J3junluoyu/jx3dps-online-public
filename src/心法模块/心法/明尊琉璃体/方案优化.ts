@@ -5,7 +5,7 @@ import type { EquipmentStats, Settings } from './计算'
 import { calculateAttributes, ratingScale } from './计算'
 import { GEAR_ITEMS, ENCHANTS, SLOTS, calculateLoadout, slotPosition } from './装备'
 import type { Loadout } from './装备'
-import { 明尊小药小吃, 获取明尊战斗增益, 获取明尊戒火增益 } from './增益'
+import { 明尊小药小吃, 获取明尊战斗增益 } from './增益'
 import { 明尊阵眼 } from './阵眼'
 import { 计算明尊基础循环 } from '@/计算模块/职业特殊处理/明尊/基础循环'
 
@@ -241,11 +241,6 @@ export function 优化明尊方案(
     )
   const meetsRequirements = (metrics: 约束指标) =>
     获取优化GCD(metrics.haste) === gcd && metrics.toughness + 1e-10 >= input.minToughness
-  const 团队戒火系数 = 获取明尊戒火增益(
-    { 阵眼: '', 小吃: [], 团队增益: input.teamGains || [] },
-    true,
-    input.settings.talents,
-  )
   const panelFor = (plan: 优化方案, cacheStats = true) => {
     const gearKey = JSON.stringify([SLOTS.map(([slot]) => plan.slots[slot]), plan.stone])
     let stats = statsCache.get(gearKey)
@@ -263,7 +258,6 @@ export function 优化明尊方案(
     const settings = {
       ...input.settings,
       gains,
-      jieGain: 团队戒火系数,
     }
     const panel = calculateAttributes(stats, settings)
     return { stats, settings, panel }

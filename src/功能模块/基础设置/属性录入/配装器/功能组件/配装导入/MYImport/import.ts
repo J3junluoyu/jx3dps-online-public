@@ -1,4 +1,5 @@
 import 获取当前数据 from '@/数据/数据工具/获取当前数据'
+import { 获取明尊装备条目 } from '@/数据/数据工具/明尊数据适配'
 import { 大附魔ID } from '@/数据/常量/装备常量'
 import 五彩石映射 from '@/数据/常量/五彩石映射.json'
 import 附魔映射 from '@/数据/常量/附魔映射'
@@ -19,7 +20,7 @@ export const getEquipData = (data) => {
   // 解析解密装备数据
   const decompressData = DecompressLUAData(data) || {}
 
-  const { 装备数据, 五彩石, 功法 } = 获取当前数据()
+  const { 装备数据, 五彩石, 功法, 名称 } = 获取当前数据()
 
   const 全部五彩石数据 = 五彩石?.[6]
 
@@ -51,7 +52,10 @@ export const getEquipData = (data) => {
       装备部位 = '戒指'
     }
     if (装备部位) {
-      const 装备原始数据 = 装备数据[装备部位]?.find((data) => +(data.id || 0) === +装备ID)
+      const 装备原始数据 =
+        名称 === '明尊琉璃体'
+          ? 获取明尊装备条目(装备部位, +装备ID)
+          : 装备数据[装备部位]?.find((data) => +(data.id || 0) === +装备ID)
 
       if (装备原始数据) {
         equip[装备位置映射] = {

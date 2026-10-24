@@ -3,7 +3,7 @@ const fs = require('node:fs')
 const path = require('node:path')
 const vm = require('node:vm')
 
-const build = path.resolve(__dirname, '../build')
+const build = process.argv[2] ? path.resolve(process.argv[2]) : path.resolve(__dirname, '../build')
 const entry = fs
   .readdirSync(path.join(build, 'static/js'))
   .find((name) => /^mingzun-plan-optimizer\..*\.js$/.test(name))

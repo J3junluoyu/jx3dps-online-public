@@ -22,7 +22,7 @@
         "haste_base": 109,
         "toughness_base": 109,
         "strain_base": 364,
-        "threat_gain": 178.0
+        "threat_gain": 178
       },
       "embed": {
         "magical_shield_base": 225,
@@ -58,11 +58,11 @@
         "haste_base": 140,
         "toughness_base": 140,
         "strain_base": 468,
-        "threat_gain": 178.0
+        "threat_gain": 178
       },
       "embed": {
         "vitality_base": 225,
-        "threat_gain": 21.0
+        "threat_gain": 21
       },
       "setId": 6981,
       "sets": {
@@ -94,7 +94,7 @@
         "haste_base": 109,
         "toughness_base": 109,
         "strain_base": 364,
-        "threat_gain": 178.0
+        "threat_gain": 178
       },
       "embed": {
         "vitality_base": 225,
@@ -131,11 +131,11 @@
         "haste_base": 140,
         "toughness_base": 140,
         "strain_base": 468,
-        "threat_gain": 178.0
+        "threat_gain": 178
       },
       "embed": {
         "vitality_base": 225,
-        "threat_gain": 21.0
+        "threat_gain": 21
       },
       "setId": 6999,
       "sets": {
@@ -168,11 +168,11 @@
         "haste_base": 109,
         "toughness_base": 109,
         "strain_base": 364,
-        "threat_gain": 178.0
+        "threat_gain": 178
       },
       "embed": {
         "vitality_base": 225,
-        "threat_gain": 21.0
+        "threat_gain": 21
       },
       "setId": 0,
       "sets": {}
@@ -198,7 +198,7 @@
         "haste_base": 109,
         "toughness_base": 109,
         "strain_base": 364,
-        "threat_gain": 178.0
+        "threat_gain": 178
       },
       "embed": {
         "magical_shield_base": 225,
@@ -228,10 +228,10 @@
         "haste_base": 109,
         "toughness_base": 109,
         "strain_base": 364,
-        "threat_gain": 178.0
+        "threat_gain": 178
       },
       "embed": {
-        "threat_gain": 21.0,
+        "threat_gain": 21,
         "physical_shield_base": 225
       },
       "setId": 0,
@@ -258,7 +258,7 @@
         "haste_base": 109,
         "toughness_base": 109,
         "strain_base": 364,
-        "threat_gain": 178.0
+        "threat_gain": 178
       },
       "embed": {
         "magical_shield_base": 225,
@@ -288,7 +288,7 @@
         "haste_base": 109,
         "toughness_base": 109,
         "strain_base": 364,
-        "threat_gain": 178.0
+        "threat_gain": 178
       },
       "embed": {
         "physical_shield_base": 225,
@@ -318,7 +318,7 @@
         "haste_base": 140,
         "toughness_base": 140,
         "strain_base": 468,
-        "threat_gain": 178.0
+        "threat_gain": 178
       },
       "embed": {
         "vitality_base": 225,
@@ -348,10 +348,10 @@
         "haste_base": 155,
         "toughness_base": 155,
         "strain_base": 520,
-        "threat_gain": 178.0
+        "threat_gain": 178
       },
       "embed": {
-        "threat_gain": 21.0,
+        "threat_gain": 21,
         "magical_shield_base": 225
       },
       "setId": 0,
@@ -378,7 +378,7 @@
         "haste_base": 155,
         "toughness_base": 155,
         "strain_base": 520,
-        "threat_gain": 178.0
+        "threat_gain": 178
       },
       "embed": {
         "vitality_base": 225,
@@ -408,7 +408,7 @@
         "haste_base": 125,
         "toughness_base": 125,
         "strain_base": 451,
-        "threat_gain": 205.0
+        "threat_gain": 205
       },
       "embed": {
         "vitality_base": 225,
@@ -445,11 +445,11 @@
         "haste_base": 161,
         "toughness_base": 161,
         "strain_base": 580,
-        "threat_gain": 205.0
+        "threat_gain": 205
       },
       "embed": {
         "vitality_base": 225,
-        "threat_gain": 21.0
+        "threat_gain": 21
       },
       "setId": 6999,
       "sets": {
@@ -482,11 +482,11 @@
         "haste_base": 125,
         "toughness_base": 125,
         "strain_base": 451,
-        "threat_gain": 205.0
+        "threat_gain": 205
       },
       "embed": {
         "vitality_base": 225,
-        "threat_gain": 21.0
+        "threat_gain": 21
       },
       "setId": 0,
       "sets": {}
@@ -512,7 +512,7 @@
         "haste_base": 125,
         "toughness_base": 125,
         "strain_base": 451,
-        "threat_gain": 205.0
+        "threat_gain": 205
       },
       "embed": {
         "magical_shield_base": 225,
@@ -542,10 +542,10 @@
         "haste_base": 125,
         "toughness_base": 125,
         "strain_base": 451,
-        "threat_gain": 205.0
+        "threat_gain": 205
       },
       "embed": {
-        "threat_gain": 21.0,
+        "threat_gain": 21,
         "physical_shield_base": 225
       },
       "setId": 0,
@@ -572,7 +572,7 @@
         "haste_base": 125,
         "toughness_base": 125,
         "strain_base": 451,
-        "threat_gain": 205.0
+        "threat_gain": 205
       },
       "embed": {
         "magical_shield_base": 225,
@@ -602,7 +602,7 @@
         "haste_base": 125,
         "toughness_base": 125,
         "strain_base": 451,
-        "threat_gain": 205.0
+        "threat_gain": 205
       },
       "embed": {
         "physical_shield_base": 225,
@@ -632,7 +632,7 @@
         "haste_base": 161,
         "toughness_base": 161,
         "strain_base": 580,
-        "threat_gain": 205.0
+        "threat_gain": 205
       },
       "embed": {
         "vitality_base": 225,
@@ -662,10 +662,10 @@
         "haste_base": 179,
         "toughness_base": 179,
         "strain_base": 644,
-        "threat_gain": 205.0
+        "threat_gain": 205
       },
       "embed": {
-        "threat_gain": 21.0,
+        "threat_gain": 21,
         "magical_shield_base": 225
       },
       "setId": 0,
@@ -692,7 +692,7 @@
         "haste_base": 179,
         "toughness_base": 179,
         "strain_base": 644,
-        "threat_gain": 205.0
+        "threat_gain": 205
       },
       "embed": {
         "vitality_base": 225,
@@ -863,7 +863,27 @@
         "strain_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_40790_4",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"进入战斗后，提高自身188点破防等级和会心等级。名剑大会中无法生效。\" font=101 </text>",
+          "description": "进入战斗后，提高自身188点破防等级和会心等级。名剑大会中无法生效。",
+          "handlerId": 40790,
+          "level": 4,
+          "kind": "combat_attributes",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "combat",
+            "attributes": {
+              "all_critical_strike_base": 188,
+              "all_overcome_base": 188
+            }
+          }
+        }
+      ]
     },
     {
       "key": "armors:112453",
@@ -890,7 +910,30 @@
         "strain_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_40791_4",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"命中目标后，自身破防等级、会心等级中最低的属性将获得548点增幅，持续20秒，该效果每20秒最多生效一次。名剑大会中无法生效。\" font=101 </text>",
+          "description": "命中目标后，自身破防等级、会心等级中最低的属性将获得548点增幅，持续20秒，该效果每20秒最多生效一次。名剑大会中无法生效。",
+          "handlerId": 40791,
+          "level": 4,
+          "kind": "lowest_rating",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "hit",
+            "cooldownSeconds": 20,
+            "durationSeconds": 20,
+            "chooseLowest": [
+              "overcome",
+              "critical"
+            ],
+            "amount": 548
+          }
+        }
+      ]
     },
     {
       "key": "armors:112454",
@@ -918,7 +961,27 @@
         "strain_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_40790_6",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"进入战斗后，提高自身219点会心等级和破防等级。名剑大会中无法生效。\" font=101 </text>",
+          "description": "进入战斗后，提高自身219点会心等级和破防等级。名剑大会中无法生效。",
+          "handlerId": 40790,
+          "level": 6,
+          "kind": "combat_attributes",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "combat",
+            "attributes": {
+              "all_critical_strike_base": 219,
+              "all_overcome_base": 219
+            }
+          }
+        }
+      ]
     },
     {
       "key": "armors:112455",
@@ -946,7 +1009,27 @@
         "magical_attack_power_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_40790_6",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"进入战斗后，提高自身219点会心等级和破防等级。名剑大会中无法生效。\" font=101 </text>",
+          "description": "进入战斗后，提高自身219点会心等级和破防等级。名剑大会中无法生效。",
+          "handlerId": 40790,
+          "level": 6,
+          "kind": "combat_attributes",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "combat",
+            "attributes": {
+              "all_critical_strike_base": 219,
+              "all_overcome_base": 219
+            }
+          }
+        }
+      ]
     },
     {
       "key": "armors:112456",
@@ -973,7 +1056,30 @@
         "strain_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_40791_4",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"命中目标后，自身破防等级、会心等级中最低的属性将获得548点增幅，持续20秒，该效果每20秒最多生效一次。名剑大会中无法生效。\" font=101 </text>",
+          "description": "命中目标后，自身破防等级、会心等级中最低的属性将获得548点增幅，持续20秒，该效果每20秒最多生效一次。名剑大会中无法生效。",
+          "handlerId": 40791,
+          "level": 4,
+          "kind": "lowest_rating",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "hit",
+            "cooldownSeconds": 20,
+            "durationSeconds": 20,
+            "chooseLowest": [
+              "overcome",
+              "critical"
+            ],
+            "amount": 548
+          }
+        }
+      ]
     },
     {
       "key": "armors:112457",
@@ -1002,7 +1108,27 @@
         "magical_attack_power_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_40790_5",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"进入战斗后，提高自身219点会心等级和破防等级。名剑大会中无法生效。\" font=101 </text>",
+          "description": "进入战斗后，提高自身219点会心等级和破防等级。名剑大会中无法生效。",
+          "handlerId": 40790,
+          "level": 5,
+          "kind": "combat_attributes",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "combat",
+            "attributes": {
+              "all_critical_strike_base": 219,
+              "all_overcome_base": 219
+            }
+          }
+        }
+      ]
     },
     {
       "key": "armors:112458",
@@ -1030,7 +1156,31 @@
         "strain_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_42767_3",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"命中目标将附带一段持续伤害，持续10秒，且会根据自身加速等级延长持续伤害时间（存在上限），该效果每40秒最多且同类效果只触发一次。名剑大会中无法生效。\" font=101 </text>",
+          "description": "命中目标将附带一段持续伤害，持续10秒，且会根据自身加速等级延长持续伤害时间（存在上限），该效果每40秒最多且同类效果只触发一次。名剑大会中无法生效。",
+          "handlerId": 42767,
+          "level": 3,
+          "kind": "triggered_dot",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "hit",
+            "cooldownSeconds": 40,
+            "durationSeconds": 10,
+            "hastedDuration": true,
+            "sharedCooldownGroup": "gain_42767",
+            "requiresVerification": [
+              "伤害公式",
+              "加速延长持续时间的规则及上限"
+            ]
+          }
+        }
+      ]
     },
     {
       "key": "armors:112474",
@@ -1192,7 +1342,28 @@
         "strain_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_40788_7",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"若自身生命值高于最大生命值的75%，则命中目标后对目标造成一次伤害，该效果每10秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
+          "description": "若自身生命值高于最大生命值的75%，则命中目标后对目标造成一次伤害，该效果每10秒最多触发一次。名剑大会中无法生效。",
+          "handlerId": 40788,
+          "level": 7,
+          "kind": "triggered_damage",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "hit",
+            "cooldownSeconds": 10,
+            "selfHealthAbovePercent": 75,
+            "requiresVerification": [
+              "伤害公式与触发招式"
+            ]
+          }
+        }
+      ]
     },
     {
       "key": "armors:112483",
@@ -1221,7 +1392,28 @@
         "strain_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_40788_4",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"若自身生命值高于最大生命值的75%，则命中目标后对目标造成一次伤害，该效果每10秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
+          "description": "若自身生命值高于最大生命值的75%，则命中目标后对目标造成一次伤害，该效果每10秒最多触发一次。名剑大会中无法生效。",
+          "handlerId": 40788,
+          "level": 4,
+          "kind": "triggered_damage",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "hit",
+            "cooldownSeconds": 10,
+            "selfHealthAbovePercent": 75,
+            "requiresVerification": [
+              "伤害公式与触发招式"
+            ]
+          }
+        }
+      ]
     },
     {
       "key": "armors:112484",
@@ -1249,7 +1441,28 @@
         "strain_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_40788_6",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"若自身生命值高于最大生命值的75%，则命中目标后对目标造成一次伤害，该效果每10秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
+          "description": "若自身生命值高于最大生命值的75%，则命中目标后对目标造成一次伤害，该效果每10秒最多触发一次。名剑大会中无法生效。",
+          "handlerId": 40788,
+          "level": 6,
+          "kind": "triggered_damage",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "hit",
+            "cooldownSeconds": 10,
+            "selfHealthAbovePercent": 75,
+            "requiresVerification": [
+              "伤害公式与触发招式"
+            ]
+          }
+        }
+      ]
     },
     {
       "key": "armors:112485",
@@ -1277,7 +1490,28 @@
         "magical_attack_power_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_40788_6",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"若自身生命值高于最大生命值的75%，则命中目标后对目标造成一次伤害，该效果每10秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
+          "description": "若自身生命值高于最大生命值的75%，则命中目标后对目标造成一次伤害，该效果每10秒最多触发一次。名剑大会中无法生效。",
+          "handlerId": 40788,
+          "level": 6,
+          "kind": "triggered_damage",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "hit",
+            "cooldownSeconds": 10,
+            "selfHealthAbovePercent": 75,
+            "requiresVerification": [
+              "伤害公式与触发招式"
+            ]
+          }
+        }
+      ]
     },
     {
       "key": "armors:112486",
@@ -1304,7 +1538,28 @@
         "strain_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_40788_7",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"若自身生命值高于最大生命值的75%，则命中目标后对目标造成一次伤害，该效果每10秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
+          "description": "若自身生命值高于最大生命值的75%，则命中目标后对目标造成一次伤害，该效果每10秒最多触发一次。名剑大会中无法生效。",
+          "handlerId": 40788,
+          "level": 7,
+          "kind": "triggered_damage",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "hit",
+            "cooldownSeconds": 10,
+            "selfHealthAbovePercent": 75,
+            "requiresVerification": [
+              "伤害公式与触发招式"
+            ]
+          }
+        }
+      ]
     },
     {
       "key": "armors:112487",
@@ -1333,7 +1588,28 @@
         "magical_attack_power_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_40788_5",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"若自身生命值高于最大生命值的75%，则命中目标后对目标造成一次伤害，该效果每10秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
+          "description": "若自身生命值高于最大生命值的75%，则命中目标后对目标造成一次伤害，该效果每10秒最多触发一次。名剑大会中无法生效。",
+          "handlerId": 40788,
+          "level": 5,
+          "kind": "triggered_damage",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "hit",
+            "cooldownSeconds": 10,
+            "selfHealthAbovePercent": 75,
+            "requiresVerification": [
+              "伤害公式与触发招式"
+            ]
+          }
+        }
+      ]
     },
     {
       "key": "armors:112488",
@@ -1361,7 +1637,31 @@
         "strain_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_42767_3",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"命中目标将附带一段持续伤害，持续10秒，且会根据自身加速等级延长持续伤害时间（存在上限），该效果每40秒最多且同类效果只触发一次。名剑大会中无法生效。\" font=101 </text>",
+          "description": "命中目标将附带一段持续伤害，持续10秒，且会根据自身加速等级延长持续伤害时间（存在上限），该效果每40秒最多且同类效果只触发一次。名剑大会中无法生效。",
+          "handlerId": 42767,
+          "level": 3,
+          "kind": "triggered_dot",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "hit",
+            "cooldownSeconds": 40,
+            "durationSeconds": 10,
+            "hastedDuration": true,
+            "sharedCooldownGroup": "gain_42767",
+            "requiresVerification": [
+              "伤害公式",
+              "加速延长持续时间的规则及上限"
+            ]
+          }
+        }
+      ]
     },
     {
       "key": "armors:112504",
@@ -1518,11 +1818,11 @@
         "haste_base": 127,
         "toughness_base": 127,
         "strain_base": 461,
-        "threat_gain": 208.0
+        "threat_gain": 208
       },
       "embed": {
         "vitality_base": 225,
-        "threat_gain": 21.0
+        "threat_gain": 21
       },
       "setId": 7019,
       "sets": {
@@ -1555,11 +1855,11 @@
         "haste_base": 182,
         "toughness_base": 182,
         "strain_base": 659,
-        "threat_gain": 208.0
+        "threat_gain": 208
       },
       "embed": {
         "physical_shield_base": 225,
-        "threat_gain": 21.0
+        "threat_gain": 21
       },
       "setId": 7019,
       "sets": {
@@ -1592,7 +1892,7 @@
         "haste_base": 182,
         "toughness_base": 182,
         "strain_base": 659,
-        "threat_gain": 208.0
+        "threat_gain": 208
       },
       "embed": {
         "physical_shield_base": 225,
@@ -1629,11 +1929,11 @@
         "haste_base": 155,
         "toughness_base": 155,
         "strain_base": 520,
-        "threat_gain": 178.0
+        "threat_gain": 178
       },
       "embed": {
         "physical_shield_base": 225,
-        "threat_gain": 21.0
+        "threat_gain": 21
       },
       "setId": 0,
       "sets": {}
@@ -1659,11 +1959,11 @@
         "haste_base": 179,
         "toughness_base": 179,
         "strain_base": 644,
-        "threat_gain": 205.0
+        "threat_gain": 205
       },
       "embed": {
         "physical_shield_base": 225,
-        "threat_gain": 21.0
+        "threat_gain": 21
       },
       "setId": 0,
       "sets": {}
@@ -1694,7 +1994,28 @@
         "magical_attack_power_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38934_10",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"进入战斗后使当前破防等级、会心等级中最高的属性提高75点，名剑大会中无法生效。\" font=101 </text>",
+          "description": "进入战斗后使当前破防等级、会心等级中最高的属性提高75点，名剑大会中无法生效。",
+          "handlerId": 38934,
+          "level": 10,
+          "kind": "highest_rating",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "combat",
+            "chooseHighest": [
+              "overcome",
+              "critical"
+            ],
+            "amount": 75
+          }
+        }
+      ]
     },
     {
       "key": "armors:112700",
@@ -1722,7 +2043,28 @@
         "strain_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38934_10",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"进入战斗后使当前破防等级、会心等级中最高的属性提高75点，名剑大会中无法生效。\" font=101 </text>",
+          "description": "进入战斗后使当前破防等级、会心等级中最高的属性提高75点，名剑大会中无法生效。",
+          "handlerId": 38934,
+          "level": 10,
+          "kind": "highest_rating",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "combat",
+            "chooseHighest": [
+              "overcome",
+              "critical"
+            ],
+            "amount": 75
+          }
+        }
+      ]
     },
     {
       "key": "armors:112701",
@@ -1751,7 +2093,28 @@
         "magical_attack_power_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38934_10",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"进入战斗后使当前破防等级、会心等级中最高的属性提高75点，名剑大会中无法生效。\" font=101 </text>",
+          "description": "进入战斗后使当前破防等级、会心等级中最高的属性提高75点，名剑大会中无法生效。",
+          "handlerId": 38934,
+          "level": 10,
+          "kind": "highest_rating",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "combat",
+            "chooseHighest": [
+              "overcome",
+              "critical"
+            ],
+            "amount": 75
+          }
+        }
+      ]
     },
     {
       "key": "armors:112705",
@@ -1779,7 +2142,29 @@
         "magical_attack_power_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38944_10",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"命中目标后提升自身130点破防等级，持续10秒，持续期间受到超过最大气血值30%的伤害则效果提前结束，该效果每20秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
+          "description": "命中目标后提升自身130点破防等级，持续10秒，持续期间受到超过最大气血值30%的伤害则效果提前结束，该效果每20秒最多触发一次。名剑大会中无法生效。",
+          "handlerId": 38944,
+          "level": 10,
+          "kind": "triggered_attributes",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "hit",
+            "cooldownSeconds": 20,
+            "durationSeconds": 10,
+            "breakOnDamageAboveMaxHealthPercent": 30,
+            "attributes": {
+              "all_overcome_base": 130
+            }
+          }
+        }
+      ]
     },
     {
       "key": "armors:112706",
@@ -1807,7 +2192,29 @@
         "strain_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38939_10",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"命中目标后提升自身130点会心等级，持续10秒，持续期间受到超过最大气血值30%的伤害则效果提前结束，该效果每20秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
+          "description": "命中目标后提升自身130点会心等级，持续10秒，持续期间受到超过最大气血值30%的伤害则效果提前结束，该效果每20秒最多触发一次。名剑大会中无法生效。",
+          "handlerId": 38939,
+          "level": 10,
+          "kind": "triggered_attributes",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "hit",
+            "cooldownSeconds": 20,
+            "durationSeconds": 10,
+            "breakOnDamageAboveMaxHealthPercent": 30,
+            "attributes": {
+              "all_critical_strike_base": 130
+            }
+          }
+        }
+      ]
     },
     {
       "key": "armors:112707",
@@ -1834,7 +2241,29 @@
         "strain_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38944_10",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"命中目标后提升自身130点破防等级，持续10秒，持续期间受到超过最大气血值30%的伤害则效果提前结束，该效果每20秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
+          "description": "命中目标后提升自身130点破防等级，持续10秒，持续期间受到超过最大气血值30%的伤害则效果提前结束，该效果每20秒最多触发一次。名剑大会中无法生效。",
+          "handlerId": 38944,
+          "level": 10,
+          "kind": "triggered_attributes",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "hit",
+            "cooldownSeconds": 20,
+            "durationSeconds": 10,
+            "breakOnDamageAboveMaxHealthPercent": 30,
+            "attributes": {
+              "all_overcome_base": 130
+            }
+          }
+        }
+      ]
     },
     {
       "key": "armors:112783",
@@ -1862,7 +2291,28 @@
         "magical_attack_power_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38934_10",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"进入战斗后使当前破防等级、会心等级中最高的属性提高75点，名剑大会中无法生效。\" font=101 </text>",
+          "description": "进入战斗后使当前破防等级、会心等级中最高的属性提高75点，名剑大会中无法生效。",
+          "handlerId": 38934,
+          "level": 10,
+          "kind": "highest_rating",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "combat",
+            "chooseHighest": [
+              "overcome",
+              "critical"
+            ],
+            "amount": 75
+          }
+        }
+      ]
     },
     {
       "key": "armors:112784",
@@ -1890,7 +2340,28 @@
         "strain_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38934_10",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"进入战斗后使当前破防等级、会心等级中最高的属性提高75点，名剑大会中无法生效。\" font=101 </text>",
+          "description": "进入战斗后使当前破防等级、会心等级中最高的属性提高75点，名剑大会中无法生效。",
+          "handlerId": 38934,
+          "level": 10,
+          "kind": "highest_rating",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "combat",
+            "chooseHighest": [
+              "overcome",
+              "critical"
+            ],
+            "amount": 75
+          }
+        }
+      ]
     },
     {
       "key": "armors:112785",
@@ -1919,7 +2390,28 @@
         "magical_attack_power_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38934_10",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"进入战斗后使当前破防等级、会心等级中最高的属性提高75点，名剑大会中无法生效。\" font=101 </text>",
+          "description": "进入战斗后使当前破防等级、会心等级中最高的属性提高75点，名剑大会中无法生效。",
+          "handlerId": 38934,
+          "level": 10,
+          "kind": "highest_rating",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "combat",
+            "chooseHighest": [
+              "overcome",
+              "critical"
+            ],
+            "amount": 75
+          }
+        }
+      ]
     },
     {
       "key": "armors:112789",
@@ -1947,7 +2439,29 @@
         "magical_attack_power_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38944_10",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"命中目标后提升自身130点破防等级，持续10秒，持续期间受到超过最大气血值30%的伤害则效果提前结束，该效果每20秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
+          "description": "命中目标后提升自身130点破防等级，持续10秒，持续期间受到超过最大气血值30%的伤害则效果提前结束，该效果每20秒最多触发一次。名剑大会中无法生效。",
+          "handlerId": 38944,
+          "level": 10,
+          "kind": "triggered_attributes",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "hit",
+            "cooldownSeconds": 20,
+            "durationSeconds": 10,
+            "breakOnDamageAboveMaxHealthPercent": 30,
+            "attributes": {
+              "all_overcome_base": 130
+            }
+          }
+        }
+      ]
     },
     {
       "key": "armors:112790",
@@ -1975,7 +2489,29 @@
         "strain_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38939_10",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"命中目标后提升自身130点会心等级，持续10秒，持续期间受到超过最大气血值30%的伤害则效果提前结束，该效果每20秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
+          "description": "命中目标后提升自身130点会心等级，持续10秒，持续期间受到超过最大气血值30%的伤害则效果提前结束，该效果每20秒最多触发一次。名剑大会中无法生效。",
+          "handlerId": 38939,
+          "level": 10,
+          "kind": "triggered_attributes",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "hit",
+            "cooldownSeconds": 20,
+            "durationSeconds": 10,
+            "breakOnDamageAboveMaxHealthPercent": 30,
+            "attributes": {
+              "all_critical_strike_base": 130
+            }
+          }
+        }
+      ]
     },
     {
       "key": "armors:112791",
@@ -2002,7 +2538,29 @@
         "strain_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38944_10",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"命中目标后提升自身130点破防等级，持续10秒，持续期间受到超过最大气血值30%的伤害则效果提前结束，该效果每20秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
+          "description": "命中目标后提升自身130点破防等级，持续10秒，持续期间受到超过最大气血值30%的伤害则效果提前结束，该效果每20秒最多触发一次。名剑大会中无法生效。",
+          "handlerId": 38944,
+          "level": 10,
+          "kind": "triggered_attributes",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "hit",
+            "cooldownSeconds": 20,
+            "durationSeconds": 10,
+            "breakOnDamageAboveMaxHealthPercent": 30,
+            "attributes": {
+              "all_overcome_base": 130
+            }
+          }
+        }
+      ]
     },
     {
       "key": "armors:112818",
@@ -2025,11 +2583,11 @@
         "haste_base": 179,
         "toughness_base": 179,
         "strain_base": 644,
-        "threat_gain": 112.0
+        "threat_gain": 112
       },
       "embed": {
         "physical_shield_base": 225,
-        "threat_gain": 21.0
+        "threat_gain": 21
       },
       "setId": 0,
       "sets": {}
@@ -2055,11 +2613,11 @@
         "haste_base": 161,
         "toughness_base": 161,
         "strain_base": 580,
-        "threat_gain": 112.0
+        "threat_gain": 112
       },
       "embed": {
         "vitality_base": 225,
-        "threat_gain": 21.0
+        "threat_gain": 21
       },
       "setId": 0,
       "sets": {}
@@ -2085,11 +2643,11 @@
         "haste_base": 155,
         "toughness_base": 155,
         "strain_base": 520,
-        "threat_gain": 178.0
+        "threat_gain": 178
       },
       "embed": {
         "physical_shield_base": 225,
-        "threat_gain": 21.0
+        "threat_gain": 21
       },
       "setId": 0,
       "sets": {}
@@ -2115,11 +2673,11 @@
         "haste_base": 140,
         "toughness_base": 140,
         "strain_base": 468,
-        "threat_gain": 178.0
+        "threat_gain": 178
       },
       "embed": {
         "vitality_base": 225,
-        "threat_gain": 21.0
+        "threat_gain": 21
       },
       "setId": 0,
       "sets": {}
@@ -2555,7 +3113,28 @@
       },
       "embed": {},
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_40803_6",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"招式命中生命值百分比低于自身的目标时，提高自身391点会心等级，持续10秒。名剑大会中无法生效。\" font=101 </text>",
+          "description": "招式命中生命值百分比低于自身的目标时，提高自身391点会心等级，持续10秒。名剑大会中无法生效。",
+          "handlerId": 40803,
+          "level": 6,
+          "kind": "triggered_attributes",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "hit",
+            "durationSeconds": 10,
+            "targetHealthBelowSelf": true,
+            "attributes": {
+              "all_critical_strike_base": 391
+            }
+          }
+        }
+      ]
     },
     {
       "key": "trinkets:49931",
@@ -2578,7 +3157,28 @@
       },
       "embed": {},
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_40803_4",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"招式命中生命值百分比低于自身的目标时，提高自身268点会心等级，持续10秒。名剑大会中无法生效。\" font=101 </text>",
+          "description": "招式命中生命值百分比低于自身的目标时，提高自身268点会心等级，持续10秒。名剑大会中无法生效。",
+          "handlerId": 40803,
+          "level": 4,
+          "kind": "triggered_attributes",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "hit",
+            "durationSeconds": 10,
+            "targetHealthBelowSelf": true,
+            "attributes": {
+              "all_critical_strike_base": 268
+            }
+          }
+        }
+      ]
     },
     {
       "key": "trinkets:49932",
@@ -2599,7 +3199,28 @@
       },
       "embed": {},
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_40802_6",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"招式命中生命值百分比低于自身的目标时，提高自身391点破防等级，持续10秒。名剑大会中无法生效。\" font=101 </text>",
+          "description": "招式命中生命值百分比低于自身的目标时，提高自身391点破防等级，持续10秒。名剑大会中无法生效。",
+          "handlerId": 40802,
+          "level": 6,
+          "kind": "triggered_attributes",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "hit",
+            "durationSeconds": 10,
+            "targetHealthBelowSelf": true,
+            "attributes": {
+              "all_overcome_base": 391
+            }
+          }
+        }
+      ]
     },
     {
       "key": "trinkets:49933",
@@ -2621,7 +3242,28 @@
       },
       "embed": {},
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_40803_5",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"招式命中生命值百分比低于自身的目标时，提高自身313点会心等级，持续10秒。名剑大会中无法生效。\" font=101 </text>",
+          "description": "招式命中生命值百分比低于自身的目标时，提高自身313点会心等级，持续10秒。名剑大会中无法生效。",
+          "handlerId": 40803,
+          "level": 5,
+          "kind": "triggered_attributes",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "hit",
+            "durationSeconds": 10,
+            "targetHealthBelowSelf": true,
+            "attributes": {
+              "all_critical_strike_base": 313
+            }
+          }
+        }
+      ]
     },
     {
       "key": "trinkets:49934",
@@ -2643,7 +3285,28 @@
       },
       "embed": {},
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_40802_5",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"招式命中生命值百分比低于自身的目标时，提高自身313点破防等级，持续10秒。名剑大会中无法生效。\" font=101 </text>",
+          "description": "招式命中生命值百分比低于自身的目标时，提高自身313点破防等级，持续10秒。名剑大会中无法生效。",
+          "handlerId": 40802,
+          "level": 5,
+          "kind": "triggered_attributes",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "hit",
+            "durationSeconds": 10,
+            "targetHealthBelowSelf": true,
+            "attributes": {
+              "all_overcome_base": 313
+            }
+          }
+        }
+      ]
     },
     {
       "key": "trinkets:49935",
@@ -2666,7 +3329,28 @@
       },
       "embed": {},
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_40802_4",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"招式命中生命值百分比低于自身的目标时，提高自身313点破防等级，持续10秒。名剑大会中无法生效。\" font=101 </text>",
+          "description": "招式命中生命值百分比低于自身的目标时，提高自身313点破防等级，持续10秒。名剑大会中无法生效。",
+          "handlerId": 40802,
+          "level": 4,
+          "kind": "triggered_attributes",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "hit",
+            "durationSeconds": 10,
+            "targetHealthBelowSelf": true,
+            "attributes": {
+              "all_overcome_base": 313
+            }
+          }
+        }
+      ]
     },
     {
       "key": "trinkets:49936",
@@ -2687,7 +3371,26 @@
       },
       "embed": {},
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_41065_4",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"进入战斗后额外提高313点无双等级。名剑大会中无法生效。\" font=101 </text>",
+          "description": "进入战斗后额外提高313点无双等级。名剑大会中无法生效。",
+          "handlerId": 41065,
+          "level": 4,
+          "kind": "combat_attributes",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "combat",
+            "attributes": {
+              "strain_base": 313
+            }
+          }
+        }
+      ]
     },
     {
       "key": "trinkets:49988",
@@ -2977,7 +3680,30 @@
         "magical_attack_power_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38945_9",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"进入战斗后，自身每10点会心等级提高2点无双等级，最多提高448点。名剑大会中无法生效。\" font=101 </text>",
+          "description": "进入战斗后，自身每10点会心等级提高2点无双等级，最多提高448点。名剑大会中无法生效。",
+          "handlerId": 38945,
+          "level": 9,
+          "kind": "rating_conversion",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "combat",
+            "conversion": {
+              "from": "critical",
+              "to": "strain_base",
+              "per": 10,
+              "amount": 2,
+              "cap": 448
+            }
+          }
+        }
+      ]
     },
     {
       "key": "trinkets:51438",
@@ -3001,7 +3727,30 @@
         "magical_overcome_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38946_10",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"进入战斗后，自身每10点基础破防等级将提高2点全攻击，最多提高256点，名剑大会中无法生效。\" font=101 </text>",
+          "description": "进入战斗后，自身每10点基础破防等级将提高2点全攻击，最多提高256点，名剑大会中无法生效。",
+          "handlerId": 38946,
+          "level": 10,
+          "kind": "rating_conversion",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "combat",
+            "conversion": {
+              "from": "base_overcome",
+              "to": "all_attack_power_base",
+              "per": 10,
+              "amount": 2,
+              "cap": 256
+            }
+          }
+        }
+      ]
     },
     {
       "key": "trinkets:51439",
@@ -3026,7 +3775,30 @@
         "all_critical_power_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38946_9",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"进入战斗后，自身每10点基础破防等级将提高2点全攻击，最多提高256点，名剑大会中无法生效。\" font=101 </text>",
+          "description": "进入战斗后，自身每10点基础破防等级将提高2点全攻击，最多提高256点，名剑大会中无法生效。",
+          "handlerId": 38946,
+          "level": 9,
+          "kind": "rating_conversion",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "combat",
+            "conversion": {
+              "from": "base_overcome",
+              "to": "all_attack_power_base",
+              "per": 10,
+              "amount": 2,
+              "cap": 256
+            }
+          }
+        }
+      ]
     },
     {
       "key": "trinkets:51443",
@@ -3050,7 +3822,30 @@
         "magical_attack_power_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38945_10",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"进入战斗后，自身每10点会心等级提高2点无双等级，最多提高470点。名剑大会中无法生效。\" font=101 </text>",
+          "description": "进入战斗后，自身每10点会心等级提高2点无双等级，最多提高470点。名剑大会中无法生效。",
+          "handlerId": 38945,
+          "level": 10,
+          "kind": "rating_conversion",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "combat",
+            "conversion": {
+              "from": "critical",
+              "to": "strain_base",
+              "per": 10,
+              "amount": 2,
+              "cap": 470
+            }
+          }
+        }
+      ]
     },
     {
       "key": "trinkets:51444",
@@ -3074,7 +3869,30 @@
         "magical_overcome_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38946_13",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"进入战斗后，自身每66点基础破防等级将提高1点全攻击，最多提高28点，名剑大会中无法生效。\" font=101 </text>",
+          "description": "进入战斗后，自身每66点基础破防等级将提高1点全攻击，最多提高28点，名剑大会中无法生效。",
+          "handlerId": 38946,
+          "level": 13,
+          "kind": "rating_conversion",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "combat",
+            "conversion": {
+              "from": "base_overcome",
+              "to": "all_attack_power_base",
+              "per": 66,
+              "amount": 1,
+              "cap": 28
+            }
+          }
+        }
+      ]
     },
     {
       "key": "trinkets:51445",
@@ -3099,7 +3917,30 @@
         "all_critical_power_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38946_12",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"进入战斗后，自身每10点基础破防等级将提高2点全攻击，最多提高268点，名剑大会中无法生效。\" font=101 </text>",
+          "description": "进入战斗后，自身每10点基础破防等级将提高2点全攻击，最多提高268点，名剑大会中无法生效。",
+          "handlerId": 38946,
+          "level": 12,
+          "kind": "rating_conversion",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "combat",
+            "conversion": {
+              "from": "base_overcome",
+              "to": "all_attack_power_base",
+              "per": 10,
+              "amount": 2,
+              "cap": 268
+            }
+          }
+        }
+      ]
     },
     {
       "key": "trinkets:51473",
@@ -3193,7 +4034,30 @@
         "magical_attack_power_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38945_9",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"进入战斗后，自身每10点会心等级提高2点无双等级，最多提高448点。名剑大会中无法生效。\" font=101 </text>",
+          "description": "进入战斗后，自身每10点会心等级提高2点无双等级，最多提高448点。名剑大会中无法生效。",
+          "handlerId": 38945,
+          "level": 9,
+          "kind": "rating_conversion",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "combat",
+            "conversion": {
+              "from": "critical",
+              "to": "strain_base",
+              "per": 10,
+              "amount": 2,
+              "cap": 448
+            }
+          }
+        }
+      ]
     },
     {
       "key": "trinkets:51480",
@@ -3217,7 +4081,30 @@
         "magical_overcome_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38946_10",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"进入战斗后，自身每10点基础破防等级将提高2点全攻击，最多提高256点，名剑大会中无法生效。\" font=101 </text>",
+          "description": "进入战斗后，自身每10点基础破防等级将提高2点全攻击，最多提高256点，名剑大会中无法生效。",
+          "handlerId": 38946,
+          "level": 10,
+          "kind": "rating_conversion",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "combat",
+            "conversion": {
+              "from": "base_overcome",
+              "to": "all_attack_power_base",
+              "per": 10,
+              "amount": 2,
+              "cap": 256
+            }
+          }
+        }
+      ]
     },
     {
       "key": "trinkets:51481",
@@ -3242,7 +4129,30 @@
         "all_critical_power_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38946_9",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"进入战斗后，自身每10点基础破防等级将提高2点全攻击，最多提高256点，名剑大会中无法生效。\" font=101 </text>",
+          "description": "进入战斗后，自身每10点基础破防等级将提高2点全攻击，最多提高256点，名剑大会中无法生效。",
+          "handlerId": 38946,
+          "level": 9,
+          "kind": "rating_conversion",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "combat",
+            "conversion": {
+              "from": "base_overcome",
+              "to": "all_attack_power_base",
+              "per": 10,
+              "amount": 2,
+              "cap": 256
+            }
+          }
+        }
+      ]
     },
     {
       "key": "trinkets:51485",
@@ -3266,7 +4176,30 @@
         "magical_attack_power_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38945_10",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"进入战斗后，自身每10点会心等级提高2点无双等级，最多提高470点。名剑大会中无法生效。\" font=101 </text>",
+          "description": "进入战斗后，自身每10点会心等级提高2点无双等级，最多提高470点。名剑大会中无法生效。",
+          "handlerId": 38945,
+          "level": 10,
+          "kind": "rating_conversion",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "combat",
+            "conversion": {
+              "from": "critical",
+              "to": "strain_base",
+              "per": 10,
+              "amount": 2,
+              "cap": 470
+            }
+          }
+        }
+      ]
     },
     {
       "key": "trinkets:51486",
@@ -3290,7 +4223,30 @@
         "magical_overcome_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38946_13",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"进入战斗后，自身每66点基础破防等级将提高1点全攻击，最多提高28点，名剑大会中无法生效。\" font=101 </text>",
+          "description": "进入战斗后，自身每66点基础破防等级将提高1点全攻击，最多提高28点，名剑大会中无法生效。",
+          "handlerId": 38946,
+          "level": 13,
+          "kind": "rating_conversion",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "combat",
+            "conversion": {
+              "from": "base_overcome",
+              "to": "all_attack_power_base",
+              "per": 66,
+              "amount": 1,
+              "cap": 28
+            }
+          }
+        }
+      ]
     },
     {
       "key": "trinkets:51487",
@@ -3315,7 +4271,30 @@
         "all_critical_power_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38946_12",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"进入战斗后，自身每10点基础破防等级将提高2点全攻击，最多提高268点，名剑大会中无法生效。\" font=101 </text>",
+          "description": "进入战斗后，自身每10点基础破防等级将提高2点全攻击，最多提高268点，名剑大会中无法生效。",
+          "handlerId": 38946,
+          "level": 12,
+          "kind": "rating_conversion",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "combat",
+            "conversion": {
+              "from": "base_overcome",
+              "to": "all_attack_power_base",
+              "per": 10,
+              "amount": 2,
+              "cap": 268
+            }
+          }
+        }
+      ]
     },
     {
       "key": "trinkets:51499",
@@ -3360,7 +4339,30 @@
         "all_critical_strike_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38946_11",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"进入战斗后，自身每10点基础破防等级将提高2点全攻击，最多提高182点，名剑大会中无法生效。\" font=101 </text>",
+          "description": "进入战斗后，自身每10点基础破防等级将提高2点全攻击，最多提高182点，名剑大会中无法生效。",
+          "handlerId": 38946,
+          "level": 11,
+          "kind": "rating_conversion",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "combat",
+            "conversion": {
+              "from": "base_overcome",
+              "to": "all_attack_power_base",
+              "per": 10,
+              "amount": 2,
+              "cap": 182
+            }
+          }
+        }
+      ]
     },
     {
       "key": "trinkets:51503",
@@ -3383,7 +4385,30 @@
         "all_critical_strike_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38946_14",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"进入战斗后，自身每10点基础破防等级将提高2点全攻击，最多提高190点，名剑大会中无法生效。\" font=101 </text>",
+          "description": "进入战斗后，自身每10点基础破防等级将提高2点全攻击，最多提高190点，名剑大会中无法生效。",
+          "handlerId": 38946,
+          "level": 14,
+          "kind": "rating_conversion",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "combat",
+            "conversion": {
+              "from": "base_overcome",
+              "to": "all_attack_power_base",
+              "per": 10,
+              "amount": 2,
+              "cap": 190
+            }
+          }
+        }
+      ]
     },
     {
       "key": "trinkets:51513",
@@ -3428,7 +4453,30 @@
         "all_critical_strike_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38946_11",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"进入战斗后，自身每10点基础破防等级将提高2点全攻击，最多提高182点，名剑大会中无法生效。\" font=101 </text>",
+          "description": "进入战斗后，自身每10点基础破防等级将提高2点全攻击，最多提高182点，名剑大会中无法生效。",
+          "handlerId": 38946,
+          "level": 11,
+          "kind": "rating_conversion",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "combat",
+            "conversion": {
+              "from": "base_overcome",
+              "to": "all_attack_power_base",
+              "per": 10,
+              "amount": 2,
+              "cap": 182
+            }
+          }
+        }
+      ]
     },
     {
       "key": "trinkets:51517",
@@ -3451,7 +4499,30 @@
         "all_critical_strike_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38946_14",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"进入战斗后，自身每10点基础破防等级将提高2点全攻击，最多提高190点，名剑大会中无法生效。\" font=101 </text>",
+          "description": "进入战斗后，自身每10点基础破防等级将提高2点全攻击，最多提高190点，名剑大会中无法生效。",
+          "handlerId": 38946,
+          "level": 14,
+          "kind": "rating_conversion",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "combat",
+            "conversion": {
+              "from": "base_overcome",
+              "to": "all_attack_power_base",
+              "per": 10,
+              "amount": 2,
+              "cap": 190
+            }
+          }
+        }
+      ]
     },
     {
       "key": "weapons:46530",
@@ -3674,7 +4745,7 @@
         "strain_base": 386
       },
       "embed": {
-        "threat_gain": 21.0
+        "threat_gain": 21
       },
       "setId": 0,
       "sets": {}
@@ -3729,7 +4800,7 @@
         "strain_base": 312
       },
       "embed": {
-        "threat_gain": 21.0
+        "threat_gain": 21
       },
       "setId": 0,
       "sets": {}
@@ -3754,7 +4825,7 @@
         "strain_base": 351
       },
       "embed": {
-        "threat_gain": 21.0
+        "threat_gain": 21
       },
       "setId": 0,
       "sets": {}
@@ -3851,7 +4922,27 @@
         "magical_attack_power_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38950_10",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"命中目标后对目标造成一段伤害，该效果每10秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
+          "description": "命中目标后对目标造成一段伤害，该效果每10秒最多触发一次。名剑大会中无法生效。",
+          "handlerId": 38950,
+          "level": 10,
+          "kind": "triggered_damage",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "hit",
+            "cooldownSeconds": 10,
+            "requiresVerification": [
+              "伤害公式与触发招式"
+            ]
+          }
+        }
+      ]
     },
     {
       "key": "weapons:47973",
@@ -3875,7 +4966,27 @@
         "magical_overcome_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38950_10",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"命中目标后对目标造成一段伤害，该效果每10秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
+          "description": "命中目标后对目标造成一段伤害，该效果每10秒最多触发一次。名剑大会中无法生效。",
+          "handlerId": 38950,
+          "level": 10,
+          "kind": "triggered_damage",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "hit",
+            "cooldownSeconds": 10,
+            "requiresVerification": [
+              "伤害公式与触发招式"
+            ]
+          }
+        }
+      ]
     },
     {
       "key": "weapons:47974",
@@ -3900,7 +5011,27 @@
         "magical_overcome_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38950_9",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"命中目标后对目标造成一段伤害，该效果每10秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
+          "description": "命中目标后对目标造成一段伤害，该效果每10秒最多触发一次。名剑大会中无法生效。",
+          "handlerId": 38950,
+          "level": 9,
+          "kind": "triggered_damage",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "hit",
+            "cooldownSeconds": 10,
+            "requiresVerification": [
+              "伤害公式与触发招式"
+            ]
+          }
+        }
+      ]
     },
     {
       "key": "weapons:47978",
@@ -3924,7 +5055,27 @@
         "magical_attack_power_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38950_14",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"命中目标后对目标造成一段伤害，该效果每10秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
+          "description": "命中目标后对目标造成一段伤害，该效果每10秒最多触发一次。名剑大会中无法生效。",
+          "handlerId": 38950,
+          "level": 14,
+          "kind": "triggered_damage",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "hit",
+            "cooldownSeconds": 10,
+            "requiresVerification": [
+              "伤害公式与触发招式"
+            ]
+          }
+        }
+      ]
     },
     {
       "key": "weapons:47979",
@@ -3948,7 +5099,27 @@
         "magical_overcome_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38950_14",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"命中目标后对目标造成一段伤害，该效果每10秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
+          "description": "命中目标后对目标造成一段伤害，该效果每10秒最多触发一次。名剑大会中无法生效。",
+          "handlerId": 38950,
+          "level": 14,
+          "kind": "triggered_damage",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "hit",
+            "cooldownSeconds": 10,
+            "requiresVerification": [
+              "伤害公式与触发招式"
+            ]
+          }
+        }
+      ]
     },
     {
       "key": "weapons:47980",
@@ -3973,7 +5144,27 @@
         "magical_overcome_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38950_13",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"命中目标后对目标造成一段伤害，该效果每10秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
+          "description": "命中目标后对目标造成一段伤害，该效果每10秒最多触发一次。名剑大会中无法生效。",
+          "handlerId": 38950,
+          "level": 13,
+          "kind": "triggered_damage",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "hit",
+            "cooldownSeconds": 10,
+            "requiresVerification": [
+              "伤害公式与触发招式"
+            ]
+          }
+        }
+      ]
     },
     {
       "key": "weapons:48008",
@@ -4067,7 +5258,27 @@
         "magical_attack_power_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38950_10",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"命中目标后对目标造成一段伤害，该效果每10秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
+          "description": "命中目标后对目标造成一段伤害，该效果每10秒最多触发一次。名剑大会中无法生效。",
+          "handlerId": 38950,
+          "level": 10,
+          "kind": "triggered_damage",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "hit",
+            "cooldownSeconds": 10,
+            "requiresVerification": [
+              "伤害公式与触发招式"
+            ]
+          }
+        }
+      ]
     },
     {
       "key": "weapons:48015",
@@ -4091,7 +5302,27 @@
         "magical_overcome_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38950_10",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"命中目标后对目标造成一段伤害，该效果每10秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
+          "description": "命中目标后对目标造成一段伤害，该效果每10秒最多触发一次。名剑大会中无法生效。",
+          "handlerId": 38950,
+          "level": 10,
+          "kind": "triggered_damage",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "hit",
+            "cooldownSeconds": 10,
+            "requiresVerification": [
+              "伤害公式与触发招式"
+            ]
+          }
+        }
+      ]
     },
     {
       "key": "weapons:48016",
@@ -4116,7 +5347,27 @@
         "magical_overcome_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38950_9",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"命中目标后对目标造成一段伤害，该效果每10秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
+          "description": "命中目标后对目标造成一段伤害，该效果每10秒最多触发一次。名剑大会中无法生效。",
+          "handlerId": 38950,
+          "level": 9,
+          "kind": "triggered_damage",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "hit",
+            "cooldownSeconds": 10,
+            "requiresVerification": [
+              "伤害公式与触发招式"
+            ]
+          }
+        }
+      ]
     },
     {
       "key": "weapons:48020",
@@ -4140,7 +5391,27 @@
         "magical_attack_power_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38950_14",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"命中目标后对目标造成一段伤害，该效果每10秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
+          "description": "命中目标后对目标造成一段伤害，该效果每10秒最多触发一次。名剑大会中无法生效。",
+          "handlerId": 38950,
+          "level": 14,
+          "kind": "triggered_damage",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "hit",
+            "cooldownSeconds": 10,
+            "requiresVerification": [
+              "伤害公式与触发招式"
+            ]
+          }
+        }
+      ]
     },
     {
       "key": "weapons:48021",
@@ -4164,7 +5435,27 @@
         "magical_overcome_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38950_14",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"命中目标后对目标造成一段伤害，该效果每10秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
+          "description": "命中目标后对目标造成一段伤害，该效果每10秒最多触发一次。名剑大会中无法生效。",
+          "handlerId": 38950,
+          "level": 14,
+          "kind": "triggered_damage",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "hit",
+            "cooldownSeconds": 10,
+            "requiresVerification": [
+              "伤害公式与触发招式"
+            ]
+          }
+        }
+      ]
     },
     {
       "key": "weapons:48022",
@@ -4189,7 +5480,27 @@
         "magical_overcome_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38950_13",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"命中目标后对目标造成一段伤害，该效果每10秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
+          "description": "命中目标后对目标造成一段伤害，该效果每10秒最多触发一次。名剑大会中无法生效。",
+          "handlerId": 38950,
+          "level": 13,
+          "kind": "triggered_damage",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "hit",
+            "cooldownSeconds": 10,
+            "requiresVerification": [
+              "伤害公式与触发招式"
+            ]
+          }
+        }
+      ]
     },
     {
       "key": "weapons:48034",
@@ -4236,7 +5547,36 @@
         "all_critical_strike_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_46727_1",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"命中目标后，使自身全攻击提高511点，持续6至11秒。加速等级越高，持续时间越长，达到2024点加速等级时持续11秒。该效果每20秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
+          "description": "命中目标后，使自身全攻击提高511点，持续6至11秒。加速等级越高，持续时间越长，达到2024点加速等级时持续11秒。该效果每20秒最多触发一次。名剑大会中无法生效。",
+          "handlerId": 46727,
+          "level": 1,
+          "kind": "triggered_attributes",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "hit",
+            "cooldownSeconds": 20,
+            "durationSeconds": 11,
+            "attributes": {
+              "all_attack_power_base": 511
+            },
+            "durationRangeSeconds": [
+              6,
+              11
+            ],
+            "hasteForMaxDuration": 2024,
+            "requiresVerification": [
+              "加速与持续时间的分档规则"
+            ]
+          }
+        }
+      ]
     },
     {
       "key": "weapons:48038",
@@ -4260,7 +5600,36 @@
         "all_critical_strike_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_46727_2",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"命中目标后，使自身全攻击提高537点，持续6至11秒。加速等级越高，持续时间越长，达到2024点加速等级时持续11秒。该效果每20秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
+          "description": "命中目标后，使自身全攻击提高537点，持续6至11秒。加速等级越高，持续时间越长，达到2024点加速等级时持续11秒。该效果每20秒最多触发一次。名剑大会中无法生效。",
+          "handlerId": 46727,
+          "level": 2,
+          "kind": "triggered_attributes",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "hit",
+            "cooldownSeconds": 20,
+            "durationSeconds": 11,
+            "attributes": {
+              "all_attack_power_base": 537
+            },
+            "durationRangeSeconds": [
+              6,
+              11
+            ],
+            "hasteForMaxDuration": 2024,
+            "requiresVerification": [
+              "加速与持续时间的分档规则"
+            ]
+          }
+        }
+      ]
     },
     {
       "key": "weapons:48048",
@@ -4307,7 +5676,36 @@
         "all_critical_strike_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_46727_1",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"命中目标后，使自身全攻击提高511点，持续6至11秒。加速等级越高，持续时间越长，达到2024点加速等级时持续11秒。该效果每20秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
+          "description": "命中目标后，使自身全攻击提高511点，持续6至11秒。加速等级越高，持续时间越长，达到2024点加速等级时持续11秒。该效果每20秒最多触发一次。名剑大会中无法生效。",
+          "handlerId": 46727,
+          "level": 1,
+          "kind": "triggered_attributes",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "hit",
+            "cooldownSeconds": 20,
+            "durationSeconds": 11,
+            "attributes": {
+              "all_attack_power_base": 511
+            },
+            "durationRangeSeconds": [
+              6,
+              11
+            ],
+            "hasteForMaxDuration": 2024,
+            "requiresVerification": [
+              "加速与持续时间的分档规则"
+            ]
+          }
+        }
+      ]
     },
     {
       "key": "weapons:48052",
@@ -4331,7 +5729,36 @@
         "all_critical_strike_base": 225
       },
       "setId": 0,
-      "sets": {}
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_46727_2",
+          "sourceAttribute": "magic",
+          "rawDescription": "<Text>text=\"命中目标后，使自身全攻击提高537点，持续6至11秒。加速等级越高，持续时间越长，达到2024点加速等级时持续11秒。该效果每20秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
+          "description": "命中目标后，使自身全攻击提高537点，持续6至11秒。加速等级越高，持续时间越长，达到2024点加速等级时持续11秒。该效果每20秒最多触发一次。名剑大会中无法生效。",
+          "handlerId": 46727,
+          "level": 2,
+          "kind": "triggered_attributes",
+          "calculationStatus": "pending",
+          "rules": {
+            "disabledInArena": true,
+            "trigger": "hit",
+            "cooldownSeconds": 20,
+            "durationSeconds": 11,
+            "attributes": {
+              "all_attack_power_base": 537
+            },
+            "durationRangeSeconds": [
+              6,
+              11
+            ],
+            "hasteForMaxDuration": 2024,
+            "requiresVerification": [
+              "加速与持续时间的分档规则"
+            ]
+          }
+        }
+      ]
     },
     {
       "key": "weapons:47816",
@@ -20467,5 +21894,16 @@
   "threatSource": {
     "repository": "https://github.com/IcyTide/Generator",
     "commit": "b7d609a4a87f92a7b3907efe9141bdfdfb8c3f9e"
+  },
+  "effectSource": {
+    "repository": "https://github.com/IcyTide/Generator",
+    "commit": "b7d609a4a87f92a7b3907efe9141bdfdfb8c3f9e",
+    "files": [
+      "assets/json/armors.json",
+      "assets/json/trinkets.json",
+      "assets/json/weapons.json"
+    ],
+    "itemCount": 65,
+    "effectCount": 65
   }
 }

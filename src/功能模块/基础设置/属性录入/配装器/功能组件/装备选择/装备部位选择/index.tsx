@@ -125,7 +125,11 @@ function 装备部位选择(props: 装备部位选择入参, ref) {
         新列表 = 新列表?.filter((item) => {
           let 是否过滤 = false
           if (装备选择范围?.过滤类型?.includes('特效')) {
-            是否过滤 = !!(item?.装备特效?.includes('试炼') || item?.装备特效?.includes('特效_'))
+            是否过滤 = !!(
+              item?.装备黄字特效?.length ||
+              item?.装备特效?.includes('试炼') ||
+              item?.装备特效?.includes('特效_')
+            )
           }
 
           if (!是否过滤) {
@@ -341,7 +345,7 @@ function 装备部位选择(props: 装备部位选择入参, ref) {
           if (findObj) {
             const filterStr = `${findObj.装备名称}${获取装备数据描述(findObj).join('')}${
               findObj.装备品级
-            }`
+            }${findObj.装备黄字特效?.map((effect) => effect.说明).join('') || ''}`
             return filterStr.includes(input.toLowerCase())
           }
           return false
@@ -442,6 +446,7 @@ export const 获取装备数据描述 = (data: 装备属性信息模型, 携带�
       strList.push('PVX')
     }
     if (
+      data?.装备黄字特效?.length ||
       data?.装备特效 === 装备特效枚举.风特效腰坠 ||
       (装备特效 && 副本精简特效枚举?.[装备特效]) ||
       (装备特效 && 试炼之地特效枚举?.[装备特效])

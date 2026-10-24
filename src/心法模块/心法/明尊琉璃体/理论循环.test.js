@@ -30,12 +30,13 @@ test('保留原有自动循环顺序，两套理论仅手动选择且不绑定�
 })
 
 test.each([
-  [理论循环[0], 七五数据, 4, 380],
-  [理论循环[1], 八一数据, 3, 352],
-])('$名称逐项覆盖与原寻优300秒回放一致，快速评估也使用同一算法', (cycle, data, tier, casts) => {
+  [理论循环[0], 七五数据, 4, 380, 35255.884523491695],
+  [理论循环[1], 八一数据, 3, 352, 33304.683294106944],
+])('$名称保留原回放技能数，未启用团队戒火时不含易伤，快速评估也使用同一算法', (cycle, data, tier, casts, dps) => {
   expect(cycle.循环详情[0].循环加速等级).toBe(tier)
   const result = 计算(cycle, data)
-  expect(result.秒伤).toBeCloseTo(data.dps, 8)
+  // 独立模拟器重放历史逐招、强制关闭自身戒火后得到的对照分数。
+  expect(result.秒伤).toBeCloseTo(dps, 8)
   expect(计算(cycle, data, data.settings, false).秒伤).toBe(result.秒伤)
   const rows = cycle.循环详情[0].技能详情
   for (const [name, count] of Object.entries(data.hits)) {
@@ -76,29 +77,48 @@ test('网页计算入口按当前奇穴结算，替换月尽为净身后仍可�
     技能列表: cycle.循环详情[0].技能详情,
     战斗时间: 300,
   })
-  expect(result.秒伤).toBeCloseTo(36654.90088778118, 8)
+  expect(result.秒伤).toBeCloseTo(35920.038903237546, 8)
   expect(talents).not.toContain('月尽天明')
 })
 
-test('理论自身戒火与团队戒火不叠加；炽炎追加按施放次数而非月破段数', () => {
+test.each([
+  [理论循环[0], 七五数据, [35255.884523491695, 35615.63120747447, 35977.43668816486]],
+  [理论循环[1], 八一数据, [33304.683294106944, 33644.53480381134, 33986.31119897682]],
+])('$名称戒火易伤只由团队开关及覆盖率控制，历史Buff标记不再影响分数', (cycle, data, expected) => {
+  const rows = cycle.循环详情[0].技能详情
+  const settingsFor = (coverage, enabled = true, selected = true) => {
+    const settings = 获取明尊计算设置(
+      默认奇穴,
+      {
+        阵眼: '',
+        小吃: [],
+        团队增益: [{ 增益名称: '戒火斩', 启用: selected, 层数: 1, 覆盖率: coverage }],
+        明尊设置: { stance: 'mainTank' },
+      },
+      获取明尊固定秘籍(),
+      54,
+      enabled,
+    )
+    return { ...settings, gains: { ...data.settings.gains, ...settings.gains } }
+  }
+  for (const [index, coverage] of [0, 50, 100].entries()) {
+    const settings = settingsFor(coverage)
+    const result = 计算(cycle, data, settings)
+    expect(result.秒伤).toBeCloseTo(expected[index], 8)
+    expect(计算(cycle, data, settings, false).秒伤).toBe(result.秒伤)
+    for (const marker of [false, true]) {
+      const marked = rows.map(r => ({ ...r, 明尊技能状态: { ...r.明尊技能状态, 戒火: marker } }))
+      expect(计算明尊基础循环(data.equipment, settings, marked, 300).秒伤).toBe(result.秒伤)
+    }
+  }
+  // 团队条目关闭、或整个增益关闭，均不得借历史自身覆盖状态补回易伤。
+  expect(计算(cycle, data, settingsFor(100, true, false)).秒伤).toBeCloseTo(expected[0], 8)
+  expect(计算(cycle, data, settingsFor(100, false)).秒伤).toBeCloseTo(expected[0], 8)
+})
+
+test('炽炎追加仍按施放次数而非月破段数，历史戒火覆盖标记不影响结算', () => {
   const cycle = 理论循环[0]
   const rows = cycle.循环详情[0].技能详情
-  const 单行 = rows.find((r) => r.技能名称 === '赤日轮·1')
-  const enabled = 获取明尊计算设置(
-    默认奇穴,
-    {
-      阵眼: '',
-      小吃: [],
-      团队增益: [{ 增益名称: '戒火斩', 启用: true, 层数: 1, 覆盖率: 100 }],
-    },
-    获取明尊固定秘籍(),
-    54,
-    true,
-  )
-  const 不计团队 = { ...enabled, gains: {}, jieGain: 0 }
-  const withTeam = 计算明尊基础循环(七五数据.equipment, enabled, [单行], 300)
-  const withoutTeam = 计算明尊基础循环(七五数据.equipment, 不计团队, [单行], 300)
-  expect(withTeam.总伤).toBe(withoutTeam.总伤)
   const settings = {
     ...七五数据.settings,
     talents: 七五数据.settings.talents.map((id) => (id === '6000' ? '44569' : id)),

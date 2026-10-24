@@ -101,6 +101,8 @@
     "build:mingzun": "pnpm run build",
     "test:mingzun": "jest --config config/jest/mingzun.config.js --runInBand",
     "test:mingzun-worker": "node scripts/verify-mingzun-worker.cjs",
+    "package:local": "node scripts/package-local-calculator.cjs",
+    "test:local-package": "node scripts/verify-local-calculator.cjs",
     "typecheck:mingzun": "pnpm run typecheck",
     "dev": "cross-env BROWSER=none PORT=3000 FAST_REFRESH=false REACT_APP_BUILD_TYPE=local node scripts/start.js",
     "start": "pnpm run dev",

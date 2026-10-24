@@ -1,6 +1,7 @@
 import data from './装备数据.json'
 import { EMPTY_EQUIPMENT } from './计算'
 import type { EquipmentStats } from './计算'
+import type { EquipmentSpecialEffect, EquippedSpecialEffect } from './装备特效'
 
 type Attributes = Record<string, number | string>
 const isThreatAttribute = (key: string) =>
@@ -16,6 +17,7 @@ export interface GearItem {
   level: number
   maxStrength: number
   orangeWeapon?: boolean
+  specialEffects?: EquipmentSpecialEffect[]
   base: Attributes
   magic: Attributes
   embed: Attributes
@@ -41,12 +43,49 @@ const database = data as unknown as {
   stones: Stone[]
 }
 export const MIN_GEAR_LEVEL = 1110
-export const GEAR_ITEMS = database.items.filter(
+const eligibleGear = database.items.filter(
   (row) =>
     row.level >= MIN_GEAR_LEVEL &&
     (row.kind !== '防御' || Number(row.magic.haste_base) > 0) &&
     (Number(row.base.strain_base) > 0 || Number(row.magic.strain_base) > 0),
 )
+// 只合并无修的完全重复记录；孔位顺序、黄字、套装、品级及精炼上限都参与比较。
+const stableGearValue = (value: unknown): unknown => {
+  if (Array.isArray(value)) return value.map(stableGearValue)
+  if (value && typeof value === 'object')
+    return Object.fromEntries(
+      Object.entries(value)
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([key, entry]) => [key, stableGearValue(entry)]),
+    )
+  return value
+}
+const canonicalWuxiu = new Map<string, GearItem>()
+const gearAliases = new Map<string, GearItem>()
+for (const row of [...eligibleGear].sort((a, b) => a.id - b.id)) {
+  let canonical = row
+  if (row.name.startsWith('无修')) {
+    const { key, id, ...attributes } = row
+    const signature = JSON.stringify(
+      stableGearValue({ ...attributes, embed: Object.entries(row.embed) }),
+    )
+    canonical = canonicalWuxiu.get(signature) || row
+    canonicalWuxiu.set(signature, canonical)
+  }
+  gearAliases.set(row.key, canonical)
+}
+export const GEAR_ITEMS = eligibleGear.filter((row) => gearAliases.get(row.key) === row)
+/** 同时接受旧装备键和旧ID，返回合并后的可选装备；部位校验防止ID跨表冲突。 */
+export function findGearItem(identifier: string | number, position?: string): GearItem | undefined {
+  const raw =
+    typeof identifier === 'number'
+      ? eligibleGear.find(
+          (row) => row.id === identifier && (!position || row.position === position),
+        )
+      : undefined
+  const canonical = gearAliases.get(typeof identifier === 'string' ? identifier : raw?.key || '')
+  return canonical && (!position || canonical.position === position) ? canonical : undefined
+}
 export function gearAttributeSuffix(item: GearItem): string {
   const has = (...keys: string[]) => keys.some((key) => Number(item.magic[key]) > 0)
   if (item.kind === '防御') {
@@ -185,14 +224,13 @@ export type Loadout = Record<string, GearSelection>
 export function normalizeLoadout(slots: Loadout, stone = 0, embedFormatVersion = 2) {
   const normalizedSlots = Object.fromEntries(
     Object.entries(slots).map(([slot, selection]) => {
-      const item = GEAR_ITEMS.find(
-        (row) => row.key === selection.key && row.position === slotPosition(slot),
-      )
+      const item = findGearItem(selection.key, slotPosition(slot))
       if (selection.key && !item) return [slot, { key: '', strength: 0, embeds: [], enchantId: 0 }]
       return [
         slot,
         {
           ...selection,
+          key: item?.key || selection.key,
           embeds:
             item && embedFormatVersion < 2
               ? Object.keys(item.embed).map((attribute) => {
@@ -320,6 +358,7 @@ const integerInRange = (value: number, max: number) =>
 export function calculateLoadout(loadout: Loadout, stoneId = 0) {
   const raw: Record<string, number> = {}
   const warnings = new Set<string>()
+  const specialEffects: EquippedSpecialEffect[] = []
   const activeSets: { id: number; pieces: number; threshold: number }[] = []
   const sets = new Map<number, { count: number; bonuses: Record<string, Attributes> }>()
   let selectedCount = 0
@@ -341,7 +380,7 @@ export function calculateLoadout(loadout: Loadout, stoneId = 0) {
   for (const [slot, selection] of Object.entries(loadout)) {
     if (!SLOTS.some(([key]) => key === slot)) throw new Error('配装包含未知部位')
     if (!selection.key) continue
-    const item = GEAR_ITEMS.find((gear) => gear.key === selection.key)
+    const item = findGearItem(selection.key)
     if (!item || item.position !== slotPosition(slot)) throw new Error('装备与部位不匹配')
     if (!integerInRange(selection.strength, item.maxStrength))
       throw new Error(`${item.name}精炼等级无效`)
@@ -352,6 +391,8 @@ export function calculateLoadout(loadout: Loadout, stoneId = 0) {
     )
       throw new Error('镶嵌等级无效')
     selectedCount++
+    for (const effect of item.specialEffects || [])
+      specialEffects.push({ slot, gearKey: item.key, effect })
     if (slot === 'primary_weapon') hasPrimary = true
     add(item.base)
     add(item.magic)
@@ -394,5 +435,5 @@ export function calculateLoadout(loadout: Loadout, stoneId = 0) {
   }
   stats.weaponMin = raw.weapon_damage_base || 0
   stats.weaponMax = stats.weaponMin + (raw.weapon_damage_rand || 0)
-  return { stats, selectedCount, activeSets, warnings: [...warnings] }
+  return { stats, selectedCount, activeSets, warnings: [...warnings], specialEffects }
 }

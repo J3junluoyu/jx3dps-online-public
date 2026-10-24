@@ -15,8 +15,10 @@ function Attribute-Map($entries, [bool]$preserveUnmapped = $false) {
     return $result
 }
 $items = @()
+$effectSources = [ordered]@{}
 foreach ($category in @('armors', 'trinkets', 'weapons')) {
     $all = Invoke-RestMethod -Uri "$raw/$category.json" -TimeoutSec 120
+    $effectSources[$category] = $all
     foreach ($row in $all.PSObject.Properties.Value) {
         $isTank = $row.kind -eq '防御' -and $row.school -in @('明教', '通用')
         $isSimplifiedInner = $row.school -eq '精简' -and $row.kind -eq '内功'
@@ -54,4 +56,12 @@ $output = [ordered]@{ commit = $commit; items = $items; enchants = $enchants; st
 $destination = Join-Path $PSScriptRoot '../src/心法模块/心法/明尊琉璃体/装备数据.json'
 $output | ConvertTo-Json -Depth 30 | Set-Content -LiteralPath $destination -Encoding utf8
 Write-Output "Equipment: $($items.Count); enchants: $($enchants.Count); stones: $($stones.Count)"
+$effectSourceFile = Join-Path ([IO.Path]::GetTempPath()) ("mingzun-effects-" + [guid]::NewGuid().ToString('N') + '.json')
+try {
+    $effectSources | ConvertTo-Json -Depth 40 | Set-Content -LiteralPath $effectSourceFile -Encoding utf8
+    & node (Join-Path $PSScriptRoot 'update-mingzun-effects.cjs') --source $effectSourceFile --repository 'https://github.com/J3junluoyu/Generator' --commit $commit
+    if ($LASTEXITCODE -ne 0) { throw '装备黄字特效导入失败' }
+} finally {
+    Remove-Item -LiteralPath $effectSourceFile -ErrorAction SilentlyContinue
+}
 & (Join-Path $PSScriptRoot 'update-mingzun-threat.ps1')

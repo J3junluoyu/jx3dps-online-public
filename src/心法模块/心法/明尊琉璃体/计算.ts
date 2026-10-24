@@ -107,8 +107,6 @@ export interface Settings {
   pveBonus: number
   damageBonus: number
   gains?: Record<string, number>
-  /** 已计入gains的团队戒火斩系数，理论时间轴避免与自身戒火重复叠加。 */
-  jieGain?: number
 }
 export const TALENT_LAYOUT: { label: string; ids: string[]; fixed: boolean }[] = [
   { label: '第一层', ids: ['14678'], fixed: true },

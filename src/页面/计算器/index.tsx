@@ -1,12 +1,8 @@
-const isLocalBuild = process.env.REACT_APP_BUILD_TYPE === 'local'
-
 import React, { lazy, Suspense, useEffect, useState } from 'react'
 import useQuery from '@/hooks/use-query'
 import FullLoading from '@/组件/FullLoading'
 
 const Dps = lazy(() => import('./dps'))
-
-const 本地打包心法入口 = lazy(() => import('./本地打包心法入口'))
 
 function 主页面() {
   const urlXf = useQuery('xf') || 'mzllt'
@@ -33,10 +29,6 @@ function 主页面() {
   return 资源获取完成 ? (
     <Suspense fallback={<FullLoading />}>
       <Dps />
-    </Suspense>
-  ) : isLocalBuild ? (
-    <Suspense fallback={<FullLoading />}>
-      <本地打包心法入口 />
     </Suspense>
   ) : (
     <FullLoading />

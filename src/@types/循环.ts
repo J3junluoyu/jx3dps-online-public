@@ -151,6 +151,7 @@ export interface 循环技能详情 {
     驱夷: boolean
     光明相: boolean
     五明: boolean
+    /** 保留历史时间轴标记；戒火易伤仅由团队增益设置控制。 */
     戒火: boolean
     /** 原始释放次数，月破三段只计一次，DOT及附加伤害为0。 */
     施放次数: number
