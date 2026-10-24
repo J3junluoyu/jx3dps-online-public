@@ -20,18 +20,23 @@ foreach ($category in @('armors', 'trinkets', 'weapons')) {
     foreach ($row in $all.PSObject.Properties.Value) {
         $isTank = $row.kind -eq '防御' -and $row.school -in @('明教', '通用')
         $isSimplifiedInner = $row.school -eq '精简' -and $row.kind -eq '内功'
-        if ((-not $isTank -and -not $isSimplifiedInner) -or $row.usage -ne 'PVE' -or $row.level -lt 1110) { continue }
+        # ALL equipment can be used in PVE too (including the Mingzun legendary weapon).
+        if ((-not $isTank -and -not $isSimplifiedInner) -or $row.usage -notin @('PVE', 'ALL') -or $row.level -lt 1110) { continue }
         if ($isTank -and @($row.magic | Where-Object { $_.attr_type -eq 'haste_base' -and $_.value -gt 0 }).Count -eq 0) { continue }
         if ($row.position -eq 'primary_weapon' -and $row.school -ne '明教') { continue }
         $sets = [ordered]@{}
         foreach ($bonus in $row.sets.PSObject.Properties) { $sets[$bonus.Name] = Attribute-Map $bonus.Value }
-        $items += [ordered]@{
+        $item = [ordered]@{
             key = "$category`:$($row.id)"; id = $row.id; name = $row.name; school = $row.school
             kind = $row.kind; usage = $row.usage
             position = $row.position; level = $row.level; maxStrength = $row.max_strength
             base = Attribute-Map $row.base; magic = Attribute-Map $row.magic
             embed = Attribute-Map $row.embed $true; setId = $row.set_id; sets = $sets
         }
+        if ($row.position -eq 'primary_weapon' -and $row.school -eq '明教' -and $row.skill -and $row.skill[0] -eq 4941) {
+            $item.orangeWeapon = $true
+        }
+        $items += $item
     }
 }
 $allEnchants = Invoke-RestMethod -Uri "$raw/enchants.json" -TimeoutSec 120

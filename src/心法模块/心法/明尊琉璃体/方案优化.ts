@@ -5,7 +5,7 @@ import type { EquipmentStats, Settings } from './计算'
 import { calculateAttributes, ratingScale } from './计算'
 import { GEAR_ITEMS, ENCHANTS, SLOTS, calculateLoadout, slotPosition } from './装备'
 import type { Loadout } from './装备'
-import { 明尊小药小吃, 获取明尊战斗增益 } from './增益'
+import { 明尊小药小吃, 获取明尊战斗增益, 获取明尊戒火增益 } from './增益'
 import { 明尊阵眼 } from './阵眼'
 import { 计算明尊基础循环 } from '@/计算模块/职业特殊处理/明尊/基础循环'
 
@@ -28,6 +28,7 @@ export interface 方案优化输入 {
   minToughness: number
   includeMowen?: boolean
   includeHasteConsumables?: boolean
+  gearScope?: 'defensive' | 'includeStreamlined'
   teamGains?: 团队增益选项数据类型[]
   gearKeys: string[]
   slots: string[]
@@ -102,7 +103,7 @@ export function 优化明尊方案(
     throw new Error('镶嵌等级无效')
   const detail = input.cycle.循环详情[0]
   const tier = Number(detail?.循环加速等级)
-  if (![3, 4].includes(tier)) throw new Error('请选择0.8125GCD或0.75GCD循环')
+  if (![3, 4].includes(tier)) throw new Error('请选择0.81GCD或0.75GCD循环')
   const gcd = (16 - tier) / 16
   const minHaste = Math.ceil(
     ((Math.floor((1024 * 16) / (17 - tier) - 1024) + 1) * ratingScale('haste')) / 1024,
@@ -114,7 +115,16 @@ export function 优化明尊方案(
           ((Math.floor((1024 * 16) / (16 - tier) - 1024) + 1) * ratingScale('haste')) / 1024,
         )
   const started = Date.now()
-  const allowed = new Set(input.gearKeys)
+  if (input.gearScope && !['defensive', 'includeStreamlined'].includes(input.gearScope))
+    throw new Error('装备范围无效')
+  // 与配装器的品级等筛选取交集；初始配装不能绕过防御装备限制。
+  const allowed = new Set(
+    GEAR_ITEMS.filter(
+      (item) =>
+        input.gearKeys.includes(item.key) &&
+        (input.gearScope !== 'defensive' || item.kind === '防御'),
+    ).map((item) => item.key),
+  )
   const activeSlots = new Set(input.slots)
   if (input.slots.some((slot) => !SLOTS.some(([key]) => key === slot)))
     throw new Error('优化部位无效')
@@ -126,7 +136,10 @@ export function 优化明尊方案(
     const items = GEAR_ITEMS.filter(
       (item) => item.position === slotPosition(slot) && allowed.has(item.key),
     )
-    if (!items.length) throw new Error(`${label}在当前装备筛选范围内没有候选装备`)
+    if (!items.length)
+      throw new Error(
+        `${label}在当前${input.gearScope === 'defensive' ? '防御' : ''}装备筛选范围内没有候选装备`,
+      )
     const enchants = 获取同档附魔(current?.enchantId || 0, slotPosition(slot))
     validEnchants.set(slot, enchants)
     groups.push({
@@ -228,6 +241,11 @@ export function 优化明尊方案(
     )
   const meetsRequirements = (metrics: 约束指标) =>
     获取优化GCD(metrics.haste) === gcd && metrics.toughness + 1e-10 >= input.minToughness
+  const 团队戒火系数 = 获取明尊戒火增益(
+    { 阵眼: '', 小吃: [], 团队增益: input.teamGains || [] },
+    true,
+    input.settings.talents,
+  )
   const panelFor = (plan: 优化方案, cacheStats = true) => {
     const gearKey = JSON.stringify([SLOTS.map(([slot]) => plan.slots[slot]), plan.stone])
     let stats = statsCache.get(gearKey)
@@ -242,7 +260,11 @@ export function 优化明尊方案(
       stats,
       input.settings,
     )
-    const settings = { ...input.settings, gains }
+    const settings = {
+      ...input.settings,
+      gains,
+      jieGain: 团队戒火系数,
+    }
     const panel = calculateAttributes(stats, settings)
     return { stats, settings, panel }
   }

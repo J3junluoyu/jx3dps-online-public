@@ -57,7 +57,7 @@ test('网页默认记录当前九个奇穴，两个内置循环使用同一套�
     '6000',
   ])
   expect(() => validateSettings({ ...DEFAULT_SETTINGS, talents })).not.toThrow()
-  for (const 循环 of 循环列表) expect(循环.奇穴).toEqual(默认奇穴)
+  for (const 循环 of 循环列表.filter((项) => !项.保留当前奇穴)) expect(循环.奇穴).toEqual(默认奇穴)
 })
 
 test.each(['0.8125GCD循环', '0.75GCD循环'])('没有方案缓存时，%s首次加载默认九个奇穴', (名称) => {
@@ -67,7 +67,7 @@ test.each(['0.8125GCD循环', '0.75GCD循环'])('没有方案缓存时，%s首�
   expect(方案.当前奇穴信息).toEqual(默认奇穴)
   方案.当前奇穴信息.pop()
   expect(加载缓存全部方案数据().默认方案.当前奇穴信息).toHaveLength(9)
-  for (const 循环 of 循环列表) expect(循环.奇穴).toHaveLength(9)
+  for (const 循环 of 循环列表.filter((项) => !项.保留当前奇穴)) expect(循环.奇穴).toHaveLength(9)
 })
 
 test('损坏的方案缓存回退到默认配置，已保存的有效个人选择继续保留', () => {

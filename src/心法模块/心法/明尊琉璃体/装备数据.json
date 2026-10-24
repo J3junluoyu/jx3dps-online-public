@@ -4332,6 +4332,105 @@
       },
       "setId": 0,
       "sets": {}
+    },
+    {
+      "key": "weapons:47816",
+      "id": 47816,
+      "name": "圣辉月雪_测试用",
+      "school": "明教",
+      "kind": "防御",
+      "usage": "ALL",
+      "position": "primary_weapon",
+      "level": 1110,
+      "maxStrength": 8,
+      "base": {
+        "weapon_damage_base": 115,
+        "weapon_damage_rand": 77
+      },
+      "magic": {
+        "vitality_base": 1268,
+        "physical_shield_base": 1655,
+        "magical_shield_base": 1655,
+        "haste_base": 552,
+        "toughness_base": 276,
+        "strain_base": 925,
+        "recipe": "recipe_1544_1 | recipe_1545_1 | recipe_17333_1 | recipe_17246_1 | recipe_17337_1 | recipe_17343_1",
+        "event": "gain_4941_9 | gain_25796_1"
+      },
+      "embed": {
+        "vitality_base": 225,
+        "physical_shield_base": 225,
+        "dodge_base": 225
+      },
+      "setId": 0,
+      "sets": {},
+      "orangeWeapon": true
+    },
+    {
+      "key": "weapons:47849",
+      "id": 47849,
+      "name": "圣辉月雪_测试用",
+      "school": "明教",
+      "kind": "防御",
+      "usage": "ALL",
+      "position": "primary_weapon",
+      "level": 1170,
+      "maxStrength": 8,
+      "base": {
+        "weapon_damage_base": 124,
+        "weapon_damage_rand": 83
+      },
+      "magic": {
+        "vitality_base": 1342,
+        "physical_shield_base": 1745,
+        "magical_shield_base": 1745,
+        "haste_base": 582,
+        "toughness_base": 291,
+        "strain_base": 1001,
+        "recipe": "recipe_1544_1 | recipe_1545_1 | recipe_17333_1 | recipe_17246_1 | recipe_17337_1 | recipe_17343_1",
+        "event": "gain_4941_9 | gain_25796_1"
+      },
+      "embed": {
+        "vitality_base": 225,
+        "physical_shield_base": 225,
+        "dodge_base": 225
+      },
+      "setId": 0,
+      "sets": {},
+      "orangeWeapon": true
+    },
+    {
+      "key": "weapons:47882",
+      "id": 47882,
+      "name": "圣辉月雪_测试用",
+      "school": "明教",
+      "kind": "防御",
+      "usage": "ALL",
+      "position": "primary_weapon",
+      "level": 1240,
+      "maxStrength": 8,
+      "base": {
+        "weapon_damage_base": 134,
+        "weapon_damage_rand": 89
+      },
+      "magic": {
+        "vitality_base": 1429,
+        "physical_shield_base": 1849,
+        "magical_shield_base": 1849,
+        "haste_base": 616,
+        "toughness_base": 308,
+        "strain_base": 1092,
+        "recipe": "recipe_1544_1 | recipe_1545_1 | recipe_17333_1 | recipe_17246_1 | recipe_17337_1 | recipe_17343_1",
+        "event": "gain_4941_9 | gain_25796_1"
+      },
+      "embed": {
+        "vitality_base": 225,
+        "physical_shield_base": 225,
+        "dodge_base": 225
+      },
+      "setId": 0,
+      "sets": {},
+      "orangeWeapon": true
     }
   ],
   "enchants": [

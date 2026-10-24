@@ -24,6 +24,46 @@ const 炽炎镇恶触发技能 = new Set([
   '40088', // 烈日斩
 ])
 
+type 计算行 = Pick<
+  基础循环技能类型,
+  '技能名称' | '技能' | '命中倍率' | '驱夷' | '光明相' | '五明'
+> & {
+  技能数量: number
+  戒火?: boolean
+}
+
+function 获取理论循环行(列表: 循环技能详情[], 设置: Settings): 计算行[] {
+  const 结果: 计算行[] = []
+  for (const 行 of 列表) {
+    const 状态 = 行.明尊技能状态
+    const 技能 = SKILLS.find((项) => 项.key === 状态?.技能键)
+    if (!状态 || !技能) throw new Error(`未知理论循环技能：${行.技能名称}`)
+    if (
+      !Number.isSafeInteger(行.技能数量) ||
+      行.技能数量 < 0 ||
+      !Number.isSafeInteger(状态.施放次数) ||
+      状态.施放次数 < 0 ||
+      状态.施放次数 > 行.技能数量
+    ) {
+      throw new Error('理论循环命中及施放次数必须为非负整数，施放次数不能超过命中次数')
+    }
+    结果.push({ ...状态, 技能名称: 行.技能名称, 技能, 技能数量: 行.技能数量, 命中倍率: 1 })
+    if (设置.talents.includes('44569') && 炽炎镇恶触发技能.has(技能.id) && 状态.施放次数) {
+      结果.push({
+        技能名称: '戒火斩',
+        技能: SKILLS.find((项) => 项.id === '44567')!,
+        技能数量: 状态.施放次数,
+        命中倍率: 1,
+        驱夷: false,
+        光明相: false,
+        五明: 状态.五明,
+        戒火: false,
+      })
+    }
+  }
+  return 结果
+}
+
 export function 获取基础循环次数(列表: 循环技能详情[]) {
   const 次数 = new Map<string, number>()
   for (const 行 of 列表) {
@@ -65,22 +105,37 @@ export function 计算明尊基础循环(
   计算技能详情 = true,
 ): 当前计算结果类型 {
   if (!Number.isFinite(战斗时间) || 战斗时间 <= 0) throw new Error('循环时长必须大于零')
-  const 次数 = 获取基础循环次数(列表)
-  const 武伤分配 = 获取基础循环武伤分配(列表)
+  const 理论循环 = 列表.some((项) => 项.明尊技能状态)
+  const 次数 = 理论循环 ? () => 0 : 获取基础循环次数(列表)
+  const 武伤分配 = 理论循环 ? [] : 获取基础循环武伤分配(列表)
   // 按原始施放次数求和，月破不乘三段；追加戒火不再触发自身，也不新增武伤。
-  const 追加戒火斩 = 设置.talents.includes('44569')
-    ? 基础循环技能.reduce(
-        (合计, 行) => 合计 + (炽炎镇恶触发技能.has(行.技能.id) ? 次数(行.技能名称) : 0),
-        0,
-      )
-    : 0
+  const 追加戒火斩 =
+    !理论循环 && 设置.talents.includes('44569')
+      ? 基础循环技能.reduce(
+          (合计, 行) => 合计 + (炽炎镇恶触发技能.has(行.技能.id) ? 次数(行.技能名称) : 0),
+          0,
+        )
+      : 0
   const 面板缓存 = new Map<string, ReturnType<typeof calculateAttributes>>()
   // 仍由原Generator计算器校验装备及奇穴，分项状态只改变本条技能。
   calculateAttributes(属性, 设置)
-  const 获取面板 = (状态: Pick<基础循环技能类型, '驱夷' | '光明相' | '五明'>) => {
-    const 键 = `${状态.驱夷}:${状态.光明相}:${状态.五明}`
+  const 获取面板 = (状态: Pick<计算行, '驱夷' | '光明相' | '五明' | '戒火'>) => {
+    const 键 = `${状态.驱夷}:${状态.光明相}:${状态.五明}:${状态.戒火}`
     if (!面板缓存.has(键)) {
-      const 面板 = calculateAttributes(属性, { ...设置, drive: 状态.驱夷, light: 状态.光明相 })
+      const gains = { ...设置.gains }
+      if (状态.戒火 && !设置.talents.includes('44569')) {
+        // 自身时间轴与团队戒火取较高覆盖，不重复叠加同一个目标减益。
+        const 补足系数 = Math.max(0, 21 - (设置.jieGain || 0))
+        for (const key of ['solar_damage_cof', 'lunar_damage_cof', 'physical_damage_cof']) {
+          gains[key] = (gains[key] || 0) + 补足系数
+        }
+      }
+      const 面板 = calculateAttributes(属性, {
+        ...设置,
+        gains,
+        drive: 状态.驱夷,
+        light: 状态.光明相,
+      })
       // Generator五明乐见描述为伤害提高10%，单独转为郭氏102/1024后加入增伤区。
       if (状态.五明 && 设置.talents.includes('46492')) {
         面板.variables.magical_damage_addition += percentToGuo(10)
@@ -93,7 +148,7 @@ export function 计算明尊基础循环(
   const 计算分项 = (
     技能: Skill,
     数量: number,
-    状态: Pick<基础循环技能类型, '驱夷' | '光明相' | '五明'>,
+    状态: Pick<计算行, '驱夷' | '光明相' | '五明' | '戒火'>,
   ) => {
     const 面板 = 获取面板(状态)
     const 结果 = calculateSkill(技能, 面板)
@@ -107,11 +162,17 @@ export function 计算明尊基础循环(
   }
   const 结果列表: 计算结果技能列表类型[] = []
   let 总伤 = 0
-  for (const 行 of 基础循环技能) {
-    const 技能数量 = 次数(行.技能名称) + (行.技能名称 === '戒火斩' ? 追加戒火斩 : 0)
+  const 计算列表: 计算行[] = 理论循环
+    ? 获取理论循环行(列表, 设置)
+    : 基础循环技能.map((行) => ({
+        ...行,
+        技能数量: 次数(行.技能名称) + (行.技能名称 === '戒火斩' ? 追加戒火斩 : 0),
+      }))
+  for (const 行 of 计算列表) {
+    const 技能数量 = 行.技能数量
     if (!技能数量 || !skillAvailable(行.技能, 设置)) continue
     const 分项 =
-      行.技能名称 === '武伤'
+      !理论循环 && 行.技能名称 === '武伤'
         ? 武伤分配.map((项) =>
             计算分项(项.技能, 项.次数, { 驱夷: false, 光明相: false, 五明: 项.五明 }),
           )
@@ -119,7 +180,7 @@ export function 计算明尊基础循环(
     总伤 += 分项.reduce((合计, 项) => 合计 + 项.总伤, 0)
     if (!计算技能详情) continue
     const 数量 = 分项.reduce((总数, 项) => 总数 + 项.数量, 0)
-    结果列表.push({
+    const 本项结果: 计算结果技能列表类型 = {
       ...获取明尊技能显示信息(行.技能.id),
       技能ID: 行.技能.id,
       技能名称: 行.技能名称,
@@ -139,7 +200,25 @@ export function 计算明尊基础循环(
           总值: 分项.reduce((总伤, 项) => 总伤 + 项.criticalHit * 项.数量 * 项.critical, 0),
         },
       },
-    })
+    }
+    // 理论循环同一技能按增益状态拆行结算，显示前合并，避免图表只取其中一行。
+    const 已有结果 = 理论循环 && 结果列表.find((项) => 项.技能ID === 本项结果.技能ID)
+    if (已有结果) {
+      const 合计数量 = 已有结果.技能数量 + 数量
+      已有结果.会心几率 =
+        ((已有结果.会心几率 || 0) * 已有结果.技能数量 + (本项结果.会心几率 || 0) * 数量) / 合计数量
+      已有结果.技能数量 = 合计数量
+      已有结果.技能总输出 += 本项结果.技能总输出
+      for (const 类型 of ['命中', '会心'] as const) {
+        const 当前 = 已有结果.技能最终详情[类型]
+        const 新项 = 本项结果.技能最终详情[类型]
+        当前.最小值 = Math.min(当前.最小值, 新项.最小值)
+        当前.最大值 = Math.max(当前.最大值, 新项.最大值)
+        当前.总值 += 新项.总值
+      }
+    } else {
+      结果列表.push(本项结果)
+    }
   }
   return { 总伤, 秒伤: 总伤 / 战斗时间, 秒伤计算时间: 战斗时间, 计算结果技能列表: 结果列表 }
 }

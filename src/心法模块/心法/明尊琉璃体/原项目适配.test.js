@@ -81,6 +81,22 @@ test('原配装器完整保留体质孔、仇恨孔、附魔及特例五彩石�
   )
 })
 
+test('圣辉月雪以橙武显示并保留精炼8及体质外防闪避孔，导入后属性一致', () => {
+  for (const id of [47816, 47849, 47882]) {
+    const item = GEAR_ITEMS.find((row) => row.id === id)
+    const row = 明尊装备数据.武器.find((row) => row.id === id)
+    expect(row).toMatchObject({ 装备名称: '圣辉月雪', 装备类型: '橙武', 最大精炼等级: 8 })
+    const slots = {
+      primary_weapon: { key: item.key, strength: 8, embeds: [8, 8, 8], enchantId: 0 },
+    }
+    const equipped = 制作配装(slots)
+    expect(获取明尊配装(equipped).slots.primary_weapon).toEqual(slots.primary_weapon)
+    expect(获取明尊原始属性(计算明尊装备属性(equipped).装备基础属性)).toEqual(
+      calculateLoadout(slots).stats,
+    )
+  }
+})
+
 test('旧方案加载时按装备和原孔位更新威胁，保留其他属性及原始方案', () => {
   const 原方案 = 制作配装({
     hat: { key: 'armors:112319', strength: 6, embeds: [8, 8], enchantId: 0 },

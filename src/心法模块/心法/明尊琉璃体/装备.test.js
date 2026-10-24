@@ -23,8 +23,8 @@ const selection = (item, overrides = {}) => ({
 })
 const slot = (item) => (item.position === 'ring' ? 'ring1' : item.position)
 
-test('导入全部148件符合品质、加速和无双词条规则的装备，精炼和镶嵌均产生有效属性', () => {
-  expect(GEAR_ITEMS).toHaveLength(148)
+test('导入全部151件符合品质、加速和无双词条规则的装备，精炼和镶嵌均产生有效属性', () => {
+  expect(GEAR_ITEMS).toHaveLength(151)
   expect(new Set(GEAR_ITEMS.map((item) => item.key)).size).toBe(GEAR_ITEMS.length)
   for (const item of GEAR_ITEMS) {
     const result = calculateLoadout({
@@ -37,6 +37,58 @@ test('导入全部148件符合品质、加速和无双词条规则的装备，�
     expect(Object.values(result.stats).every(Number.isFinite)).toBe(true)
     expect(() => calculateAttributes(result.stats, DEFAULT_SETTINGS)).not.toThrow()
   }
+})
+
+test.each([
+  [47816, 1110, 1268, 1655, 552, 276, 925, 115, 192],
+  [47849, 1170, 1342, 1745, 582, 291, 1001, 124, 207],
+  [47882, 1240, 1429, 1849, 616, 308, 1092, 134, 223],
+])(
+  '圣辉月雪%s按考拉原始属性加入，ALL用途不排除PVE',
+  (id, level, vitality, shield, haste, toughness, strain, weaponMin, weaponMax) => {
+    const item = GEAR_ITEMS.find((row) => row.id === id)
+    expect(item).toMatchObject({
+      name: '圣辉月雪_测试用',
+      level,
+      usage: 'ALL',
+      maxStrength: 8,
+      orangeWeapon: true,
+    })
+    expect(item.embed).toEqual({ vitality_base: 225, physical_shield_base: 225, dodge_base: 225 })
+    const result = calculateLoadout({ primary_weapon: selection(item) })
+    expect(result.stats).toMatchObject({
+      vitality,
+      physicalShield: shield,
+      magicalShield: shield,
+      haste,
+      toughness,
+      strain,
+      weaponMin,
+      weaponMax,
+    })
+    expect(result.warnings).toEqual(expect.arrayContaining(['触发特效', '技能秘籍或套装招式效果']))
+  },
+)
+
+test('1240品圣辉月雪精炼8和三孔8级正确汇总，武伤不随精炼翻倍', () => {
+  const item = GEAR_ITEMS.find((row) => row.id === 47882)
+  const result = calculateLoadout({
+    primary_weapon: selection(item, { strength: 8, embeds: [8, 8, 8] }),
+  })
+  expect(result.stats).toMatchObject({
+    vitality: 1634,
+    physicalShield: 2106,
+    magicalShield: 2078,
+    haste: 692,
+    toughness: 346,
+    strain: 1227,
+    dodge: 28,
+    weaponMin: 134,
+    weaponMax: 223,
+  })
+  expect(GEAR_ITEMS.filter((row) => row.orangeWeapon).map((row) => row.id)).toEqual([
+    47816, 47849, 47882,
+  ])
 })
 
 test('精简内功防具、首饰和暗器加入装备库并正确汇总攻击、会心与无双', () => {

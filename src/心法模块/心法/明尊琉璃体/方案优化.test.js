@@ -149,6 +149,44 @@ test('没有符合范围的装备时明确失败，不使用范围外的初始�
   expect(() => 优化明尊方案({ ...输入(), gearKeys: [] })).toThrow('没有候选装备')
 })
 
+test('仅防御装备限制所有参与部位，初始精简装备不能作为结果保留', () => {
+  const input = 输入(循环列表[0])
+  const item = GEAR_ITEMS.find((row) => row.position === 'hat' && row.school === '精简')
+  input.initial.slots.hat = {
+    ...input.initial.slots.hat,
+    key: item.key,
+    embeds: Object.keys(item.embed).map(() => 8),
+  }
+  input.gearScope = 'defensive'
+  const original = JSON.stringify(input)
+  const result = 优化明尊方案(input)
+  expect(result.plan).toBeDefined()
+  for (const slot of input.slots) {
+    expect(GEAR_ITEMS.find((row) => row.key === result.plan.slots[slot].key).kind).toBe('防御')
+    expect(input.gearKeys).toContain(result.plan.slots[slot].key)
+  }
+  expect(result.after.gcd).toBe(0.8125)
+  expect(result.after.toughness).toBeGreaterThanOrEqual(8)
+  expect(JSON.stringify(input)).toBe(original)
+})
+
+test('包含精简时可选择精简装备，仅防御时不扩大当前筛选范围，无候选会提示具体部位', () => {
+  const input = 输入(循环列表[0])
+  const item = GEAR_ITEMS.find((row) => row.position === 'hat' && row.school === '精简')
+  input.slots = ['hat']
+  input.gearKeys = [item.key]
+  input.minToughness = 0
+  const result = 优化明尊方案({ ...input, gearScope: 'includeStreamlined' })
+  expect(result.plan.slots.hat.key).toBe(item.key)
+  expect(() => 优化明尊方案({ ...input, gearScope: 'defensive' })).toThrow(
+    '帽子在当前防御装备筛选范围内没有候选装备',
+  )
+  // 未参与优化的部位保持原装备，即使该部位是精简装备。
+  input.initial.slots.hat = result.plan.slots.hat
+  const locked = 优化明尊方案({ ...input, slots: [], gearScope: 'defensive' })
+  expect(locked.plan.slots).toEqual(input.initial.slots)
+})
+
 test.each([
   ['仅优化增益', []],
   ['联合优化装备', SLOTS.map(([key]) => key)],

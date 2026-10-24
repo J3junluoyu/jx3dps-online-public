@@ -78,6 +78,7 @@ const 小药小吃选择框: React.FC<小药小吃选择框入参> = (props) => 
             dpsUp: 0,
           }
         )?.dpsUp
+        const upPercent = 当前计算结果?.秒伤 > 0 ? (upDps / 当前计算结果.秒伤) * 100 : 0
 
         const 小吃详情 = (
           <div>
@@ -97,18 +98,26 @@ const 小药小吃选择框: React.FC<小药小吃选择框入参> = (props) => 
               <Tooltip title={小吃详情} placement='left'>
                 <div className={'xiaochi-diff-item-name'}>
                   {item?.图标 ? <img className={'xiaochi-diff-item-img'} src={item?.图标} /> : null}
-                  {小吃显示名称.split('（')[0]}
-                  {小吃显示名称.split('（')[1] ? (
-                    <span className={小吃品级样式[item.小吃品级]}>
-                      （{小吃显示名称.split('（')[1]}
-                    </span>
-                  ) : null}
+                  <span className='xiaochi-diff-item-label'>
+                    {小吃显示名称.split('（')[0]}
+                    {小吃显示名称.split('（')[1] ? (
+                      <span className={小吃品级样式[item.小吃品级]}>
+                        （{小吃显示名称.split('（')[1]}
+                      </span>
+                    ) : null}
+                  </span>
                 </div>
               </Tooltip>
               {upDps !== 0 ? (
-                <span className={`${upDps > 0 ? 'dps-up-color' : 'dps-low-color'}`}>
+                <span
+                  className={`xiaochi-diff-item-change ${upDps > 0 ? 'dps-up-color' : 'dps-low-color'}`}
+                >
                   {upDps > 0 ? '+' : ''}
                   {upDps.toFixed(2)}
+                  <span className='xiaochi-diff-item-percent'>
+                    ({upDps > 0 ? '+' : ''}
+                    {upPercent.toFixed(2)}%)
+                  </span>
                 </span>
               ) : null}
             </div>

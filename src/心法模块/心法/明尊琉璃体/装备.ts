@@ -15,6 +15,7 @@ export interface GearItem {
   position: string
   level: number
   maxStrength: number
+  orangeWeapon?: boolean
   base: Attributes
   magic: Attributes
   embed: Attributes

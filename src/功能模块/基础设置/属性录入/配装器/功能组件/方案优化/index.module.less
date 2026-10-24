@@ -2,7 +2,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 28px;
+  gap: 16px 24px;
   margin: 16px 0;
 
   label {
@@ -30,6 +30,14 @@
 .progress {
   margin: 16px 0;
   color: #666;
+}
+
+.comparison {
+  margin-top: 16px;
+
+  :global(.ant-table-wrapper) {
+    margin-top: 12px;
+  }
 }
 
 .changed {

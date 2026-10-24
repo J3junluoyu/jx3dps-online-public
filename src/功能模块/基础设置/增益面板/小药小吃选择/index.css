@@ -23,18 +23,39 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 8px;
 }
 
 .xiaochi-diff-item-name {
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  min-width: 0;
+  flex: 1;
+}
+
+.xiaochi-diff-item-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.xiaochi-diff-item-change {
+  flex-shrink: 0;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.xiaochi-diff-item-percent {
+  margin-left: 4px;
+  font-size: 12px;
 }
 
 .xiaochi-diff-item-img {
   height: 22px;
   margin-right: 6px;
   border-radius: 4px;
+  flex-shrink: 0;
 }
 
 .xiaochi-zi {

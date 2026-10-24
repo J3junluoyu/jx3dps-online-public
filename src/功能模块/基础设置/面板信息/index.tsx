@@ -12,6 +12,7 @@ import { 获取判断增益后技能系数 } from '@/计算模块/统一工具�
 import DpsKernelOptimizer from '@/计算模块/dps-kernel-optimizer'
 import { 获取计算目标信息 } from '@/计算模块/统一工具函数/工具函数'
 import { 获取加速等级, 获取实际帧数 } from '@/工具函数/data'
+import { 格式化明尊GCD } from '@/心法模块/心法/明尊琉璃体/GCD显示'
 import { 数据埋点 } from '@/工具函数/tools/log'
 import { 判断团队增益轴快照计算 } from '@/数据/团队增益/tools'
 
@@ -242,7 +243,7 @@ export const 获取面板显示数据 = (
       return (
         <>
           <span>{百分比(明尊面板.haste)}</span>
-          <span>{获取实际帧数(基础GCD * 16, 明尊面板.hasteRating) / 16}s</span>
+          <span>{格式化明尊GCD(获取实际帧数(基础GCD * 16, 明尊面板.hasteRating) / 16)}s</span>
         </>
       )
     if (key === '外防') return 百分比(明尊面板.physicalReduction)

@@ -10,9 +10,11 @@ import 获取当前数据 from '@/数据/数据工具/获取当前数据'
 import { 装备部位枚举 } from '@/@types/枚举'
 import { 装备位置部位枚举, 装备特效枚举 } from '@/@types/装备'
 import classNames from 'classnames'
+import { 格式化明尊GCD } from '@/心法模块/心法/明尊琉璃体/GCD显示'
 import './index.css'
 
 const { 名称, 装备数据 } = 获取当前数据()
+const 显示循环 = (value = '') => (名称 === '明尊琉璃体' ? 格式化明尊GCD(value) : value)
 
 function 循环选择(props) {
   const { className, 不提示循环, 不更新秒伤, value, onChange } = props
@@ -22,7 +24,7 @@ function 循环选择(props) {
   const 当前计算循环名称 = useAppSelector((state) => state?.data?.当前计算循环名称)
   const 装备信息 = useAppSelector((state) => state?.data?.装备信息)
 
-  const { 全部循环 = [], 当前循环信息, 计算循环详情 } = useCycle()
+  const { 全部循环 = [], 当前循环信息, 计算循环详情, 当前加速等级 } = useCycle()
   const 实际循环名称 = 当前循环信息?.名称
 
   useEffect(() => {
@@ -93,7 +95,9 @@ function 循环选择(props) {
     }
     const 目标循环数据 = 全部循环?.find((item) => item?.名称 === val)
     dispatch(更新方案数据({ 属性: '当前计算循环名称', 数据: val }))
-    dispatch(更新方案数据({ 属性: '当前奇穴信息', 数据: 目标循环数据?.奇穴 }))
+    if (!目标循环数据?.保留当前奇穴) {
+      dispatch(更新方案数据({ 属性: '当前奇穴信息', 数据: 目标循环数据?.奇穴 }))
+    }
     const 实际计算循环秘籍信息 = 获取实际计算循环秘籍信息(val)
 
     if (实际计算循环秘籍信息 && Object.keys(实际计算循环秘籍信息)?.length) {
@@ -160,7 +164,16 @@ function 循环选择(props) {
 
             const 快照计算列表 = 根据循环判断快照计算列表(item?.循环详情?.[0]?.技能详情 || [])
             return (
-              <Select.Option value={item?.名称} key={item.名称} label={item.名称}>
+              <Select.Option
+                value={item?.名称}
+                key={item.名称}
+                label={显示循环(item.名称)}
+                disabled={
+                  item.自动选择 === false &&
+                  当前加速等级 !== undefined &&
+                  !item.循环详情.some((详情) => Number(详情.循环加速等级) === 当前加速等级)
+                }
+              >
                 <Popover
                   placement='right'
                   zIndex={2000}
@@ -182,7 +195,7 @@ function 循环选择(props) {
                               <span className='cycle-select-provider'> 模拟器 </span>生成
                             </p>
                           )}
-                          <p dangerouslySetInnerHTML={{ __html: item?.备注 as any }} />
+                          <p dangerouslySetInnerHTML={{ __html: 显示循环(item?.备注) as any }} />
                         </>
                         {快照计算列表?.length ? (
                           <div>
@@ -209,7 +222,7 @@ function 循环选择(props) {
                   }
                 >
                   <div className='cycle-select-item'>
-                    <div dangerouslySetInnerHTML={{ __html: item.标题 || item.名称 }} />
+                    <div dangerouslySetInnerHTML={{ __html: 显示循环(item.标题 || item.名称) }} />
                     <div>
                       {item.提供者 ? (
                         <span className='cycle-select-provider'>{item.提供者}</span>

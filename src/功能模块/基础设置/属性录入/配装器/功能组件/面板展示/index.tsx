@@ -8,6 +8,7 @@ import { 获取角色需要展示的面板数据 } from '@/功能模块/基础�
 import 获取当前数据 from '@/数据/数据工具/获取当前数据'
 import { 获取面板显示数据数值, 获取面板显示数据 } from '@/功能模块/基础设置/面板信息'
 import { 获取实际帧数, 获取下一档加速信息 } from '@/工具函数/data'
+import { 格式化明尊GCD } from '@/心法模块/心法/明尊琉璃体/GCD显示'
 import './index.css'
 
 interface 面板展示入参 {
@@ -102,7 +103,7 @@ function 面板展示(props: 面板展示入参) {
               <div className='zhuangbei-character-haste-next'>
                 {下一档 ? (
                   <>
-                    <span>下一档 {下一档.下一档GCD}s</span>
+                    <span>下一档 {格式化明尊GCD(下一档.下一档GCD)}s</span>
                     <strong>还差{下一档.差值}点</strong>
                   </>
                 ) : (
@@ -120,7 +121,7 @@ function 面板展示(props: 面板展示入参) {
           item === '加速' && 明尊面板
             ? `${(明尊面板.haste * 100).toFixed(2)}%`
             : item === 'GCD'
-              ? `${获取实际帧数(基础GCD * 16, 明尊面板?.hasteRating || 0) / 16}s`
+              ? `${格式化明尊GCD(获取实际帧数(基础GCD * 16, 明尊面板?.hasteRating || 0) / 16)}s`
               : 获取面板显示数据(item, 显示数据.数据, 显示数据.数据.装分)
         const cls = classnames(
           'zhuangbei-character-content-normal',

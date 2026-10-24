@@ -11,6 +11,7 @@ import 获取当前数据 from '@/数据/数据工具/获取当前数据'
 import useCycle from '@/hooks/use-cycle'
 import { 转换明尊配装 } from '@/数据/数据工具/明尊数据适配'
 import type { 优化方案 } from '@/心法模块/心法/明尊琉璃体/方案优化'
+import { 格式化明尊GCD } from '@/心法模块/心法/明尊琉璃体/GCD显示'
 
 import 根据表单选项获取装备信息 from './工具函数/根据表单选项获取装备信息'
 import { 获取寻优循环详情 } from './工具函数/循环加速要求'
@@ -271,7 +272,9 @@ function 配装器(props: ModalProps) {
         增益启用,
       )
     ) {
-      message.warning(`当前范围内未找到满足${目标循环.名称}的配装，请先调整加速或扩大装备范围`)
+      message.warning(
+        `当前范围内未找到满足${明尊模式 ? 格式化明尊GCD(目标循环.名称) : 目标循环.名称}的配装，请先调整加速或扩大装备范围`,
+      )
     } else if (!总替换次数) {
       message.warning('当前已经为局部最优，未找到可替换的装备')
     } else {

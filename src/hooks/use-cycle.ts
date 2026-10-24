@@ -65,10 +65,12 @@ function useCycle(props?: UseCycleProps): 获取计算循环结果 {
   // 明尊按实际GCD档位优先启用内置循环，计算和界面共用同一选择结果。
   const 自动匹配循环 =
     名称 === '明尊琉璃体'
-      ? (计算循环 || []).find((循环) =>
-          循环.循环详情.some(
-            (详情) => 详情.循环加速等级 !== undefined && Number(详情.循环加速等级) === 加速等级,
-          ),
+      ? (计算循环 || []).find(
+          (循环) =>
+            循环.自动选择 !== false &&
+            循环.循环详情.some(
+              (详情) => 详情.循环加速等级 !== undefined && Number(详情.循环加速等级) === 加速等级,
+            ),
         )
       : undefined
   const 已选循环 = 全部循环?.find((item) => item?.名称 === 计算数据?.当前计算循环名称)
@@ -119,12 +121,14 @@ function useCycle(props?: UseCycleProps): 获取计算循环结果 {
     全部循环: 全部循环,
     当前循环信息: 匹配名字的循环,
     计算循环详情: 该循环用于计算的循环详情 || undefined,
+    当前加速等级: 加速等级,
   }
 }
 
 export default useCycle
 
 interface 获取计算循环结果 {
+  当前加速等级: number
   全部循环: 循环数据[]
   当前循环信息: 循环数据
   计算循环详情: 循环详情 | undefined
