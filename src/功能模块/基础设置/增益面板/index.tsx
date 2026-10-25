@@ -33,11 +33,6 @@ function 增益面板() {
     }
   }
 
-  const 切换增益启用状态 = (checked) => {
-    dispatch(更新方案数据({ 数据: checked ? true : false, 属性: '增益启用' }))
-    dispatch(触发秒伤计算({ 是否更新显示计算结果: true }))
-  }
-
   return (
     <div className='zengyi-wrapper' id='Guide_13'>
       <h1 className='zengyi-title'>
@@ -84,15 +79,6 @@ function 增益面板() {
               对比
             </Tooltip>
           </Checkbox>
-          <span id='Guide_14'>
-            <Checkbox
-              className='zengyi-operator-checkbox'
-              checked={!!增益启用}
-              onChange={(e) => 切换增益启用状态(e?.target?.checked)}
-            >
-              启用增益
-            </Checkbox>
-          </span>
         </div>
       </h1>
       {(名称 === '明尊琉璃体' || !!阵眼.length) && (

@@ -229,6 +229,7 @@ export interface 装备属性信息模型 {
     标识: string
     说明: string
     已计入计算: boolean
+    详细数值?: { 标签: string; 数值: string }[]
   }[]
   /**
    * @name 装备特效
@@ -411,6 +412,8 @@ export interface 装备增益类型 {
  * @name 配装器装备信息模型-装备列表
  */
 export interface 选择装备数据类型 {
+  /** 50级大附魔ID，与普通属性附魔独立保存。 */
+  大附魔?: number
   /**
    * @name 装备id
    */

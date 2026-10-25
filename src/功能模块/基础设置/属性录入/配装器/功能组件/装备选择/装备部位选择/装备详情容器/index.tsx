@@ -33,7 +33,9 @@ const 装备详情容器: React.FC<装备详情容器类型> = (props) => {
       destroyTooltipOnHide
       // open={当前装备信息?.装备部位 === '帽子'}
       content={
-        <div className={styles.content}>
+        <div
+          className={`${styles.content}${装备数据.装备黄字特效?.length ? ` ${styles.detailedContent}` : ''}`}
+        >
           <div className={styles.equipIcon}>
             <ImageComponent
               src={装备图标}

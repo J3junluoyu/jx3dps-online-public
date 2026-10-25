@@ -8,6 +8,7 @@ import { 获取加速等级, 计算增益数据中加速值 } from '@/工具函�
 import 获取当前数据 from '@/数据/数据工具/获取当前数据'
 import { 已移除明尊循环 } from '@/心法模块/心法/明尊琉璃体/计算循环'
 import { 获取明尊增益属性 } from '@/心法模块/心法/明尊琉璃体/增益'
+import { 规范理论循环名称 } from '@/心法模块/心法/明尊琉璃体/计算循环/理论循环'
 
 interface UseCycleProps {
   使用内存数据?: boolean
@@ -73,7 +74,9 @@ function useCycle(props?: UseCycleProps): 获取计算循环结果 {
             ),
         )
       : undefined
-  const 已选循环 = 全部循环?.find((item) => item?.名称 === 计算数据?.当前计算循环名称)
+  const 已选循环名称 =
+    名称 === '明尊琉璃体' ? 规范理论循环名称(计算数据.当前计算循环名称) : 计算数据.当前计算循环名称
+  const 已选循环 = 全部循环?.find((item) => item?.名称 === 已选循环名称)
   // 当前档位保存的自定义次数仍可使用；跨档后切换到对应的内置循环。
   const 已选循环匹配档位 = 已选循环?.循环详情.some(
     (详情) => 详情.循环加速等级 !== undefined && Number(详情.循环加速等级) === 加速等级,

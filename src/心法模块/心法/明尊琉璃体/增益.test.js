@@ -16,6 +16,7 @@ import {
 import { 明尊秒伤计算, 获取明尊显示面板, 获取明尊计算设置 } from '@/计算模块/职业特殊处理/明尊'
 import { 转换明尊基础属性 } from '@/数据/数据工具/明尊数据适配'
 import { 属性类型 } from '@/@types/属性'
+import { 计入循环戒火 } from './戒火斩'
 
 const raw = {
   ...EMPTY_EQUIPMENT,
@@ -62,12 +63,13 @@ test('圣浴常驻实际计算按当前基础体质更新，忽略旧缓存层�
   const high = { ...EMPTY_EQUIPMENT, vitality: 9300 } // 基础9318，朝圣98，常驻9层。
   expect(settings(low).gains.strain_base).toBe(0)
   expect(settings(high).gains.strain_base).toBe(369)
-  expect(settings(high, false).gains).toEqual({})
+  expect(settings(high, false).gains).toEqual({ strain_base: 369 })
   data.小吃 = [
     明尊小药小吃.find((row) => row.小吃部位 === '药品辅助' && row.考拉属性.vitality_base === 203)
       .小吃名称,
   ]
   expect(settings(low).gains.strain_base).toBe(41)
+  expect(settings(low, false).gains).toEqual({ strain_base: 0 })
   data.阵眼 = 'T阵'
   // 百分比体质不进入朝圣所用的基础体质，保留层数也不额外增加。
   expect(settings(low).gains.strain_base).toBe(41)
@@ -77,10 +79,42 @@ test('圣浴常驻实际计算按当前基础体质更新，忽略旧缓存层�
 test('完整朝圣与圣浴常驻互斥，不重复计算相同气劲', () => {
   const both = selected(['圣浴明心', 圣浴常驻名称])
   expect(获取明尊增益属性(both, true, 9).strain_base).toBe(4100)
+  expect(获取明尊增益属性(both, false, 9).strain_base).toBe(369)
   both.团队增益[0].启用 = false
   expect(获取明尊增益属性(both, true, 9).strain_base).toBe(369)
   both.团队增益[1].启用 = false
   expect(获取明尊增益属性(both, true, 9).strain_base).toBeUndefined()
+})
+
+test('圣浴常驻在总开关关闭时独立计入面板和伤害，不带入药食阵眼及其他团队增益', () => {
+  const equipment = { ...raw, vitality: 9300 }
+  const data = selected(
+    ['秋肃', '圣浴明心', 圣浴常驻名称],
+    [明尊小药小吃.find((row) => row.考拉属性.haste_base === 203).小吃名称],
+  )
+  data.阵眼 = 'T阵'
+  const gear = { 装备基础属性: 转换明尊基础属性(equipment) }
+  const settings = 获取明尊计算设置([], data, {}, 53, false, equipment)
+  expect(settings.gains).toEqual({ strain_base: 369 })
+  const baseline = 获取明尊显示面板(gear, [], selected(), false)
+  const enabled = 获取明尊显示面板(gear, [], data, false)
+  expect(enabled.明尊面板.strainRating - baseline.明尊面板.strainRating).toBe(369)
+  expect(enabled.体质).toBe(baseline.体质)
+  expect(enabled.加速等级).toBe(baseline.加速等级)
+  const args = {
+    装备信息: gear,
+    奇穴: [],
+    秘籍: {},
+    目标等级: 53,
+    战斗时间: 300,
+    技能列表: [{ 技能名称: SKILLS.find((row) => row.id === '14701').label, 技能数量: 10 }],
+    增益启用: false,
+  }
+  const before = 明尊秒伤计算({ ...args, 增益数据: selected() })
+  const after = 明尊秒伤计算({ ...args, 增益数据: data })
+  expect(after.秒伤).toBeGreaterThan(before.秒伤)
+  data.团队增益.find((row) => row.增益名称 === 圣浴常驻名称).启用 = false
+  expect(明尊秒伤计算({ ...args, 增益数据: data }).秒伤).toBe(before.秒伤)
 })
 
 test('常用消耗品按每个属性保留高两档，并排除治疗和其他主属性', () => {
@@ -245,7 +279,7 @@ test('袖气按全属性45与内防86同步，主属性转攻击和会心会重�
   expect(after.physicalAttack).toBeGreaterThan(before.physicalAttack)
 })
 
-test('立地只作用内功防御，虚弱只作用外功防御，戒火使用独立易伤系数', () => {
+test('立地只作用内功防御，虚弱只作用外功防御，循环戒火使用独立易伤系数且团队不重复叠加', () => {
   const base = panel(selected())
   const magic = SKILLS.find((row) => row.id === '14701')
   const physical = SKILLS.find((row) => row.id === '4326')
@@ -259,7 +293,8 @@ test('立地只作用内功防御，虚弱只作用外功防御，戒火使用�
     )
     expect(calculateSkill(unchanged, next)).toEqual(calculateSkill(unchanged, base))
   }
-  const fire = panel(selected(['戒火斩']))
+  expect(panel(selected(['戒火斩']))).toEqual(base)
+  const fire = calculateAttributes(raw, 计入循环戒火(DEFAULT_SETTINGS))
   expect(fire.variables.solar_damage_scale).toBe(21 / 1024)
   expect(fire.variables.physical_damage_scale).toBe(21 / 1024)
   expect(fire.variables.magical_damage_addition).toBe(0)
@@ -289,8 +324,7 @@ test.each([0, 50, 100])(
         const skill = SKILLS.find((item) => item.id === id)
         const restoredHit = calculateSkill(skill, calculateAttributes(raw, restored)).expected
         const baseHit = calculateSkill(skill, calculateAttributes(raw, base)).expected
-        if (coverage) expect(restoredHit).toBeGreaterThan(baseHit)
-        else expect(restoredHit).toBe(baseHit)
+        expect(restoredHit).toBe(baseHit)
         expect(calculateSkill(skill, calculateAttributes(raw, settings))).toEqual(
           calculateSkill(skill, calculateAttributes(raw, without)),
         )

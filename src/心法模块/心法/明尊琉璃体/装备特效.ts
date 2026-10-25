@@ -14,10 +14,15 @@ export interface EquipmentSpecialEffect {
     | 'triggered_attributes'
     | 'triggered_damage'
     | 'triggered_dot'
+    | 'defensive'
     | 'unknown'
-  calculationStatus: 'pending'
+  calculationStatus: 'pending' | 'verified'
   rules: {
-    trigger?: 'combat' | 'hit'
+    trigger?: 'combat' | 'hit' | 'critical' | 'cast' | 'behit'
+    eventMask?: number
+    procChance?: number
+    attributeVariants?: { probability: number; attributes: Record<string, number> }[]
+    damage?: { id: string; name: string; base: number }
     disabledInArena?: boolean
     attributes?: Record<string, number>
     cooldownSeconds?: number

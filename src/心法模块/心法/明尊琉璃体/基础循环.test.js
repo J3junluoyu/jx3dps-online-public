@@ -13,6 +13,7 @@ import { 获取基础循环武伤分配, 计算明尊基础循环 } from '@/计�
 import { 获取明尊计算设置, 明尊秒伤计算 } from '@/计算模块/职业特殊处理/明尊'
 import { 转换明尊基础属性 } from '@/数据/数据工具/明尊数据适配'
 import { TALENTS, normalizeTalents } from './计算'
+import { 计入循环戒火 } from './戒火斩'
 
 const 列表 = 基础循环.循环详情[0].技能详情
 const 属性 = {
@@ -44,6 +45,63 @@ const 计算 = (更新属性 = {}, 覆盖 = {}) =>
     ...覆盖,
   })
 const 查结果 = (结果, 名称) => 结果.计算结果技能列表.find((行) => 行.技能名称 === 名称)
+
+test.each([基础循环, 零点七五循环])(
+  '$名称默认100%戒火覆盖，关闭总增益或团队戒火不移除，开启不叠加',
+  (循环) => {
+    const 技能列表 = 循环.循环详情[0].技能详情
+    const 原始设置 = JSON.stringify(设置)
+    for (const 增益启用 of [false, true]) {
+      for (const 覆盖率 of [0, 50, 100]) {
+        const 结果 = 计算(
+          {},
+          {
+            技能列表,
+            增益启用,
+            增益数据: {
+              明尊设置: { stance: 'mainTank' },
+              团队增益: [{ 增益名称: '戒火斩', 启用: true, 层数: 1, 覆盖率 }],
+            },
+          },
+        )
+        const 技能 = SKILLS.find((r) => r.key === '3962:4028:33')
+        // 独立核对公式的易伤通道，避免和生产辅助函数同源掩盖错误。
+        const 面板 = calculateAttributes(属性, { ...设置, gains: { solar_damage_cof: 21 } })
+        const 次数 = 技能列表.find((r) => r.技能名称 === '日轮1').技能数量
+        expect(查结果(结果, '日轮1').技能总输出).toBe(calculateSkill(技能, 面板).expected * 次数)
+        expect(结果.总伤).toBe(计算({}, { 技能列表, 增益启用: false }).总伤)
+      }
+    }
+    expect(JSON.stringify(设置)).toBe(原始设置)
+  },
+)
+
+test.each([基础循环, 零点七五循环])(
+  '$名称炽炎镇恶关闭自身及团队戒火易伤，技能仍按原次数结算',
+  (循环) => {
+    const 奇穴 = [...基础循环.奇穴.filter((r) => r !== '血泪成悦'), '炽炎镇恶']
+    const 技能列表 = 循环.循环详情[0].技能详情
+    const 结果 = 计算(
+      {},
+      {
+        奇穴,
+        技能列表,
+        增益启用: true,
+        增益数据: {
+          明尊设置: { stance: 'mainTank' },
+          团队增益: [{ 增益名称: '戒火斩', 启用: true, 层数: 1, 覆盖率: 100 }],
+        },
+      },
+    )
+    const 技能 = SKILLS.find((r) => r.key === '3962:4028:33')
+    const 面板 = calculateAttributes(
+      属性,
+      获取明尊计算设置(奇穴, { 明尊设置: { stance: 'mainTank' } }, {}, 53),
+    )
+    const 次数 = 技能列表.find((r) => r.技能名称 === '日轮1').技能数量
+    expect(查结果(结果, '日轮1').技能总输出).toBe(calculateSkill(技能, 面板).expected * 次数)
+  },
+)
 
 test('0.8125GCD循环完整保留300秒17项次数及零次月破', () => {
   expect(基础循环.名称).toBe('0.8125GCD循环')
@@ -154,11 +212,19 @@ test.each([
   const 普通戒火 = 查结果(基准, '戒火斩')
   expect(戒火.技能数量).toBe(合计)
   expect(戒火.技能数量 - 普通戒火.技能数量).toBe(追加)
-  expect(戒火.技能总输出).toBe((普通戒火.技能总输出 / 普通戒火.技能数量) * 合计)
+  const 无易伤面板 = calculateAttributes(
+    属性,
+    获取明尊计算设置(奇穴, { 明尊设置: { stance: 'mainTank' } }, {}, 53),
+  )
+  expect(戒火.技能总输出).toBe(
+    calculateSkill(
+      SKILLS.find((r) => r.id === '44567'),
+      无易伤面板,
+    ).expected * 合计,
+  )
   for (const 行 of 基准.计算结果技能列表) {
-    if (行.技能名称 !== '戒火斩') expect(查结果(结果, 行.技能名称)).toEqual(行)
+    if (行.技能名称 !== '戒火斩') expect(查结果(结果, 行.技能名称).技能数量).toBe(行.技能数量)
   }
-  expect(结果.总伤 - 基准.总伤).toBeCloseTo(戒火.技能总输出 - 普通戒火.技能总输出, 6)
   const 快速 = 计算明尊基础循环(
     属性,
     获取明尊计算设置(奇穴, { 明尊设置: { stance: 'mainTank' } }, {}, 53),
@@ -200,8 +266,14 @@ test('烈日默认常驻，旧方案关闭烈日或关闭团队增益均不移�
       ['日轮3', '3962:4030:33', 45],
     ]) {
       const 技能 = SKILLS.find((项) => 项.key === key)
-      const 常驻 = calculateSkill(技能, calculateAttributes(属性, { ...设置, sunlight: true }))
-      const 无烈日 = calculateSkill(技能, calculateAttributes(属性, { ...设置, sunlight: false }))
+      const 常驻 = calculateSkill(
+        技能,
+        calculateAttributes(属性, { ...计入循环戒火(设置), sunlight: true }),
+      )
+      const 无烈日 = calculateSkill(
+        技能,
+        calculateAttributes(属性, { ...计入循环戒火(设置), sunlight: false }),
+      )
       expect(查结果(结果, 名称).技能总输出).toBe(常驻.expected * 次数)
       expect(常驻.expected).toBeGreaterThan(无烈日.expected)
     }
@@ -218,7 +290,7 @@ test.each([
   ['驱夜断愁', '25355:4480:58', 9, false, false, true],
   ['日轮1', '3962:4028:33', 76, false, false, false],
 ])('%s单独应用驱夷、光明相及五明，不被全局开关污染', (名称, 原始键, 次数, 驱夷, 光明, 五明) => {
-  const 面板 = calculateAttributes(属性, { ...设置, light: false, drive: false })
+  const 面板 = calculateAttributes(属性, { ...计入循环戒火(设置), light: false, drive: false })
   面板.variables.recipe_4489_1 = 驱夷 ? 1 : 0
   面板.variables.recipe_4545_1 = 光明 ? 1 : 0
   面板.variables.recipe_4546_1 = 光明 ? 1 : 0
@@ -244,7 +316,7 @@ test('武伤388次拆成74次200%和314次100%，驱夜继承200%武伤及五明
     ['1', 54, true],
   ])
   expect(分配.reduce((总数, 项) => 总数 + 项.次数, 0)).toBe(388)
-  const 面板 = calculateAttributes(属性, 设置)
+  const 面板 = calculateAttributes(属性, 计入循环戒火(设置))
   const 五明面板 = {
     ...面板,
     variables: { ...面板.variables, physical_damage_addition: percentToGuo(10) },

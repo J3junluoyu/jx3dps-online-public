@@ -1,7 +1,13 @@
 import React from 'react'
-import { Button, Dropdown } from 'antd'
+import { Button, Dropdown, Tooltip } from 'antd'
 import 装备选择范围设置 from './装备选择范围设置'
 import 获取当前数据 from '@/数据/数据工具/获取当前数据'
+import { SLOTS, findGearItem } from '@/心法模块/心法/明尊琉璃体/装备'
+import {
+  majorEnchantsForGear,
+  MAJOR_ENCHANT_ASSUMPTION,
+  MAJOR_ENCHANT_POSITIONS,
+} from '@/心法模块/心法/明尊琉璃体/大附魔'
 
 function 配装组件标题({
   form,
@@ -67,6 +73,24 @@ function 配装组件标题({
       保存数据并计算(res)
     })
   }
+  const setMingzunDafumo = (tier?: '血石' | '血玉') => {
+    form?.validateFields().then((values) => {
+      const next = { ...values }
+      SLOTS.forEach(([slot], index) => {
+        const field = `_${index + 1}`
+        if (!values[field]?.id || !MAJOR_ENCHANT_POSITIONS.some((position) => position === slot))
+          return
+        next[field] = {
+          ...values[field],
+          大附魔:
+            majorEnchantsForGear(slot, findGearItem(values[field].id, slot)?.kind).find(
+              (item) => item.tier === tier,
+            )?.id || 0,
+        }
+      })
+      保存数据并计算(next)
+    })
+  }
 
   return (
     <div className='zhuangbei-form-header'>
@@ -96,21 +120,34 @@ function 配装组件标题({
           </Button>
         </Dropdown>
       </div>
-      <div
-        className='zhuangbei-form-left-5'
-        style={明尊模式 ? { visibility: 'hidden' } : undefined}
-      >
-        <h1 className='zhuangbei-form-title'>大附魔</h1>
+      <div className='zhuangbei-form-left-5'>
+        <Tooltip title={明尊模式 ? MAJOR_ENCHANT_ASSUMPTION : undefined}>
+          <h1 className='zhuangbei-form-title'>大附魔</h1>
+        </Tooltip>
         <Dropdown
           menu={{
-            items: [
-              { label: '英雄', key: 'dafumo_2', onClick: () => setDafumo(2) },
-              { label: '普通', key: 'dafumo_1', onClick: () => setDafumo(1) },
-              { label: '清空', key: 'dafumo_0', onClick: () => setDafumo(undefined) },
-            ],
+            items: 明尊模式
+              ? [
+                  {
+                    label: '定尘血玉（按装备类型）',
+                    key: 'mz_high',
+                    onClick: () => setMingzunDafumo('血玉'),
+                  },
+                  {
+                    label: '定尘血石（按装备类型）',
+                    key: 'mz_low',
+                    onClick: () => setMingzunDafumo('血石'),
+                  },
+                  { label: '清空大附魔', key: 'mz_clear', onClick: () => setMingzunDafumo() },
+                ]
+              : [
+                  { label: '英雄', key: 'dafumo_2', onClick: () => setDafumo(2) },
+                  { label: '普通', key: 'dafumo_1', onClick: () => setDafumo(1) },
+                  { label: '清空', key: 'dafumo_0', onClick: () => setDafumo(undefined) },
+                ],
           }}
         >
-          <Button size='small' style={{ marginLeft: 32 }}>
+          <Button size='small' style={{ marginLeft: 明尊模式 ? 8 : 32 }}>
             一键
           </Button>
         </Dropdown>

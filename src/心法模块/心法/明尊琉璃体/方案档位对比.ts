@@ -1,5 +1,6 @@
 import type { 循环数据 } from '@/@types/循环'
 import 循环列表 from './计算循环'
+import { 获取理论档位循环, 规范理论循环名称, 自适应理论循环名称 } from './计算循环/理论循环'
 import { 优化明尊方案 } from './方案优化'
 import type { 方案优化输入, 方案优化结果, 方案优化进度 } from './方案优化'
 
@@ -18,10 +19,11 @@ export interface 档位对比结果 {
 
 /** 两档使用同一类循环；理论循环仅在用户主动选择时参与。 */
 export function 获取档位对比循环(cycleName: string): 循环数据[] {
-  const suffix = cycleName.endsWith('理论循环') ? '理论循环' : 'GCD循环'
+  if (规范理论循环名称(cycleName) === 自适应理论循环名称)
+    return [获取理论档位循环(0.75), 获取理论档位循环(0.8125)]
   return ['0.75', '0.8125'].map((gcd) => {
-    const cycle = 循环列表.find((item) => item.名称 === `${gcd}${suffix}`)
-    if (!cycle) throw new Error(`未找到${gcd}${suffix}`)
+    const cycle = 循环列表.find((item) => item.名称 === `${gcd}GCD循环`)
+    if (!cycle) throw new Error(`未找到${gcd}GCD循环`)
     return cycle
   })
 }
@@ -60,7 +62,10 @@ export function 对比明尊加速档位(
     if (
       !best ||
       entry.result.after.dps > best.result!.after!.dps ||
-      (entry.result.after.dps === best.result!.after!.dps && entry.cycleName === input.cycle.名称)
+      (entry.result.after.dps === best.result!.after!.dps &&
+        (entry.cycleName === input.cycle.名称 ||
+          (规范理论循环名称(input.cycle.名称) === 自适应理论循环名称 &&
+            entry.gcd === entry.result.before.gcd)))
     )
       best = entry
   }

@@ -1,7 +1,7 @@
 /** @jest-environment jsdom */
 jest.mock(
   '@/功能模块/基础设置/属性录入/配装器/功能组件/装备选择/装备部位选择/装备详情容器/index.module.less',
-  () => ({ yellowEffect: 'yellow-effect' }),
+  () => ({ yellowEffect: 'yellow-effect', effectDetailRow: 'effect-detail-row' }),
 )
 jest.mock('@/功能模块/基础设置/属性录入/配装器/工具函数/获取装备特效展示信息', () => ({
   获取装备特效展示信息: jest.fn(() => '原有特效【123】'),
@@ -22,7 +22,7 @@ beforeEach(() => {
 afterEach(() => act(() => root.unmount()))
 const render = (data) => act(() => root.render(<装备特效 装备数据={data} />))
 
-test('精简装备悬停详情展示原始黄字全文和未计入提示，不使用其他等级的特效模板', () => {
+test('精简装备悬停详情保留黄字和详细数值，移除灰色计算口径说明', () => {
   const gear = Object.values(明尊装备数据)
     .flat()
     .find((row) => row.id === 112452)
@@ -31,7 +31,13 @@ test('精简装备悬停详情展示原始黄字全文和未计入提示，不�
   expect(container.querySelector('.yellow-effect').textContent).toBe(
     '进入战斗后，提高自身188点破防等级和会心等级。名剑大会中无法生效。',
   )
-  expect(container.textContent).toContain('黄字特效收益尚未计入当前计算')
+  expect(container.textContent).not.toContain('黄字已计入伤害、智能对比和方案推荐')
+  expect(container.textContent).not.toContain('持续命中木桩')
+  expect(container.textContent).not.toContain('属性面板按平均覆盖折算')
+  expect(container.querySelector('[aria-label="黄字特效详细数值"]').textContent).toContain(
+    '会心等级 +188、破防等级 +188',
+  )
+  expect(container.textContent).not.toContain('尚未计入')
   expect(获取装备特效展示信息).not.toHaveBeenCalled()
 })
 
@@ -55,4 +61,67 @@ test('外部黄字按纯文本显示，多条特效完整保留，不执行说�
   expect(container.querySelectorAll('.yellow-effect')).toHaveLength(2)
   expect(container.textContent).toContain('<img src=x onerror="alert(1)">')
   expect(container.textContent).toContain('第二条说明')
+})
+
+const yellowGear = (id) =>
+  Object.values(明尊装备数据)
+    .flat()
+    .find((item) => item.id === id)
+
+test('直伤装备显示按事件等级核对的基础伤害与冷却，明确基础值不等于最终伤害', () => {
+  render(yellowGear(112483))
+  const details = container.querySelector('[aria-label="黄字特效详细数值"]').textContent
+  expect(details).toContain('13683点／次（50级基础值）')
+  expect(details).toContain('内置冷却10秒')
+  expect(details).toContain('自身气血≥75%')
+  expect(details).toContain('实际伤害随目标等级和易伤变化')
+  render(yellowGear(47978))
+  expect(container.textContent).toContain('3276点／次')
+  expect(container.textContent).not.toContain('11979点／次')
+})
+
+test('加速DOT显示每跳伤害、跳数上限与共享冷却，明确原文与脚本持续时间的差异', () => {
+  render(yellowGear(112488))
+  const details = container.querySelector('[aria-label="黄字特效详细数值"]').textContent
+  expect(details).toContain('899点／跳')
+  expect(details).toContain('12～22跳，每1秒1跳')
+  expect(details).toContain('加速等级≥2024，22跳')
+  expect(details).toContain('19778点（899×22）')
+  expect(details).toContain('腰带与护腕同类效果共用40秒冷却')
+  expect(details).toContain('原黄字写“持续10秒”')
+})
+
+test('戒指显示单件与双戴合计，项链保留每66点转换和28点上限的特殊档位', () => {
+  render(yellowGear(49931))
+  expect(container.textContent).toContain('属性加成会心等级 +268')
+  expect(container.textContent).toContain('同组双戴合计会心等级 +536（268×2）')
+  expect(container.textContent).toContain('无内置冷却')
+  render(yellowGear(51444))
+  expect(container.textContent).toContain('每66点基础破防等级 → 1点全攻击')
+  expect(container.textContent).toContain('加成上限全攻击 +28')
+  render(yellowGear(48038))
+  expect(container.textContent).toContain('全攻击 +537')
+  expect(container.textContent).toContain('加速等级≥2024，持续11秒')
+})
+
+test('当前全部可选黄字都有数值说明，外部说明仍按纯文本渲染', () => {
+  const gear = Object.values(明尊装备数据)
+    .flat()
+    .filter((item) => item.装备黄字特效?.length)
+  expect(gear).toHaveLength(34)
+  expect(
+    gear.every((item) => item.装备黄字特效.every((effect) => effect.详细数值.length > 0)),
+  ).toBe(true)
+  render({
+    装备黄字特效: [
+      {
+        标识: 'unknown',
+        说明: '原说明',
+        已计入计算: false,
+        详细数值: [{ 标签: '测试', 数值: '<img src=x onerror="alert(1)">' }],
+      },
+    ],
+  })
+  expect(container.querySelector('img')).toBeNull()
+  expect(container.textContent).toContain('<img src=x onerror="alert(1)">')
 })

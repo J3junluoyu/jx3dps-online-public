@@ -9,6 +9,7 @@ import { 属性简写枚举 } from '@/@types/枚举'
 import classNames from 'classnames'
 import ImageComponent from '@/组件/图片展示'
 import { 格式化附魔名称 } from '../../../工具函数/附魔显示'
+import { findMajorEnchant } from '@/心法模块/心法/明尊琉璃体/大附魔'
 
 const { 装备数据, 五彩石 } = 获取当前数据()
 
@@ -34,7 +35,9 @@ const 装备区 = () => {
         const 最大精炼等级 = 装备?.装备类型 === 装备类型枚举?.橙武 ? 8 : 6
         const 装备特征描述 = 获取装备数据描述(装备, true, false)
         const 装备结果描述 = 获取装备数据描述(装备, false, true)
-        const 是否有大附魔 = 判断是否存在大附魔(当前装备?.装备部位, 当前装备信息?.装备增益)
+        const 明尊大附魔 = 获取当前数据().名称 === '明尊琉璃体' && findMajorEnchant(当前装备.大附魔)
+        const 是否有大附魔 =
+          明尊大附魔 || 判断是否存在大附魔(当前装备?.装备部位, 当前装备信息?.装备增益)
 
         return 装备 ? (
           <div className={styles.equip} key={`导出装备_${装备?.id}_${index}`}>
@@ -113,7 +116,7 @@ const 装备区 = () => {
                 {是否有大附魔 ? (
                   <div className={styles.bigGain}>
                     <img className={styles.gainIcon} src={图标?.大附魔} />
-                    <span>{大附魔枚举?.[当前装备?.装备部位]}</span>
+                    <span>{明尊大附魔 ? 明尊大附魔.name : 大附魔枚举?.[当前装备?.装备部位]}</span>
                   </div>
                 ) : null}
                 {当前装备?.装备部位 === 装备位置部位枚举._12 ? (

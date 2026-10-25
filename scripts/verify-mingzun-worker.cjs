@@ -112,6 +112,20 @@ async function verify(basePath) {
   console.log(
     `Worker验证通过 ${basePath}：加载${resources.length}个脚本，比较${last.result.evaluations}个方案`,
   )
+  for (const coverage of [0, 50, 100]) {
+    messages.length = 0
+    sandbox.onmessage({
+      data: {
+        ...request,
+        teamGains: [{ 增益名称: '戒火斩', 启用: true, 层数: 1, 覆盖率: coverage }],
+      },
+    })
+    const fire = messages.at(-1)
+    assert.equal(fire?.type, 'result', JSON.stringify(fire))
+    assert.equal(fire.result.before.dps, last.result.before.dps, '团队戒火重复影响循环默认易伤')
+    assert.equal(fire.result.after.dps, last.result.after.dps, '团队戒火改变方案推荐评分')
+  }
+  console.log(`戒火Worker验证通过 ${basePath}：默认全覆盖，团队选择不重复叠加`)
   messages.length = 0
   sandbox.onmessage({ data: { ...request, compareGcd: true, gearScope: 'defensive' } })
   const compared = messages.at(-1)
@@ -138,6 +152,88 @@ async function verify(basePath) {
   console.log(
     `双档Worker验证通过 ${basePath}：${feasible.length}档可行，共比较${comparison.evaluations}个方案`,
   )
+  // 主界面合并后的理论选项，仍需在生产Worker内分别使用两档完整数据。
+  messages.length = 0
+  sandbox.onmessage({
+    data: {
+      ...request,
+      compareGcd: true,
+      cycle: {
+        名称: '自适应理论循环',
+        循环详情: [
+          {
+            循环加速等级: 4,
+            战斗时间: 300,
+            技能详情: require('../src/心法模块/心法/明尊琉璃体/计算循环/0.75理论循环数据.json'),
+          },
+          {
+            循环加速等级: 3,
+            战斗时间: 300,
+            技能详情: require('../src/心法模块/心法/明尊琉璃体/计算循环/0.8125理论循环数据.json'),
+          },
+        ],
+      },
+    },
+  })
+  const adaptive = messages.at(-1)
+  assert.equal(adaptive?.type, 'comparison', JSON.stringify(adaptive))
+  assert.deepEqual(
+    Array.from(adaptive.comparison.entries, (entry) => entry.cycleName),
+    ['0.75理论循环', '0.8125理论循环'],
+  )
+  assert(adaptive.comparison.recommendedCycleName, '理论循环双档对比未返回推荐')
+  for (const entry of adaptive.comparison.entries) {
+    assert.equal(entry.error, undefined)
+    if (entry.result?.after) assert.equal(entry.result.after.gcd, entry.gcd)
+  }
+  console.log(`自适应理论Worker验证通过 ${basePath}：两档独立评分并返回推荐`)
+  // 两条记录基础、绿字、孔位完全相同，仅凌顶观带加速DOT；用于验证生产Worker真的计入黄字。
+  const yellowGear = equipment.items.find((item) => item.id === 112458)
+  const plainGear = equipment.items.find((item) => item.id === 112451)
+  const yellowScores = []
+  for (const item of [plainGear, yellowGear]) {
+    const changedSlots = {
+      ...slots,
+      belt: { ...slots.belt, key: item.key, embeds: Object.keys(item.embed).map(() => 8) },
+    }
+    messages.length = 0
+    sandbox.onmessage({
+      data: {
+        ...request,
+        initial: { ...request.initial, slots: changedSlots },
+        gearKeys: Object.values(changedSlots).map((selection) => selection.key),
+      },
+    })
+    const reply = messages.at(-1)
+    assert.equal(reply?.type, 'result', JSON.stringify(reply))
+    assert(reply.result.before.haste >= 2024, '验证配装未达到22跳阈值')
+    yellowScores.push(reply.result.before.dps)
+  }
+  // 54级压制、默认戒火21/1024；300秒共173跳，不吃攻击或破防。
+  const expectedDot = (Math.trunc(Math.trunc(899 * 0.8) * (1 + 21 / 1024)) * 173) / 300
+  assert(
+    Math.abs(yellowScores[1] - yellowScores[0] - expectedDot) < 1e-8,
+    '生产Worker遗漏或重复计入加速DOT',
+  )
+  console.log(
+    `黄字Worker验证通过 ${basePath}：同属性换装增加${(yellowScores[1] - yellowScores[0]).toFixed(2)}DPS`,
+  )
+  messages.length = 0
+  sandbox.onmessage({
+    data: {
+      ...request,
+      initial: {
+        ...request.initial,
+        slots: { ...slots, wrist: { ...slots.wrist, majorEnchantId: 16682 } },
+      },
+      slots: ['wrist'],
+    },
+  })
+  const enchanted = messages.at(-1)
+  assert.equal(enchanted?.type, 'result', JSON.stringify(enchanted))
+  assert.equal(enchanted.result.plan.slots.wrist.majorEnchantId, 16682, '推荐换装后丢失大附魔')
+  assert(enchanted.result.before.dps > last.result.before.dps, '生产Worker遗漏大附魔增益')
+  console.log(`大附魔Worker验证通过 ${basePath}：选择生效，推荐方案保留大附魔`)
 }
 
 async function main() {

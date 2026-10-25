@@ -873,7 +873,7 @@
           "handlerId": 40790,
           "level": 4,
           "kind": "combat_attributes",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "combat",
@@ -971,7 +971,7 @@
           "handlerId": 40790,
           "level": 6,
           "kind": "combat_attributes",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "combat",
@@ -1019,7 +1019,7 @@
           "handlerId": 40790,
           "level": 6,
           "kind": "combat_attributes",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "combat",
@@ -1118,7 +1118,7 @@
           "handlerId": 40790,
           "level": 5,
           "kind": "combat_attributes",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "combat",
@@ -1166,18 +1166,14 @@
           "handlerId": 42767,
           "level": 3,
           "kind": "triggered_dot",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "hit",
             "cooldownSeconds": 40,
             "durationSeconds": 10,
             "hastedDuration": true,
-            "sharedCooldownGroup": "gain_42767",
-            "requiresVerification": [
-              "伤害公式",
-              "加速延长持续时间的规则及上限"
-            ]
+            "sharedCooldownGroup": "gain_42767"
           }
         }
       ]
@@ -1402,15 +1398,12 @@
           "handlerId": 40788,
           "level": 4,
           "kind": "triggered_damage",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "hit",
             "cooldownSeconds": 10,
-            "selfHealthAbovePercent": 75,
-            "requiresVerification": [
-              "伤害公式与触发招式"
-            ]
+            "selfHealthAbovePercent": 75
           }
         }
       ]
@@ -1451,15 +1444,12 @@
           "handlerId": 40788,
           "level": 6,
           "kind": "triggered_damage",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "hit",
             "cooldownSeconds": 10,
-            "selfHealthAbovePercent": 75,
-            "requiresVerification": [
-              "伤害公式与触发招式"
-            ]
+            "selfHealthAbovePercent": 75
           }
         }
       ]
@@ -1500,15 +1490,12 @@
           "handlerId": 40788,
           "level": 6,
           "kind": "triggered_damage",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "hit",
             "cooldownSeconds": 10,
-            "selfHealthAbovePercent": 75,
-            "requiresVerification": [
-              "伤害公式与触发招式"
-            ]
+            "selfHealthAbovePercent": 75
           }
         }
       ]
@@ -1598,15 +1585,12 @@
           "handlerId": 40788,
           "level": 5,
           "kind": "triggered_damage",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "hit",
             "cooldownSeconds": 10,
-            "selfHealthAbovePercent": 75,
-            "requiresVerification": [
-              "伤害公式与触发招式"
-            ]
+            "selfHealthAbovePercent": 75
           }
         }
       ]
@@ -1647,18 +1631,14 @@
           "handlerId": 42767,
           "level": 3,
           "kind": "triggered_dot",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "hit",
             "cooldownSeconds": 40,
             "durationSeconds": 10,
             "hastedDuration": true,
-            "sharedCooldownGroup": "gain_42767",
-            "requiresVerification": [
-              "伤害公式",
-              "加速延长持续时间的规则及上限"
-            ]
+            "sharedCooldownGroup": "gain_42767"
           }
         }
       ]
@@ -2004,7 +1984,7 @@
           "handlerId": 38934,
           "level": 10,
           "kind": "highest_rating",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "combat",
@@ -2053,7 +2033,7 @@
           "handlerId": 38934,
           "level": 10,
           "kind": "highest_rating",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "combat",
@@ -2103,7 +2083,7 @@
           "handlerId": 38934,
           "level": 10,
           "kind": "highest_rating",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "combat",
@@ -2152,7 +2132,7 @@
           "handlerId": 38944,
           "level": 10,
           "kind": "triggered_attributes",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "hit",
@@ -2202,7 +2182,7 @@
           "handlerId": 38939,
           "level": 10,
           "kind": "triggered_attributes",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "hit",
@@ -2251,7 +2231,7 @@
           "handlerId": 38944,
           "level": 10,
           "kind": "triggered_attributes",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "hit",
@@ -2301,7 +2281,7 @@
           "handlerId": 38934,
           "level": 10,
           "kind": "highest_rating",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "combat",
@@ -2350,7 +2330,7 @@
           "handlerId": 38934,
           "level": 10,
           "kind": "highest_rating",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "combat",
@@ -2400,7 +2380,7 @@
           "handlerId": 38934,
           "level": 10,
           "kind": "highest_rating",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "combat",
@@ -2449,7 +2429,7 @@
           "handlerId": 38944,
           "level": 10,
           "kind": "triggered_attributes",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "hit",
@@ -2499,7 +2479,7 @@
           "handlerId": 38939,
           "level": 10,
           "kind": "triggered_attributes",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "hit",
@@ -2548,7 +2528,7 @@
           "handlerId": 38944,
           "level": 10,
           "kind": "triggered_attributes",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "hit",
@@ -3167,7 +3147,7 @@
           "handlerId": 40803,
           "level": 4,
           "kind": "triggered_attributes",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "hit",
@@ -3252,7 +3232,7 @@
           "handlerId": 40803,
           "level": 5,
           "kind": "triggered_attributes",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "hit",
@@ -3295,7 +3275,7 @@
           "handlerId": 40802,
           "level": 5,
           "kind": "triggered_attributes",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "hit",
@@ -3339,7 +3319,7 @@
           "handlerId": 40802,
           "level": 4,
           "kind": "triggered_attributes",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "hit",
@@ -3690,7 +3670,7 @@
           "handlerId": 38945,
           "level": 9,
           "kind": "rating_conversion",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "combat",
@@ -3737,7 +3717,7 @@
           "handlerId": 38946,
           "level": 10,
           "kind": "rating_conversion",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "combat",
@@ -3785,7 +3765,7 @@
           "handlerId": 38946,
           "level": 9,
           "kind": "rating_conversion",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "combat",
@@ -3832,7 +3812,7 @@
           "handlerId": 38945,
           "level": 10,
           "kind": "rating_conversion",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "combat",
@@ -3879,7 +3859,7 @@
           "handlerId": 38946,
           "level": 13,
           "kind": "rating_conversion",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "combat",
@@ -3927,7 +3907,7 @@
           "handlerId": 38946,
           "level": 12,
           "kind": "rating_conversion",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "combat",
@@ -4044,7 +4024,7 @@
           "handlerId": 38945,
           "level": 9,
           "kind": "rating_conversion",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "combat",
@@ -4091,7 +4071,7 @@
           "handlerId": 38946,
           "level": 10,
           "kind": "rating_conversion",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "combat",
@@ -4139,7 +4119,7 @@
           "handlerId": 38946,
           "level": 9,
           "kind": "rating_conversion",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "combat",
@@ -4186,7 +4166,7 @@
           "handlerId": 38945,
           "level": 10,
           "kind": "rating_conversion",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "combat",
@@ -4233,7 +4213,7 @@
           "handlerId": 38946,
           "level": 13,
           "kind": "rating_conversion",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "combat",
@@ -4281,7 +4261,7 @@
           "handlerId": 38946,
           "level": 12,
           "kind": "rating_conversion",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "combat",
@@ -4932,14 +4912,11 @@
           "handlerId": 38950,
           "level": 10,
           "kind": "triggered_damage",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "hit",
-            "cooldownSeconds": 10,
-            "requiresVerification": [
-              "伤害公式与触发招式"
-            ]
+            "cooldownSeconds": 10
           }
         }
       ]
@@ -4976,14 +4953,11 @@
           "handlerId": 38950,
           "level": 10,
           "kind": "triggered_damage",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "hit",
-            "cooldownSeconds": 10,
-            "requiresVerification": [
-              "伤害公式与触发招式"
-            ]
+            "cooldownSeconds": 10
           }
         }
       ]
@@ -5021,14 +4995,11 @@
           "handlerId": 38950,
           "level": 9,
           "kind": "triggered_damage",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "hit",
-            "cooldownSeconds": 10,
-            "requiresVerification": [
-              "伤害公式与触发招式"
-            ]
+            "cooldownSeconds": 10
           }
         }
       ]
@@ -5065,14 +5036,11 @@
           "handlerId": 38950,
           "level": 14,
           "kind": "triggered_damage",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "hit",
-            "cooldownSeconds": 10,
-            "requiresVerification": [
-              "伤害公式与触发招式"
-            ]
+            "cooldownSeconds": 10
           }
         }
       ]
@@ -5109,14 +5077,11 @@
           "handlerId": 38950,
           "level": 14,
           "kind": "triggered_damage",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "hit",
-            "cooldownSeconds": 10,
-            "requiresVerification": [
-              "伤害公式与触发招式"
-            ]
+            "cooldownSeconds": 10
           }
         }
       ]
@@ -5154,14 +5119,11 @@
           "handlerId": 38950,
           "level": 13,
           "kind": "triggered_damage",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "hit",
-            "cooldownSeconds": 10,
-            "requiresVerification": [
-              "伤害公式与触发招式"
-            ]
+            "cooldownSeconds": 10
           }
         }
       ]
@@ -5268,14 +5230,11 @@
           "handlerId": 38950,
           "level": 10,
           "kind": "triggered_damage",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "hit",
-            "cooldownSeconds": 10,
-            "requiresVerification": [
-              "伤害公式与触发招式"
-            ]
+            "cooldownSeconds": 10
           }
         }
       ]
@@ -5312,14 +5271,11 @@
           "handlerId": 38950,
           "level": 10,
           "kind": "triggered_damage",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "hit",
-            "cooldownSeconds": 10,
-            "requiresVerification": [
-              "伤害公式与触发招式"
-            ]
+            "cooldownSeconds": 10
           }
         }
       ]
@@ -5357,14 +5313,11 @@
           "handlerId": 38950,
           "level": 9,
           "kind": "triggered_damage",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "hit",
-            "cooldownSeconds": 10,
-            "requiresVerification": [
-              "伤害公式与触发招式"
-            ]
+            "cooldownSeconds": 10
           }
         }
       ]
@@ -5401,14 +5354,11 @@
           "handlerId": 38950,
           "level": 14,
           "kind": "triggered_damage",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "hit",
-            "cooldownSeconds": 10,
-            "requiresVerification": [
-              "伤害公式与触发招式"
-            ]
+            "cooldownSeconds": 10
           }
         }
       ]
@@ -5445,14 +5395,11 @@
           "handlerId": 38950,
           "level": 14,
           "kind": "triggered_damage",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "hit",
-            "cooldownSeconds": 10,
-            "requiresVerification": [
-              "伤害公式与触发招式"
-            ]
+            "cooldownSeconds": 10
           }
         }
       ]
@@ -5490,14 +5437,11 @@
           "handlerId": 38950,
           "level": 13,
           "kind": "triggered_damage",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "hit",
-            "cooldownSeconds": 10,
-            "requiresVerification": [
-              "伤害公式与触发招式"
-            ]
+            "cooldownSeconds": 10
           }
         }
       ]
@@ -5557,7 +5501,7 @@
           "handlerId": 46727,
           "level": 1,
           "kind": "triggered_attributes",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "hit",
@@ -5570,10 +5514,7 @@
               6,
               11
             ],
-            "hasteForMaxDuration": 2024,
-            "requiresVerification": [
-              "加速与持续时间的分档规则"
-            ]
+            "hasteForMaxDuration": 2024
           }
         }
       ]
@@ -5610,7 +5551,7 @@
           "handlerId": 46727,
           "level": 2,
           "kind": "triggered_attributes",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "hit",
@@ -5623,10 +5564,7 @@
               6,
               11
             ],
-            "hasteForMaxDuration": 2024,
-            "requiresVerification": [
-              "加速与持续时间的分档规则"
-            ]
+            "hasteForMaxDuration": 2024
           }
         }
       ]
@@ -5686,7 +5624,7 @@
           "handlerId": 46727,
           "level": 1,
           "kind": "triggered_attributes",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "hit",
@@ -5699,10 +5637,7 @@
               6,
               11
             ],
-            "hasteForMaxDuration": 2024,
-            "requiresVerification": [
-              "加速与持续时间的分档规则"
-            ]
+            "hasteForMaxDuration": 2024
           }
         }
       ]
@@ -5739,7 +5674,7 @@
           "handlerId": 46727,
           "level": 2,
           "kind": "triggered_attributes",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "hit",
@@ -5752,10 +5687,7 @@
               6,
               11
             ],
-            "hasteForMaxDuration": 2024,
-            "requiresVerification": [
-              "加速与持续时间的分档规则"
-            ]
+            "hasteForMaxDuration": 2024
           }
         }
       ]

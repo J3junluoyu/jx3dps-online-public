@@ -4,8 +4,10 @@ import { Checkbox, Tooltip } from 'antd'
 import { 自身属性系数 } from '@/数据/常量'
 import 获取当前数据 from '@/数据/数据工具/获取当前数据'
 import { QuestionCircleOutlined } from '@ant-design/icons'
-import { useAppSelector } from '@/hooks'
+import { useAppDispatch, useAppSelector } from '@/hooks'
 import useCycle from '@/hooks/use-cycle'
+import { 更新方案数据 } from '@/store/data'
+import { 触发秒伤计算 } from '@/计算模块/计算函数'
 import { 角色基础属性类型 } from '@/@types/角色'
 
 import { 获取判断增益后技能系数 } from '@/计算模块/统一工具函数/技能增益启用计算'
@@ -24,6 +26,7 @@ import './index.css'
 const { 名称, 主属性, 基础GCD = 1.5, 性能功能关闭数组 = [] } = 获取当前数据()
 
 function 面板信息() {
+  const dispatch = useAppDispatch()
   const 当前奇穴信息 = useAppSelector((state) => state?.data?.当前奇穴信息)
   const 装备信息 = useAppSelector((state) => state?.data?.装备信息)
   const 当前输出计算目标名称 = useAppSelector((state) => state?.data?.当前输出计算目标名称)
@@ -37,7 +40,12 @@ function 面板信息() {
   const { 计算循环详情, 当前循环信息 } = useCycle()
 
   const [开启优化算法, 切换开启优化算法] = useState<boolean>(false)
-  const [显示增益后面板, 切换显示增益后面板] = useState<boolean>(false)
+  const 显示增益后面板 = !!增益启用
+
+  const 切换增益启用状态 = (启用: boolean) => {
+    dispatch(更新方案数据({ 属性: '增益启用', 数据: 启用 }))
+    dispatch(触发秒伤计算({ 是否更新显示计算结果: true }))
+  }
 
   const mapKeyList = [
     '气血',
@@ -124,18 +132,21 @@ function 面板信息() {
         {名称 === '明尊琉璃体' && <圣浴常驻 />}
         <div>
           <Checkbox
-            checked={显示增益后面板}
-            onChange={(e) => 切换显示增益后面板(e?.target?.checked)}
+            id='Guide_14'
+            checked={!!增益启用}
+            onChange={(e) => 切换增益启用状态(e.target.checked)}
           >
             <Tooltip
               title={
                 <div>
-                  <p>开启后将展示阵眼常驻增益，小吃小药、团队宴席、常驻团队buff增益</p>
-                  <p>不显示其他团队增益的面板提升</p>
+                  <p>
+                    开启后，所选阵眼、药品、食品及团队增益参与伤害计算，并显示增益后的角色属性。
+                  </p>
+                  <p>关闭后保留所选增益配置，仅独立开启的圣浴常驻继续生效。</p>
                 </div>
               }
             >
-              增益面板
+              启用增益
             </Tooltip>
           </Checkbox>
           {!性能功能关闭数组?.includes('优化算法') ? (

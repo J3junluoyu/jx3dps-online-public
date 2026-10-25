@@ -6,6 +6,9 @@ import 装备部位选择 from './装备部位选择'
 import 精炼等级选择 from './精炼等级选择'
 import 镶嵌孔选择 from './镶嵌孔选择'
 import 附魔选择 from './附魔选择'
+import 明尊大附魔选择 from '../大附魔选择/明尊大附魔选择'
+import { MAJOR_ENCHANT_POSITIONS, matchMajorEnchant } from '@/心法模块/心法/明尊琉璃体/大附魔'
+import { SLOTS, findGearItem } from '@/心法模块/心法/明尊琉璃体/装备'
 import { 装备部位枚举 } from '@/@types/枚举'
 import type { 循环数据 } from '@/@types/循环'
 import {
@@ -36,6 +39,7 @@ interface 装备选择入参 {
 const { 装备数据, 附魔 } = 获取当前数据()
 
 function 装备选择(props: 装备选择入参, ref) {
+  const 明尊模式 = 获取当前数据().名称 === '明尊琉璃体'
   const {
     value,
     onChange,
@@ -75,6 +79,17 @@ function 装备选择(props: 装备选择入参, ref) {
     onChange &&
       onChange({
         ...value,
+        ...(明尊模式 &&
+        MAJOR_ENCHANT_POSITIONS.some((position) => position === SLOTS[排序索引]?.[0])
+          ? {
+              大附魔:
+                matchMajorEnchant(
+                  value?.大附魔,
+                  SLOTS[排序索引][0],
+                  e ? findGearItem(e)?.kind : undefined,
+                )?.id || 0,
+            }
+          : {}),
         镶嵌孔数组: obj?.镶嵌孔数组?.map((item, index) => {
           return {
             ...item,
@@ -186,6 +201,24 @@ function 装备选择(props: 装备选择入参, ref) {
           部位索引={部位索引}
         />
       </div>
+      {明尊模式 && (
+        <div className='mingzun-major-enchant-cell'>
+          {MAJOR_ENCHANT_POSITIONS.some((position) => position === SLOTS[排序索引]?.[0]) && (
+            <明尊大附魔选择
+              value={value?.大附魔}
+              onChange={(id) => onChange?.({ ...value, 大附魔: id } as 选择装备数据类型)}
+              position={SLOTS[排序索引][0]}
+              gearKind={value?.id ? findGearItem(value.id)?.kind : undefined}
+              slotIndex={部位索引}
+              slotName={部位}
+              disabled={!当前选择装备数据?.id}
+              compare={开启装备智能对比}
+              percent={对比显示百分比}
+              form={form}
+            />
+          )}
+        </div>
+      )}
     </div>
   )
 }

@@ -2,8 +2,26 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  /* justify-content: space-between; */
+  flex-wrap: wrap;
+  gap: 8px;
   margin-bottom: 12px;
+}
+
+.tuandui-zengyi-heading {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.tuandui-preset-btn {
+  margin: 0;
+  font-size: 12px;
+}
+
+.tuandui-zengyi-header .tuandui-setting-btn,
+.tuandui-zengyi-header .zengyi-clear-btn {
+  margin-left: 0;
 }
 
 .tuandui-setting-btn {
@@ -30,8 +48,8 @@
 .tuandui-zengyi-btn {
   width: 100%;
   height: 40px;
-  color: #ED4F00;
-  border-color: #ED4F00;
+  color: #ed4f00;
+  border-color: #ed4f00;
 }
 
 .tuandui-zengyi-btn:hover,

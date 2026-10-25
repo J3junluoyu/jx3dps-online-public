@@ -22,7 +22,10 @@ test('去重后可选精简装备的34条黄字完整显示，并保留原始han
       gear.specialEffects.map((value) => ({
         标识: value.key,
         说明: value.description,
-        已计入计算: false,
+        已计入计算: true,
+        详细数值: expect.arrayContaining([
+          expect.objectContaining({ 标签: expect.any(String), 数值: expect.any(String) }),
+        ]),
       })),
     )
     for (const value of gear.specialEffects) {
@@ -31,7 +34,7 @@ test('去重后可选精简装备的34条黄字完整显示，并保留原始han
       expect(value.description).toBe(decodeGameText(value.rawDescription))
       expect(value.description).not.toMatch(/<\/?text>|数值_\d|\{\}/i)
       expect(value.description.length).toBeGreaterThan(15)
-      expect(value.calculationStatus).toBe('pending')
+      expect(value.calculationStatus).toBe('verified')
     }
   }
   expect(database.effectSource).toMatchObject({
@@ -76,7 +79,6 @@ test('生命值条件、触发冷却、持续时间及受伤终止规则分别�
     rules: {
       selfHealthAbovePercent: 75,
       cooldownSeconds: 10,
-      requiresVerification: ['伤害公式与触发招式'],
     },
   })
   expect(effect(112705)).toMatchObject({
@@ -135,7 +137,6 @@ test('加速延长持续时间和同类触发限制有结构化记录，不猜�
       durationRangeSeconds: [6, 11],
       hasteForMaxDuration: 2024,
       cooldownSeconds: 20,
-      requiresVerification: ['加速与持续时间的分档规则'],
     },
   })
   expect(effect(112458)).toMatchObject({

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { EQUIPMENT_EFFECT_ASSUMPTION } from '@/心法模块/心法/明尊琉璃体/装备特效计算'
 import {
   Alert,
   Button,
@@ -24,7 +25,7 @@ import {
   STONES,
   gearAttributeSuffix,
 } from '@/心法模块/心法/明尊琉璃体/装备'
-import { 明尊小药小吃 } from '@/心法模块/心法/明尊琉璃体/增益'
+import { 明尊小药小吃, 圣浴常驻名称 } from '@/心法模块/心法/明尊琉璃体/增益'
 import 循环列表 from '@/心法模块/心法/明尊琉璃体/计算循环'
 import type {
   优化方案,
@@ -33,6 +34,7 @@ import type {
   方案优化进度,
 } from '@/心法模块/心法/明尊琉璃体/方案优化'
 import { 获取档位对比循环 } from '@/心法模块/心法/明尊琉璃体/方案档位对比'
+import { 规范理论循环名称 } from '@/心法模块/心法/明尊琉璃体/计算循环/理论循环'
 import type { 档位对比结果 } from '@/心法模块/心法/明尊琉璃体/方案档位对比'
 import { 格式化明尊GCD } from '@/心法模块/心法/明尊琉璃体/GCD显示'
 import { 格式化附魔名称 } from '../../工具函数/附魔显示'
@@ -79,6 +81,9 @@ function 方案优化(props: 方案优化入参) {
   const 奇穴 = useAppSelector((state) => state.data.当前奇穴信息)
   const 秘籍 = useAppSelector((state) => state.data.当前秘籍信息)
   const 目标名称 = useAppSelector((state) => state.data.当前输出计算目标名称)
+  const 圣浴常驻独立开启 = 增益数据?.团队增益?.some(
+    (item) => item.增益名称 === 圣浴常驻名称 && item.启用,
+  )
   const compareGcd = mode === 'compare'
   const cycles = 获取档位对比循环(props.循环名称 || 循环列表[0].名称)
   const cycle =
@@ -181,7 +186,9 @@ function 方案优化(props: 方案优化入参) {
         includeHasteConsumables,
         gearScope,
         compareGcd,
-        teamGains: includeTeamGains ? 增益数据.团队增益.map((item) => ({ ...item })) : [],
+        teamGains: 增益数据.团队增益
+          .filter((item) => includeTeamGains || item.增益名称 === 圣浴常驻名称)
+          .map((item) => ({ ...item })),
         gearKeys: props.获取候选装备键(),
         slots,
         defaultEmbedLevel: props.默认镶嵌宝石等级,
@@ -296,7 +303,7 @@ function 方案优化(props: 方案优化入参) {
                 disabled={running || !result?.plan}
                 onClick={() => {
                   if (result?.plan) {
-                    props.应用方案(result.plan, resultCycleName, includeTeamGains)
+                    props.应用方案(result.plan, 规范理论循环名称(resultCycleName), includeTeamGains)
                     关闭()
                   }
                 }}
@@ -381,13 +388,13 @@ function 方案优化(props: 方案优化入参) {
         <Alert
           type='info'
           showIcon
-          message={`装备沿用配装器筛选范围，${gearScope === 'defensive' ? '参与优化的部位仅选择防御装备' : '可选择防御装备和精简内功装备'}，未参与的部位保持当前装备；附魔沿用各部位当前数值档位，排除御劲附魔，未选附魔保持空置。药品增强与食品增强须选择同属性组合。药食酒与阵眼参与优化，五彩石固定；同伤害下酒品优先低数值档位。${includeHasteConsumables ? '加速药品与食品参与优化。' : '加速药品与食品不参与优化，家园酒品仍参与。'}${includeTeamGains ? '按当前已启用团队增益的层数和覆盖率计算，团队配置保持固定。' : '团队增益不计入。'}${
+          message={`装备沿用配装器筛选范围，${gearScope === 'defensive' ? '参与优化的部位仅选择防御装备' : '可选择防御装备和精简内功装备'}，未参与的部位保持当前装备；附魔沿用各部位当前数值档位，排除御劲附魔，未选附魔保持空置。药品增强与食品增强须选择同属性组合。药食酒与阵眼参与优化，五彩石固定；同伤害下酒品优先低数值档位。${includeHasteConsumables ? '加速药品与食品参与优化。' : '加速药品与食品不参与优化，家园酒品仍参与。'}${includeTeamGains ? '按当前已启用团队增益的层数和覆盖率计算，团队配置保持固定。' : '团队增益不计入。'}${圣浴常驻独立开启 ? '圣浴常驻按自身开关独立计入。' : ''}${
             compareGcd
               ? `分别使用${cycles
                   .map((cycle) => 格式化明尊GCD(cycle.名称))
                   .join('、')}，在相同御劲、装备范围和增益条件下独立寻优。`
               : `使用${格式化明尊GCD(cycleName)}寻优。`
-          }`}
+          }大附魔保留各部位已选档位，随候选装备匹配伤/御类别，属性、随机增伤与附加伤害均参与比较。随机大附魔按概率和冷却估算期望收益。${EQUIPMENT_EFFECT_ASSUMPTION}`}
         />
         {initial && (
           <p className={styles.stone}>

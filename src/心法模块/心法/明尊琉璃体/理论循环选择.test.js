@@ -13,7 +13,7 @@ jest.mock('@/hooks/use-cycle', () => ({
     全部循环: require('./计算循环').default,
     当前循环信息: require('./计算循环').default[1],
     计算循环详情: require('./计算循环').default[1].循环详情[0],
-    当前加速等级: 4,
+    当前加速等级: mockTier,
   }),
 }))
 jest.mock('@/store/data', () => ({ 更新方案数据: (data) => data }))
@@ -35,20 +35,32 @@ import { createRoot } from 'react-dom/client'
 import 循环选择 from '@/功能模块/基础设置/公用设置/循环选择'
 const mockDispatch = jest.fn()
 let mockSelectProps
+let mockTier = 4
 global.IS_REACT_ACT_ENVIRONMENT = true
 
-test('手动选择理论循环不覆盖当前奇穴；不符GCD的理论选项不可选', () => {
+test.each([3, 4])('加速档位%s仅显示一个可选自适应理论循环，手动选择不覆盖当前奇穴', (tier) => {
+  mockTier = tier
   const container = document.createElement('div')
   const root = createRoot(container)
   act(() => root.render(<循环选择 不提示循环 />))
   const options = mockSelectProps.children
-  expect(options.find((r) => r.props.value === '0.75理论循环').props.disabled).toBe(false)
-  expect(options.find((r) => r.props.value === '0.8125理论循环').props.disabled).toBe(true)
-  expect(options.find((r) => r.props.value === '0.8125理论循环').props.label).toBe('0.81理论循环')
+  expect(options.filter((r) => r.props.value.includes('理论循环'))).toHaveLength(1)
+  expect(options.find((r) => r.props.value === '自适应理论循环').props.disabled).toBe(false)
   expect(options.find((r) => r.props.value === '0.8125GCD循环').props.label).toBe('0.81GCD循环')
-  act(() => mockSelectProps.onChange('0.75理论循环'))
-  expect(mockDispatch).toHaveBeenCalledWith({ 属性: '当前计算循环名称', 数据: '0.75理论循环' })
+  act(() => mockSelectProps.onChange('自适应理论循环'))
+  expect(mockDispatch).toHaveBeenCalledWith({ 属性: '当前计算循环名称', 数据: '自适应理论循环' })
   expect(mockDispatch.mock.calls.some(([r]) => r.属性 === '当前奇穴信息')).toBe(false)
   expect(mockDispatch).toHaveBeenCalledWith({ type: 'calculate' })
+  act(() => root.unmount())
+})
+
+test('低于0.81档时自适应理论选项禁用，不借用另一档计算', () => {
+  mockTier = 2
+  const container = document.createElement('div')
+  const root = createRoot(container)
+  act(() => root.render(<循环选择 不提示循环 />))
+  expect(
+    mockSelectProps.children.find((r) => r.props.value === '自适应理论循环').props.disabled,
+  ).toBe(true)
   act(() => root.unmount())
 })

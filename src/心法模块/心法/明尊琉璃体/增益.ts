@@ -145,7 +145,9 @@ export const 明尊小药小吃: Consumable[] = [
   ...[
     ...major(records('10067', '34517')).filter((row) => /^(巴渝|长安)/.test(row.name)),
     ...records('10067', '34516').filter((row) => /^(嘉陵|未央宫)/.test(row.name)),
-  ].map((row) => consumable(row, 小吃类型枚举.团队宴席)),
+  ].map((row) =>
+    consumable(row, 小吃类型枚举.团队宴席, /^(长安|未央)/.test(row.name) ? '金' : '紫'),
+  ),
   ...records('23768', '17365')
     .filter(
       (row) =>
@@ -262,7 +264,7 @@ export const 明尊团队增益: TeamGain[] = [
       '1',
       '目标减益',
       '戒火斩',
-      '目标受到各类伤害系数增加21/1024（约2.05%）',
+      '循环已默认100%覆盖：目标受到各类伤害系数增加21/1024（约2.05%）。选择此项不重复叠加，炽炎镇恶时失效。',
     ),
     冲突奇穴: [{ id: '44569', 奇穴名称: '炽炎镇恶' }],
   },
@@ -293,21 +295,26 @@ export function 获取明尊增益属性(
   talents: Settings['talents'] = [],
 ): Attributes {
   const result: Attributes = {}
-  if (!enabled) return result
   const add = (attributes: Attributes, multiplier = 1) => {
     for (const [key, value] of Object.entries(attributes))
       result[key] = (result[key] || 0) + value * multiplier
   }
-  add(获取明尊阵眼属性(data?.阵眼))
-  const slots = new Map<string, Consumable>()
-  for (const name of data?.小吃 || []) {
-    const item = 明尊小药小吃.find((row) => row.小吃名称 === name)
-    if (item) slots.set(item.小吃部位, item)
+  if (enabled) {
+    add(获取明尊阵眼属性(data?.阵眼))
+    const slots = new Map<string, Consumable>()
+    for (const name of data?.小吃 || []) {
+      const item = 明尊小药小吃.find((row) => row.小吃名称 === name)
+      if (item) slots.set(item.小吃部位, item)
+    }
+    for (const item of slots.values()) add(item.考拉属性)
   }
-  for (const item of slots.values()) add(item.考拉属性)
   const selected = new Map((data?.团队增益 || []).map((row) => [row.增益名称, row]))
   const applied = new Set<string>()
   for (const item of 明尊团队增益) {
+    // 戒火易伤由循环自身覆盖结算，团队选项保留但不重复加算。
+    if (item.增益名称 === '戒火斩') continue
+    // 圣浴常驻由自身开关控制；总开关只控制其余团队增益、药食及阵眼。
+    if (!enabled && item.增益名称 !== 圣浴常驻名称) continue
     const selection = selected.get(item.增益名称)
     if (!selection?.启用) continue
     if (获取团队增益禁用原因(item, talents)) continue
@@ -340,7 +347,7 @@ export function 获取明尊战斗增益(
   settings: Settings,
 ): Attributes {
   const gains = 获取明尊增益属性(data, enabled, undefined, settings.talents)
-  if (enabled && data?.团队增益?.some((row) => row.增益名称 === 圣浴常驻名称 && row.启用)) {
+  if (data?.团队增益?.some((row) => row.增益名称 === 圣浴常驻名称 && row.启用)) {
     const panel = calculateAttributes(equipment, { ...settings, gains })
     return 获取明尊增益属性(data, enabled, 获取圣浴常驻层数(panel.baseVitality), settings.talents)
   }

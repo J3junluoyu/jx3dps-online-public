@@ -1,6 +1,15 @@
 import reference from './参考数据.json'
 import 驱夜秘籍 from './驱夜断愁秘籍.json'
 import { evaluateExpression } from './表达式'
+import { 计入循环戒火 } from './戒火斩'
+import type { EquippedSpecialEffect } from './装备特效'
+import { isMajorEnchant, majorEnchantContext } from './大附魔'
+import {
+  permanentEquipmentGains,
+  averageEquipmentProcGains,
+  equipmentProcStates,
+  equipmentDamageRows,
+} from './装备特效计算'
 
 export const LEVEL = 50
 export const GLOBAL_COEFFICIENTS = {
@@ -107,6 +116,9 @@ export interface Settings {
   pveBonus: number
   damageBonus: number
   gains?: Record<string, number>
+  equipmentEffects?: EquippedSpecialEffect[]
+  /** 内部结算当前触发状态；不传时角色面板按稳态覆盖显示。 */
+  equipmentProcGains?: Record<string, number>
 }
 export const TALENT_LAYOUT: { label: string; ids: string[]; fixed: boolean }[] = [
   { label: '第一层', ids: ['14678'], fixed: true },
@@ -261,6 +273,39 @@ export function calculateAttributes(equipment: EquipmentStats, settings: Setting
   const strength = major(17 + equipment.strength, 'strength')
   const agility = major(18 + equipment.agility, 'agility')
   const fromVitality = (key: string) => Math.trunc((vitality * (attributes[key] || 0)) / 1024)
+  const effects = settings.equipmentEffects || []
+  if (effects.length) {
+    const permanent = permanentEquipmentGains(effects, {
+      critical:
+        equipment.critical +
+        equipment.magicalCritical +
+        gain('all_critical_strike_base') +
+        gain('magical_critical_strike_base') +
+        Math.trunc(spirit * 0.25) +
+        fromVitality('vitality_to_magical_critical_strike'),
+      physicalCritical:
+        equipment.critical +
+        equipment.physicalCritical +
+        gain('all_critical_strike_base') +
+        gain('physical_critical_strike_base') +
+        Math.trunc(agility * 0.25),
+      overcome:
+        equipment.overcome +
+        gain('all_overcome_base') +
+        gain('magical_overcome_base') +
+        Math.trunc(spunk * 0.061),
+      physicalOvercome:
+        equipment.physicalOvercome +
+        gain('all_overcome_base') +
+        gain('physical_overcome_base') +
+        Math.trunc(strength * 0.061),
+    })
+    const temporary =
+      settings.equipmentProcGains ??
+      averageEquipmentProcGains(effects, equipment.haste + gain('haste_base'))
+    for (const source of [permanent, temporary])
+      for (const [key, value] of Object.entries(source)) attributes[key] = gain(key) + value
+  }
   const baseMagicalAttack =
     equipment.attack +
     gain('all_attack_power_base') +
@@ -533,19 +578,77 @@ export function calculateCycle(
 ) {
   if (!Number.isFinite(duration) || duration <= 0) throw new Error('循环时长必须大于零')
   const panel = calculateAttributes(equipment, settings)
+  const cycleSettings = 计入循环戒火(settings)
+  const effects = settings.equipmentEffects || []
+  const hits = Object.values(counts).reduce((sum, value) => sum + value, 0)
+  const majorContext = effects.some(({ effect }) => isMajorEnchant(effect))
+    ? majorEnchantContext(
+        SKILLS.filter((skill) => (counts[skill.key] || 0) > 0).map((skill) => ({
+          id: skill.id,
+          count: counts[skill.key],
+          critical: calculateSkill(skill, panel).critical,
+        })),
+      )
+    : undefined
+  const states = equipmentProcStates(effects, panel.hasteRating, duration, hits, majorContext)
+  const panels = states.map((state) => ({
+    ...state,
+    panel: calculateAttributes(equipment, { ...cycleSettings, equipmentProcGains: state.gains }),
+  }))
   const rows = SKILLS.map((skill) => {
     const count = counts[skill.key] ?? 0
     if (!Number.isFinite(count) || count < 0 || !Number.isInteger(count))
       throw new Error('技能命中次数必须为非负整数')
     if (count > 0 && !skillAvailable(skill, settings))
       throw new Error(`请先选择${belongs[skill.group]?.name || ''}奇穴`)
-    const result = calculateSkill(skill, panel)
-    return { ...skill, ...result, count, total: result.expected * count }
+    const parts = panels.map((state) => ({
+      ...calculateSkill(skill, state.panel),
+      weight: state.weight,
+      min: calculateSkill(skill, {
+        ...state.panel,
+        variables: { ...state.panel.variables, rand: 0 },
+      }),
+      max: calculateSkill(skill, {
+        ...state.panel,
+        variables: { ...state.panel.variables, rand: 1 },
+      }),
+    }))
+    const result = {
+      ...parts[0],
+      hit: parts.reduce((sum, part) => sum + part.hit * part.weight, 0),
+      criticalHit: parts.reduce((sum, part) => sum + part.criticalHit * part.weight, 0),
+      critical: parts.reduce((sum, part) => sum + part.critical * part.weight, 0),
+      expected: parts.reduce((sum, part) => sum + part.expected * part.weight, 0),
+    }
+    return {
+      ...skill,
+      ...result,
+      count,
+      total: result.expected * count,
+      hitTotal:
+        parts.reduce((sum, part) => sum + part.hit * (1 - part.critical) * part.weight, 0) * count,
+      criticalTotal:
+        parts.reduce((sum, part) => sum + part.criticalHit * part.critical * part.weight, 0) *
+        count,
+      minHit: Math.min(...parts.map((part) => part.min.hit)),
+      maxHit: Math.max(...parts.map((part) => part.max.hit)),
+      minCritical: Math.min(...parts.map((part) => part.min.criticalHit)),
+      maxCritical: Math.max(...parts.map((part) => part.max.criticalHit)),
+    }
   })
   if (Object.keys(counts).some((key) => !SKILLS.some((skill) => skill.key === key)))
     throw new Error('循环包含未知技能')
-  const total = rows.reduce((sum, row) => sum + row.total, 0)
-  return { panel, rows, total, dps: total / duration }
+  const equipmentRows = equipmentDamageRows(
+    effects,
+    calculateAttributes(equipment, cycleSettings),
+    duration,
+    hits,
+    majorContext,
+  )
+  const total =
+    rows.reduce((sum, row) => sum + row.total, 0) +
+    equipmentRows.reduce((sum, row) => sum + row.技能总输出, 0)
+  return { panel, rows, equipmentRows, total, dps: total / duration }
 }
 export function skillAvailable(skill: Skill, settings: Settings) {
   return (

@@ -12,6 +12,7 @@ import useCycle from '@/hooks/use-cycle'
 import { 转换明尊配装 } from '@/数据/数据工具/明尊数据适配'
 import type { 优化方案 } from '@/心法模块/心法/明尊琉璃体/方案优化'
 import { 格式化明尊GCD } from '@/心法模块/心法/明尊琉璃体/GCD显示'
+import { 圣浴常驻名称 } from '@/心法模块/心法/明尊琉璃体/增益'
 
 import 根据表单选项获取装备信息 from './工具函数/根据表单选项获取装备信息'
 import { 获取寻优循环详情 } from './工具函数/循环加速要求'
@@ -128,7 +129,8 @@ function 配装器(props: ModalProps) {
         (a, i) => a.装备部位 === 装备位置部位枚举[item] && index === i,
       )
       if (o) {
-        newObj[`${item}`] = o
+        // Form合并对象字段时不会删除旧的可选值，必须显式重置未保存的大附魔。
+        newObj[`${item}`] = 明尊模式 ? { ...o, 大附魔: o.大附魔 || 0 } : o
       }
     })
 
@@ -157,8 +159,14 @@ function 配装器(props: ModalProps) {
 
   // 导入配装数据
   const 保存数据并计算 = (e) => {
-    form.setFieldsValue({ ...e })
-    更换装备计算秒伤(undefined, e)
+    const values = { ...e }
+    if (明尊模式) {
+      for (const slot of Object.keys(装备位置部位枚举)) {
+        if (values[slot]) values[slot] = { ...values[slot], 大附魔: values[slot].大附魔 || 0 }
+      }
+    }
+    form.setFieldsValue(values)
+    更换装备计算秒伤(undefined, values)
   }
 
   const onOk = () => {
@@ -189,7 +197,9 @@ function 配装器(props: ModalProps) {
           小吃: 方案.consumables,
           团队增益: 计入团队增益
             ? 增益数据.团队增益
-            : 增益数据.团队增益.map((增益) => ({ ...增益, 启用: false })),
+            : 增益数据.团队增益.map((增益) =>
+                增益.增益名称 === 圣浴常驻名称 ? 增益 : { ...增益, 启用: false },
+              ),
         },
         属性: '增益数据',
       }),
@@ -320,7 +330,7 @@ function 配装器(props: ModalProps) {
           )}
         </头部组件>
       }
-      className={'zhuangbei-input-set-modal'}
+      className={`zhuangbei-input-set-modal${明尊模式 ? ' mingzun-equipment-modal' : ''}`}
       open={open}
       width={1258}
       // destroyOnClose

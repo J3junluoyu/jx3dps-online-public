@@ -80,7 +80,10 @@ test.each([
     )
     expect(cycle.计算结果技能列表).toHaveLength(1)
     expect(cycle.计算结果技能列表[0].技能数量).toBe(9)
-    expect(cycle.总伤).toBeCloseTo(expected * 9, 9)
-    expect(cycle.秒伤).toBeCloseTo((expected * 9) / 300, 12)
+    // 循环默认全程戒火，但仍不计背后增伤；单技能原始公式校验保留无戒火基准。
+    panel.variables.lunar_damage_scale += 21 / 1024
+    const cycleExpected = calculateSkill(skill, panel).expected
+    expect(cycle.总伤).toBeCloseTo(cycleExpected * 9, 9)
+    expect(cycle.秒伤).toBeCloseTo((cycleExpected * 9) / 300, 12)
   },
 )

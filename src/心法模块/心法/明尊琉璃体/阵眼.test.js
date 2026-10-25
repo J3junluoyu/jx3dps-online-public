@@ -120,24 +120,27 @@ test.each(fixture.cases)('阵眼与考拉原Python数值一致：$stance / $form
   }
 })
 
-test.each(明尊阵眼)('原项目方案中的$阵眼名称进入实际伤害计算，关闭增益后恢复原值', (formation) => {
-  const skill = SKILLS.find((row) => row.key === '25355:4480:58')
-  const calculate = (enabled) =>
-    明尊秒伤计算({
-      装备信息: { 装备基础属性: 转换明尊基础属性({ ...EMPTY_EQUIPMENT, ...fixture.equipment }) },
-      奇穴: [],
-      秘籍: {},
-      增益数据: { ...selection(formation.阵眼名称), 明尊设置: { stance: 'mainTank' } },
-      增益启用: enabled,
-      目标等级: 53,
-      技能列表: [{ 技能名称: skill.label, 技能数量: 9 }],
-      战斗时间: 300,
-    })
-  const expected = (name) => {
-    const row = fixture.cases.find((item) => item.formation === name && item.stance === 'mainTank')
-      .skills[skill.key]
-    return (row.hit * (1 - row.critical) + row.criticalHit * row.critical) * 9
-  }
-  expect(calculate(true).总伤).toBeCloseTo(expected(formation.阵眼名称), 9)
-  expect(calculate(false).总伤).toBeCloseTo(expected(''), 9)
-})
+test.each(明尊阵眼)(
+  '原项目方案中的$阵眼名称进入实际伤害计算，关闭增益后仍保留循环默认戒火',
+  (formation) => {
+    const skill = SKILLS.find((row) => row.key === '25355:4480:58')
+    const calculate = (enabled) =>
+      明尊秒伤计算({
+        装备信息: { 装备基础属性: 转换明尊基础属性({ ...EMPTY_EQUIPMENT, ...fixture.equipment }) },
+        奇穴: [],
+        秘籍: {},
+        增益数据: { ...selection(formation.阵眼名称), 明尊设置: { stance: 'mainTank' } },
+        增益启用: enabled,
+        目标等级: 53,
+        技能列表: [{ 技能名称: skill.label, 技能数量: 9 }],
+        战斗时间: 300,
+      })
+    const expected = (name) => {
+      const expectedPanel = panel(name)
+      expectedPanel.variables.lunar_damage_scale += 21 / 1024
+      return calculateSkill(skill, expectedPanel).expected * 9
+    }
+    expect(calculate(true).总伤).toBeCloseTo(expected(formation.阵眼名称), 9)
+    expect(calculate(false).总伤).toBeCloseTo(expected(''), 9)
+  },
+)

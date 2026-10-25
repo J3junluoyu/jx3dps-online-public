@@ -1,0 +1,47 @@
+{
+  "source": {
+    "date": "2026-10-24",
+    "client": "JX3_EXP，读取 scripts/Include/NewSkill.lh、装备脚本及 settings/skill/buff.tab",
+    "formulas": "本地考拉 assets_raw_skills.py 的 SKILLS[0]；伤害常数与当前客户端逐项一致",
+    "environment": "持续命中木桩，自身满血，目标满足戒指触发条件，不承受使鞋子特效提前消失的伤害"
+  },
+  "damage": {
+    "gain_40788_4": { "id": "40789", "name": "巽", "base": 13683, "cooldown": 10 },
+    "gain_40788_5": { "id": "40789", "name": "巽", "base": 16694, "cooldown": 10 },
+    "gain_40788_6": { "id": "40789", "name": "巽", "base": 15963, "cooldown": 10 },
+    "gain_38950_9": { "id": "38966", "name": "无修·荒", "base": 10268, "cooldown": 10 },
+    "gain_38950_10": { "id": "38966", "name": "无修·荒", "base": 11979, "cooldown": 10 },
+    "gain_38950_13": { "id": "38966", "name": "无修·荒", "base": 11728, "cooldown": 10 },
+    "gain_38950_14": { "id": "38966", "name": "无修·荒", "base": 3276, "cooldown": 10 },
+    "gain_42767_3": {
+      "id": "42837",
+      "name": "速·震（加速DOT）",
+      "base": 899,
+      "cooldown": 40,
+      "interval": 1,
+      "shared": "31954"
+    }
+  },
+  "attributeKeys": [
+    "gain_40790_4",
+    "gain_40790_5",
+    "gain_40790_6",
+    "gain_38934_10",
+    "gain_38939_10",
+    "gain_38944_10",
+    "gain_40802_4",
+    "gain_40802_5",
+    "gain_40803_4",
+    "gain_40803_5",
+    "gain_38945_9",
+    "gain_38945_10",
+    "gain_38946_9",
+    "gain_38946_10",
+    "gain_38946_12",
+    "gain_38946_13",
+    "gain_46727_1",
+    "gain_46727_2"
+  ],
+  "attackDuration": { "haste": [0, 445, 928, 1452, 2024], "frames": [96, 120, 136, 160, 176] },
+  "dotTicks": { "haste": [0, 444, 928, 1451, 2024], "counts": [12, 15, 17, 20, 22] }
+}

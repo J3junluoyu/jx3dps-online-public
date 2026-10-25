@@ -11,18 +11,9 @@ import type { EquipmentStats, Settings, Skill } from '@/心法模块/心法/明�
 import { 基础循环技能 } from '@/心法模块/心法/明尊琉璃体/计算循环/基础循环'
 import type { 基础循环技能类型 } from '@/心法模块/心法/明尊琉璃体/计算循环/基础循环'
 import { 获取明尊技能显示信息 } from './技能显示'
-
-const 炽炎镇恶触发技能 = new Set([
-  '44567', // 戒火斩
-  '4480', // 驱夜断愁
-  '14701',
-  '4476', // 净世破魔击·日、月
-  '4028',
-  '4029',
-  '4030', // 赤日轮三段
-  '40089', // 银月斩，排除DOT
-  '40088', // 烈日斩
-])
+import { equipmentProcStates, equipmentDamageRows } from '@/心法模块/心法/明尊琉璃体/装备特效计算'
+import { isMajorEnchant, majorEnchantContext } from '@/心法模块/心法/明尊琉璃体/大附魔'
+import { 炽炎镇恶触发技能, 计入循环戒火 } from '@/心法模块/心法/明尊琉璃体/戒火斩'
 
 type 计算行 = Pick<
   基础循环技能类型,
@@ -103,6 +94,8 @@ export function 计算明尊基础循环(
   计算技能详情 = true,
 ): 当前计算结果类型 {
   if (!Number.isFinite(战斗时间) || 战斗时间 <= 0) throw new Error('循环时长必须大于零')
+  // 0.75、0.81常规及自适应循环均默认100%覆盖，不叠加团队戒火或历史逐招标记。
+  设置 = 计入循环戒火(设置)
   const 理论循环 = 列表.some((项) => 项.明尊技能状态)
   const 次数 = 理论循环 ? () => 0 : 获取基础循环次数(列表)
   const 武伤分配 = 理论循环 ? [] : 获取基础循环武伤分配(列表)
@@ -114,17 +107,45 @@ export function 计算明尊基础循环(
           0,
         )
       : 0
+  const 计算列表: 计算行[] = 理论循环
+    ? 获取理论循环行(列表, 设置)
+    : 基础循环技能.map((行) => ({
+        ...行,
+        技能数量: 次数(行.技能名称) + (行.技能名称 === '戒火斩' ? 追加戒火斩 : 0),
+      }))
   const 面板缓存 = new Map<string, ReturnType<typeof calculateAttributes>>()
   // 仍由原Generator计算器校验装备及奇穴，分项状态只改变本条技能。
-  calculateAttributes(属性, 设置)
-  const 获取面板 = (状态: Pick<计算行, '驱夷' | '光明相' | '五明'>) => {
-    const 键 = `${状态.驱夷}:${状态.光明相}:${状态.五明}`
+  const 装备面板 = calculateAttributes(属性, { ...设置, equipmentProcGains: {} })
+  const 命中总数 = 计算列表.reduce(
+    (合计, 行) => 合计 + (skillAvailable(行.技能, 设置) ? 行.技能数量 * 行.命中倍率 : 0),
+    0,
+  )
+  const 大附魔事件 = 设置.equipmentEffects?.some(({ effect }) => isMajorEnchant(effect))
+    ? majorEnchantContext(
+        计算列表
+          .filter((行) => 行.技能数量 > 0 && skillAvailable(行.技能, 设置))
+          .map((行) => ({
+            id: 行.技能.id,
+            count: 行.技能数量 * 行.命中倍率,
+            critical: calculateSkill(行.技能, 装备面板).critical,
+          })),
+      )
+    : undefined
+  const 装备状态 = equipmentProcStates(
+    设置.equipmentEffects || [],
+    装备面板.hasteRating,
+    战斗时间,
+    命中总数,
+    大附魔事件,
+  )
+  const 获取面板 = (状态: Pick<计算行, '驱夷' | '光明相' | '五明'>, 装备状态索引: number) => {
+    const 键 = `${状态.驱夷}:${状态.光明相}:${状态.五明}:${装备状态索引}`
     if (!面板缓存.has(键)) {
-      // 戒火易伤统一由团队增益控制，历史时间轴中的戒火标记不再自动增加易伤。
       const 面板 = calculateAttributes(属性, {
         ...设置,
         drive: 状态.驱夷,
         light: 状态.光明相,
+        equipmentProcGains: 装备状态[装备状态索引].gains,
       })
       // Generator五明乐见描述为伤害提高10%，单独转为郭氏102/1024后加入增伤区。
       if (状态.五明 && 设置.talents.includes('46492')) {
@@ -139,8 +160,9 @@ export function 计算明尊基础循环(
     技能: Skill,
     数量: number,
     状态: Pick<计算行, '驱夷' | '光明相' | '五明'>,
+    装备状态索引: number,
   ) => {
-    const 面板 = 获取面板(状态)
+    const 面板 = 获取面板(状态, 装备状态索引)
     const 结果 = calculateSkill(技能, 面板)
     const 最小 = 计算技能详情
       ? calculateSkill(技能, { ...面板, variables: { ...面板.variables, rand: 0 } })
@@ -152,24 +174,23 @@ export function 计算明尊基础循环(
   }
   const 结果列表: 计算结果技能列表类型[] = []
   let 总伤 = 0
-  const 计算列表: 计算行[] = 理论循环
-    ? 获取理论循环行(列表, 设置)
-    : 基础循环技能.map((行) => ({
-        ...行,
-        技能数量: 次数(行.技能名称) + (行.技能名称 === '戒火斩' ? 追加戒火斩 : 0),
-      }))
   for (const 行 of 计算列表) {
     const 技能数量 = 行.技能数量
     if (!技能数量 || !skillAvailable(行.技能, 设置)) continue
-    const 分项 =
+    const 原分项 =
       !理论循环 && 行.技能名称 === '武伤'
-        ? 武伤分配.map((项) =>
-            计算分项(项.技能, 项.次数, { 驱夷: false, 光明相: false, 五明: 项.五明 }),
-          )
-        : [计算分项(行.技能, 技能数量 * 行.命中倍率, 行)]
+        ? 武伤分配.map((项) => ({
+            技能: 项.技能,
+            数量: 项.次数,
+            状态: { 驱夷: false, 光明相: false, 五明: 项.五明 },
+          }))
+        : [{ 技能: 行.技能, 数量: 技能数量 * 行.命中倍率, 状态: 行 }]
+    const 分项 = 原分项.flatMap((项) =>
+      装备状态.map((状态, 索引) => 计算分项(项.技能, 项.数量 * 状态.weight, 项.状态, 索引)),
+    )
     总伤 += 分项.reduce((合计, 项) => 合计 + 项.总伤, 0)
     if (!计算技能详情) continue
-    const 数量 = 分项.reduce((总数, 项) => 总数 + 项.数量, 0)
+    const 数量 = 原分项.reduce((总数, 项) => 总数 + 项.数量, 0)
     const 本项结果: 计算结果技能列表类型 = {
       ...获取明尊技能显示信息(行.技能.id),
       技能ID: 行.技能.id,
@@ -210,5 +231,14 @@ export function 计算明尊基础循环(
       结果列表.push(本项结果)
     }
   }
+  const 装备伤害 = equipmentDamageRows(
+    设置.equipmentEffects || [],
+    装备面板,
+    战斗时间,
+    命中总数,
+    大附魔事件,
+  )
+  总伤 += 装备伤害.reduce((合计, 行) => 合计 + 行.技能总输出, 0)
+  if (计算技能详情) 结果列表.push(...装备伤害)
   return { 总伤, 秒伤: 总伤 / 战斗时间, 秒伤计算时间: 战斗时间, 计算结果技能列表: 结果列表 }
 }

@@ -92,6 +92,58 @@
   padding-left: 8px;
 }
 
+/* 五个大附魔选项与装备行对齐，沿用原弹窗宽度。 */
+.mingzun-equipment-modal .zhuangbei-form-item-left-1 {
+  width: 300px;
+}
+.mingzun-equipment-modal .zhuangbei-form-left-1 {
+  width: 344px;
+}
+.mingzun-equipment-modal .zhuangbei-form-item-left-2,
+.mingzun-equipment-modal .zhuangbei-form-left-2 {
+  width: 112px;
+}
+.mingzun-equipment-modal .zhuangbei-form-item-left-3,
+.mingzun-equipment-modal .zhuangbei-form-left-3 {
+  width: 60px;
+}
+.mingzun-equipment-modal .zhuangbei-form-item-left-4,
+.mingzun-equipment-modal .zhuangbei-form-left-4 {
+  width: 240px;
+}
+.mingzun-equipment-modal .zhuangbei-form-left-5,
+.mingzun-major-enchant-cell {
+  width: 136px;
+  flex-shrink: 0;
+  padding-right: 12px;
+}
+.mingzun-major-enchant-select {
+  width: 100%;
+}
+.major-enchant-option-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.major-enchant-option-description {
+  color: #888;
+  font-size: 12px;
+  white-space: normal;
+  line-height: 1.6;
+  margin-top: 3px;
+}
+.mingzun-major-enchant-popup .ant-select-item {
+  padding-top: 9px;
+  padding-bottom: 9px;
+}
+.major-enchant-up {
+  color: #389e0d;
+}
+.major-enchant-down {
+  color: #ff4d4f;
+}
+
 .zhuangbei-form-set-btn {
   margin-left: 12px;
 }

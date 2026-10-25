@@ -1,13 +1,14 @@
 import type { 循环数据 } from '@/@types/循环'
 import { 小吃类型枚举 } from '@/@types/枚举'
 import type { 团队增益选项数据类型 } from '@/@types/团队增益'
-import type { EquipmentStats, Settings } from './计算'
+import type { Settings } from './计算'
 import { calculateAttributes, ratingScale } from './计算'
 import { GEAR_ITEMS, ENCHANTS, SLOTS, calculateLoadout, slotPosition } from './装备'
 import type { Loadout } from './装备'
 import { 明尊小药小吃, 获取明尊战斗增益 } from './增益'
 import { 明尊阵眼 } from './阵眼'
 import { 计算明尊基础循环 } from '@/计算模块/职业特殊处理/明尊/基础循环'
+import { matchMajorEnchant } from './大附魔'
 
 export interface 优化方案 {
   slots: Loadout
@@ -153,6 +154,12 @@ export function 优化明尊方案(
               slots: {
                 ...plan.slots,
                 [slot]: {
+                  ...(current?.majorEnchantId
+                    ? {
+                        majorEnchantId: matchMajorEnchant(current.majorEnchantId, slot, item.kind)
+                          ?.id,
+                      }
+                    : {}),
                   key: item.key,
                   strength: item.key === current?.key ? current.strength : item.maxStrength,
                   embeds: Object.keys(item.embed).map(
@@ -227,7 +234,7 @@ export function 优化明尊方案(
     })),
   })
   const cache = new Map<string, 候选结果>()
-  const statsCache = new Map<string, EquipmentStats>()
+  const statsCache = new Map<string, ReturnType<typeof calculateLoadout>>()
   let constraintEvaluations = 0
   const evaluations = () => cache.size + constraintEvaluations
   let best: 候选结果 | undefined
@@ -243,11 +250,12 @@ export function 优化明尊方案(
     获取优化GCD(metrics.haste) === gcd && metrics.toughness + 1e-10 >= input.minToughness
   const panelFor = (plan: 优化方案, cacheStats = true) => {
     const gearKey = JSON.stringify([SLOTS.map(([slot]) => plan.slots[slot]), plan.stone])
-    let stats = statsCache.get(gearKey)
-    if (!stats) {
-      stats = calculateLoadout(plan.slots, plan.stone).stats
-      if (cacheStats) statsCache.set(gearKey, stats)
+    let equipped = statsCache.get(gearKey)
+    if (!equipped) {
+      equipped = calculateLoadout(plan.slots, plan.stone)
+      if (cacheStats) statsCache.set(gearKey, equipped)
     }
+    const { stats, specialEffects } = equipped
     // 团队增益固定使用传入配置；只优化装备、附魔、阵眼与常规增益。
     const gains = 获取明尊战斗增益(
       { 阵眼: plan.formation, 小吃: plan.consumables, 团队增益: input.teamGains || [] },
@@ -258,6 +266,8 @@ export function 优化明尊方案(
     const settings = {
       ...input.settings,
       gains,
+      equipmentEffects: specialEffects,
+      equipmentProcGains: undefined,
     }
     const panel = calculateAttributes(stats, settings)
     return { stats, settings, panel }

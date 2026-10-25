@@ -2,6 +2,8 @@ import data from './装备数据.json'
 import { EMPTY_EQUIPMENT } from './计算'
 import type { EquipmentStats } from './计算'
 import type { EquipmentSpecialEffect, EquippedSpecialEffect } from './装备特效'
+import { equipmentEffectSupported } from './装备特效计算'
+import { matchMajorEnchant } from './大附魔'
 
 type Attributes = Record<string, number | string>
 const isThreatAttribute = (key: string) =>
@@ -218,18 +220,22 @@ export interface GearSelection {
   strength: number
   embeds: number[]
   enchantId: number
+  majorEnchantId?: number
 }
 export type Loadout = Record<string, GearSelection>
 /** Clear unavailable gear slots while retaining valid gear, refinement and gems. */
 export function normalizeLoadout(slots: Loadout, stone = 0, embedFormatVersion = 2) {
   const normalizedSlots = Object.fromEntries(
     Object.entries(slots).map(([slot, selection]) => {
+      const { majorEnchantId, ...remaining } = selection
       const item = findGearItem(selection.key, slotPosition(slot))
+      const major = item && matchMajorEnchant(majorEnchantId, slot, item.kind)
       if (selection.key && !item) return [slot, { key: '', strength: 0, embeds: [], enchantId: 0 }]
       return [
         slot,
         {
-          ...selection,
+          ...remaining,
+          ...(major ? { majorEnchantId: major.id } : {}),
           key: item?.key || selection.key,
           embeds:
             item && embedFormatVersion < 2
@@ -368,7 +374,17 @@ export function calculateLoadout(loadout: Loadout, stoneId = 0) {
       // The normalized field supersedes its legacy alias on the same attribute source.
       if (key === 'atActiveThreatCoefficient' && 'threat_gain' in attributes) continue
       if (unsupportedLabels[key]) {
-        if (value) warnings.add(unsupportedLabels[key])
+        const supported =
+          key === 'event' &&
+          String(value)
+            .split(/\s*\|\s*/)
+            .filter(Boolean)
+            .every((event) =>
+              specialEffects.some(
+                ({ effect }) => effect.key === event && equipmentEffectSupported(effect),
+              ),
+            )
+        if (value && !supported) warnings.add(unsupportedLabels[key])
         continue
       }
       if (typeof value !== 'number') throw new Error('装备数据存在无效数值')
@@ -393,6 +409,11 @@ export function calculateLoadout(loadout: Loadout, stoneId = 0) {
     selectedCount++
     for (const effect of item.specialEffects || [])
       specialEffects.push({ slot, gearKey: item.key, effect })
+    if (selection.majorEnchantId) {
+      const major = matchMajorEnchant(selection.majorEnchantId, slot, item.kind)
+      if (!major) throw new Error('大附魔与部位不匹配')
+      specialEffects.push({ slot, gearKey: item.key, effect: major.effect })
+    }
     if (slot === 'primary_weapon') hasPrimary = true
     add(item.base)
     add(item.magic)

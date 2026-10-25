@@ -12,6 +12,7 @@ test.each([
   ['0.8125GCD循环', ['0.75GCD循环', '0.8125GCD循环']],
   ['0.75理论循环', ['0.75理论循环', '0.8125理论循环']],
   ['0.8125理论循环', ['0.75理论循环', '0.8125理论循环']],
+  ['自适应理论循环', ['0.75理论循环', '0.8125理论循环']],
 ])('%s对比时只使用同一类循环', (name, expected) => {
   expect(获取档位对比循环(name).map((cycle) => cycle.名称)).toEqual(expected)
 })
@@ -92,7 +93,7 @@ const 返回方案 = (input, dps) => ({
 })
 
 test('理论循环两档独立使用原配装、团队增益及约束，不将第一档的优化结果作为第二档起点', () => {
-  const input = { ...输入(), cycle: 循环列表.find((cycle) => cycle.名称 === '0.75理论循环') }
+  const input = { ...输入(), cycle: 循环列表.find((cycle) => cycle.名称 === '自适应理论循环') }
   const spy = jest.spyOn(优化模块, '优化明尊方案').mockImplementation((request) => ({
     ...返回方案(request, request.cycle.名称 === '0.75理论循环' ? 1000 : 1100),
     plan: { ...request.initial, formation: '万灵阵' },
@@ -111,6 +112,14 @@ test('理论循环两档独立使用原配装、团队增益及约束，不将�
     expect(request.teamGains).toBe(input.teamGains)
   }
   expect(result.recommendedCycleName).toBe('0.8125理论循环')
+  expect(spy.mock.calls.map(([request]) => request.cycle.循环详情[0].循环加速等级)).toEqual([4, 3])
+  expect(spy.mock.calls.every(([request]) => request.cycle.循环详情.length === 1)).toBe(true)
+})
+
+test('自适应理论两档秒伤相同时优先当前实际GCD，避免默认选中第一档', () => {
+  const input = { ...输入(), cycle: 循环列表.find((cycle) => cycle.名称 === '自适应理论循环') }
+  jest.spyOn(优化模块, '优化明尊方案').mockImplementation((request) => 返回方案(request, 1000))
+  expect(对比明尊加速档位(input).recommendedCycleName).toBe('0.8125理论循环')
 })
 
 test.each(['未找到方案', '优化报错'])('第一档%s时仍完成第二档，保留有效结果', (scenario) => {

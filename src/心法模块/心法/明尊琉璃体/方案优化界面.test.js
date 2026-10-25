@@ -278,6 +278,31 @@ test('计入团队增益默认关闭，修改后旧结果失效，开启时传�
   expect(props.应用方案).toHaveBeenCalledWith(result.plan, 循环列表[0].名称, true)
 })
 
+test('总开关关闭且不计入团队增益时，方案推荐仍沿用独立开启的圣浴常驻', async () => {
+  const originalData = mockState.data.增益数据
+  const originalEnabled = mockState.data.增益启用
+  mockState.data.增益启用 = false
+  mockState.data.增益数据 = {
+    ...originalData,
+    团队增益: [
+      ...originalData.团队增益,
+      { 增益名称: '圣浴明心（常驻）', 启用: true, 层数: 0, 覆盖率: 100 },
+    ],
+  }
+  try {
+    render()
+    await click('方案推荐')
+    expect(getByRole(container, 'checkbox', { name: '计入当前团队增益' }).checked).toBe(false)
+    await click('开始推荐')
+    expect(finish().input.teamGains).toEqual([
+      { 增益名称: '圣浴明心（常驻）', 启用: true, 层数: 0, 覆盖率: 100 },
+    ])
+  } finally {
+    mockState.data.增益数据 = originalData
+    mockState.data.增益启用 = originalEnabled
+  }
+})
+
 const changeSelect = (name, value) =>
   act(() => fireEvent.change(getByRole(container, 'combobox', { name }), { target: { value } }))
 const finishComparison = (dpsValues = [22000, 20000]) => {
@@ -417,7 +442,7 @@ test('优化方式直接选择0.75或0.81，移除目标GCD，0.81仍传入精�
 })
 
 test('优化档位选项沿用主界面已选理论循环，0.81理论循环保持内部名称并显示简称', async () => {
-  const props = render({ 循环名称: '0.75理论循环' })
+  const props = render({ 循环名称: '自适应理论循环' })
   await click('方案推荐')
   changeSelect('推荐方式', '0.8125')
   await click('开始推荐')
@@ -426,5 +451,5 @@ test('优化档位选项沿用主界面已选理论循环，0.81理论循环保�
   expect(container.textContent).toContain('使用0.81理论循环寻优')
   expect(container.textContent).not.toContain('0.8125')
   await click('应用并计算')
-  expect(props.应用方案).toHaveBeenCalledWith(result.plan, '0.8125理论循环', false)
+  expect(props.应用方案).toHaveBeenCalledWith(result.plan, '自适应理论循环', false)
 })

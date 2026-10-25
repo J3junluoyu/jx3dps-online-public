@@ -199,9 +199,59 @@
   color: #a67720;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
+}
+
+.detailedContent {
+  width: 360px;
+  max-height: calc(100vh - 120px);
+}
+
+.yellowEffectBlock + .yellowEffectBlock {
+  margin-top: 12px;
+}
+
+.effectNumbers {
+  margin-top: 8px;
+  padding: 8px 10px;
+  border: 1px solid #eee4d2;
+  border-radius: 6px;
+  background: #fcf9f3;
+}
+
+.effectNumbersTitle {
+  margin-bottom: 5px;
+  color: #8c6425;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.effectDetails {
+  margin: 0;
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.effectDetailRow {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
 
   & + & {
-    margin-top: 8px;
+    margin-top: 3px;
+  }
+
+  dt {
+    width: 84px;
+    flex-shrink: 0;
+    color: #777;
+  }
+
+  dd {
+    flex: 1;
+    margin: 0;
+    color: #493923;
+    font-weight: 500;
+    overflow-wrap: anywhere;
   }
 }
 

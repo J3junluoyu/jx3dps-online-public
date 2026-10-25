@@ -1,12 +1,13 @@
 import { useAppDispatch, useAppSelector } from '@/hooks'
-import { Button, Space } from 'antd'
+import { Button, Space, Tooltip } from 'antd'
 import React, { useMemo, useState } from 'react'
 import { 团队增益数据类型, 增益选项数据类型 } from '@/@types/团队增益'
 import 获取当前数据 from '@/数据/数据工具/获取当前数据'
 import classNames from 'classnames'
 import { 触发秒伤计算 } from '@/计算模块/计算函数'
-import { 更新团队增益轴 } from '@/store/data'
+import { 更新方案数据, 更新团队增益轴 } from '@/store/data'
 import { 获取团队增益禁用原因 } from '@/数据/数据工具/团队增益限制'
+import { 明尊一键团队增益 } from '@/心法模块/心法/明尊琉璃体/团队增益预设'
 
 import 团队增益设置弹窗 from './团队增益设置弹窗'
 import 团队增益轴设置弹窗 from './团队增益轴设置弹窗'
@@ -14,10 +15,11 @@ import 团队增益图标 from './团队增益图标'
 import 团队增益收益弹窗 from './团队增益收益弹窗'
 import './index.css'
 
-const { 团队增益 = [] } = 获取当前数据()
+const { 名称, 团队增益 = [] } = 获取当前数据()
 
 function 团队增益选择({ 保存数据并计算 }) {
   const 增益数据 = useAppSelector((state) => state.data.增益数据)
+  const 增益启用 = useAppSelector((state) => state.data.增益启用)
   const 当前奇穴信息 = useAppSelector((state) => state.data.当前奇穴信息)
   const 新手引导流程状态 = useAppSelector((state) => state.system.新手引导流程状态)
 
@@ -103,12 +105,59 @@ function 团队增益选择({ 保存数据并计算 }) {
     )
   }, [团队增益, 增益数据, 当前奇穴信息])
 
+  const 一键增益预设 = useMemo(
+    () =>
+      明尊一键团队增益.filter((item) => {
+        const 定义 = 团队增益.find((增益) => 增益.增益名称 === item.增益名称)
+        return 定义 && !获取团队增益禁用原因(定义, 当前奇穴信息)
+      }),
+    [当前奇穴信息],
+  )
+  const 一键增益已启用 =
+    !!增益启用 &&
+    一键增益预设.length > 0 &&
+    显示团队增益.length === 一键增益预设.length &&
+    一键增益预设.every((预设) =>
+      增益数据.团队增益.some(
+        (当前) =>
+          当前.增益名称 === 预设.增益名称 &&
+          当前.启用 &&
+          当前.层数 === 预设.层数 &&
+          当前.覆盖率 === 预设.覆盖率,
+      ),
+    )
+  const 切换一键增益 = (启用: boolean) => {
+    快捷设置团队增益(启用 ? 一键增益预设.map((item) => ({ ...item })) : [])
+    if (启用 && !增益启用) {
+      dispatch(更新方案数据({ 属性: '增益启用', 数据: true }))
+      dispatch(触发秒伤计算({ 是否更新显示计算结果: true }))
+    }
+  }
+
   const cls = classNames('tuandui-list', 新手引导流程状态 ? 'onGuide' : '')
 
   return (
     <div className='tuandui-zengyi'>
       <div className='tuandui-zengyi-header'>
-        <h1 className='tuandui-title'>团队增益</h1>
+        <div className='tuandui-zengyi-heading'>
+          <h1 className='tuandui-title'>团队增益</h1>
+          {名称 === '明尊琉璃体' && (
+            <Tooltip title='开启后套用已记录的团队增益、层数及覆盖率，同时启用增益总开关；关闭后清空团队增益，保留药食和阵眼。'>
+              <Button
+                className='tuandui-preset-btn'
+                size='small'
+                danger
+                type={一键增益已启用 ? 'primary' : 'default'}
+                aria-label='一键团队增益'
+                aria-pressed={一键增益已启用}
+                disabled={!!新手引导流程状态}
+                onClick={() => 切换一键增益(!一键增益已启用)}
+              >
+                一键增益
+              </Button>
+            </Tooltip>
+          )}
+        </div>
         <Button
           className='zengyi-clear-btn'
           size='small'

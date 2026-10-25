@@ -1,3 +1,5 @@
+const verified = require('../src/心法模块/心法/明尊琉璃体/装备黄字数值.json')
+const verifiedKeys = new Set([...Object.keys(verified.damage), ...verified.attributeKeys])
 /** Import game tooltip text as data, retaining the original handler and exact level. */
 function decodeGameText(value = '') {
   const text = String(value)
@@ -134,6 +136,10 @@ function parseEffect(entry, sourceAttribute) {
       break
     default:
       rules.requiresVerification = ['特效规则']
+  }
+  if (verifiedKeys.has(effect.key)) {
+    effect.calculationStatus = 'verified'
+    delete rules.requiresVerification
   }
   return effect
 }

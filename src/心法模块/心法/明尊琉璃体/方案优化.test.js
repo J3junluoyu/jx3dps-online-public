@@ -125,9 +125,10 @@ test.each(循环列表)(
     expect(['', ...明尊阵眼.map((item) => item.阵眼名称)]).toContain(result.plan.formation)
     const applied = 转换明尊配装(result.plan.slots, result.plan.stone)
     expect(获取明尊配装(applied)).toEqual({ slots: result.plan.slots, stone: result.plan.stone })
-    const stats = calculateLoadout(result.plan.slots, result.plan.stone).stats
+    const { stats, specialEffects } = calculateLoadout(result.plan.slots, result.plan.stone)
     const settings = {
       ...input.settings,
+      equipmentEffects: specialEffects,
       gains: 获取明尊增益属性(
         { 阵眼: result.plan.formation, 小吃: result.plan.consumables, 团队增益: [] },
         true,

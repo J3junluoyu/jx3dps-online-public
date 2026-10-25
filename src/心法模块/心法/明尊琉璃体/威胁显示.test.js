@@ -10,6 +10,8 @@ jest.mock('@/数据/数据工具/获取当前数据', () => ({
   }),
 }))
 jest.mock('@/hooks', () => ({ useAppSelector: (select) => select(mockState) }))
+jest.mock('@/store/data', () => ({ 更新方案数据: jest.fn() }))
+jest.mock('@/计算模块/计算函数', () => ({ 触发秒伤计算: jest.fn() }))
 jest.mock('@/功能模块/基础设置/面板信息/圣浴常驻', () => () => null)
 jest.mock('@/功能模块/基础设置/面板信息/index.css', () => ({}))
 jest.mock('@/功能模块/基础设置/属性录入/配装器/功能组件/面板展示/index.css', () => ({}))

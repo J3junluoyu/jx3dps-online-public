@@ -26,9 +26,22 @@ const 装备来源: React.FC<装备来源类型> = (props) => {
         <h1 className={styles.title}>特效</h1>
         <div className={styles.featureWrapper}>
           {装备数据.装备黄字特效.map((effect) => (
-            <p className={styles.yellowEffect} key={effect.标识}>
-              {effect.说明}
-            </p>
+            <div className={styles.yellowEffectBlock} key={effect.标识}>
+              <p className={styles.yellowEffect}>{effect.说明}</p>
+              {!!effect.详细数值?.length && (
+                <div className={styles.effectNumbers}>
+                  <div className={styles.effectNumbersTitle}>数值说明</div>
+                  <dl className={styles.effectDetails} aria-label='黄字特效详细数值'>
+                    {effect.详细数值.map((detail) => (
+                      <div className={styles.effectDetailRow} key={detail.标签}>
+                        <dt>{detail.标签}</dt>
+                        <dd>{detail.数值}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </div>
+              )}
+            </div>
           ))}
           {装备数据.装备黄字特效.some((effect) => !effect.已计入计算) && (
             <p className={styles.effectNote}>黄字特效收益尚未计入当前计算</p>

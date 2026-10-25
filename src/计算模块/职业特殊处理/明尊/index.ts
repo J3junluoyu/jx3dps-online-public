@@ -3,7 +3,7 @@ import type { 角色基础属性类型 } from '@/@types/角色'
 import type { 增益选项数据类型 } from '@/@types/团队增益'
 import type { 选中秘籍信息 } from '@/@types/秘籍'
 import type { 循环技能详情 } from '@/@types/循环'
-import type { 当前计算结果类型 } from '@/@types/输出'
+import type { 当前计算结果类型, 计算结果技能列表类型 } from '@/@types/输出'
 import {
   EMPTY_EQUIPMENT,
   DEFAULT_SETTINGS,
@@ -12,7 +12,6 @@ import {
   normalizeTalents,
   calculateAttributes,
   calculateCycle,
-  calculateSkill,
   skillAvailable,
 } from '@/心法模块/心法/明尊琉璃体/计算'
 import type { Settings, EquipmentStats } from '@/心法模块/心法/明尊琉璃体/计算'
@@ -20,10 +19,10 @@ import { 明尊秘籍选项 } from '@/心法模块/心法/明尊琉璃体/秘籍
 import { 使用基础循环格式 } from '@/心法模块/心法/明尊琉璃体/计算循环/基础循环'
 import { 计算明尊基础循环 } from './基础循环'
 import { 获取明尊技能显示信息 } from './技能显示'
-import {
-  获取明尊增益属性,
-  获取明尊战斗增益,
-} from '@/心法模块/心法/明尊琉璃体/增益'
+import { findGearItem } from '@/心法模块/心法/明尊琉璃体/装备'
+import type { EquippedSpecialEffect } from '@/心法模块/心法/明尊琉璃体/装备特效'
+import { matchMajorEnchant } from '@/心法模块/心法/明尊琉璃体/大附魔'
+import { 获取明尊增益属性, 获取明尊战斗增益 } from '@/心法模块/心法/明尊琉璃体/增益'
 
 export const 规范明尊奇穴 = (名称: string[] = []) =>
   normalizeTalents(
@@ -110,7 +109,9 @@ export function 获取明尊显示面板(
   增益启用 = false,
 ): 角色基础属性类型 {
   const 原始 = 获取明尊原始属性(装备信息?.装备基础属性)
-  const 面板 = calculateAttributes(原始, 获取明尊计算设置(奇穴, 增益数据, {}, 53, 增益启用, 原始))
+  const 设置 = 获取明尊计算设置(奇穴, 增益数据, {}, 53, 增益启用, 原始)
+  设置.equipmentEffects = 获取明尊已选装备特效(装备信息)
+  const 面板 = calculateAttributes(原始, 设置)
   return {
     ...装备信息.装备基础属性,
     明尊面板: 面板,
@@ -124,6 +125,19 @@ export function 获取明尊显示面板(
     无双等级: 面板.strainRating,
     加速等级: 面板.hasteRating,
   }
+}
+
+/** 从当前装备ID读取，兼容旧方案，并在智能对比替换装备时立即更新。 */
+export function 获取明尊已选装备特效(装备信息: 装备信息数据类型): EquippedSpecialEffect[] {
+  return (装备信息?.装备列表 || []).flatMap((行, 索引) => {
+    const 装备 = 行?.id ? findGearItem(行.id) : undefined
+    const 大附魔 = 装备 && matchMajorEnchant(行.大附魔, 装备.position, 装备.kind)
+    return [...(装备?.specialEffects || []), ...(大附魔 ? [大附魔.effect] : [])].map((effect) => ({
+      slot: String(索引),
+      gearKey: 装备!.key,
+      effect,
+    }))
+  })
 }
 
 export function 明尊秒伤计算(参数: {
@@ -145,6 +159,7 @@ export function 明尊秒伤计算(参数: {
     参数.增益启用,
     原始,
   )
+  设置.equipmentEffects = 获取明尊已选装备特效(参数.装备信息)
   if (使用基础循环格式(参数.技能列表)) {
     return 计算明尊基础循环(
       获取明尊原始属性(参数.装备信息?.装备基础属性),
@@ -171,15 +186,7 @@ export function 明尊秒伤计算(参数: {
     秒伤计算时间: 参数.战斗时间 || 60,
     计算结果技能列表: 结果.rows
       .filter((行) => 行.count > 0)
-      .map((行) => {
-        const 最小 = calculateSkill(行, {
-          ...结果.panel,
-          variables: { ...结果.panel.variables, rand: 0 },
-        })
-        const 最大 = calculateSkill(行, {
-          ...结果.panel,
-          variables: { ...结果.panel.variables, rand: 1 },
-        })
+      .map((行): 计算结果技能列表类型 => {
         return {
           ...获取明尊技能显示信息(行.id),
           技能ID: 行.id,
@@ -190,17 +197,18 @@ export function 明尊秒伤计算(参数: {
           会心几率: 行.critical,
           技能最终详情: {
             命中: {
-              最小值: 最小.hit,
-              最大值: 最大.hit,
-              总值: 行.hit * 行.count * (1 - 行.critical),
+              最小值: 行.minHit,
+              最大值: 行.maxHit,
+              总值: 行.hitTotal,
             },
             会心: {
-              最小值: 最小.criticalHit,
-              最大值: 最大.criticalHit,
-              总值: 行.criticalHit * 行.count * 行.critical,
+              最小值: 行.minCritical,
+              最大值: 行.maxCritical,
+              总值: 行.criticalTotal,
             },
           },
         }
-      }),
+      })
+      .concat(结果.equipmentRows),
   }
 }

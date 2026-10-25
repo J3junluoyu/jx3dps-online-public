@@ -493,8 +493,8 @@ test('指定健体石作为例外可选，两项属性即可匹配并正确应�
     isAllowedStone({ name: '其他全属性石', attributes: { all_major_base: 46, vitality_gain: 81 } }),
   ).toBe(false)
 })
-test('触发特效列为未计入，不按普通数值叠加', () => {
-  const item = GEAR_ITEMS.find((row) => row.magic.event)
+test('尚未支持的橙武触发仍列为未计入，不按普通数值叠加', () => {
+  const item = GEAR_ITEMS.find((row) => row.magic.event && !row.specialEffects?.length)
   const result = calculateLoadout({ [slot(item)]: selection(item) })
   expect(result.warnings).toContain('触发特效')
   expect(Object.values(result.stats).every(Number.isFinite)).toBe(true)

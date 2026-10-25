@@ -27,6 +27,9 @@ import {
 } from '@/心法模块/心法/明尊琉璃体/计算'
 import type { Loadout } from '@/心法模块/心法/明尊琉璃体/装备'
 import { 规范明尊秘籍 } from '@/计算模块/职业特殊处理/明尊'
+import { equipmentEffectSupported } from '@/心法模块/心法/明尊琉璃体/装备特效计算'
+import { matchMajorEnchant } from '@/心法模块/心法/明尊琉璃体/大附魔'
+import { equipmentEffectDetails } from '@/心法模块/心法/明尊琉璃体/装备特效说明'
 
 export const 明尊部位映射 = Object.fromEntries(
   SLOTS.map(([键], 索引) => [键, 装备位置部位枚举[`_${索引 + 1}`]]),
@@ -101,7 +104,8 @@ for (const 装备 of 明尊装备列表) {
     装备黄字特效: 装备.specialEffects?.map((effect) => ({
       标识: effect.key,
       说明: effect.description,
-      已计入计算: false,
+      已计入计算: equipmentEffectSupported(effect),
+      详细数值: equipmentEffectDetails(effect),
     })),
     装备增益: [...转换属性(装备.base), ...转换属性(装备.magic, true)],
     镶嵌孔数组: Object.entries(装备.embed).map(([键, 值]) => ({
@@ -126,9 +130,14 @@ function 规范明尊装备列表(装备信息: 装备信息数据类型) {
   let 已更新 = false
   const 列表 = 装备信息.装备列表?.map((项) => {
     const 装备 = 获取明尊装备条目(项?.装备部位, 项?.id)
-    if (!装备 || 装备.id === 项.id) return 项
+    if (!装备) return 项
+    const 原始 = findGearItem(String(装备.uid))
+    const 大附魔 = 项.大附魔
+      ? matchMajorEnchant(项.大附魔, 原始?.position || '', 原始?.kind)?.id || 0
+      : 项.大附魔
+    if (装备.id === 项.id && 大附魔 === 项.大附魔) return 项
     已更新 = true
-    return { ...项, id: 装备.id }
+    return { ...项, id: 装备.id, ...(项.大附魔 ? { 大附魔 } : {}) }
   })
   return 已更新 ? 列表 : 装备信息.装备列表
 }
@@ -193,6 +202,7 @@ export function 获取明尊配装(装备信息: 装备信息数据类型) {
         ? Object.keys(原始装备.embed).map((_, 索引) => 已选?.镶嵌孔数组?.[索引]?.镶嵌宝石等级 || 0)
         : [],
       enchantId: ENCHANTS.find((附魔, 索引) => 明尊附魔数据[索引].附魔名称 === 已选?.附魔)?.id || 0,
+      ...(已选?.大附魔 ? { majorEnchantId: 已选.大附魔 } : {}),
     }
   }
   return normalizeLoadout(配装, STONES.find((石头) => 石头.name === 装备信息.五彩石)?.id || 0)
@@ -209,6 +219,7 @@ export function 转换明尊配装(配装: Loadout, 五彩石 = 0): 装备信息
       装备部位: 明尊部位映射[键],
       当前精炼等级: 槽?.strength || 0,
       附魔: 明尊附魔数据[ENCHANTS.findIndex((附魔) => 附魔.id === 槽?.enchantId)]?.附魔名称,
+      ...(槽?.majorEnchantId ? { 大附魔: 槽.majorEnchantId } : {}),
       镶嵌孔数组:
         数据?.镶嵌孔数组?.map((孔, 索引) => ({
           ...孔,
