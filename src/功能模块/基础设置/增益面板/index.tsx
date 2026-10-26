@@ -1,3 +1,4 @@
+import { 使用五十级装备 } from '@/心法模块/模块工具/心法模式'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { Button, Checkbox, Dropdown, Menu, Tooltip } from 'antd'
 import React, { useState } from 'react'
@@ -67,10 +68,11 @@ function 增益面板() {
               </Button>
             </Dropdown>
           ) : null}
-          {名称 !== '明尊琉璃体' && <计算最佳增益 保存数据并计算={保存数据并计算} />}
+          {!使用五十级装备(名称) && <计算最佳增益 保存数据并计算={保存数据并计算} />}
         </div>
         <div className={'zengyi-operator'}>
           <Checkbox
+            disabled={名称 === '洗髓经'}
             className='zengyi-operator-checkbox'
             checked={!!开启智能对比}
             onChange={(e) => 设置开启智能对比(e?.target?.checked)}
@@ -81,11 +83,11 @@ function 增益面板() {
           </Checkbox>
         </div>
       </h1>
-      {(名称 === '明尊琉璃体' || !!阵眼.length) && (
+      {(使用五十级装备(名称) || !!阵眼.length) && (
         <div
-          className={名称 === '明尊琉璃体' ? 'zengyi-xiaochi-item zengyi-zhenyan-item' : undefined}
+          className={使用五十级装备(名称) ? 'zengyi-xiaochi-item zengyi-zhenyan-item' : undefined}
         >
-          {名称 === '明尊琉璃体' && <h1 className='zengyi-xiaochi-title'>阵眼</h1>}
+          {使用五十级装备(名称) && <h1 className='zengyi-xiaochi-title'>阵眼</h1>}
           <阵眼选择
             aria-label='阵眼'
             value={增益数据?.阵眼 || undefined}

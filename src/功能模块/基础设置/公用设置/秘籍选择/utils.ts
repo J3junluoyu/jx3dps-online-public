@@ -1,9 +1,15 @@
 import { 技能秘籍信息 } from '@/@types/秘籍'
 import 获取当前数据 from '@/数据/数据工具/获取当前数据'
+import { 洗髓秘籍选项 } from '@/心法模块/心法/洗髓经/秘籍'
 
 const { 技能系数 = [] } = 获取当前数据()
 
 export const 获取当前职业的所有秘籍信息 = (): 技能秘籍信息[] => {
+  if (获取当前数据().名称 === '洗髓经')
+    return 洗髓秘籍选项.map((组) => ({
+      技能名称: 组.name,
+      技能秘籍列表: 组.records.map((项) => 项.value),
+    }))
   const 秘籍枚举对象 = {}
   技能系数.forEach((技能) => {
     const 秘籍列表 =

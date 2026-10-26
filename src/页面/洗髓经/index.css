@@ -1,0 +1,15 @@
+.xisui-intro {
+  margin: 4px 0 20px;
+  color: #8c8073;
+}
+.xisui-pending-result {
+  width: 100%;
+}
+.xisui-pending-result .dps-number-count {
+  gap: 20px;
+}
+.xisui-pending-description {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  margin-top: 24px;
+}

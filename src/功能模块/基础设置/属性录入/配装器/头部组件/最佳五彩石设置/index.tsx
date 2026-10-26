@@ -19,7 +19,7 @@ const { 五彩石, 名称 } = 获取当前数据()
 
 const 五彩石原始数据 = 五彩石?.[6]
 
-function 最佳五彩石设置({ 一键替换五彩石, 对比秒伤, 对比装备信息 }) {
+function 最佳五彩石设置({ 一键替换五彩石, 对比秒伤, 对比装备信息, 循环待补充 = false }) {
   const [open, setOpen] = useState<boolean>(false)
   const [最大五彩石, 更新最大五彩石] = useState<string>('')
   const [最大Dps, 更新最大Dps] = useState<number>(0)
@@ -39,8 +39,8 @@ function 最佳五彩石设置({ 一键替换五彩石, 对比秒伤, 对比装�
   }, [open])
 
   useEffect(() => {
-    获取当前装备信息去除五彩石加成的面板()
-  }, [对比装备信息])
+    if (!循环待补充) 获取当前装备信息去除五彩石加成的面板()
+  }, [对比装备信息, 循环待补充])
 
   const 获取当前装备信息去除五彩石加成的面板 = () => {
     const { 装备基础属性 } = 根据装备信息获取基础属性(对比装备信息, { 计算五彩石: false })
@@ -48,6 +48,7 @@ function 最佳五彩石设置({ 一键替换五彩石, 对比秒伤, 对比装�
   }
 
   const 计算前提示 = () => {
+    if (循环待补充) return
     modal.confirm({
       title: `确定开始计算吗`,
       content: `共 ${五彩石原始数据?.length} 个六级五彩石，计算将造成一定卡顿`,
@@ -59,6 +60,7 @@ function 最佳五彩石设置({ 一键替换五彩石, 对比秒伤, 对比装�
   }
 
   const 开始计算 = () => {
+    if (循环待补充) return
     数据埋点('计算最佳五彩石')
     const 开始计算时间 = new Date().valueOf()
     let 最大秒伤 = 0
@@ -129,7 +131,14 @@ function 最佳五彩石设置({ 一键替换五彩石, 对比秒伤, 对比装�
 
   return (
     <>
-      <Button type='primary' size='small' style={{ marginLeft: 12 }} onClick={() => 计算前提示()}>
+      <Button
+        disabled={循环待补充}
+        title={循环待补充 ? '循环模板待补充' : undefined}
+        type='primary'
+        size='small'
+        style={{ marginLeft: 12 }}
+        onClick={() => 计算前提示()}
+      >
         一键设置五彩石
       </Button>
       {/* 设置提醒和结果弹窗 */}

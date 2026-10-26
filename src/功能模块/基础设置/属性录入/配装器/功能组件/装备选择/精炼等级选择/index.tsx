@@ -19,7 +19,12 @@ function 精炼等级选择(props: 精炼等级选择入参) {
 
   return (
     <Tooltip title={是否未精炼满 ? '请注意，当前装备未精炼至满级' : null}>
-      <Select className='jinglian-select' optionFilterProp='label' {...rest}>
+      <Select
+        aria-label={`${装备数据?.装备部位 || '装备'}精炼等级`}
+        className='jinglian-select'
+        optionFilterProp='label'
+        {...rest}
+      >
         {list.map((item) => {
           const 是最大等级 = item === 装备数据?.最大精炼等级
           return (

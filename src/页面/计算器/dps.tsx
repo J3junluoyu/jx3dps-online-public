@@ -17,6 +17,7 @@ import 计算结果 from '@/功能模块/计算结果'
 import 新手引导 from '@/功能模块/新手引导'
 
 import 获取当前数据 from '@/数据/数据工具/获取当前数据'
+import 洗髓界面 from '@/页面/洗髓经'
 
 import '@/工具函数/axios'
 import 'dayjs/locale/zh-cn'
@@ -31,7 +32,7 @@ const 主题色 = 系统配置?.主题色 || '#dca53e'
 ConfigProvider.config({ theme: { primaryColor: 主题色 } })
 
 // TODO 已更新循环列在这里
-const 已完成心法 = ['明尊琉璃体']
+const 已完成心法 = ['明尊琉璃体', '洗髓经']
 
 function 主页面() {
   useEffect(() => {
@@ -59,8 +60,14 @@ function 主页面() {
             <AntdApp>
               <Layout>
                 <系统说明 />
-                <基础设置 />
-                <计算结果 />
+                {名称 === '洗髓经' ? (
+                  <洗髓界面 />
+                ) : (
+                  <>
+                    <基础设置 />
+                    <计算结果 />
+                  </>
+                )}
                 <系统工具 />
                 <心法切换 />
                 <新手引导 />

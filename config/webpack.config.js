@@ -79,6 +79,7 @@ const hasJsxRuntime = (() => {
 })()
 
 const xinfaNameMap = {
+  洗髓经: 'xsj',
   明尊琉璃体: 'mzllt',
 }
 

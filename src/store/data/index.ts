@@ -11,6 +11,8 @@ import { 循环数据 } from '@/@types/循环'
 import 获取当前数据 from '@/数据/数据工具/获取当前数据'
 import { 获取数据默认值 } from '@/工具函数/init'
 import { 获取明尊固定秘籍 } from '@/心法模块/心法/明尊琉璃体/秘籍'
+import { 规范洗髓秘籍 } from '@/心法模块/心法/洗髓经/秘籍'
+import { 获取洗髓固定奇穴 } from '@/心法模块/心法/洗髓经/奇穴'
 
 const { 名称, 缓存映射 } = 获取当前数据()
 
@@ -80,7 +82,12 @@ export const 数据模块 = createSlice({
       localStorage?.setItem(缓存映射.当前输出计算目标名称, action.payload)
     },
     更新当前秘籍信息: (state, action: PayloadAction<选中秘籍信息>) => {
-      state.当前秘籍信息 = 名称 === '明尊琉璃体' ? 获取明尊固定秘籍() : { ...action.payload }
+      state.当前秘籍信息 =
+        名称 === '明尊琉璃体'
+          ? 获取明尊固定秘籍()
+          : 名称 === '洗髓经'
+            ? 规范洗髓秘籍(action.payload)
+            : { ...action.payload }
       localStorage.setItem(缓存映射.当前秘籍信息, JSON.stringify(state.当前秘籍信息))
     },
     更新当前方案名称: (state, action: PayloadAction<string>) => {
@@ -88,16 +95,28 @@ export const 数据模块 = createSlice({
       localStorage.setItem(缓存映射.当前方案名称, action.payload)
     },
     更新全部方案数据: (state, action: PayloadAction<全部方案数据>) => {
-      state.全部方案数据 = action.payload
-      localStorage.setItem(缓存映射.全部方案数据, JSON.stringify(action.payload))
+      state.全部方案数据 =
+        名称 === '洗髓经'
+          ? Object.fromEntries(
+              Object.entries(action.payload).map(([key, 方案]) => [
+                key,
+                { ...方案, 当前奇穴信息: 获取洗髓固定奇穴() },
+              ]),
+            )
+          : action.payload
+      localStorage.setItem(缓存映射.全部方案数据, JSON.stringify(state.全部方案数据))
     },
     更新方案数据: (state, action: PayloadAction<更新方案数据入参>) => {
       const 目标属性 = action?.payload?.属性
       if (目标属性) {
         const 数据 =
-          名称 === '明尊琉璃体' && 目标属性 === '当前秘籍信息'
-            ? 获取明尊固定秘籍()
-            : action?.payload?.数据
+          名称 === '洗髓经' && 目标属性 === '当前奇穴信息'
+            ? 获取洗髓固定奇穴()
+            : 名称 === '明尊琉璃体' && 目标属性 === '当前秘籍信息'
+              ? 获取明尊固定秘籍()
+              : 名称 === '洗髓经' && 目标属性 === '当前秘籍信息'
+                ? 规范洗髓秘籍(action.payload.数据)
+                : action?.payload?.数据
         // 更新当前正在使用的属性
         state[目标属性] = 数据
         const 当前方案名称 = state.当前方案名称
@@ -119,10 +138,14 @@ export const 数据模块 = createSlice({
         state.装备信息 = 目标方案.装备信息
         state.增益启用 = 目标方案.增益启用
         state.增益数据 = 目标方案.增益数据
-        state.当前奇穴信息 = 目标方案.当前奇穴信息
+        state.当前奇穴信息 = 名称 === '洗髓经' ? 获取洗髓固定奇穴() : 目标方案.当前奇穴信息
+        if (名称 === '洗髓经') 目标方案.当前奇穴信息 = 获取洗髓固定奇穴()
         state.当前计算循环名称 = 目标方案.当前计算循环名称
         if (名称 === '明尊琉璃体') {
           state.当前秘籍信息 = 获取明尊固定秘籍()
+          目标方案.当前秘籍信息 = state.当前秘籍信息
+        } else if (名称 === '洗髓经') {
+          state.当前秘籍信息 = 规范洗髓秘籍(目标方案.当前秘籍信息)
           目标方案.当前秘籍信息 = state.当前秘籍信息
         } else if (目标方案.当前秘籍信息) {
           state.当前秘籍信息 = 目标方案.当前秘籍信息

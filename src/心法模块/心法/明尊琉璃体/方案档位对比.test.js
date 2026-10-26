@@ -1,7 +1,7 @@
 import { 对比明尊加速档位, 获取档位对比循环 } from './方案档位对比'
 import * as 优化模块 from './方案优化'
 import { DEFAULT_SETTINGS } from './计算'
-import { GEAR_ITEMS, SLOTS, STONES, slotPosition } from './装备'
+import { GEAR_ITEMS, ENCHANTS, SLOTS, STONES, slotPosition } from './装备'
 import 循环列表 from './计算循环'
 
 jest.setTimeout(120000)
@@ -31,7 +31,11 @@ const 输入 = () => ({
             key: item.key,
             strength: item.maxStrength,
             embeds: Object.keys(item.embed).map(() => 8),
-            enchantId: 0,
+            enchantId: ['hat', 'shoes'].includes(slot)
+              ? ENCHANTS.find(
+                  (row) => row.position === item.position && row.attributes.haste_base === 72,
+                ).id
+              : 0,
           },
         ]
       }),
@@ -67,6 +71,7 @@ test('实际装备库按相同条件分别优化两档，严格满足GCD和御�
       const key = entry.result.plan.slots[slot].key
       expect(input.gearKeys).toContain(key)
       expect(GEAR_ITEMS.find((row) => row.key === key).kind).toBe('防御')
+      expect(GEAR_ITEMS.find((row) => row.key === key).orangeWeapon).toBeFalsy()
     }
   }
   const best = [...comparison.entries].sort((a, b) => b.result.after.dps - a.result.after.dps)[0]

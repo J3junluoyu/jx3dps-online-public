@@ -150,6 +150,28 @@ test('没有符合范围的装备时明确失败，不使用范围外的初始�
   expect(() => 优化明尊方案({ ...输入(), gearKeys: [] })).toThrow('没有候选装备')
 })
 
+test('橙武暂不参与推荐，初始橙武必须替换，不能绕过候选限制', () => {
+  const input = 输入(循环列表[0])
+  const orange = GEAR_ITEMS.find((item) => item.orangeWeapon)
+  const ordinary = GEAR_ITEMS.find((item) => item.key === input.initial.slots.primary_weapon.key)
+  expect(ordinary.orangeWeapon).toBeFalsy()
+  input.initial.slots.primary_weapon = {
+    key: orange.key,
+    strength: orange.maxStrength,
+    embeds: Object.keys(orange.embed).map(() => 8),
+    enchantId: 0,
+  }
+  input.slots = ['primary_weapon']
+  input.gearKeys = [orange.key]
+  input.minToughness = 0
+  expect(() => 优化明尊方案(input)).toThrow('没有候选装备')
+  expect(() => 优化明尊方案({ ...input, slots: [] })).toThrow('橙武暂不参与推荐')
+  const result = 优化明尊方案({ ...input, gearKeys: [orange.key, ordinary.key] })
+  expect(result.plan).toBeDefined()
+  expect(result.plan.slots.primary_weapon.key).toBe(ordinary.key)
+  expect(input.initial.slots.primary_weapon.key).toBe(orange.key)
+})
+
 test('仅防御装备限制所有参与部位，初始精简装备不能作为结果保留', () => {
   const input = 输入(循环列表[0])
   const item = GEAR_ITEMS.find((row) => row.position === 'hat' && row.school === '精简')

@@ -8,6 +8,7 @@ import { 触发秒伤计算 } from '@/计算模块/计算函数'
 import { 更新方案数据, 更新团队增益轴 } from '@/store/data'
 import { 获取团队增益禁用原因 } from '@/数据/数据工具/团队增益限制'
 import { 明尊一键团队增益 } from '@/心法模块/心法/明尊琉璃体/团队增益预设'
+import { 使用五十级装备 } from '@/心法模块/模块工具/心法模式'
 
 import 团队增益设置弹窗 from './团队增益设置弹窗'
 import 团队增益轴设置弹窗 from './团队增益轴设置弹窗'
@@ -141,7 +142,7 @@ function 团队增益选择({ 保存数据并计算 }) {
       <div className='tuandui-zengyi-header'>
         <div className='tuandui-zengyi-heading'>
           <h1 className='tuandui-title'>团队增益</h1>
-          {名称 === '明尊琉璃体' && (
+          {使用五十级装备(名称) && (
             <Tooltip title='开启后套用已记录的团队增益、层数及覆盖率，同时启用增益总开关；关闭后清空团队增益，保留药食和阵眼。'>
               <Button
                 className='tuandui-preset-btn'
@@ -198,6 +199,7 @@ function 团队增益选择({ 保存数据并计算 }) {
           className={'tuandui-setting-btn'}
           size='small'
           type='dashed'
+          disabled={名称 === '洗髓经'}
           onClick={() => {
             if (新手引导流程状态) {
               return

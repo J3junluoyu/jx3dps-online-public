@@ -4,11 +4,14 @@ import type { 团队增益选项数据类型 } from '@/@types/团队增益'
 import type { Settings } from './计算'
 import { calculateAttributes, ratingScale } from './计算'
 import { GEAR_ITEMS, ENCHANTS, SLOTS, calculateLoadout, slotPosition } from './装备'
-import type { Loadout } from './装备'
+import type { GearItem, Loadout } from './装备'
 import { 明尊小药小吃, 获取明尊战斗增益 } from './增益'
 import { 明尊阵眼 } from './阵眼'
 import { 计算明尊基础循环 } from '@/计算模块/职业特殊处理/明尊/基础循环'
 import { matchMajorEnchant } from './大附魔'
+import { 计算洗髓面板, 计算洗髓循环, 获取洗髓增益属性 } from '../洗髓经/计算'
+import { 洗髓自适应循环 } from '../洗髓经/循环'
+import 明尊循环列表 from './计算循环'
 
 export interface 优化方案 {
   slots: Loadout
@@ -20,9 +23,15 @@ export interface 优化指标 {
   dps: number
   haste: number
   gcd: number
+  simulatedGcd?: number
   toughness: number
 }
 export interface 方案优化输入 {
+  kungfu?: 'xsj' | 'mzllt'
+  /** 推荐以该档为加速下限，保留更高加速装备，技能次数仍使用所选模板。 */
+  allowHigherHaste?: boolean
+  /** 高品级方案只用于增加搜索起点，最终仍按伤害排序。 */
+  exploreHighLevelCandidates?: boolean
   initial: 优化方案
   cycle: 循环数据
   settings: Settings
@@ -47,13 +56,13 @@ export interface 方案优化进度 {
   stage: string
   evaluations: number
 }
-type 候选结果 = { plan: 优化方案; metrics: 优化指标; violation: number; key: string }
+type 候选结果 = { plan: 优化方案; metrics: 优化指标; violation: number; key: string; grade: number }
 type 选择组 = { label: string; slot?: string; apply: ((plan: 优化方案) => 优化方案)[] }
 type 约束指标 = Pick<优化指标, 'haste' | 'toughness'>
 
-export const 获取优化GCD = (加速: number) =>
+export const 获取优化GCD = (加速: number, 基础帧数 = 16) =>
   Math.floor(
-    (1024 * 16) / (1024 + Math.min(256, Math.floor((1024 * 加速) / ratingScale('haste')))),
+    (1024 * 基础帧数) / (1024 + Math.min(256, Math.floor((1024 * 加速) / ratingScale('haste')))),
   ) / 16
 
 export function 获取同档附魔(enchantId: number, position: string) {
@@ -77,6 +86,7 @@ const 方案键 = (plan: 优化方案) =>
     plan.formation,
     [...plan.consumables].sort(),
   ])
+const 装备品级 = new Map(GEAR_ITEMS.map((item) => [item.key, item.level]))
 
 const wineValues = new Map(
   明尊小药小吃
@@ -94,6 +104,61 @@ export function 优化明尊方案(
   input: 方案优化输入,
   onProgress?: (progress: 方案优化进度) => void,
 ): 方案优化结果 {
+  if (!input.exploreHighLevelCandidates || !input.slots.length)
+    return 搜索推荐方案(input, onProgress)
+  const started = Date.now()
+  const highKeys = 获取最高品级候选(input)
+  const high = 搜索推荐方案({ ...input, gearKeys: highKeys }, (progress) =>
+    onProgress?.({
+      ...progress,
+      percent: Math.floor(progress.percent / 2),
+      stage: `补充高品级起点：${progress.stage}`,
+    }),
+  )
+  // 高品级可行方案只是额外起点；始终再搜索用户范围内的全部装备，包括较低品级特效。
+  const result = 搜索推荐方案(
+    input,
+    (progress) =>
+      onProgress?.({
+        ...progress,
+        percent: 50 + Math.floor(progress.percent / 2),
+        stage: `全范围伤害比较：${progress.stage}`,
+        evaluations: high.evaluations + progress.evaluations,
+      }),
+    high.plan ? [high.plan] : [],
+  )
+  return {
+    ...result,
+    evaluations: high.evaluations + result.evaluations,
+    elapsed: Date.now() - started,
+  }
+}
+
+/** 用户确认：可精炼8级的试做腰坠视为橙装，不因低品级而排除。 */
+export const 是橙色腰坠 = (item: GearItem) => item.position === 'pendant' && item.maxStrength === 8
+
+export function 获取最高品级候选(input: 方案优化输入): string[] {
+  const candidates = GEAR_ITEMS.filter(
+    (item) =>
+      input.gearKeys.includes(item.key) &&
+      !item.orangeWeapon &&
+      (input.gearScope !== 'defensive' || item.kind === '防御'),
+  )
+  const maxLevels = new Map<string, number>()
+  for (const item of candidates) {
+    if (!是橙色腰坠(item))
+      maxLevels.set(item.position, Math.max(maxLevels.get(item.position) || 0, item.level))
+  }
+  return candidates
+    .filter((item) => 是橙色腰坠(item) || item.level === maxLevels.get(item.position))
+    .map((item) => item.key)
+}
+
+function 搜索推荐方案(
+  input: 方案优化输入,
+  onProgress?: (progress: 方案优化进度) => void,
+  startingPlans: 优化方案[] = [],
+): 方案优化结果 {
   if (!Number.isFinite(input.minToughness) || input.minToughness < 0 || input.minToughness > 100)
     throw new Error('御劲要求须为0到100之间的百分比')
   if (
@@ -104,31 +169,47 @@ export function 优化明尊方案(
     throw new Error('镶嵌等级无效')
   const detail = input.cycle.循环详情[0]
   const tier = Number(detail?.循环加速等级)
-  if (![3, 4].includes(tier)) throw new Error('请选择0.81GCD或0.75GCD循环')
-  const gcd = (16 - tier) / 16
+  const xisui = input.kungfu === 'xsj'
+  if (!(xisui ? [3, 4, 5] : [3, 4]).includes(tier))
+    throw new Error(xisui ? '请选择洗髓3、4、5档循环' : '请选择0.81GCD或0.75GCD循环')
+  const baseFrames = xisui ? 24 : 16
+  const gcd = (baseFrames - tier) / 16
   const minHaste = Math.ceil(
-    ((Math.floor((1024 * 16) / (17 - tier) - 1024) + 1) * ratingScale('haste')) / 1024,
+    ((Math.floor((1024 * baseFrames) / (baseFrames + 1 - tier) - 1024) + 1) *
+      ratingScale('haste')) /
+      1024,
   )
   const maxHaste =
-    tier === 4
+    input.allowHigherHaste || tier === (xisui ? 5 : 4)
       ? Infinity
       : Math.ceil(
-          ((Math.floor((1024 * 16) / (16 - tier) - 1024) + 1) * ratingScale('haste')) / 1024,
+          ((Math.floor((1024 * baseFrames) / (baseFrames - tier) - 1024) + 1) *
+            ratingScale('haste')) /
+            1024,
         )
   const started = Date.now()
   if (input.gearScope && !['defensive', 'includeStreamlined'].includes(input.gearScope))
     throw new Error('装备范围无效')
-  // 与配装器的品级等筛选取交集；初始配装不能绕过防御装备限制。
+  // 与配装器筛选取交集；橙武暂不参与推荐，初始配装也不能绕过限制。
   const allowed = new Set(
     GEAR_ITEMS.filter(
       (item) =>
         input.gearKeys.includes(item.key) &&
+        !item.orangeWeapon &&
         (input.gearScope !== 'defensive' || item.kind === '防御'),
     ).map((item) => item.key),
   )
   const activeSlots = new Set(input.slots)
   if (input.slots.some((slot) => !SLOTS.some(([key]) => key === slot)))
     throw new Error('优化部位无效')
+  if (
+    SLOTS.some(
+      ([slot]) =>
+        !activeSlots.has(slot) &&
+        GEAR_ITEMS.find((item) => item.key === input.initial.slots[slot]?.key)?.orangeWeapon,
+    )
+  )
+    throw new Error('橙武暂不参与推荐，请勾选武器部位或换为普通武器后重试')
   const groups: 选择组[] = []
   const validEnchants = new Map<string, number[]>()
   for (const [slot, label] of SLOTS) {
@@ -247,7 +328,10 @@ export function 优化明尊方案(
         validEnchants.get(slot)?.includes(plan.slots[slot]?.enchantId),
     )
   const meetsRequirements = (metrics: 约束指标) =>
-    获取优化GCD(metrics.haste) === gcd && metrics.toughness + 1e-10 >= input.minToughness
+    (input.allowHigherHaste
+      ? metrics.haste >= minHaste
+      : 获取优化GCD(metrics.haste, baseFrames) === gcd) &&
+    metrics.toughness + 1e-10 >= input.minToughness
   const panelFor = (plan: 优化方案, cacheStats = true) => {
     const gearKey = JSON.stringify([SLOTS.map(([slot]) => plan.slots[slot]), plan.stone])
     let equipped = statsCache.get(gearKey)
@@ -257,19 +341,26 @@ export function 优化明尊方案(
     }
     const { stats, specialEffects } = equipped
     // 团队增益固定使用传入配置；只优化装备、附魔、阵眼与常规增益。
-    const gains = 获取明尊战斗增益(
-      { 阵眼: plan.formation, 小吃: plan.consumables, 团队增益: input.teamGains || [] },
-      true,
-      stats,
-      input.settings,
-    )
+    const gainData = {
+      阵眼: plan.formation,
+      小吃: plan.consumables,
+      团队增益: input.teamGains || [],
+    }
+    const gains = xisui
+      ? 获取洗髓增益属性(gainData, true)
+      : 获取明尊战斗增益(
+          { 阵眼: plan.formation, 小吃: plan.consumables, 团队增益: input.teamGains || [] },
+          true,
+          stats,
+          input.settings,
+        )
     const settings = {
       ...input.settings,
       gains,
       equipmentEffects: specialEffects,
       equipmentProcGains: undefined,
     }
-    const panel = calculateAttributes(stats, settings)
+    const panel = xisui ? 计算洗髓面板(stats, settings) : calculateAttributes(stats, settings)
     return { stats, settings, panel }
   }
   const constraintsFor = (plan: 优化方案): 约束指标 => {
@@ -282,9 +373,16 @@ export function 优化明尊方案(
     if (cached) return cached
     const { stats, settings, panel } = panelFor(plan)
     const metrics = {
-      dps: 计算明尊基础循环(stats, settings, detail.技能详情, detail.战斗时间, false).秒伤,
+      dps: (xisui ? 计算洗髓循环 : 计算明尊基础循环)(
+        stats,
+        settings,
+        detail.技能详情,
+        detail.战斗时间,
+        false,
+      ).秒伤,
       haste: panel.hasteRating,
-      gcd: 获取优化GCD(panel.hasteRating),
+      gcd: 获取优化GCD(panel.hasteRating, baseFrames),
+      ...(input.allowHigherHaste ? { simulatedGcd: gcd } : {}),
       toughness: panel.toughness * 100,
     }
     const violation =
@@ -292,19 +390,50 @@ export function 优化明尊方案(
         (metrics.haste >= maxHaste ? metrics.haste - maxHaste + 1 : 0)) /
         888 +
       Math.max(0, input.minToughness - metrics.toughness) / Math.max(1, input.minToughness)
-    const result = { plan, metrics, violation, key }
+    const grade = SLOTS.reduce((sum, [slot]) => sum + (装备品级.get(plan.slots[slot]?.key) || 0), 0)
+    const result = { plan, metrics, violation, key, grade }
     cache.set(key, result)
     if (
       meetsRequirements(metrics) &&
       inScope(plan) &&
       (!best ||
         metrics.dps > best.metrics.dps ||
-        (metrics.dps === best.metrics.dps && wineValue(plan) < wineValue(best.plan)))
+        (metrics.dps === best.metrics.dps &&
+          (grade > best.grade || (grade === best.grade && wineValue(plan) < wineValue(best.plan)))))
     )
       best = result
     return result
   }
   const initial = evaluate(input.initial)
+  let before = initial.metrics
+  if (xisui || input.allowHigherHaste) {
+    const theoretical = detail.技能详情.some((row) => row.明尊技能状态)
+    const actual = (
+      xisui
+        ? [洗髓自适应循环]
+        : 明尊循环列表.filter((cycle) =>
+            cycle.循环详情.some(
+              (row) => row.技能详情.some((skill) => !!skill.明尊技能状态) === theoretical,
+            ),
+          )
+    )
+      .flatMap((cycle) => cycle.循环详情)
+      .find((row) => (baseFrames - Number(row.循环加速等级)) / 16 === initial.metrics.gcd)
+    const { stats, settings } = panelFor(input.initial)
+    before = {
+      ...initial.metrics,
+      dps: actual
+        ? (xisui ? 计算洗髓循环 : 计算明尊基础循环)(
+            stats,
+            settings,
+            actual.技能详情,
+            actual.战斗时间,
+            false,
+          ).秒伤
+        : 0,
+      ...(input.allowHigherHaste ? { simulatedGcd: initial.metrics.gcd } : {}),
+    }
+  }
   const seed = evaluate({
     ...input.initial,
     formation: formations.includes(input.initial.formation) ? input.initial.formation : '',
@@ -312,6 +441,7 @@ export function 优化明尊方案(
       ? input.initial.consumables
       : input.initial.consumables.filter((name) => !enhancementNames.has(name)),
   })
+  const extraSeeds = startingPlans.filter(inScope).map(evaluate)
   // 可行性核查不按伤害裁剪：同一加速和套装状态只需保留御劲最高的组合。
   // 先检查当前装备搭配不同增益，再检查换装，避免把加速药食路径提前丢弃。
   if (!best) {
@@ -391,7 +521,11 @@ export function 优化明尊方案(
       })
     }
   }
-  let beam = best && best.key !== seed.key ? [seed, best] : [seed]
+  let beam = [
+    ...new Map(
+      [seed, ...extraSeeds, ...(best ? [best] : [])].map((row) => [row.key, row]),
+    ).values(),
+  ]
   const selectBeam = (candidates: 候选结果[]) => {
     const unique = [...new Map(candidates.map((item) => [item.key, item])).values()]
     const selected = new Map<string, 候选结果>()
@@ -511,7 +645,7 @@ export function 优化明尊方案(
   onProgress?.({ percent: 100, stage: '计算完成', evaluations: evaluations() })
   return {
     plan: best?.plan,
-    before: initial.metrics,
+    before,
     after: best?.metrics,
     evaluations: evaluations(),
     elapsed: Date.now() - started,

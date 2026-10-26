@@ -5,7 +5,7 @@ import FullLoading from './组件/FullLoading'
 import useQuery from './hooks/use-query'
 
 // 懒加载组件
-const 登录 = React.lazy(() => import('./页面/登录/index'))
+const 首页 = React.lazy(() => import('./页面/首页'))
 const 计算器 = React.lazy(() => import('./页面/计算器/index'))
 const Haste = React.lazy(() => import('./页面/加速计算/index'))
 
@@ -46,10 +46,15 @@ const root = ReactDOM.createRoot(document.getElementById('root') as any)
 
 const isLocalBuild = process.env.REACT_APP_BUILD_TYPE === 'local'
 
+function 入口页面() {
+  const 心法 = useQuery('xf')
+  return 心法 === 'mzllt' || 心法 === 'xsj' ? <计算器 /> : <首页 />
+}
+
 if (isLocalBuild) {
   root.render(
     <Suspense fallback={<FullLoading />}>
-      <计算器 />
+      <入口页面 />
     </Suspense>,
   )
 } else {
@@ -60,7 +65,7 @@ if (isLocalBuild) {
           path='/'
           element={
             <Suspense fallback={<FullLoading />}>
-              <登录 />
+              <入口页面 />
             </Suspense>
           }
         />

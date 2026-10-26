@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Button, Divider } from 'antd'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import 获取当前数据 from '@/数据/数据工具/获取当前数据'
@@ -21,10 +21,16 @@ type 循环要求 = {
   延迟?: string
 }
 
-function 计算结果() {
+interface 计算结果入参 {
+  标题操作?: React.ReactNode
+  未计算内容?: React.ReactNode
+}
+
+function 计算结果({ 标题操作, 未计算内容 }: 计算结果入参) {
   const 增益面板显示状态 = useAppSelector((state) => state?.system?.增益面板显示状态)
   const 增益启用 = useAppSelector((state) => state?.data?.增益启用)
-  const 当前计算结果 = useAppSelector((state) => state?.data?.当前计算结果)
+  const 已保存计算结果 = useAppSelector((state) => state?.data?.当前计算结果)
+  const 当前计算结果 = 未计算内容 ? undefined : 已保存计算结果
   const 当前计算循环名称 = useAppSelector((state) => state?.data?.当前计算循环名称)
   const [技能统计弹窗, 打开技能统计弹窗] = useState<boolean>(false)
   const [初始化, 设置初始化] = useState<boolean>(false)
@@ -83,6 +89,7 @@ function 计算结果() {
   }, [当前循环信息, 当前计算结果])
 
   const 更新计算记录 = () => {
+    if (!当前计算结果?.秒伤) return
     // 第一次不更新，用于新版本提示
     if (!初始化) {
       设置初始化(true)
@@ -126,55 +133,59 @@ function 计算结果() {
       style={{ backgroundColor: 系统配置?.背景色 || 'rgba(0, 0, 0, 0.5)' }}
       onClickCapture={收起增益面板}
     >
-      <h1 className={'dps-title'}>伤害计算</h1>
+      <div className='dps-title-row'>
+        <h1 className={'dps-title'}>伤害计算</h1>
+        {标题操作}
+      </div>
       <Divider />
       <div className='dps-number-count-wrap'>
-        {当前计算结果?.秒伤 ? (
-          <div className={'dps-number-count'}>
-            <div id='Guide_8' className={'dps-number-count-text'}>
-              {名称 === '明尊琉璃体' ? 当前计算结果.秒伤.toFixed(2) : 当前计算结果.秒伤}
+        {未计算内容 ||
+          (当前计算结果?.秒伤 ? (
+            <div className={'dps-number-count'}>
+              <div id='Guide_8' className={'dps-number-count-text'}>
+                {['明尊琉璃体', '洗髓经'].includes(名称) ? 当前计算结果.秒伤.toFixed(2) : 当前计算结果.秒伤}
+              </div>
+              <Button
+                className={'dps-number-count-skill-btn'}
+                style={{ marginLeft: 20 }}
+                type='primary'
+                size='small'
+                onClick={() => 打开技能统计弹窗(true)}
+              >
+                技能详情
+              </Button>
+              {!增益启用 && !['明尊琉璃体', '洗髓经'].includes(名称) ? (
+                <div className={'dps-number-count-gain-tip'}>
+                  当前为纯木桩计算，计算属性收益时建议
+                  <b style={{ textDecorationLine: 'underline' }}>开启增益</b>。
+                </div>
+              ) : null}
             </div>
-            <Button
-              className={'dps-number-count-skill-btn'}
-              style={{ marginLeft: 20 }}
-              type='primary'
-              size='small'
-              onClick={() => 打开技能统计弹窗(true)}
-            >
-              技能详情
-            </Button>
-            {!增益启用 && 名称 !== '明尊琉璃体' ? (
-              <div className={'dps-number-count-gain-tip'}>
-                当前为纯木桩计算，计算属性收益时建议
-                <b style={{ textDecorationLine: 'underline' }}>开启增益</b>。
-              </div>
-            ) : null}
-          </div>
-        ) : 名称 === '明尊琉璃体' ? (
-          <div className='dps-number-count-no-result'>
-            <h1>尚未填写技能次数</h1>
-            <p>在“技能次数 / 增益”中填写实际命中次数后计算。</p>
-          </div>
-        ) : (
-          <div className={'dps-number-count-no-result'}>
-            <h1>无法计算</h1>
-            <h1>加速或延迟不对！</h1>
-            <h1>请检查装备、循环情况</h1>
-            <h1>鼠标放置循环上有加速要求说明</h1>
-            {当前循环强制要求 ? (
-              <div>
-                <p>当前循环支持范围：</p>
-                {当前循环强制要求?.map((要求, index) => {
-                  return (
-                    <p key={`当前循环强制要求_${index}`}>
-                      {要求?.加速 ? 要求.加速 : ''} {要求?.延迟 ? 要求.延迟 : ''}
-                    </p>
-                  )
-                })}
-              </div>
-            ) : null}
-          </div>
-        )}
+          ) : 名称 === '明尊琉璃体' ? (
+            <div className='dps-number-count-no-result'>
+              <h1>尚未填写技能次数</h1>
+              <p>在“技能次数 / 增益”中填写实际命中次数后计算。</p>
+            </div>
+          ) : (
+            <div className={'dps-number-count-no-result'}>
+              <h1>无法计算</h1>
+              <h1>加速或延迟不对！</h1>
+              <h1>请检查装备、循环情况</h1>
+              <h1>鼠标放置循环上有加速要求说明</h1>
+              {当前循环强制要求 ? (
+                <div>
+                  <p>当前循环支持范围：</p>
+                  {当前循环强制要求?.map((要求, index) => {
+                    return (
+                      <p key={`当前循环强制要求_${index}`}>
+                        {要求?.加速 ? 要求.加速 : ''} {要求?.延迟 ? 要求.延迟 : ''}
+                      </p>
+                    )
+                  })}
+                </div>
+              ) : null}
+            </div>
+          ))}
         {当前计算结果?.秒伤 ? (
           <div className='dps-number-count-time'>
             <span className={'dps-number-count-time-label'}>战斗时间：</span>
@@ -202,4 +213,4 @@ function 计算结果() {
   )
 }
 
-export default forwardRef(计算结果)
+export default 计算结果

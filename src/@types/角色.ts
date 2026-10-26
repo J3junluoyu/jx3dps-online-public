@@ -7,6 +7,7 @@ export interface 角色基础属性类型 {
   // 保留Generator的内外功、防御及体质百分比属性，避免转换时丢失精度。
   明尊属性?: import('@/心法模块/心法/明尊琉璃体/计算').EquipmentStats
   明尊面板?: ReturnType<typeof import('@/心法模块/心法/明尊琉璃体/计算').calculateAttributes>
+  洗髓面板?: ReturnType<typeof import('@/心法模块/心法/明尊琉璃体/计算').calculateAttributePanel>
   明尊招式威胁?: number
   /**
    * @name 装分

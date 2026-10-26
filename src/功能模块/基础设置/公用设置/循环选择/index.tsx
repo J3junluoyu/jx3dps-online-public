@@ -30,7 +30,7 @@ function 循环选择(props) {
   useEffect(() => {
     if (
       !外部控制循环 &&
-      名称 === '明尊琉璃体' &&
+      ['明尊琉璃体', '洗髓经'].includes(名称) &&
       实际循环名称 &&
       实际循环名称 !== 当前计算循环名称
     ) {
@@ -128,6 +128,8 @@ function 循环选择(props) {
       <h1 className='common-label'>循环</h1>
       <div className='common-content'>
         <Select
+          disabled={名称 === '洗髓经' && !全部循环.length}
+          placeholder={名称 === '洗髓经' && !全部循环.length ? '循环模板待补充' : undefined}
           value={外部控制循环 ? value : 实际循环名称 || 当前计算循环名称}
           className='cycle-select'
           onChange={(v) => {

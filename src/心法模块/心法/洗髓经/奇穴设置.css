@@ -1,0 +1,72 @@
+.xisui-talents-drawer .ant-drawer-body {
+  padding: 16px 24px 24px;
+}
+.xisui-talents-tip {
+  color: #99774a;
+  background: #faf7f1;
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin: 0 0 16px;
+}
+.xisui-talents-groups {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: auto;
+}
+.xisui-talents-groups h2 {
+  font-size: 13px;
+  margin: 0 0 10px;
+  color: #8b6d48;
+}
+.xisui-talents-main {
+  flex: 2;
+  min-width: 550px;
+}
+.xisui-talents-pool {
+  flex: 1;
+  min-width: 260px;
+}
+.xisui-talents-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px;
+}
+.xisui-talents-pool .xisui-talents-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.xisui-talent-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 4px;
+  border: 1px solid #dfcfb7;
+  border-radius: 6px;
+  background: #fffcf7;
+  color: #76562e;
+  cursor: help;
+}
+.xisui-talent-card img {
+  width: 44px;
+  height: 44px;
+  border-radius: 6px;
+}
+.xisui-talent-card span {
+  font-size: 13px;
+  white-space: nowrap;
+}
+.xisui-talent-card:focus-visible {
+  outline: 2px solid #a67541;
+  outline-offset: 2px;
+}
+@media (max-width: 640px) {
+  .xisui-talents-main {
+    min-width: 0;
+    flex-basis: 100%;
+  }
+  .xisui-talents-main .xisui-talents-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

@@ -19,7 +19,7 @@ function 主页面() {
   const 初始化数据 = async () => {
     try {
       const 模块 = require('@/数据/数据工具/获取当前数据')
-      await 模块?.初始化心法数据('明尊琉璃体')
+      await 模块?.初始化心法数据()
       设置资源获取完成(true)
     } catch {
       window.location.href = '/'

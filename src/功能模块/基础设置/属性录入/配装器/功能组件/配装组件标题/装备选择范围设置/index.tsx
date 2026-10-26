@@ -1,3 +1,4 @@
+import { 使用五十级装备 } from '@/心法模块/模块工具/心法模式'
 import React, { useState } from 'react'
 import { 装备选择范围类型 } from '@/@types/装备'
 import { SettingOutlined } from '@ant-design/icons'
@@ -11,7 +12,7 @@ interface 装备选择范围设置类型 {
 }
 
 const { 系统配置, 名称, 装备数据 } = 获取当前数据()
-const 明尊模式 = 名称 === '明尊琉璃体'
+const 明尊模式 = 使用五十级装备(名称)
 const 最高品级 = 明尊模式
   ? Math.max(
       ...Object.values(装备数据)

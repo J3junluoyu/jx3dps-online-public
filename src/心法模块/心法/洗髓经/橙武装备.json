@@ -1,0 +1,108 @@
+{
+  "source": {
+    "repository": "https://github.com/J3junluoyu/Generator",
+    "commit": "8fad4eb8b52fa435bc656e7731ccbf40d6d41126",
+    "file": "assets/json/weapons.json"
+  },
+  "items": [
+    {
+      "key": "weapons:47799",
+      "id": 47799,
+      "name": "降魔境_测试用",
+      "school": "少林",
+      "kind": "防御",
+      "usage": "ALL",
+      "position": "primary_weapon",
+      "level": 1110,
+      "maxStrength": 8,
+      "orangeWeapon": true,
+      "base": {
+        "weapon_damage_base": 196,
+        "weapon_damage_rand": 131
+      },
+      "magic": {
+        "vitality_base": 1268,
+        "physical_shield_base": 1655,
+        "magical_shield_base": 1655,
+        "haste_base": 552,
+        "toughness_base": 276,
+        "strain_base": 925,
+        "recipe": "recipe_1514_1 | recipe_1515_1 | recipe_17356_1 | recipe_17246_1 | recipe_17360_1 | recipe_17361_1",
+        "event": "gain_1855_9 | gain_25794_1"
+      },
+      "embed": {
+        "vitality_base": 225,
+        "physical_shield_base": 225,
+        "magical_shield_base": 225
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
+      "key": "weapons:47832",
+      "id": 47832,
+      "name": "降魔境_测试用",
+      "school": "少林",
+      "kind": "防御",
+      "usage": "ALL",
+      "position": "primary_weapon",
+      "level": 1170,
+      "maxStrength": 8,
+      "orangeWeapon": true,
+      "base": {
+        "weapon_damage_base": 211,
+        "weapon_damage_rand": 141
+      },
+      "magic": {
+        "vitality_base": 1342,
+        "physical_shield_base": 1745,
+        "magical_shield_base": 1745,
+        "haste_base": 582,
+        "toughness_base": 291,
+        "strain_base": 1001,
+        "recipe": "recipe_1514_1 | recipe_1515_1 | recipe_17356_1 | recipe_17246_1 | recipe_17360_1 | recipe_17361_1",
+        "event": "gain_1855_9 | gain_25794_1"
+      },
+      "embed": {
+        "vitality_base": 225,
+        "physical_shield_base": 225,
+        "magical_shield_base": 225
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
+      "key": "weapons:47865",
+      "id": 47865,
+      "name": "降魔境_测试用",
+      "school": "少林",
+      "kind": "防御",
+      "usage": "ALL",
+      "position": "primary_weapon",
+      "level": 1240,
+      "maxStrength": 8,
+      "orangeWeapon": true,
+      "base": {
+        "weapon_damage_base": 228,
+        "weapon_damage_rand": 152
+      },
+      "magic": {
+        "vitality_base": 1429,
+        "physical_shield_base": 1849,
+        "magical_shield_base": 1849,
+        "haste_base": 616,
+        "toughness_base": 308,
+        "strain_base": 1092,
+        "recipe": "recipe_1514_1 | recipe_1515_1 | recipe_17356_1 | recipe_17246_1 | recipe_17360_1 | recipe_17361_1",
+        "event": "gain_1855_9 | gain_25794_1"
+      },
+      "embed": {
+        "vitality_base": 225,
+        "physical_shield_base": 225,
+        "magical_shield_base": 225
+      },
+      "setId": 0,
+      "sets": {}
+    }
+  ]
+}

@@ -1,3 +1,4 @@
+import { 使用五十级装备 } from '@/心法模块/模块工具/心法模式'
 /**
  * 装备选择
  */
@@ -14,11 +15,11 @@ import type { 循环数据 } from '@/@types/循环'
 import {
   装备位置部位枚举,
   装备属性信息模型,
-  装备类型枚举,
   装备选择范围类型,
   选择装备数据类型,
 } from '@/@types/装备'
 import 获取当前数据 from '@/数据/数据工具/获取当前数据'
+import { 获取最大精炼等级 } from '../../工具函数/获取最大精炼等级'
 import './index.css'
 
 interface 装备选择入参 {
@@ -39,7 +40,7 @@ interface 装备选择入参 {
 const { 装备数据, 附魔 } = 获取当前数据()
 
 function 装备选择(props: 装备选择入参, ref) {
-  const 明尊模式 = 获取当前数据().名称 === '明尊琉璃体'
+  const 明尊模式 = 使用五十级装备(获取当前数据().名称)
   const {
     value,
     onChange,
@@ -225,16 +226,4 @@ function 装备选择(props: 装备选择入参, ref) {
 
 export default forwardRef(装备选择)
 
-export const 获取最大精炼等级 = (data?: 装备属性信息模型) => {
-  switch (data?.装备类型) {
-    case 装备类型枚举.橙武:
-      return 8
-    case 装备类型枚举.副本精简:
-    case 装备类型枚举.特效武器:
-      return 6
-    case 装备类型枚举.试炼精简:
-      return 6
-    default:
-      return 6
-  }
-}
+export { 获取最大精炼等级 }

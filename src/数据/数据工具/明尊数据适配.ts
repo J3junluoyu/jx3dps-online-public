@@ -126,6 +126,48 @@ export function 获取明尊装备条目(部位: string, id?: number) {
   return 明尊装备数据[部位]?.find((项) => 项.uid === 装备?.key)
 }
 
+/** 橙武和水特效武器按心法显示，其余装备共用。 */
+export function 获取五十级装备数据(心法名称: string) {
+  const 门派 = 心法名称 === '洗髓经' ? '少林' : '明教'
+  return Object.fromEntries(
+    Object.entries(明尊装备数据).map(([部位, 列表]) => [
+      部位,
+      列表.filter(
+        (项) =>
+          (项.装备类型 !== 装备类型枚举.橙武 &&
+            !项.装备黄字特效?.some((效果) => 效果.标识 === 'gain_4877_89')) ||
+          项.所属门派 === 门派,
+      ),
+    ]),
+  )
+}
+
+/** 洗髓旧方案曾借用明尊橙武，按相同品级换为原始洗髓ID并重算武伤和孔位。 */
+export function 规范洗髓橙武(装备信息: 装备信息数据类型) {
+  let 已替换 = false
+  const 装备列表 = 装备信息?.装备列表?.map((项) => {
+    if (项.装备部位 !== 装备位置部位枚举._12 || !项.id) return 项
+    const 原始 = findGearItem(项.id, 'primary_weapon')
+    if (!原始?.orangeWeapon || 原始.school !== '明教') return 项
+    const 对应 = GEAR_ITEMS.find(
+      (装备) => 装备.orangeWeapon && 装备.school === '少林' && 装备.level === 原始.level,
+    )
+    const 新装备 = 对应 && 获取明尊装备条目(项.装备部位, 对应.id)
+    if (!新装备) return 项
+    已替换 = true
+    return {
+      ...项,
+      ...新装备,
+      装备部位: 项.装备部位,
+      镶嵌孔数组: (新装备.镶嵌孔数组 || []).map((孔, 索引) => ({
+        ...孔,
+        镶嵌宝石等级: 项.镶嵌孔数组?.[索引]?.镶嵌宝石等级 || 0,
+      })),
+    }
+  })
+  return 已替换 ? 计算明尊装备属性({ ...装备信息, 装备列表 }) : 装备信息
+}
+
 function 规范明尊装备列表(装备信息: 装备信息数据类型) {
   let 已更新 = false
   const 列表 = 装备信息.装备列表?.map((项) => {

@@ -94,7 +94,9 @@ function 面板展示(props: 面板展示入参) {
       </div>
       {mapKeyList.map((item) => {
         if (item === '下档加速') {
-          const 下一档 = 获取下一档加速信息(显示数据.数据.明尊面板?.hasteRating || 0)
+          const 下一档 = 获取下一档加速信息(
+            (显示数据.数据.明尊面板 || 显示数据.数据.洗髓面板)?.hasteRating || 0,
+          )
           return (
             <Tooltip
               key={item}
@@ -116,7 +118,7 @@ function 面板展示(props: 面板展示入参) {
         const 对比枚举属性名 = 显示文案和实际属性枚举[item]
         const 对比枚举结果 = 显示数据?.对比枚举?.[对比枚举属性名]
         const 有变化 = 对比枚举结果 && 对比枚举结果 !== '-1'
-        const 明尊面板 = 显示数据.数据.明尊面板
+        const 明尊面板 = 显示数据.数据.明尊面板 || 显示数据.数据.洗髓面板
         const 内容 =
           item === '加速' && 明尊面板
             ? `${(明尊面板.haste * 100).toFixed(2)}%`

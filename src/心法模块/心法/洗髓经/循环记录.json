@@ -1,0 +1,2116 @@
+{
+  "3": {
+    "来源": "结果/洗髓已保存配装_54级木桩_3档_40ms_20261026/复核.json",
+    "校验": "b9f867b58011e4418b29a47e706391f8e08cb6deea0c119b7b7b611eb80f5586",
+    "GCD": 1.3125,
+    "加速": 928,
+    "战斗时间": 300,
+    "延迟": 40,
+    "施放次数": {
+      "横扫六合": 17,
+      "韦驮献杵": 72,
+      "普渡四方": 72,
+      "心诤": 14,
+      "醍醐灌顶": 11,
+      "擒龙诀": 15,
+      "大狮子吼": 12,
+      "罗汉金身": 10
+    },
+    "技能详情": [
+      {
+        "技能名称": "六合棍",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "10002:11",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": false,
+          "lidi": false,
+          "dashan": 0
+        }
+      },
+      {
+        "技能名称": "横扫六合",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "235:3830",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": false,
+          "lidi": false,
+          "dashan": 0
+        }
+      },
+      {
+        "技能名称": "武伤·横扫",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "235:19090",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": false,
+          "lidi": false,
+          "dashan": 0
+        }
+      },
+      {
+        "技能名称": "韦驮献杵（3禅那）",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "233:3848",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": false,
+          "dashan": 0
+        }
+      },
+      {
+        "技能名称": "武伤·韦驮",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "233:19090",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": false,
+          "dashan": 0
+        }
+      },
+      {
+        "技能名称": "六合棍",
+        "技能数量": 2,
+        "洗髓技能状态": {
+          "技能键": "10002:11",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": false,
+          "dashan": 1
+        }
+      },
+      {
+        "技能名称": "横扫六合（DOT）",
+        "技能数量": 2,
+        "洗髓技能状态": {
+          "技能键": "dot",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": false,
+          "dashan": 1
+        }
+      },
+      {
+        "技能名称": "普渡四方",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "232:17641",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": false,
+          "dashan": 1
+        }
+      },
+      {
+        "技能名称": "武伤·普渡",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "232:19090",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": false,
+          "dashan": 1
+        }
+      },
+      {
+        "技能名称": "韦驮献杵（3禅那）",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "233:3848",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": false,
+          "dashan": 1
+        }
+      },
+      {
+        "技能名称": "武伤·韦驮",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "233:19090",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": false,
+          "dashan": 1
+        }
+      },
+      {
+        "技能名称": "立地成佛",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "17750:24883",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": false,
+          "dashan": 2
+        }
+      },
+      {
+        "技能名称": "六合棍",
+        "技能数量": 2,
+        "洗髓技能状态": {
+          "技能键": "10002:11",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 2
+        }
+      },
+      {
+        "技能名称": "普渡四方",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "232:17641",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 2
+        }
+      },
+      {
+        "技能名称": "武伤·普渡",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "232:19090",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 2
+        }
+      },
+      {
+        "技能名称": "横扫六合（DOT）",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "dot",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 2
+        }
+      },
+      {
+        "技能名称": "韦驮献杵（3禅那）",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "233:3848",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 2
+        }
+      },
+      {
+        "技能名称": "武伤·韦驮",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "233:19090",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 2
+        }
+      },
+      {
+        "技能名称": "立地成佛",
+        "技能数量": 58,
+        "洗髓技能状态": {
+          "技能键": "17750:24883",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "横扫六合（DOT）",
+        "技能数量": 116,
+        "洗髓技能状态": {
+          "技能键": "dot",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "六合棍",
+        "技能数量": 145,
+        "洗髓技能状态": {
+          "技能键": "10002:11",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "心诤·棍舞",
+        "技能数量": 55,
+        "洗髓技能状态": {
+          "技能键": "29191:28574",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "心诤·扫击",
+        "技能数量": 4,
+        "洗髓技能状态": {
+          "技能键": "29191:28576",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "醍醐灌顶",
+        "技能数量": 14,
+        "洗髓技能状态": {
+          "技能键": "24819:24888",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "普渡四方",
+        "技能数量": 64,
+        "洗髓技能状态": {
+          "技能键": "232:17641",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "武伤·普渡",
+        "技能数量": 64,
+        "洗髓技能状态": {
+          "技能键": "232:19090",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "韦驮献杵（3禅那）",
+        "技能数量": 9,
+        "洗髓技能状态": {
+          "技能键": "233:3848",
+          "qin": false,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "武伤·韦驮",
+        "技能数量": 12,
+        "洗髓技能状态": {
+          "技能键": "233:19090",
+          "qin": false,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "立地成佛",
+        "技能数量": 12,
+        "洗髓技能状态": {
+          "技能键": "17750:24883",
+          "qin": false,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "横扫六合（DOT）",
+        "技能数量": 31,
+        "洗髓技能状态": {
+          "技能键": "dot",
+          "qin": false,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "六合棍",
+        "技能数量": 45,
+        "洗髓技能状态": {
+          "技能键": "10002:11",
+          "qin": false,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "韦驮献杵（3禅那）",
+        "技能数量": 54,
+        "洗髓技能状态": {
+          "技能键": "233:3848",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "武伤·韦驮",
+        "技能数量": 57,
+        "洗髓技能状态": {
+          "技能键": "233:19090",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "横扫六合",
+        "技能数量": 12,
+        "洗髓技能状态": {
+          "技能键": "235:3830",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "武伤·横扫",
+        "技能数量": 12,
+        "洗髓技能状态": {
+          "技能键": "235:19090",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "横扫六合（DOT）",
+        "技能数量": 3,
+        "洗髓技能状态": {
+          "技能键": "dot",
+          "qin": true,
+          "gold": false,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "心诤·棍舞",
+        "技能数量": 3,
+        "洗髓技能状态": {
+          "技能键": "29191:28574",
+          "qin": true,
+          "gold": false,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "六合棍",
+        "技能数量": 2,
+        "洗髓技能状态": {
+          "技能键": "10002:11",
+          "qin": true,
+          "gold": false,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "心诤·棍舞",
+        "技能数量": 5,
+        "洗髓技能状态": {
+          "技能键": "29191:28574",
+          "qin": false,
+          "gold": false,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "横扫六合（DOT）",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "dot",
+          "qin": false,
+          "gold": false,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "六合棍",
+        "技能数量": 2,
+        "洗髓技能状态": {
+          "技能键": "10002:11",
+          "qin": false,
+          "gold": false,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "心诤·扫击",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "29191:28576",
+          "qin": false,
+          "gold": false,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "醍醐灌顶",
+        "技能数量": 2,
+        "洗髓技能状态": {
+          "技能键": "24819:24888",
+          "qin": true,
+          "gold": false,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "六合棍",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "10002:11",
+          "qin": true,
+          "gold": true,
+          "chanyu": false,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "心诤·棍舞",
+        "技能数量": 3,
+        "洗髓技能状态": {
+          "技能键": "29191:28574",
+          "qin": true,
+          "gold": true,
+          "chanyu": false,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "心诤·扫击",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "29191:28576",
+          "qin": true,
+          "gold": true,
+          "chanyu": false,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "普渡四方",
+        "技能数量": 6,
+        "洗髓技能状态": {
+          "技能键": "232:17641",
+          "qin": false,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "武伤·普渡",
+        "技能数量": 6,
+        "洗髓技能状态": {
+          "技能键": "232:19090",
+          "qin": false,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "韦驮献杵（2禅那）",
+        "技能数量": 3,
+        "洗髓技能状态": {
+          "技能键": "233:3850",
+          "qin": false,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "心诤·棍舞",
+        "技能数量": 46,
+        "洗髓技能状态": {
+          "技能键": "29191:28574",
+          "qin": false,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "心诤·扫击",
+        "技能数量": 8,
+        "洗髓技能状态": {
+          "技能键": "29191:28576",
+          "qin": false,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "醍醐灌顶",
+        "技能数量": 6,
+        "洗髓技能状态": {
+          "技能键": "24819:24888",
+          "qin": false,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "横扫六合",
+        "技能数量": 4,
+        "洗髓技能状态": {
+          "技能键": "235:3830",
+          "qin": false,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "武伤·横扫",
+        "技能数量": 4,
+        "洗髓技能状态": {
+          "技能键": "235:19090",
+          "qin": false,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "韦驮献杵（2禅那）",
+        "技能数量": 3,
+        "洗髓技能状态": {
+          "技能键": "233:3850",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      }
+    ]
+  },
+  "4": {
+    "来源": "结果/洗髓已保存配装_54级木桩_4档_40ms_20261026/复核.json",
+    "校验": "2a5a118363d8aa8fd02a08c2d1c9a5c7c6b3ecf3c9b2987507d2c338fdfc0ed6",
+    "GCD": 1.25,
+    "加速": 1452,
+    "战斗时间": 300,
+    "延迟": 40,
+    "施放次数": {
+      "横扫六合": 19,
+      "韦驮献杵": 77,
+      "普渡四方": 76,
+      "心诤": 14,
+      "醍醐灌顶": 11,
+      "擒龙诀": 15,
+      "大狮子吼": 12,
+      "罗汉金身": 10
+    },
+    "技能详情": [
+      {
+        "技能名称": "六合棍",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "10002:11",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": false,
+          "lidi": false,
+          "dashan": 0
+        }
+      },
+      {
+        "技能名称": "横扫六合",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "235:3830",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": false,
+          "lidi": false,
+          "dashan": 0
+        }
+      },
+      {
+        "技能名称": "武伤·横扫",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "235:19090",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": false,
+          "lidi": false,
+          "dashan": 0
+        }
+      },
+      {
+        "技能名称": "韦驮献杵（3禅那）",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "233:3848",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": false,
+          "dashan": 0
+        }
+      },
+      {
+        "技能名称": "武伤·韦驮",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "233:19090",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": false,
+          "dashan": 0
+        }
+      },
+      {
+        "技能名称": "六合棍",
+        "技能数量": 2,
+        "洗髓技能状态": {
+          "技能键": "10002:11",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": false,
+          "dashan": 1
+        }
+      },
+      {
+        "技能名称": "横扫六合（DOT）",
+        "技能数量": 2,
+        "洗髓技能状态": {
+          "技能键": "dot",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": false,
+          "dashan": 1
+        }
+      },
+      {
+        "技能名称": "普渡四方",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "232:17641",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": false,
+          "dashan": 1
+        }
+      },
+      {
+        "技能名称": "武伤·普渡",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "232:19090",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": false,
+          "dashan": 1
+        }
+      },
+      {
+        "技能名称": "韦驮献杵（3禅那）",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "233:3848",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": false,
+          "dashan": 1
+        }
+      },
+      {
+        "技能名称": "武伤·韦驮",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "233:19090",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": false,
+          "dashan": 1
+        }
+      },
+      {
+        "技能名称": "立地成佛",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "17750:24883",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": false,
+          "dashan": 2
+        }
+      },
+      {
+        "技能名称": "六合棍",
+        "技能数量": 2,
+        "洗髓技能状态": {
+          "技能键": "10002:11",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 2
+        }
+      },
+      {
+        "技能名称": "横扫六合（DOT）",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "dot",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 2
+        }
+      },
+      {
+        "技能名称": "普渡四方",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "232:17641",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 2
+        }
+      },
+      {
+        "技能名称": "武伤·普渡",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "232:19090",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 2
+        }
+      },
+      {
+        "技能名称": "韦驮献杵（3禅那）",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "233:3848",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 2
+        }
+      },
+      {
+        "技能名称": "武伤·韦驮",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "233:19090",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 2
+        }
+      },
+      {
+        "技能名称": "立地成佛",
+        "技能数量": 59,
+        "洗髓技能状态": {
+          "技能键": "17750:24883",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "横扫六合（DOT）",
+        "技能数量": 122,
+        "洗髓技能状态": {
+          "技能键": "dot",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "六合棍",
+        "技能数量": 152,
+        "洗髓技能状态": {
+          "技能键": "10002:11",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "心诤·棍舞",
+        "技能数量": 56,
+        "洗髓技能状态": {
+          "技能键": "29191:28574",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "心诤·扫击",
+        "技能数量": 5,
+        "洗髓技能状态": {
+          "技能键": "29191:28576",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "醍醐灌顶",
+        "技能数量": 16,
+        "洗髓技能状态": {
+          "技能键": "24819:24888",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "普渡四方",
+        "技能数量": 64,
+        "洗髓技能状态": {
+          "技能键": "232:17641",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "武伤·普渡",
+        "技能数量": 64,
+        "洗髓技能状态": {
+          "技能键": "232:19090",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "韦驮献杵（3禅那）",
+        "技能数量": 53,
+        "洗髓技能状态": {
+          "技能键": "233:3848",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "武伤·韦驮",
+        "技能数量": 58,
+        "洗髓技能状态": {
+          "技能键": "233:19090",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "横扫六合",
+        "技能数量": 12,
+        "洗髓技能状态": {
+          "技能键": "235:3830",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "武伤·横扫",
+        "技能数量": 12,
+        "洗髓技能状态": {
+          "技能键": "235:19090",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "韦驮献杵（2禅那）",
+        "技能数量": 5,
+        "洗髓技能状态": {
+          "技能键": "233:3850",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "韦驮献杵（3禅那）",
+        "技能数量": 7,
+        "洗髓技能状态": {
+          "技能键": "233:3848",
+          "qin": false,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "武伤·韦驮",
+        "技能数量": 15,
+        "洗髓技能状态": {
+          "技能键": "233:19090",
+          "qin": false,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "立地成佛",
+        "技能数量": 15,
+        "洗髓技能状态": {
+          "技能键": "17750:24883",
+          "qin": false,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "六合棍",
+        "技能数量": 48,
+        "洗髓技能状态": {
+          "技能键": "10002:11",
+          "qin": false,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "横扫六合（DOT）",
+        "技能数量": 41,
+        "洗髓技能状态": {
+          "技能键": "dot",
+          "qin": false,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "普渡四方",
+        "技能数量": 10,
+        "洗髓技能状态": {
+          "技能键": "232:17641",
+          "qin": false,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "武伤·普渡",
+        "技能数量": 10,
+        "洗髓技能状态": {
+          "技能键": "232:19090",
+          "qin": false,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "韦驮献杵（2禅那）",
+        "技能数量": 8,
+        "洗髓技能状态": {
+          "技能键": "233:3850",
+          "qin": false,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "醍醐灌顶",
+        "技能数量": 4,
+        "洗髓技能状态": {
+          "技能键": "24819:24888",
+          "qin": false,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "心诤·棍舞",
+        "技能数量": 53,
+        "洗髓技能状态": {
+          "技能键": "29191:28574",
+          "qin": false,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "心诤·扫击",
+        "技能数量": 8,
+        "洗髓技能状态": {
+          "技能键": "29191:28576",
+          "qin": false,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "横扫六合",
+        "技能数量": 5,
+        "洗髓技能状态": {
+          "技能键": "235:3830",
+          "qin": false,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "武伤·横扫",
+        "技能数量": 5,
+        "洗髓技能状态": {
+          "技能键": "235:19090",
+          "qin": false,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "韦驮献杵（3禅那）",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "233:3848",
+          "qin": true,
+          "gold": false,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "武伤·韦驮",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "233:19090",
+          "qin": true,
+          "gold": false,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "立地成佛",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "17750:24883",
+          "qin": true,
+          "gold": false,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "六合棍",
+        "技能数量": 3,
+        "洗髓技能状态": {
+          "技能键": "10002:11",
+          "qin": true,
+          "gold": false,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "横扫六合（DOT）",
+        "技能数量": 2,
+        "洗髓技能状态": {
+          "技能键": "dot",
+          "qin": true,
+          "gold": false,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "横扫六合",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "235:3830",
+          "qin": true,
+          "gold": false,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "武伤·横扫",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "235:19090",
+          "qin": true,
+          "gold": false,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "醍醐灌顶",
+        "技能数量": 2,
+        "洗髓技能状态": {
+          "技能键": "24819:24888",
+          "qin": true,
+          "gold": false,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "心诤·棍舞",
+        "技能数量": 3,
+        "洗髓技能状态": {
+          "技能键": "29191:28574",
+          "qin": false,
+          "gold": true,
+          "chanyu": false,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "六合棍",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "10002:11",
+          "qin": false,
+          "gold": true,
+          "chanyu": false,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "心诤·扫击",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "29191:28576",
+          "qin": false,
+          "gold": true,
+          "chanyu": false,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      }
+    ]
+  },
+  "5": {
+    "来源": "结果/洗髓已保存配装_54级木桩_5档_40ms_20261026/复核.json",
+    "校验": "8758785e18f5af1a89ed50b70841d3211def14f82ddcb9866e4a7e29ea54f056",
+    "GCD": 1.1875,
+    "加速": 2024,
+    "战斗时间": 300,
+    "延迟": 40,
+    "施放次数": {
+      "横扫六合": 20,
+      "韦驮献杵": 82,
+      "普渡四方": 81,
+      "心诤": 14,
+      "醍醐灌顶": 11,
+      "擒龙诀": 15,
+      "大狮子吼": 12,
+      "罗汉金身": 10
+    },
+    "技能详情": [
+      {
+        "技能名称": "六合棍",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "10002:11",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": false,
+          "lidi": false,
+          "dashan": 0
+        }
+      },
+      {
+        "技能名称": "横扫六合",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "235:3830",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": false,
+          "lidi": false,
+          "dashan": 0
+        }
+      },
+      {
+        "技能名称": "武伤·横扫",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "235:19090",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": false,
+          "lidi": false,
+          "dashan": 0
+        }
+      },
+      {
+        "技能名称": "韦驮献杵（3禅那）",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "233:3848",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": false,
+          "dashan": 0
+        }
+      },
+      {
+        "技能名称": "武伤·韦驮",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "233:19090",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": false,
+          "dashan": 0
+        }
+      },
+      {
+        "技能名称": "六合棍",
+        "技能数量": 2,
+        "洗髓技能状态": {
+          "技能键": "10002:11",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": false,
+          "dashan": 1
+        }
+      },
+      {
+        "技能名称": "横扫六合（DOT）",
+        "技能数量": 2,
+        "洗髓技能状态": {
+          "技能键": "dot",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": false,
+          "dashan": 1
+        }
+      },
+      {
+        "技能名称": "普渡四方",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "232:17641",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": false,
+          "dashan": 1
+        }
+      },
+      {
+        "技能名称": "武伤·普渡",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "232:19090",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": false,
+          "dashan": 1
+        }
+      },
+      {
+        "技能名称": "韦驮献杵（3禅那）",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "233:3848",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": false,
+          "dashan": 1
+        }
+      },
+      {
+        "技能名称": "武伤·韦驮",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "233:19090",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": false,
+          "dashan": 1
+        }
+      },
+      {
+        "技能名称": "立地成佛",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "17750:24883",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": false,
+          "dashan": 2
+        }
+      },
+      {
+        "技能名称": "六合棍",
+        "技能数量": 2,
+        "洗髓技能状态": {
+          "技能键": "10002:11",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 2
+        }
+      },
+      {
+        "技能名称": "横扫六合（DOT）",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "dot",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 2
+        }
+      },
+      {
+        "技能名称": "普渡四方",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "232:17641",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 2
+        }
+      },
+      {
+        "技能名称": "武伤·普渡",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "232:19090",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 2
+        }
+      },
+      {
+        "技能名称": "韦驮献杵（3禅那）",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "233:3848",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 2
+        }
+      },
+      {
+        "技能名称": "武伤·韦驮",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "233:19090",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 2
+        }
+      },
+      {
+        "技能名称": "立地成佛",
+        "技能数量": 67,
+        "洗髓技能状态": {
+          "技能键": "17750:24883",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "横扫六合（DOT）",
+        "技能数量": 130,
+        "洗髓技能状态": {
+          "技能键": "dot",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "六合棍",
+        "技能数量": 157,
+        "洗髓技能状态": {
+          "技能键": "10002:11",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "心诤·棍舞",
+        "技能数量": 36,
+        "洗髓技能状态": {
+          "技能键": "29191:28574",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "心诤·扫击",
+        "技能数量": 2,
+        "洗髓技能状态": {
+          "技能键": "29191:28576",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "醍醐灌顶",
+        "技能数量": 16,
+        "洗髓技能状态": {
+          "技能键": "24819:24888",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "普渡四方",
+        "技能数量": 69,
+        "洗髓技能状态": {
+          "技能键": "232:17641",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "武伤·普渡",
+        "技能数量": 69,
+        "洗髓技能状态": {
+          "技能键": "232:19090",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "韦驮献杵（3禅那）",
+        "技能数量": 64,
+        "洗髓技能状态": {
+          "技能键": "233:3848",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "武伤·韦驮",
+        "技能数量": 66,
+        "洗髓技能状态": {
+          "技能键": "233:19090",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "横扫六合",
+        "技能数量": 15,
+        "洗髓技能状态": {
+          "技能键": "235:3830",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "武伤·横扫",
+        "技能数量": 15,
+        "洗髓技能状态": {
+          "技能键": "235:19090",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "六合棍",
+        "技能数量": 56,
+        "洗髓技能状态": {
+          "技能键": "10002:11",
+          "qin": false,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "心诤·棍舞",
+        "技能数量": 76,
+        "洗髓技能状态": {
+          "技能键": "29191:28574",
+          "qin": false,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "横扫六合（DOT）",
+        "技能数量": 44,
+        "洗髓技能状态": {
+          "技能键": "dot",
+          "qin": false,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "心诤·扫击",
+        "技能数量": 11,
+        "洗髓技能状态": {
+          "技能键": "29191:28576",
+          "qin": false,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "普渡四方",
+        "技能数量": 10,
+        "洗髓技能状态": {
+          "技能键": "232:17641",
+          "qin": false,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "武伤·普渡",
+        "技能数量": 10,
+        "洗髓技能状态": {
+          "技能键": "232:19090",
+          "qin": false,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "韦驮献杵（3禅那）",
+        "技能数量": 9,
+        "洗髓技能状态": {
+          "技能键": "233:3848",
+          "qin": false,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "武伤·韦驮",
+        "技能数量": 13,
+        "洗髓技能状态": {
+          "技能键": "233:19090",
+          "qin": false,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "立地成佛",
+        "技能数量": 13,
+        "洗髓技能状态": {
+          "技能键": "17750:24883",
+          "qin": false,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "韦驮献杵（2禅那）",
+        "技能数量": 4,
+        "洗髓技能状态": {
+          "技能键": "233:3850",
+          "qin": false,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "横扫六合",
+        "技能数量": 4,
+        "洗髓技能状态": {
+          "技能键": "235:3830",
+          "qin": false,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "武伤·横扫",
+        "技能数量": 4,
+        "洗髓技能状态": {
+          "技能键": "235:19090",
+          "qin": false,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "六合棍",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "10002:11",
+          "qin": true,
+          "gold": false,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "醍醐灌顶",
+        "技能数量": 2,
+        "洗髓技能状态": {
+          "技能键": "24819:24888",
+          "qin": true,
+          "gold": false,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "横扫六合（DOT）",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "dot",
+          "qin": true,
+          "gold": false,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "韦驮献杵（2禅那）",
+        "技能数量": 2,
+        "洗髓技能状态": {
+          "技能键": "233:3850",
+          "qin": true,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "醍醐灌顶",
+        "技能数量": 4,
+        "洗髓技能状态": {
+          "技能键": "24819:24888",
+          "qin": false,
+          "gold": true,
+          "chanyu": true,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      },
+      {
+        "技能名称": "心诤·扫击",
+        "技能数量": 1,
+        "洗髓技能状态": {
+          "技能键": "29191:28576",
+          "qin": false,
+          "gold": true,
+          "chanyu": false,
+          "ring": true,
+          "lidi": true,
+          "dashan": 3
+        }
+      }
+    ]
+  }
+}

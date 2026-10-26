@@ -173,15 +173,24 @@ function 头部组件(props: 头部组件类型) {
         <span>配装器</span>
         <span id='Guide_6'>
           <Checkbox
+            disabled={获取当前数据().名称 === '洗髓经'}
             checked={开启装备智能对比}
             onChange={(e) => 设置开启装备智能对比(e?.target?.checked)}
             className={'zhuangbei-diff-btn'}
           >
             <div className={'zhuangbei-diff-btn-wrap'}>
-              <Button size='small' onClick={() => 设置开启装备智能对比(!开启装备智能对比)}>
+              <Button
+                disabled={获取当前数据().名称 === '洗髓经'}
+                size='small'
+                onClick={() => 设置开启装备智能对比(!开启装备智能对比)}
+              >
                 智能对比
               </Button>
-              <Button onClick={() => 设置智能对比设置弹窗展示(true)} size='small'>
+              <Button
+                disabled={获取当前数据().名称 === '洗髓经'}
+                onClick={() => 设置智能对比设置弹窗展示(true)}
+                size='small'
+              >
                 <SettingOutlined />
               </Button>
               <Tooltip
@@ -230,6 +239,7 @@ function 头部组件(props: 头部组件类型) {
         )}
         {/* 最佳五彩石设置 */}
         <最佳五彩石设置
+          循环待补充={获取当前数据().名称 === '洗髓经'}
           一键替换五彩石={一键替换五彩石}
           对比秒伤={对比秒伤}
           对比装备信息={对比装备信息}

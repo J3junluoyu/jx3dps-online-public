@@ -24,8 +24,8 @@ const selection = (item, overrides = {}) => ({
 })
 const slot = (item) => (item.position === 'ring' ? 'ring1' : item.position)
 
-test('无修去重后124件装备符合品质、加速和无双规则，精炼和镶嵌均产生有效属性', () => {
-  expect(GEAR_ITEMS).toHaveLength(124)
+test('无修去重、水风特效及洗髓橙武入库后131件装备，精炼和镶嵌均产生有效属性', () => {
+  expect(GEAR_ITEMS).toHaveLength(131)
   expect(new Set(GEAR_ITEMS.map((item) => item.key)).size).toBe(GEAR_ITEMS.length)
   for (const item of GEAR_ITEMS) {
     const result = calculateLoadout({
@@ -41,7 +41,7 @@ test('无修去重后124件装备符合品质、加速和无双规则，精炼�
 })
 
 test('27条完全重复无修合并，旧键和旧ID保留精炼、孔位、附魔及黄字计算', () => {
-  const aliases = 装备数据库.items.filter(row => {
+  const aliases = 装备数据库.items.filter((row) => {
     const canonical = findGearItem(row.key)
     return canonical && canonical.key !== row.key
   })
@@ -55,11 +55,11 @@ test('27条完全重复无修合并，旧键和旧ID保留精炼、孔位、附�
     expect(Object.entries(raw.embed)).toEqual(Object.entries(canonical.embed))
     expect(findGearItem(raw.id, raw.position)).toBe(canonical)
     expect(findGearItem(raw.id, 'invalid')).toBeUndefined()
-    expect(GEAR_ITEMS.some(row => row.key === raw.key)).toBe(false)
+    expect(GEAR_ITEMS.some((row) => row.key === raw.key)).toBe(false)
     const selected = selection(raw, {
       strength: raw.maxStrength,
       embeds: Object.keys(raw.embed).map((_, index) => 8 - index),
-      enchantId: ENCHANTS.find(row => row.position === raw.position)?.id || 0,
+      enchantId: ENCHANTS.find((row) => row.position === raw.position)?.id || 0,
     })
     const saved = { [slot(raw)]: selected }
     const normalized = normalizeLoadout(saved)
@@ -70,13 +70,13 @@ test('27条完全重复无修合并，旧键和旧ID保留精炼、孔位、附�
 })
 
 test('同名无修的不同词条、孔位和黄字版本仍各自保留', () => {
-  expect(GEAR_ITEMS.filter(row => row.id === 112699)).toHaveLength(1)
+  expect(GEAR_ITEMS.filter((row) => row.id === 112699)).toHaveLength(1)
   expect(findGearItem(112783, 'hat').id).toBe(112699)
   // 相同基础属性但无黄字的测试版本，不与有黄字版本混为同件装备。
   expect(findGearItem(114853, 'hat').id).toBe(114853)
   expect(findGearItem(114853, 'hat').specialEffects).toBeUndefined()
   expect(findGearItem(112699, 'hat').specialEffects.length).toBeGreaterThan(0)
-  expect([112699, 112700, 112701].map(id => findGearItem(id, 'hat').id)).toEqual([
+  expect([112699, 112700, 112701].map((id) => findGearItem(id, 'hat').id)).toEqual([
     112699, 112700, 112701,
   ])
 })
@@ -128,9 +128,9 @@ test('1240品圣辉月雪精炼8和三孔8级正确汇总，武伤不随精炼�
     weaponMin: 134,
     weaponMax: 223,
   })
-  expect(GEAR_ITEMS.filter((row) => row.orangeWeapon).map((row) => row.id)).toEqual([
-    47816, 47849, 47882,
-  ])
+  expect(
+    GEAR_ITEMS.filter((row) => row.orangeWeapon && row.school === '明教').map((row) => row.id),
+  ).toEqual([47816, 47849, 47882])
 })
 
 test('精简内功防具、首饰和暗器加入装备库并正确汇总攻击、会心与无双', () => {
@@ -331,7 +331,11 @@ test('旧配装仅清除被移除的附魔和五彩石，保留装备、精炼�
 test('保留1110品边界，清理低品与无加速防御装、归正附魔，并保留其余配装', () => {
   expect(GEAR_ITEMS.find((row) => row.key === 'armors:111949').level).toBe(1110)
   expect(GEAR_ITEMS.some((row) => row.level < 1110)).toBe(false)
-  expect(GEAR_ITEMS.some((row) => row.kind === '防御' && !(row.magic.haste_base > 0))).toBe(false)
+  expect(
+    GEAR_ITEMS.filter((row) => row.kind === '防御' && !(row.magic.haste_base > 0))
+      .map((row) => row.id)
+      .sort(),
+  ).toEqual([46708, 46725])
   expect(ENCHANTS.some((row) => row.name.includes('归正'))).toBe(false)
   expect(ENCHANTS.some((row) => 'weapon_damage_base' in row.attributes)).toBe(false)
   const wrist = GEAR_ITEMS.find((row) => row.key === 'armors:112560')

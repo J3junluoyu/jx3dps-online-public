@@ -14,6 +14,7 @@ export interface 团队增益轴数据类型 {
 
 export interface 增益选项数据类型 {
   明尊设置?: Partial<import('@/心法模块/心法/明尊琉璃体/计算').Settings>
+  洗髓设置?: import('@/心法模块/心法/洗髓经/气劲').洗髓设置
   阵眼: string
   小吃: string[]
   团队增益: 团队增益选项数据类型[]

@@ -1,3 +1,4 @@
+import { 使用五十级装备 } from '@/心法模块/模块工具/心法模式'
 import React, { useContext } from 'react'
 import 获取当前数据 from '@/数据/数据工具/获取当前数据'
 import { 装备位置部位枚举, 装备增益类型, 装备属性信息模型, 装备类型枚举 } from '@/@types/装备'
@@ -35,7 +36,7 @@ const 装备区 = () => {
         const 最大精炼等级 = 装备?.装备类型 === 装备类型枚举?.橙武 ? 8 : 6
         const 装备特征描述 = 获取装备数据描述(装备, true, false)
         const 装备结果描述 = 获取装备数据描述(装备, false, true)
-        const 明尊大附魔 = 获取当前数据().名称 === '明尊琉璃体' && findMajorEnchant(当前装备.大附魔)
+        const 明尊大附魔 = 使用五十级装备(获取当前数据().名称) && findMajorEnchant(当前装备.大附魔)
         const 是否有大附魔 =
           明尊大附魔 || 判断是否存在大附魔(当前装备?.装备部位, 当前装备信息?.装备增益)
 

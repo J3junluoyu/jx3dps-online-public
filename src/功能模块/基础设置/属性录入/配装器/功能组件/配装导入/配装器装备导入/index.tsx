@@ -1,3 +1,4 @@
+import { 使用五十级装备 } from '@/心法模块/模块工具/心法模式'
 import React, { useState } from 'react'
 import { Alert, Button, Input, message } from 'antd'
 import 获取当前数据 from '@/数据/数据工具/获取当前数据'
@@ -15,7 +16,7 @@ function 配装器导入({ onOk }) {
   const beforeOnOk = () => {
     if (解析结果 && 解析结果?.支持的装备?.length && 待解析数据) {
       const res = JSON.parse(待解析数据 as any)
-      if (获取当前数据().名称 === '明尊琉璃体') {
+      if (使用五十级装备(获取当前数据().名称)) {
         for (const [部位索引, 数据] of Object.entries(res)) {
           const 装备 = 获取明尊装备条目(装备位置部位枚举[部位索引], (数据 as any)?.id)
           if (装备) res[部位索引] = { ...(数据 as object), id: 装备.id }
@@ -49,10 +50,9 @@ function 配装器导入({ onOk }) {
     Object.keys(data).forEach((部位索引) => {
       const 数据 = data[部位索引]
       const 装备部位 = 装备位置部位枚举[部位索引]
-      const 找到对应装备 =
-        名称 === '明尊琉璃体'
-          ? 获取明尊装备条目(装备部位, 数据?.id)
-          : 装备数据[装备部位]?.find((item) => item?.id === 数据?.id)
+      const 找到对应装备 = 使用五十级装备(名称)
+        ? 获取明尊装备条目(装备部位, 数据?.id)
+        : 装备数据[装备部位]?.find((item) => item?.id === 数据?.id)
       if (找到对应装备) {
         支持的装备.push({ ...找到对应装备, 装备部位 })
       } else {

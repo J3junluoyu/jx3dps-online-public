@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { 数据埋点 } from '@/工具函数/tools/log'
 
-function 秒伤结果对比({ 配装器内动态新秒伤, 打开配装器时秒伤 }) {
+function 秒伤结果对比({ 配装器内动态新秒伤, 打开配装器时秒伤, 循环待补充 = false }) {
   const 百分比变化率 = (((配装器内动态新秒伤 - 打开配装器时秒伤) / 打开配装器时秒伤) * 100).toFixed(
     2,
   )
@@ -12,10 +12,27 @@ function 秒伤结果对比({ 配装器内动态新秒伤, 打开配装器时秒
   const 加速符不合文案 = () => <p className={'dps-diff-error-text'}>加速不符合循环需求</p>
 
   useEffect(() => {
-    if (打开配装器时秒伤 !== 配装器内动态新秒伤 && 配装器内动态新秒伤 && 打开配装器时秒伤) {
+    if (
+      !循环待补充 &&
+      打开配装器时秒伤 !== 配装器内动态新秒伤 &&
+      配装器内动态新秒伤 &&
+      打开配装器时秒伤
+    ) {
       数据埋点('秒伤对比')
     }
-  }, [配装器内动态新秒伤, 打开配装器时秒伤])
+  }, [配装器内动态新秒伤, 打开配装器时秒伤, 循环待补充])
+
+  if (循环待补充)
+    return (
+      <div className='dps-diff' title='循环模板待补充'>
+        {['更换前', '替换后'].map((标题) => (
+          <div className='dps-diff-item' key={标题}>
+            <div className='dps-diff-title'>{标题}</div>
+            <p className='dps-diff-dps'>--</p>
+          </div>
+        ))}
+      </div>
+    )
 
   return 配装器内动态新秒伤 !== undefined ? (
     配装器内动态新秒伤 ? (

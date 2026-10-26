@@ -1,0 +1,105 @@
+{
+  "slots": {
+    "hat": {
+      "key": "armors:112319",
+      "strength": 6,
+      "embeds": [
+        8,
+        8
+      ],
+      "enchantId": 16500
+    },
+    "jacket": {
+      "key": "armors:112590",
+      "strength": 6,
+      "embeds": [
+        8,
+        8
+      ],
+      "enchantId": 16551
+    },
+    "belt": {
+      "key": "armors:112413",
+      "strength": 6,
+      "embeds": [
+        8,
+        8
+      ],
+      "enchantId": 16501
+    },
+    "wrist": {
+      "key": "armors:112560",
+      "strength": 6,
+      "embeds": [
+        8,
+        8
+      ],
+      "enchantId": 16547
+    },
+    "bottoms": {
+      "key": "armors:112443",
+      "strength": 6,
+      "embeds": [
+        8,
+        8
+      ],
+      "enchantId": 16497
+    },
+    "shoes": {
+      "key": "armors:112287",
+      "strength": 6,
+      "embeds": [
+        8,
+        8
+      ],
+      "enchantId": 16550
+    },
+    "necklace": {
+      "key": "trinkets:50000",
+      "strength": 6,
+      "embeds": [
+        8
+      ],
+      "enchantId": 16617
+    },
+    "pendant": {
+      "key": "trinkets:49897",
+      "strength": 6,
+      "embeds": [
+        8
+      ],
+      "enchantId": 16619
+    },
+    "ring1": {
+      "key": "trinkets:49915",
+      "strength": 6,
+      "embeds": [],
+      "enchantId": 16625
+    },
+    "ring2": {
+      "key": "trinkets:49915",
+      "strength": 6,
+      "embeds": [],
+      "enchantId": 16625
+    },
+    "tertiary_weapon": {
+      "key": "weapons:46630",
+      "strength": 6,
+      "embeds": [
+        8
+      ],
+      "enchantId": 16631
+    },
+    "primary_weapon": {
+      "key": "weapons:46764",
+      "strength": 6,
+      "embeds": [
+        8,
+        8,
+        8
+      ],
+      "enchantId": 16486
+    }
+  },
+  "stone": 5599
+}

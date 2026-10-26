@@ -33,6 +33,7 @@ import type {
   方案优化结果,
   方案优化进度,
 } from '@/心法模块/心法/明尊琉璃体/方案优化'
+import { 是橙色腰坠 } from '@/心法模块/心法/明尊琉璃体/方案优化'
 import { 获取档位对比循环 } from '@/心法模块/心法/明尊琉璃体/方案档位对比'
 import { 规范理论循环名称 } from '@/心法模块/心法/明尊琉璃体/计算循环/理论循环'
 import type { 档位对比结果 } from '@/心法模块/心法/明尊琉璃体/方案档位对比'
@@ -40,8 +41,14 @@ import { 格式化明尊GCD } from '@/心法模块/心法/明尊琉璃体/GCD显
 import { 格式化附魔名称 } from '../../工具函数/附魔显示'
 import { 创建优化Worker } from './创建Worker'
 import styles from './index.module.less'
+import 获取当前数据 from '@/数据/数据工具/获取当前数据'
+import { 获取洗髓档位对比循环, 洗髓循环名称 } from '@/心法模块/心法/洗髓经/循环'
+import { 获取洗髓计算设置 } from '@/心法模块/心法/洗髓经/计算'
+
+const 洗髓模式 = 获取当前数据().名称 === '洗髓经'
 
 interface 方案优化入参 {
+  循环待补充?: boolean
   循环名称?: string
   默认镶嵌宝石等级: number
   获取装备信息: () => Promise<装备信息数据类型>
@@ -52,12 +59,13 @@ interface 方案优化入参 {
 const 装备名称 = (key?: string) => {
   const item = GEAR_ITEMS.find((row) => row.key === key)
   return item
-    ? `${item.name.replace(/_.*/, '')}（${item.embed.vitality_base ? '体 ' : ''}${gearAttributeSuffix(item)}）`
+    ? `${item.name.replace(/_.*/, '')}${是橙色腰坠(item) ? '〔橙〕' : ''}（${item.embed.vitality_base ? '体 ' : ''}${gearAttributeSuffix(item)}）`
     : '未选择'
 }
 const 附魔名称 = (id?: number) =>
   格式化附魔名称(明尊附魔数据[ENCHANTS.findIndex((item) => item.id === id)]?.附魔名称 || '') || '无'
-const 默认优化方式 = (cycleName?: string) => (cycleName?.startsWith('0.75') ? '0.75' : '0.8125')
+const 默认优化方式 = (cycleName?: string) =>
+  洗髓模式 ? 'compare' : cycleName?.startsWith('0.75') ? '0.75' : '0.8125'
 
 function 方案优化(props: 方案优化入参) {
   const [open, setOpen] = useState(false)
@@ -81,16 +89,19 @@ function 方案优化(props: 方案优化入参) {
   const 奇穴 = useAppSelector((state) => state.data.当前奇穴信息)
   const 秘籍 = useAppSelector((state) => state.data.当前秘籍信息)
   const 目标名称 = useAppSelector((state) => state.data.当前输出计算目标名称)
-  const 圣浴常驻独立开启 = 增益数据?.团队增益?.some(
-    (item) => item.增益名称 === 圣浴常驻名称 && item.启用,
-  )
-  const compareGcd = mode === 'compare'
-  const cycles = 获取档位对比循环(props.循环名称 || 循环列表[0].名称)
+  const 圣浴常驻独立开启 =
+    !洗髓模式 && 增益数据?.团队增益?.some((item) => item.增益名称 === 圣浴常驻名称 && item.启用)
+  const compareGcd = 洗髓模式 || mode === 'compare'
+  const cycles = props.循环待补充
+    ? []
+    : 洗髓模式
+      ? 获取洗髓档位对比循环()
+      : 获取档位对比循环(props.循环名称 || 循环列表[0].名称)
   const cycle =
     cycles.find((item) =>
       compareGcd ? item.名称 === props.循环名称 : item.名称.startsWith(`${mode}`),
     ) || cycles[1]
-  const cycleName = cycle.名称
+  const cycleName = cycle?.名称 || ''
   const result = comparison
     ? comparison.entries.find((entry) => entry.cycleName === previewCycleName)?.result
     : singleResult
@@ -98,7 +109,9 @@ function 方案优化(props: 方案优化入参) {
   const recommended = comparison?.entries.find(
     (entry) => entry.cycleName === comparison.recommendedCycleName,
   )
-  const other = comparison?.entries.find((entry) => entry !== recommended)
+  const other = comparison?.entries
+    .filter((entry) => entry !== recommended && entry.result?.after)
+    .sort((a, b) => b.result!.after!.dps - a.result!.after!.dps)[0]
   const hasPlan = comparison
     ? comparison.entries.some((entry) => entry.result?.plan)
     : !!result?.plan
@@ -107,11 +120,13 @@ function 方案优化(props: 方案优化入参) {
       ? recommended.result.after.dps - other.result.after.dps
       : undefined
   const comparisonSummary = !recommended
-    ? '两个档位均未找到可行方案，请调整装备范围或御劲要求。'
+    ? 洗髓模式
+      ? `三个档位均未找到满足最低${minToughness}%御劲的可行方案，请调整装备范围或御劲要求。`
+      : '两个档位均未找到可行方案，请调整装备范围或御劲要求。'
     : difference === undefined
-      ? `推荐${recommended.cycleName}；另一档未找到可行方案。`
+      ? `推荐${recommended.cycleName}；${洗髓模式 ? '其余档位' : '另一档'}未找到可行方案。`
       : difference === 0
-        ? `两档秒伤相同，优先保留${recommended.cycleName}。`
+        ? `可行方案秒伤相同，优先保留${recommended.cycleName}。`
         : `推荐${recommended.cycleName}，比${other!.cycleName}高${difference.toFixed(2)}秒伤${
             other!.result!.after!.dps > 0
               ? `（${((difference / other!.result!.after!.dps) * 100).toFixed(2)}%）`
@@ -136,6 +151,7 @@ function 方案优化(props: 方案优化入参) {
     setOpen(false)
   }
   const 开始计算 = async () => {
+    if (props.循环待补充 || !cycle) return
     停止计算()
     const currentRun = runId.current
     setResult(undefined)
@@ -150,13 +166,19 @@ function 方案优化(props: 方案优化入参) {
         consumables: 增益启用 ? [...增益数据.小吃] : [],
         formation: 增益启用 ? 增益数据.阵眼 : '',
       }
-      const settings = 获取明尊计算设置(
-        奇穴,
-        { ...增益数据, 阵眼: '', 小吃: [], 团队增益: [] },
-        秘籍,
-        获取计算目标信息(目标名称).等级,
-        true,
-      )
+      const settings = 洗髓模式
+        ? 获取洗髓计算设置(
+            { ...增益数据, 阵眼: '', 小吃: [], 团队增益: [] },
+            true,
+            获取计算目标信息(目标名称).等级,
+          )
+        : 获取明尊计算设置(
+            奇穴,
+            { ...增益数据, 阵眼: '', 小吃: [], 团队增益: [] },
+            秘籍,
+            获取计算目标信息(目标名称).等级,
+            true,
+          )
       setInitial(before)
       worker.current = 创建优化Worker()
       worker.current.onmessage = (event) => {
@@ -178,6 +200,9 @@ function 方案优化(props: 方案优化入参) {
         message.error('方案推荐计算中断，请刷新页面后重试')
       }
       worker.current.postMessage({
+        kungfu: 洗髓模式 ? 'xsj' : 'mzllt',
+        allowHigherHaste: true,
+        exploreHighLevelCandidates: true,
         initial: before,
         cycle,
         settings,
@@ -187,7 +212,7 @@ function 方案优化(props: 方案优化入参) {
         gearScope,
         compareGcd,
         teamGains: 增益数据.团队增益
-          .filter((item) => includeTeamGains || item.增益名称 === 圣浴常驻名称)
+          .filter((item) => includeTeamGains || (!洗髓模式 && item.增益名称 === 圣浴常驻名称))
           .map((item) => ({ ...item })),
         gearKeys: props.获取候选装备键(),
         slots,
@@ -284,7 +309,11 @@ function 方案优化(props: 方案优化入参) {
         maskClosable={false}
         footer={
           <div className={styles.footer}>
-            <span>采用本次搜索找到的最佳可行方案</span>
+            <span>
+              {props.循环待补充
+                ? '循环模板待补充，暂不计算推荐方案'
+                : '采用本次搜索找到的最佳可行方案'}
+            </span>
             <div>
               {running ? (
                 <Button
@@ -296,14 +325,20 @@ function 方案优化(props: 方案优化入参) {
                   停止计算
                 </Button>
               ) : (
-                <Button onClick={开始计算}>{compareGcd ? '开始双档对比' : '开始推荐'}</Button>
+                <Button disabled={props.循环待补充} onClick={开始计算}>
+                  {洗髓模式 ? '开始三档对比' : compareGcd ? '开始双档对比' : '开始推荐'}
+                </Button>
               )}
               <Button
                 type='primary'
-                disabled={running || !result?.plan}
+                disabled={props.循环待补充 || running || !result?.plan}
                 onClick={() => {
-                  if (result?.plan) {
-                    props.应用方案(result.plan, 规范理论循环名称(resultCycleName), includeTeamGains)
+                  if (!props.循环待补充 && result?.plan) {
+                    props.应用方案(
+                      result.plan,
+                      洗髓模式 ? 洗髓循环名称 : 规范理论循环名称(resultCycleName),
+                      includeTeamGains,
+                    )
                     关闭()
                   }
                 }}
@@ -319,14 +354,21 @@ function 方案优化(props: 方案优化入参) {
             推荐方式{' '}
             <Select
               aria-label='推荐方式'
-              disabled={running}
-              value={mode}
+              disabled={running || props.循环待补充}
+              placeholder={props.循环待补充 ? '循环模板待补充' : undefined}
+              value={props.循环待补充 ? undefined : 洗髓模式 ? 'compare' : mode}
               onChange={(value) => 设置条件(() => setMode(value))}
-              options={[
-                { label: '0.75GCD', value: '0.75' },
-                { label: '0.81GCD', value: '0.8125' },
-                { label: '0.75 / 0.81双档对比', value: 'compare' },
-              ]}
+              options={
+                props.循环待补充
+                  ? []
+                  : 洗髓模式
+                    ? [{ label: '3 / 4 / 5档自适应对比', value: 'compare' }]
+                    : [
+                        { label: '0.75GCD', value: '0.75' },
+                        { label: '0.81GCD', value: '0.8125' },
+                        { label: '0.75 / 0.81双档对比', value: 'compare' },
+                      ]
+              }
             />
           </label>
           <label>
@@ -338,7 +380,7 @@ function 方案优化(props: 方案优化入参) {
               onChange={(value) => 设置条件(() => setGearScope(value))}
               options={[
                 { label: '仅防御装备', value: 'defensive' },
-                { label: '防御装备＋精简内功', value: 'includeStreamlined' },
+                { label: '防御＋精简/特效内功', value: 'includeStreamlined' },
               ]}
             />
           </label>
@@ -388,13 +430,17 @@ function 方案优化(props: 方案优化入参) {
         <Alert
           type='info'
           showIcon
-          message={`装备沿用配装器筛选范围，${gearScope === 'defensive' ? '参与优化的部位仅选择防御装备' : '可选择防御装备和精简内功装备'}，未参与的部位保持当前装备；附魔沿用各部位当前数值档位，排除御劲附魔，未选附魔保持空置。药品增强与食品增强须选择同属性组合。药食酒与阵眼参与优化，五彩石固定；同伤害下酒品优先低数值档位。${includeHasteConsumables ? '加速药品与食品参与优化。' : '加速药品与食品不参与优化，家园酒品仍参与。'}${includeTeamGains ? '按当前已启用团队增益的层数和覆盖率计算，团队配置保持固定。' : '团队增益不计入。'}${圣浴常驻独立开启 ? '圣浴常驻按自身开关独立计入。' : ''}${
-            compareGcd
-              ? `分别使用${cycles
-                  .map((cycle) => 格式化明尊GCD(cycle.名称))
-                  .join('、')}，在相同御劲、装备范围和增益条件下独立寻优。`
-              : `使用${格式化明尊GCD(cycleName)}寻优。`
-          }大附魔保留各部位已选档位，随候选装备匹配伤/御类别，属性、随机增伤与附加伤害均参与比较。随机大附魔按概率和冷却估算期望收益。${EQUIPMENT_EFFECT_ASSUMPTION}`}
+          message={
+            props.循环待补充
+              ? '洗髓经循环模板待补充。装备、附魔、增益及参与部位沿用本界面设置，补充循环后再接入推荐计算。'
+              : `装备沿用配装器筛选范围，${gearScope === 'defensive' ? '参与优化的部位仅选择防御装备' : '可选择防御装备和精简/特效内功装备'}，橙武暂不参与推荐；品级以配装器筛选范围为准，全部候选按伤害收益比较，同伤害优先高品级。装备加速达到模拟档位或更高即可参与，不为压低加速而降品。未参与的部位保持当前装备；附魔沿用各部位当前数值档位，排除御劲附魔，未选附魔保持空置。药品增强与食品增强须选择同属性组合。药食酒与阵眼参与优化，五彩石固定；同伤害下酒品优先低数值档位。${includeHasteConsumables ? '加速药品与食品参与优化。' : '加速药品与食品不参与优化，家园酒品仍参与。'}${includeTeamGains ? '按当前已启用团队增益的层数和覆盖率计算，团队配置保持固定。' : '团队增益不计入。'}${圣浴常驻独立开启 ? '圣浴常驻按自身开关独立计入。' : ''}${
+                  compareGcd
+                    ? `分别使用${cycles
+                        .map((cycle) => 格式化明尊GCD(cycle.名称))
+                        .join('、')}，在相同御劲、装备范围和增益条件下独立寻优。`
+                    : `使用${格式化明尊GCD(cycleName)}寻优。`
+                }大附魔保留各部位已选档位，随候选装备匹配伤/御类别，属性、随机增伤与附加伤害均参与比较。随机大附魔按概率和冷却估算期望收益。${EQUIPMENT_EFFECT_ASSUMPTION}`
+          }
         />
         {initial && (
           <p className={styles.stone}>
@@ -433,7 +479,11 @@ function 方案优化(props: 方案优化入参) {
               pagination={false}
               dataSource={comparison.entries}
               columns={[
-                { title: '循环', dataIndex: 'cycleName', render: (name) => 格式化明尊GCD(name) },
+                {
+                  title: '模拟循环',
+                  dataIndex: 'cycleName',
+                  render: (name) => 格式化明尊GCD(name),
+                },
                 {
                   title: '本次最佳秒伤',
                   render: (_, entry) => entry.result?.after?.dps.toFixed(2) || '—',
@@ -472,8 +522,11 @@ function 方案优化(props: 方案优化入参) {
               ]}
             />
             <p className={styles.note}>
-              结论基于所选循环的固定技能次数。下方展示{格式化明尊GCD(resultCycleName)}
-              ，可切换查看并应用任一可行方案。双档对比用时{(comparison.elapsed / 1000).toFixed(2)}
+              技能次数按所选模拟档位，装备属性沿用实际数值；实际高档配装也可参与低档模拟。下方展示
+              {格式化明尊GCD(resultCycleName)}
+              ，所有档位均要求最低{minToughness.toFixed(2)}
+              %御劲，可切换查看并应用任一可行方案；应用后的计算按装备实际档位执行。
+              {洗髓模式 ? '三档' : '双档'}对比用时{(comparison.elapsed / 1000).toFixed(2)}
               秒。
             </p>
           </div>
@@ -490,7 +543,7 @@ function 方案优化(props: 方案优化入参) {
             <Divider />
             <Descriptions
               size='small'
-              column={4}
+              column={5}
               items={[
                 { key: 'before', label: '当前秒伤', children: result.before.dps.toFixed(2) },
                 {
@@ -501,9 +554,14 @@ function 方案优化(props: 方案优化入参) {
                   ),
                 },
                 {
-                  key: 'gcd',
-                  label: 'GCD / 加速',
-                  children: `${格式化明尊GCD(result.after.gcd)}s / ${result.after.haste.toFixed(2)}`,
+                  key: 'simulatedGcd',
+                  label: '模拟GCD',
+                  children: `${格式化明尊GCD(result.after.simulatedGcd ?? result.after.gcd)}s`,
+                },
+                {
+                  key: 'haste',
+                  label: '加速',
+                  children: result.after.haste.toFixed(2),
                 },
                 {
                   key: 'toughness',

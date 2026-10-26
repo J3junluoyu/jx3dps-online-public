@@ -6,6 +6,7 @@ import 心法枚举 from '@/数据/静态数据/心法枚举.json'
 import { useAppDispatch } from '@/hooks'
 import { 更新当前引导步骤, 更新新手引导流程状态 } from '@/store/system'
 import 计算记录对比 from './计算记录对比'
+import { 获取首页链接 } from '@/页面/首页/导航'
 import './index.css'
 
 const { 缓存映射, 名称 } = 获取当前数据()
@@ -88,8 +89,13 @@ function Log() {
   return (
     <div className='log-wrap'>
       <span>
-        {名称 === '明尊琉璃体' ? '[苍生铸世] 明尊琉璃体' : `当前版本: ${log_data?.[0]?.version}`}
+        {['明尊琉璃体', '洗髓经'].includes(名称)
+          ? `[苍生铸世] ${名称}`
+          : `当前版本: ${log_data?.[0]?.version}`}
       </span>
+      <a className='calculator-home-link' href={获取首页链接(window.location.href)}>
+        返回首页
+      </a>
       {/* <span onClick={() => setNoticeVisible(true)}>使用前声明</span> */}
       <span className='log' onClick={() => setVisible(true)}>
         更新日志

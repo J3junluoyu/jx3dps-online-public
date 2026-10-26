@@ -3,6 +3,7 @@ import { 属性类型 } from '@/@types/属性'
 import { generateCombinations } from './工具函数/附魔排列组合'
 import { closestCombinations } from './工具函数/加速方案'
 import { 精炼加成系数 } from '@/数据/常量'
+import { 获取最大精炼等级 } from '../../工具函数/获取最大精炼等级'
 
 self.onmessage = (event) => {
   const { data } = event // 获取传入的数据
@@ -345,20 +346,6 @@ function countOccurrences(arr, num, num2?) {
     }
   }
   return count
-}
-
-const 获取最大精炼等级 = (data?: 装备属性信息模型) => {
-  switch (data?.装备类型) {
-    case 装备类型枚举.橙武:
-      return 8
-    case 装备类型枚举.副本精简:
-    case 装备类型枚举.特效武器:
-      return 6
-    case 装备类型枚举.试炼精简:
-      return 6
-    default:
-      return 6
-  }
 }
 
 /**

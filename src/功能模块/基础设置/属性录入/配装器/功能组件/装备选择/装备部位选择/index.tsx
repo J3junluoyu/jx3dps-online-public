@@ -1,3 +1,4 @@
+import { 使用五十级装备 } from '@/心法模块/模块工具/心法模式'
 /**
  * 装备选择
  */
@@ -33,7 +34,7 @@ import styles from './index.module.less'
 import './index.css'
 import classNames from 'classnames'
 
-const 智能对比最低品级 = 获取当前数据().名称 === '明尊琉璃体' ? MIN_GEAR_LEVEL : 18900
+const 智能对比最低品级 = 使用五十级装备(获取当前数据().名称) ? MIN_GEAR_LEVEL : 18900
 
 interface 装备部位选择入参 {
   value?: number // 装备ID

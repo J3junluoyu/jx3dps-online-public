@@ -50,12 +50,12 @@ const normal = [
   { 技能名称: '武伤', 技能数量: 0 },
 ]
 
-test('当前34件、26种黄字全部有对应结算，未知效果仍明确保留未计入', () => {
+test('当前38件、28种黄字全部有对应结算，未知效果仍明确保留未计入', () => {
   const selected = GEAR_ITEMS.filter((row) => row.specialEffects?.length)
-  expect(selected).toHaveLength(34)
+  expect(selected).toHaveLength(38)
   expect(
     new Set(selected.flatMap((row) => row.specialEffects.map((effect) => effect.key))).size,
-  ).toBe(26)
+  ).toBe(28)
   expect(selected.flatMap((row) => row.specialEffects).every(equipmentEffectSupported)).toBe(true)
   expect(equipmentEffectSupported({ key: 'gain_999_1' })).toBe(false)
   expect(
@@ -276,9 +276,9 @@ test('方案推荐计入黄字并与应用后的主计算器评分一致，相�
       const item =
         slot === 'hat'
           ? gear(114853)
-          : GEAR_ITEMS.filter((row) => row.position === slotPosition(slot)).sort(
-              (a, b) => Number(b.magic.haste_base || 0) - Number(a.magic.haste_base || 0),
-            )[0]
+          : GEAR_ITEMS.filter(
+              (row) => row.position === slotPosition(slot) && !row.orangeWeapon,
+            ).sort((a, b) => Number(b.magic.haste_base || 0) - Number(a.magic.haste_base || 0))[0]
       return [
         slot,
         {

@@ -1,3 +1,4 @@
+import { 使用五十级装备 } from '@/心法模块/模块工具/心法模式'
 import React, { useEffect, useRef, useState } from 'react'
 import html2canvas from 'html2canvas'
 import { Alert, Button, Form, message, Modal, ModalProps } from 'antd'
@@ -34,7 +35,7 @@ import styles from './index.module.less'
 import './index.css'
 
 function 配装器(props: ModalProps) {
-  const 明尊模式 = 获取当前数据().名称 === '明尊琉璃体'
+  const 明尊模式 = 使用五十级装备(获取当前数据().名称)
   const { open, onCancel } = props
   const dispatch = useAppDispatch()
 

@@ -1,3 +1,4 @@
+import { 使用五十级装备 } from '@/心法模块/模块工具/心法模式'
 import { Cascader, Select } from 'antd'
 import React, { useMemo } from 'react'
 import { 五彩石增益类型枚举 } from '@/@types/枚举'
@@ -68,7 +69,7 @@ function WuCaiShiXuanZe(props: WuCaiShiXuanZeProps) {
     }
   }
 
-  if (名称 === '明尊琉璃体') return <三层选择 {...props} />
+  if (使用五十级装备(名称)) return <三层选择 {...props} />
   return (
     <div className='wucaishi-wrap'>
       <div className={'wucaishi-xuanze-wrap'}>

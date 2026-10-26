@@ -18,7 +18,9 @@ export interface EquipmentSpecialEffect {
     | 'unknown'
   calculationStatus: 'pending' | 'verified'
   rules: {
-    trigger?: 'combat' | 'hit' | 'critical' | 'cast' | 'behit'
+    trigger?: 'combat' | 'hit' | 'critical' | 'cast' | 'behit' | 'use'
+    maxStacks?: number
+    averageForDamage?: boolean
     eventMask?: number
     procChance?: number
     attributeVariants?: { probability: number; attributes: Record<string, number> }[]

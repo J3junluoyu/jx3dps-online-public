@@ -1,0 +1,24 @@
+{
+  "source": "用户于2026-10-25确认效果，并与测试服settings/skill/recipeskill.tab的236、237、244号条目核对。",
+  "group": "252",
+  "records": [
+    {
+      "name": "《袈裟伏魔功·大狮子吼》穴位图残页",
+      "desc": "调息时间减少5秒。",
+      "recipe_key": "recipe_236_1",
+      "effect": { "cooldownReductionSeconds": 5 }
+    },
+    {
+      "name": "《袈裟伏魔功·大狮子吼》穴位图断篇",
+      "desc": "调息时间减少10秒。",
+      "recipe_key": "recipe_237_1",
+      "effect": { "cooldownReductionSeconds": 10 }
+    },
+    {
+      "name": "《袈裟伏魔功·大狮子吼》人偶图残页",
+      "desc": "每命中一个单位回复1点禅那。",
+      "recipe_key": "recipe_244_1",
+      "effect": { "resourcePerTarget": 1 }
+    }
+  ]
+}

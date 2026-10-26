@@ -1,0 +1,209 @@
+{
+  "source": {
+    "repository": "https://github.com/J3junluoyu/Generator",
+    "commit": "8fad4eb8b52fa435bc656e7731ccbf40d6d41126",
+    "files": ["assets/json/weapons.json", "assets/json/trinkets.json"],
+    "clientVerification": "JX3_EXP：4877/89→4761/89，每层体质22、10层、96帧；38578/36→29268/36，全破防931、240帧，普通CD547为180秒。",
+    "assumption": "水特效面板按持续命中十层稳态；次数循环按均匀命中估算预热、叠层和6秒续期。主动腰坠按用户要求采用15/180平均收益。"
+  },
+  "items": [
+    {
+      "key": "weapons:46725",
+      "id": 46725,
+      "name": "漠北风_测试用",
+      "school": "明教",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "primary_weapon",
+      "level": 1280,
+      "maxStrength": 6,
+      "base": {
+        "weapon_damage_base": 126,
+        "weapon_damage_rand": 84
+      },
+      "magic": {
+        "vitality_base": 1099,
+        "physical_shield_base": 1801,
+        "toughness_base": 277,
+        "strain_base": 997,
+        "event": "gain_4877_89"
+      },
+      "embed": {
+        "vitality_base": 225,
+        "dodge_base": 225,
+        "physical_shield_base": 225
+      },
+      "setId": 0,
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_4877_89",
+          "sourceAttribute": "magic",
+          "handlerId": 4877,
+          "level": 89,
+          "kind": "triggered_attributes",
+          "calculationStatus": "verified",
+          "description": "命中后获得水·封山：每层基础体质+22，最多10层（+220），持续6秒，后续命中叠层并续期。不可与同类气劲并存，名剑大会中无法生效。",
+          "rules": {
+            "trigger": "hit",
+            "procChance": 1,
+            "eventMask": 131564,
+            "attributes": {
+              "vitality_base": 22
+            },
+            "maxStacks": 10,
+            "durationSeconds": 6,
+            "disabledInArena": true
+          },
+          "rawDescription": "<Text>text=\"装备：命中后获得水·封山气劲，自身提升基础体质，可叠加十层，持续6秒。不可与该类其他气劲并存。名剑大会中无法生效。\\\\\" font=101 </text>"
+        }
+      ]
+    },
+    {
+      "key": "weapons:46708",
+      "id": 46708,
+      "name": "松鹤吟_测试用",
+      "school": "少林",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "primary_weapon",
+      "level": 1280,
+      "maxStrength": 6,
+      "base": {
+        "weapon_damage_base": 214,
+        "weapon_damage_rand": 143
+      },
+      "magic": {
+        "vitality_base": 1099,
+        "magical_shield_base": 1801,
+        "toughness_base": 277,
+        "strain_base": 997,
+        "event": "gain_4877_89"
+      },
+      "embed": {
+        "vitality_base": 225,
+        "physical_shield_base": 225,
+        "magical_shield_base": 225
+      },
+      "setId": 0,
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_4877_89",
+          "sourceAttribute": "magic",
+          "handlerId": 4877,
+          "level": 89,
+          "kind": "triggered_attributes",
+          "calculationStatus": "verified",
+          "description": "命中后获得水·封山：每层基础体质+22，最多10层（+220），持续6秒，后续命中叠层并续期。不可与同类气劲并存，名剑大会中无法生效。",
+          "rules": {
+            "trigger": "hit",
+            "procChance": 1,
+            "eventMask": 131564,
+            "attributes": {
+              "vitality_base": 22
+            },
+            "maxStacks": 10,
+            "durationSeconds": 6,
+            "disabledInArena": true
+          },
+          "rawDescription": "<Text>text=\"装备：命中后获得水·封山气劲，自身提升基础体质，可叠加十层，持续6秒。不可与该类其他气劲并存。名剑大会中无法生效。\\\\\" font=101 </text>"
+        }
+      ]
+    },
+    {
+      "key": "trinkets:49917",
+      "id": 49917,
+      "name": "霜星魄_测试用",
+      "school": "通用",
+      "kind": "元气",
+      "usage": "PVE",
+      "position": "pendant",
+      "level": 1280,
+      "maxStrength": 6,
+      "skill": [38578, 36],
+      "base": {},
+      "magic": {
+        "vitality_base": 337,
+        "spunk_base": 157,
+        "magical_attack_power_base": 216,
+        "magical_overcome_base": 216,
+        "strain_base": 338
+      },
+      "embed": {
+        "magical_overcome_base": 225
+      },
+      "setId": 0,
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38578_36",
+          "sourceAttribute": "magic",
+          "handlerId": 38578,
+          "level": 36,
+          "kind": "triggered_attributes",
+          "calculationStatus": "verified",
+          "description": "使用后获得风·灭虚：全破防等级+931，持续15秒，冷却180秒。DPS按平均收益计算，折合全破防等级约+77.58。名剑大会中无法生效。",
+          "rules": {
+            "trigger": "use",
+            "attributes": {
+              "all_overcome_base": 931
+            },
+            "durationSeconds": 15,
+            "cooldownSeconds": 180,
+            "averageForDamage": true,
+            "disabledInArena": true
+          },
+          "rawDescription": "<Text>text=\"使用：大幅提升自身全破防等级，持续15秒。名剑大会中无法生效。\\n\\\\\\n\" font=105 </text><Text>text=\"寒星凝夜色，孤灯照客程。\" font=100 </text>"
+        }
+      ]
+    },
+    {
+      "key": "trinkets:51360",
+      "id": 51360,
+      "name": "霜星魄_测试用",
+      "school": "通用",
+      "kind": "元气",
+      "usage": "PVE",
+      "position": "pendant",
+      "level": 1170,
+      "maxStrength": 8,
+      "skill": [38578, 36],
+      "base": {},
+      "magic": {
+        "vitality_base": 340,
+        "spunk_base": 159,
+        "magical_attack_power_base": 219,
+        "magical_overcome_base": 219,
+        "strain_base": 328
+      },
+      "embed": {
+        "magical_overcome_base": 225
+      },
+      "setId": 0,
+      "sets": {},
+      "specialEffects": [
+        {
+          "key": "gain_38578_36",
+          "sourceAttribute": "magic",
+          "handlerId": 38578,
+          "level": 36,
+          "kind": "triggered_attributes",
+          "calculationStatus": "verified",
+          "description": "使用后获得风·灭虚：全破防等级+931，持续15秒，冷却180秒。DPS按平均收益计算，折合全破防等级约+77.58。名剑大会中无法生效。",
+          "rules": {
+            "trigger": "use",
+            "attributes": {
+              "all_overcome_base": 931
+            },
+            "durationSeconds": 15,
+            "cooldownSeconds": 180,
+            "averageForDamage": true,
+            "disabledInArena": true
+          },
+          "rawDescription": "<Text>text=\"使用：大幅提升自身全破防等级，持续15秒。名剑大会中无法生效。\\n\\\\\\n\" font=105 </text><Text>text=\"寒星凝夜色，孤灯照客程。\" font=100 </text>"
+        }
+      ]
+    }
+  ]
+}

@@ -1,3 +1,4 @@
+import { 使用五十级装备 } from '@/心法模块/模块工具/心法模式'
 import React from 'react'
 import { Button, Dropdown, Tooltip } from 'antd'
 import 装备选择范围设置 from './装备选择范围设置'
@@ -16,7 +17,7 @@ function 配装组件标题({
   装备选择范围,
   设置装备选择范围,
 }) {
-  const 明尊模式 = 获取当前数据().名称 === '明尊琉璃体'
+  const 明尊模式 = 使用五十级装备(获取当前数据().名称)
 
   // 设置所有镶嵌为6/8级
   const setAllXiangQian = (number) => {

@@ -108,7 +108,7 @@ export function averageEquipmentProcGains(
     const coverage = effect.rules.cooldownSeconds
       ? Math.min(1, duration / effect.rules.cooldownSeconds)
       : 1
-    add(result, effect.rules.attributes, coverage)
+    add(result, effect.rules.attributes, coverage * (effect.rules.maxStacks || 1))
   }
   return result
 }
@@ -127,10 +127,38 @@ export function equipmentProcStates(
   for (const { effect } of effects) {
     if (isMajorEnchant(effect)) continue
     if (!equipmentEffectSupported(effect) || effect.kind !== 'triggered_attributes') continue
+    if (effect.rules.averageForDamage) {
+      const coverage = Math.min(
+        1,
+        (effect.rules.durationSeconds || 0) / (effect.rules.cooldownSeconds || duration),
+      )
+      const attributes: Attributes = {}
+      add(attributes, effect.rules.attributes, coverage)
+      intervals.push({ start: 0, end: duration, attributes })
+      continue
+    }
     const active =
       effect.handlerId === 46727
         ? equipmentAttackDuration(haste)
         : effect.rules.durationSeconds || 0
+    if (effect.rules.maxStacks) {
+      const interval = duration / hits
+      const count = Math.ceil(hits)
+      for (let n = 0; n < count; n++) {
+        const start = n * interval
+        if (start >= duration) break
+        const stacks = interval <= active ? Math.min(effect.rules.maxStacks, n + 1) : 1
+        const attributes: Attributes = {}
+        add(attributes, effect.rules.attributes, stacks)
+        const full = interval <= active && stacks === effect.rules.maxStacks
+        const end = full ? duration : Math.min(duration, start + Math.min(interval, active))
+        intervals.push({ start, end, attributes })
+        boundaries.add(start)
+        boundaries.add(end)
+        if (full) break
+      }
+      continue
+    }
     if (!effect.rules.cooldownSeconds) {
       // 戒指没有内置CD，后续命中刷新10秒。次数足够密集时连续覆盖；稀疏自定义循环按均匀命中估算。
       const interval = duration / hits
@@ -199,6 +227,7 @@ export function equipmentDamageRows(
   duration: number,
   hits: number,
   majorContext?: MajorEnchantContext,
+  damageType: 'solar' | 'lunar' = 'lunar',
 ): 计算结果技能列表类型[] {
   if (hits <= 0) return []
   const used = new Set<string>()
@@ -231,7 +260,7 @@ export function equipmentDamageRows(
       0,
       Math.trunc(
         Math.trunc(rule.base * (1 - (panel.variables.level - 50) * 0.05)) *
-          (1 + panel.variables.lunar_damage_scale),
+          (1 + panel.variables[`${damageType}_damage_scale`]),
       ),
     )
     const total = hit * count

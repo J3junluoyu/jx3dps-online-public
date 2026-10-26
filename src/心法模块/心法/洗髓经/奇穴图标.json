@@ -1,0 +1,44 @@
+{
+  "repository": "https://github.com/JX3BOX/jx3box-talent",
+  "commit": "8751fb0474aa5f37c47a99c611ba12736f5028ce",
+  "source": "raw/skill.txt",
+  "sourceBlob": "95e23e9260b3dd9ed7e8eecfc49e3fa93d831d99",
+  "records": {
+    "5929": {
+      "name": "涅果",
+      "icon": 4571
+    },
+    "5939": {
+      "name": "禅语",
+      "icon": 4526
+    },
+    "14750": {
+      "name": "系珠",
+      "icon": 7426
+    },
+    "17750": {
+      "name": "立地成佛",
+      "icon": 420
+    },
+    "23972": {
+      "name": "禅慧",
+      "icon": 13419
+    },
+    "24819": {
+      "name": "醍醐灌顶",
+      "icon": 13423
+    },
+    "25353": {
+      "name": "大善",
+      "icon": 11887
+    },
+    "29191": {
+      "name": "心诤",
+      "icon": 16213
+    },
+    "45888": {
+      "name": "摩诃守御",
+      "icon": 423
+    }
+  }
+}

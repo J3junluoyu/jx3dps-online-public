@@ -156,6 +156,16 @@ export interface 循环技能详情 {
     /** 原始释放次数，月破三段只计一次，DOT及附加伤害为0。 */
     施放次数: number
   }
+  /** 洗髓已记录时间轴的命中状态；技能数量为伤害事件数。 */
+  洗髓技能状态?: {
+    技能键: string
+    qin: boolean
+    gold: boolean
+    ring: boolean
+    lidi: boolean
+    dashan: number
+    chanyu: boolean
+  }
   /**
    * @name 技能增益列表
    * 该技能携带的增益列表

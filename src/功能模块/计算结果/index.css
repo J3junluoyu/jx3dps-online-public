@@ -22,6 +22,13 @@
   margin: 0;
 }
 
+.dps-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
 .dps-number-count-wrap {
   width: 100%;
   display: flex;

@@ -7,6 +7,7 @@ export interface EquipmentEffectDetail {
 }
 
 const attributes: Record<string, string> = {
+  vitality_base: '基础体质',
   all_critical_strike_base: '会心等级',
   all_overcome_base: '破防等级',
   all_attack_power_base: '全攻击',
@@ -54,6 +55,25 @@ export function equipmentEffectDetails(effect: EquipmentSpecialEffect): Equipmen
       .filter(([key]) => attributes[key])
       .map(([key, amount]) => `${attributes[key]} +${amount}`)
     if (gains.length) add('属性加成', gains.join('、'))
+    if (rule.maxStacks) {
+      add(
+        '叠层上限',
+        `${rule.maxStacks}层，基础体质 +${(rule.attributes.vitality_base || 0) * rule.maxStacks}`,
+      )
+      add('生效方式', '命中后叠层并续期；面板按满层稳态，DPS按命中次数估算叠层预热')
+    }
+    if (rule.averageForDamage) {
+      add('生效方式', '主动使用，DPS采用平均收益')
+      const coverage = (rule.durationSeconds || 0) / (rule.cooldownSeconds || 1)
+      add(
+        '平均覆盖',
+        `${rule.durationSeconds}/${rule.cooldownSeconds} = ${(coverage * 100).toFixed(2)}%`,
+      )
+      add(
+        '平均收益',
+        `全破防等级 +${((rule.attributes.all_overcome_base || 0) * coverage).toFixed(2)}`,
+      )
+    }
     if (effect.kind === 'combat_attributes') add('生效方式', '进入战斗后持续生效')
     if (rule.durationRangeSeconds) {
       add(
@@ -62,7 +82,8 @@ export function equipmentEffectDetails(effect: EquipmentSpecialEffect): Equipmen
       )
       add('满档要求', `加速等级≥${rule.hasteForMaxDuration}，持续${rule.durationRangeSeconds[1]}秒`)
     } else if (rule.durationSeconds) add('持续时间', `${rule.durationSeconds}秒`)
-    if (rule.cooldownSeconds) add('内置冷却', `${rule.cooldownSeconds}秒`)
+    if (rule.cooldownSeconds)
+      add(rule.trigger === 'use' ? '使用冷却' : '内置冷却', `${rule.cooldownSeconds}秒`)
     if (effect.handlerId === 40802 || effect.handlerId === 40803) {
       add('刷新方式', '满足条件的后续命中刷新持续时间，无内置冷却')
       add(

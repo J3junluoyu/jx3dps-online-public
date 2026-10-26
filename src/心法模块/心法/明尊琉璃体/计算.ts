@@ -257,21 +257,38 @@ export function calculateAttributes(equipment: EquipmentStats, settings: Setting
     recipes.recipe_4546_1 = 1
   }
   if (settings.drive && settings.talents.includes('14698')) recipes.recipe_4489_1 = 1
+  return calculateAttributePanel(equipment, settings, attributes, recipes, 'lunar', {
+    buff_1_1: settings.differentSlash && settings.talents.includes('25166') ? 1 : 0,
+  })
+}
+
+/** 两个50级心法共用属性换算；职业属性、气劲和秘籍由各自模块提供。 */
+export function calculateAttributePanel(
+  equipment: EquipmentStats,
+  settings: Pick<
+    Settings,
+    | 'stance'
+    | 'targetLevel'
+    | 'damageBonus'
+    | 'pveBonus'
+    | 'equipmentEffects'
+    | 'equipmentProcGains'
+  >,
+  attributes: Attributes,
+  recipes: Attributes = {},
+  damageType: 'solar' | 'lunar' = 'lunar',
+  extraVariables: Attributes = {},
+) {
   const gain = (key: string) => attributes[key] || 0
   const major = (base: number, key: string) => base + gain(`${key}_base`) + gain('all_major_base')
-  const baseVitality = major(18 + equipment.vitality, 'vitality')
-  const vitality = Math.trunc(
+  let baseVitality = major(18 + equipment.vitality, 'vitality')
+  let vitality = Math.trunc(
     baseVitality * (1 + percentToGuo(equipment.vitalityGain) + gain('vitality_gain') / 1024),
   )
-  // 测试服9557：减仇Buff 18609按当前总体质每10000点一层，每层-102/1024，上限100层。
-  const threatReductionStacks =
-    settings.stance === 'none' ? 0 : Math.min(100, Math.floor(vitality / 10000))
-  const threatRate = 1.5 + (equipment.threat - threatReductionStacks * 102) / 1024
-  const pilgrimageStacks = Math.min(100, Math.max(0, Math.floor(baseVitality / 95)))
-  const spunk = major(17 + equipment.spunk, 'spunk')
-  const spirit = major(18 + equipment.spirit, 'spirit')
-  const strength = major(17 + equipment.strength, 'strength')
-  const agility = major(18 + equipment.agility, 'agility')
+  let spunk = major(17 + equipment.spunk, 'spunk')
+  let spirit = major(18 + equipment.spirit, 'spirit')
+  let strength = major(17 + equipment.strength, 'strength')
+  let agility = major(18 + equipment.agility, 'agility')
   const fromVitality = (key: string) => Math.trunc((vitality * (attributes[key] || 0)) / 1024)
   const effects = settings.equipmentEffects || []
   if (effects.length) {
@@ -305,13 +322,27 @@ export function calculateAttributes(equipment: EquipmentStats, settings: Setting
       averageEquipmentProcGains(effects, equipment.haste + gain('haste_base'))
     for (const source of [permanent, temporary])
       for (const [key, value] of Object.entries(source)) attributes[key] = gain(key) + value
+    // 水·封山等临时基础主属性先叠入，再计算体质百分比及心法转换。
+    baseVitality = major(18 + equipment.vitality, 'vitality')
+    vitality = Math.trunc(
+      baseVitality * (1 + percentToGuo(equipment.vitalityGain) + gain('vitality_gain') / 1024),
+    )
+    spunk = major(17 + equipment.spunk, 'spunk')
+    spirit = major(18 + equipment.spirit, 'spirit')
+    strength = major(17 + equipment.strength, 'strength')
+    agility = major(18 + equipment.agility, 'agility')
   }
+  // T减仇和朝圣/禅语层数也使用特效生效后的体质。
+  const threatReductionStacks =
+    settings.stance === 'none' ? 0 : Math.min(100, Math.floor(vitality / 10000))
+  const threatRate = 1.5 + (equipment.threat - threatReductionStacks * 102) / 1024
+  const pilgrimageStacks = Math.min(100, Math.max(0, Math.floor(baseVitality / 95)))
   const baseMagicalAttack =
     equipment.attack +
     gain('all_attack_power_base') +
     gain('magical_attack_power_base') +
     Math.trunc(spunk * 0.195)
-  const extraMagicalAttack = fromVitality('vitality_to_lunar_attack_power')
+  const extraMagicalAttack = fromVitality(`vitality_to_${damageType}_attack_power`)
   const attack =
     Math.trunc(baseMagicalAttack * (1 + gain('magical_attack_power_gain') / 1024)) +
     extraMagicalAttack
@@ -339,7 +370,7 @@ export function calculateAttributes(equipment: EquipmentStats, settings: Setting
     Math.trunc(agility * 0.25)
   const critical = Math.min(
     1,
-    criticalRating / ratingScale('critical') + gain('lunar_critical_strike_rate') / 10000,
+    criticalRating / ratingScale('critical') + gain(`${damageType}_critical_strike_rate`) / 10000,
   )
   const physicalCritical = Math.min(
     1,
@@ -350,7 +381,7 @@ export function calculateAttributes(equipment: EquipmentStats, settings: Setting
     3,
     1.75 +
       (equipment.criticalPower + equipment.magicalCriticalPower) / ratingScale('criticalPower') +
-      (gain('magical_critical_power_rate') + gain('lunar_critical_power_rate')) / 1024,
+      (gain('magical_critical_power_rate') + gain(`${damageType}_critical_power_rate`)) / 1024,
   )
   const physicalCriticalPower = Math.min(
     3,
@@ -366,7 +397,8 @@ export function calculateAttributes(equipment: EquipmentStats, settings: Setting
   const extraOvercomeRating = fromVitality('vitality_to_magical_overcome')
   // 阵法只放大基础破防；主副T气劲的体质转换破防在倍率之后单独加入。
   const overcomeRating =
-    Math.trunc(baseOvercomeRating * (1 + gain('lunar_overcome_gain') / 1024)) + extraOvercomeRating
+    Math.trunc(baseOvercomeRating * (1 + gain(`${damageType}_overcome_gain`) / 1024)) +
+    extraOvercomeRating
   const overcome = overcomeRating / ratingScale('overcome')
   const physicalOvercome =
     (equipment.physicalOvercome +
@@ -384,7 +416,11 @@ export function calculateAttributes(equipment: EquipmentStats, settings: Setting
     equipment.healthExtra +
     gain('max_life_add')
   const physicalShield = 280 + (attributes.physical_shield_base || 0) + equipment.physicalShield
-  const magicalShield = 280 + (attributes.magical_shield_base || 0) + equipment.magicalShield
+  const magicalShield =
+    280 +
+    (attributes.magical_shield_base || 0) +
+    equipment.magicalShield +
+    (damageType === 'solar' ? fromVitality('vitality_to_magical_shield') : 0)
   const dodgeRating =
     equipment.dodge + (attributes.dodge_base || 0) + fromVitality('vitality_to_dodge')
   const toughnessRating = equipment.toughness + gain('toughness_base')
@@ -434,7 +470,8 @@ export function calculateAttributes(equipment: EquipmentStats, settings: Setting
     strain,
     weapon_damage: equipment.weaponMin,
     weapon_damage_rand: equipment.weaponMax - equipment.weaponMin,
-    buff_1_1: settings.differentSlash && settings.talents.includes('25166') ? 1 : 0,
+    buff_1_1: 0,
+    ...extraVariables,
   }
   return {
     baseVitality,

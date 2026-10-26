@@ -12,11 +12,6 @@
   margin: 0;
 }
 
-.school-switch-tabs {
-  margin-left: 186px;
-  margin-top: -4px;
-}
-
 .school-switch-modal {
   display: flex;
   flex-wrap: wrap;

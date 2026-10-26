@@ -16,6 +16,16 @@ function 心法切换() {
     <div className='school-switch'>
       {/* <Dropdown overlay={menu} disabled={新手引导流程状态}> */}
       <img
+        role='button'
+        aria-label='切换心法'
+        alt='切换心法'
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (!新手引导流程状态 && (e.key === 'Enter' || e.key === ' ')) {
+            e.preventDefault()
+            设置心法切换弹窗展示(true)
+          }
+        }}
         id='Guide_16'
         src={当前Logo}
         className='school-switch-img'
