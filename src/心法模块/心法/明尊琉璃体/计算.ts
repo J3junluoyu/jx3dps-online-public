@@ -1,5 +1,6 @@
 import reference from './参考数据.json'
 import 驱夜秘籍 from './驱夜断愁秘籍.json'
+import 橙武公式 from './橙武伤害公式.json'
 import { evaluateExpression } from './表达式'
 import { 计入循环戒火 } from './戒火斩'
 import type { EquippedSpecialEffect } from './装备特效'
@@ -117,6 +118,8 @@ export interface Settings {
   damageBonus: number
   gains?: Record<string, number>
   equipmentEffects?: EquippedSpecialEffect[]
+  /** 当前装备ID检测结果；仅在自适应理论循环内使用橙武时间轴。 */
+  mingzunOrangeWeapon?: boolean
   /** 内部结算当前触发状态；不传时角色面板按稳态覆盖显示。 */
   equipmentProcGains?: Record<string, number>
 }
@@ -564,6 +567,8 @@ for (const [group, dots] of Object.entries(reference.dots)) {
     }
 }
 
+SKILLS.push(...橙武公式.skills)
+
 const JIE_HUO_ZHAN_LEVELS = Object.entries(skillGroups['3980']['44567']).sort(
   ([a], [b]) => Number(a) - Number(b),
 )
@@ -688,6 +693,7 @@ export function calculateCycle(
   return { panel, rows, equipmentRows, total, dps: total / duration }
 }
 export function skillAvailable(skill: Skill, settings: Settings) {
+  if (['4941', '25796'].includes(skill.group)) return settings.mingzunOrangeWeapon === true
   return (
     ['10243', '3959', '3960', '3962', '3963', '3966', '3967', '3980'].includes(skill.group) ||
     settings.talents.includes(skill.group)

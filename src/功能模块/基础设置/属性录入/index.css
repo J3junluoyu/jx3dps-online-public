@@ -13,3 +13,9 @@
 .character-set-in-btn {
   width: 100%;
 }
+
+.character-set-compact {
+  flex: 1;
+  margin-right: 8px;
+  padding: 0;
+}

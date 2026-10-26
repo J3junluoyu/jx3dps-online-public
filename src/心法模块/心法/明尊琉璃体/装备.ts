@@ -99,6 +99,23 @@ export function findGearItem(identifier: string | number, position?: string): Ge
   const canonical = gearAliases.get(typeof identifier === 'string' ? identifier : raw?.key || '')
   return canonical && (!position || canonical.position === position) ? canonical : undefined
 }
+
+/** 品质、名称和精炼上限均不作为橙武判断依据，避免把橙色腰坠或洗髓橙武识别为明尊橙武。 */
+export function isMingzunOrangeWeapon(identifier?: string | number): boolean {
+  const item = identifier == null ? undefined : findGearItem(identifier, 'primary_weapon')
+  return item?.orangeWeapon === true && item.school === '明教'
+}
+
+const orangeWeaponLevels = (school: string) =>
+  [
+    ...new Set(
+      GEAR_ITEMS.filter(
+        (item) => item.orangeWeapon && item.school === school && item.position === 'primary_weapon',
+      ).map((item) => item.level),
+    ),
+  ].sort((a, b) => a - b)
+export const MINGZUN_ORANGE_WEAPON_LEVELS = orangeWeaponLevels('明教')
+export const XISUI_ORANGE_WEAPON_LEVELS = orangeWeaponLevels('少林')
 export function gearAttributeSuffix(item: GearItem): string {
   const has = (...keys: string[]) => keys.some((key) => Number(item.magic[key]) > 0)
   if (item.kind === '防御') {

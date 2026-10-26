@@ -3,6 +3,7 @@ import React from 'react'
 import 目标选择 from './目标选择'
 import 循环选择 from './循环选择'
 import 延迟选择 from './延迟选择'
+import 属性录入 from '../属性录入'
 import 秘籍选择 from './秘籍选择'
 import 奇穴选择 from './奇穴选择'
 import 增益详情 from '../基础设置标题/增益详情'
@@ -21,8 +22,7 @@ function 公用设置() {
       <循环选择 />
       <延迟选择 />
       <div className='common-item' style={{ height: 'unset' }}>
-        <秘籍选择 />
-        {获取当前数据().名称 === '洗髓经' ? <洗髓奇穴设置 /> : <奇穴选择 />}
+        <属性录入 紧凑布局 />
         {获取当前数据().名称 === '洗髓经' ? <洗髓气劲切换 /> : <气劲切换 />}
       </div>
       {使用五十级装备(获取当前数据().名称) && (
@@ -35,3 +35,12 @@ function 公用设置() {
 }
 
 export default 公用设置
+
+export function 秘籍奇穴设置() {
+  return (
+    <div className='character-config-actions'>
+      <秘籍选择 />
+      {获取当前数据().名称 === '洗髓经' ? <洗髓奇穴设置 /> : <奇穴选择 />}
+    </div>
+  )
+}

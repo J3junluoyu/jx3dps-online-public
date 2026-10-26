@@ -1,0 +1,221 @@
+{
+  "equipment": {
+    "vitality": 9774,
+    "spunk": 46,
+    "spirit": 46,
+    "strength": 46,
+    "agility": 46,
+    "attack": 252,
+    "physicalAttack": 252,
+    "overcome": 0,
+    "physicalOvercome": 0,
+    "critical": 0,
+    "criticalPower": 0,
+    "magicalCritical": 0,
+    "physicalCritical": 0,
+    "magicalCriticalPower": 0,
+    "physicalCriticalPower": 0,
+    "strain": 6787,
+    "pvx": 0,
+    "haste": 2399,
+    "health": 0,
+    "healthExtra": 0,
+    "vitalityGain": 7.91015625,
+    "physicalShield": 6689,
+    "magicalShield": 6201,
+    "dodge": 28,
+    "parry": 0,
+    "parryValue": 0,
+    "toughness": 1819,
+    "decritical": 0,
+    "weaponMin": 134,
+    "weaponMax": 223,
+    "threat": 1332
+  },
+  "settings": {
+    "stance": "mainTank",
+    "targetLevel": 54,
+    "talents": [
+      "14678",
+      "25355",
+      "26717",
+      "18296",
+      "46492",
+      "6771",
+      "5974",
+      "14698",
+      "6000"
+    ],
+    "recipes": [
+      "recipe_984_1",
+      "recipe_985_1",
+      "recipe_989_1",
+      "recipe_990_1",
+      "recipe_992_1",
+      "recipe_993_1",
+      "recipe_994_1",
+      "recipe_999_1",
+      "recipe_1000_1",
+      "recipe_1001_1",
+      "recipe_1005_1",
+      "recipe_1008_1",
+      "recipe_1009_1",
+      "recipe_1011_1",
+      "recipe_1013_1",
+      "recipe_1621_1",
+      "recipe_1622_1",
+      "recipe_1623_1",
+      "recipe_1015_1",
+      "recipe_1016_1",
+      "recipe_1019_1",
+      "recipe_5206_1",
+      "recipe_1052_1",
+      "recipe_1053_1",
+      "recipe_1055_1",
+      "recipe_1056_1"
+    ],
+    "sunlight": true,
+    "light": false,
+    "differentSlash": false,
+    "drive": false,
+    "pveBonus": 0,
+    "damageBonus": 0,
+    "gains": {
+      "lunar_critical_strike_rate": 300,
+      "solar_critical_strike_rate": 300,
+      "neutral_critical_strike_rate": 300,
+      "poison_critical_strike_rate": 300,
+      "physical_critical_strike_rate": 300,
+      "strain_rate": 20,
+      "all_damage_gain": 62,
+      "physical_critical_power_rate": 144,
+      "magical_critical_power_rate": 144,
+      "vitality_base": 540,
+      "all_critical_strike_base": 361,
+      "all_attack_power_base": 135,
+      "max_life_add": -2094,
+      "strain_base": 156
+    }
+  },
+  "slots": {
+    "hat": {
+      "key": "armors:112319",
+      "strength": 6,
+      "enchantId": 16500,
+      "embeds": [
+        8,
+        8
+      ]
+    },
+    "jacket": {
+      "key": "armors:112590",
+      "strength": 6,
+      "enchantId": 16551,
+      "embeds": [
+        8,
+        8
+      ]
+    },
+    "belt": {
+      "key": "armors:112413",
+      "strength": 6,
+      "enchantId": 16501,
+      "embeds": [
+        8,
+        8
+      ]
+    },
+    "wrist": {
+      "key": "armors:112560",
+      "strength": 6,
+      "enchantId": 16547,
+      "embeds": [
+        8,
+        8
+      ]
+    },
+    "bottoms": {
+      "key": "armors:112443",
+      "strength": 6,
+      "enchantId": 16497,
+      "embeds": [
+        8,
+        8
+      ]
+    },
+    "shoes": {
+      "key": "armors:112287",
+      "strength": 6,
+      "enchantId": 16550,
+      "embeds": [
+        8,
+        8
+      ]
+    },
+    "necklace": {
+      "key": "trinkets:50000",
+      "strength": 6,
+      "enchantId": 16617,
+      "embeds": [
+        8
+      ]
+    },
+    "pendant": {
+      "key": "trinkets:51358",
+      "strength": 8,
+      "enchantId": 16619,
+      "embeds": [
+        8
+      ]
+    },
+    "ring1": {
+      "key": "trinkets:49915",
+      "strength": 6,
+      "enchantId": 16625,
+      "embeds": []
+    },
+    "ring2": {
+      "key": "trinkets:49915",
+      "strength": 6,
+      "enchantId": 16625,
+      "embeds": []
+    },
+    "tertiary_weapon": {
+      "key": "weapons:46630",
+      "strength": 6,
+      "enchantId": 16631,
+      "embeds": [
+        8
+      ]
+    },
+    "primary_weapon": {
+      "key": "weapons:47882",
+      "strength": 8,
+      "enchantId": 16486,
+      "embeds": [
+        8,
+        8,
+        8
+      ]
+    }
+  },
+  "stone": 5599,
+  "gainData": {
+    "阵眼": "万灵阵",
+    "小吃": [
+      "五气归元丹·精（体质+203）",
+      "巴山凝神丹·精（会心+203）",
+      "云芝竹沥羹·精（体质+158）",
+      "渝州小面·精（会心+158）",
+      "苍生·坠宵焠晶（全攻击+135）",
+      "长安珍馐宴（体质+179）",
+      "创意料理·盛（额外气血-2094、无双+156）"
+    ],
+    "团队增益": [],
+    "明尊设置": {
+      "stance": "mainTank"
+    }
+  },
+  "expectedDps": 50088.5941798108,
+  "normalDps": 47929.83396926703
+}

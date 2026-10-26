@@ -418,11 +418,12 @@ function 装备部位选择(props: 装备部位选择入参, ref) {
                       className={`zhuangbei-diff ${upItem.dpsUp === 0 ? '' : +upItem.dpsUp > 0 ? 'dps-up-color' : 'dps-low-color'}`}
                     >
                       {+upItem?.dpsUp > 0 ? '+' : ''}
-                      {对比显示百分比 && upItem?.dpsPercent
-                        ? `${upItem?.dpsPercent}%`
-                        : typeof upItem?.dpsUp === 'number'
-                          ? upItem.dpsUp.toFixed(2)
-                          : upItem?.dpsUp}
+                      {typeof upItem?.dpsUp === 'number' ? upItem.dpsUp.toFixed(2) : upItem?.dpsUp}
+                      {对比显示百分比 &&
+                      upItem.dpsPercent !== '' &&
+                      Number.isFinite(Number(upItem.dpsPercent))
+                        ? `（${Number(upItem.dpsPercent) > 0 ? '+' : ''}${Number(upItem.dpsPercent).toFixed(2)}%）`
+                        : null}
                     </span>
                   ) : null}
                   <span className={'zhuangbei-select-level'}>{item.装备品级}</span>

@@ -3,7 +3,16 @@ import { 小吃类型枚举 } from '@/@types/枚举'
 import type { 团队增益选项数据类型 } from '@/@types/团队增益'
 import type { Settings } from './计算'
 import { calculateAttributes, ratingScale } from './计算'
-import { GEAR_ITEMS, ENCHANTS, SLOTS, calculateLoadout, slotPosition } from './装备'
+import {
+  GEAR_ITEMS,
+  ENCHANTS,
+  SLOTS,
+  calculateLoadout,
+  slotPosition,
+  isMingzunOrangeWeapon,
+  MINGZUN_ORANGE_WEAPON_LEVELS,
+  XISUI_ORANGE_WEAPON_LEVELS,
+} from './装备'
 import type { GearItem, Loadout } from './装备'
 import { 明尊小药小吃, 获取明尊战斗增益 } from './增益'
 import { 明尊阵眼 } from './阵眼'
@@ -12,6 +21,7 @@ import { matchMajorEnchant } from './大附魔'
 import { 计算洗髓面板, 计算洗髓循环, 获取洗髓增益属性 } from '../洗髓经/计算'
 import { 洗髓自适应循环 } from '../洗髓经/循环'
 import 明尊循环列表 from './计算循环'
+import { 获取理论档位循环 } from './计算循环/理论循环'
 
 export interface 优化方案 {
   slots: Loadout
@@ -38,6 +48,8 @@ export interface 方案优化输入 {
   minToughness: number
   includeMowen?: boolean
   includeHasteConsumables?: boolean
+  /** 0或未选时排除橙武候选；所选品级橙武独立加入候选，不锁定最终武器。 */
+  orangeWeaponLevel?: number
   gearScope?: 'defensive' | 'includeStreamlined'
   teamGains?: 团队增益选项数据类型[]
   gearKeys: string[]
@@ -104,6 +116,17 @@ export function 优化明尊方案(
   input: 方案优化输入,
   onProgress?: (progress: 方案优化进度) => void,
 ): 方案优化结果 {
+  const orangeLevels =
+    input.kungfu === 'xsj' ? XISUI_ORANGE_WEAPON_LEVELS : MINGZUN_ORANGE_WEAPON_LEVELS
+  if (input.orangeWeaponLevel && !orangeLevels.includes(input.orangeWeaponLevel))
+    throw new Error(`请选择装备库中可用的${input.kungfu === 'xsj' ? '洗髓' : '明尊'}橙武品级`)
+  if (input.orangeWeaponLevel && !input.slots.includes('primary_weapon'))
+    input = { ...input, slots: [...input.slots, 'primary_weapon'] }
+  if (使用橙武推荐模型(input)) {
+    const tier = Number(input.cycle.循环详情[0]?.循环加速等级)
+    if (tier === 3 || tier === 4)
+      input = { ...input, cycle: 获取理论档位循环(tier === 4 ? 0.75 : 0.8125) }
+  }
   if (!input.exploreHighLevelCandidates || !input.slots.length)
     return 搜索推荐方案(input, onProgress)
   const started = Date.now()
@@ -137,20 +160,37 @@ export function 优化明尊方案(
 /** 用户确认：可精炼8级的试做腰坠视为橙装，不因低品级而排除。 */
 export const 是橙色腰坠 = (item: GearItem) => item.position === 'pendant' && item.maxStrength === 8
 
+export const 使用橙武推荐模型 = (
+  input: Pick<方案优化输入, 'kungfu' | 'orangeWeaponLevel' | 'initial' | 'slots'>,
+) =>
+  input.kungfu !== 'xsj' &&
+  (!!input.orangeWeaponLevel ||
+    (!input.slots?.includes('primary_weapon') &&
+      isMingzunOrangeWeapon(input.initial?.slots?.primary_weapon?.key)))
+
+const 是当前心法橙武 = (input: Pick<方案优化输入, 'kungfu'>, item: GearItem) =>
+  item.orangeWeapon === true &&
+  item.position === 'primary_weapon' &&
+  item.school === (input.kungfu === 'xsj' ? '少林' : '明教')
+
+const 允许装备候选 = (input: 方案优化输入, item: GearItem) =>
+  (item.orangeWeapon
+    ? item.level === input.orangeWeaponLevel && 是当前心法橙武(input, item)
+    : input.gearKeys.includes(item.key)) &&
+  (input.gearScope !== 'defensive' || item.kind === '防御')
+
 export function 获取最高品级候选(input: 方案优化输入): string[] {
-  const candidates = GEAR_ITEMS.filter(
-    (item) =>
-      input.gearKeys.includes(item.key) &&
-      !item.orangeWeapon &&
-      (input.gearScope !== 'defensive' || item.kind === '防御'),
-  )
+  const candidates = GEAR_ITEMS.filter((item) => 允许装备候选(input, item))
   const maxLevels = new Map<string, number>()
   for (const item of candidates) {
     if (!是橙色腰坠(item))
       maxLevels.set(item.position, Math.max(maxLevels.get(item.position) || 0, item.level))
   }
   return candidates
-    .filter((item) => 是橙色腰坠(item) || item.level === maxLevels.get(item.position))
+    .filter(
+      (item) =>
+        是橙色腰坠(item) || item.orangeWeapon || item.level === maxLevels.get(item.position),
+    )
     .map((item) => item.key)
 }
 
@@ -190,14 +230,9 @@ function 搜索推荐方案(
   const started = Date.now()
   if (input.gearScope && !['defensive', 'includeStreamlined'].includes(input.gearScope))
     throw new Error('装备范围无效')
-  // 与配装器筛选取交集；橙武暂不参与推荐，初始配装也不能绕过限制。
+  // 普通装备沿用配装器范围；用户单独选定品级的橙武作为额外候选，不能强制选用。
   const allowed = new Set(
-    GEAR_ITEMS.filter(
-      (item) =>
-        input.gearKeys.includes(item.key) &&
-        !item.orangeWeapon &&
-        (input.gearScope !== 'defensive' || item.kind === '防御'),
-    ).map((item) => item.key),
+    GEAR_ITEMS.filter((item) => 允许装备候选(input, item)).map((item) => item.key),
   )
   const activeSlots = new Set(input.slots)
   if (input.slots.some((slot) => !SLOTS.some(([key]) => key === slot)))
@@ -206,7 +241,12 @@ function 搜索推荐方案(
     SLOTS.some(
       ([slot]) =>
         !activeSlots.has(slot) &&
-        GEAR_ITEMS.find((item) => item.key === input.initial.slots[slot]?.key)?.orangeWeapon,
+        GEAR_ITEMS.some(
+          (item) =>
+            item.key === input.initial.slots[slot]?.key &&
+            item.orangeWeapon &&
+            !是当前心法橙武(input, item),
+        ),
     )
   )
     throw new Error('橙武暂不参与推荐，请勾选武器部位或换为普通武器后重试')
@@ -358,6 +398,7 @@ function 搜索推荐方案(
       ...input.settings,
       gains,
       equipmentEffects: specialEffects,
+      mingzunOrangeWeapon: !xisui && isMingzunOrangeWeapon(plan.slots.primary_weapon?.key),
       equipmentProcGains: undefined,
     }
     const panel = xisui ? 计算洗髓面板(stats, settings) : calculateAttributes(stats, settings)

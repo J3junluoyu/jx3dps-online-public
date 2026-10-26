@@ -91,6 +91,11 @@ function 头部组件(props: 头部组件类型) {
   const [遍历寻优跳过弹窗展示, 设置遍历寻优跳过弹窗展示] = useState<boolean>(false)
   const [智能对比设置弹窗展示, 设置智能对比设置弹窗展示] = useState<boolean>(false)
 
+  const 切换智能对比 = (开启: boolean) => {
+    设置开启装备智能对比(开启)
+    if (开启) 设置对比显示百分比(true)
+  }
+
   const 一键替换附魔 = (附魔信息) => {
     form?.validateFields().then((values) => {
       const obj = { ...values }
@@ -173,21 +178,18 @@ function 头部组件(props: 头部组件类型) {
         <span>配装器</span>
         <span id='Guide_6'>
           <Checkbox
-            disabled={获取当前数据().名称 === '洗髓经'}
             checked={开启装备智能对比}
-            onChange={(e) => 设置开启装备智能对比(e?.target?.checked)}
+            onChange={(e) => 切换智能对比(e?.target?.checked)}
             className={'zhuangbei-diff-btn'}
           >
             <div className={'zhuangbei-diff-btn-wrap'}>
               <Button
-                disabled={获取当前数据().名称 === '洗髓经'}
                 size='small'
-                onClick={() => 设置开启装备智能对比(!开启装备智能对比)}
+                onClick={() => 切换智能对比(!开启装备智能对比)}
               >
                 智能对比
               </Button>
               <Button
-                disabled={获取当前数据().名称 === '洗髓经'}
                 onClick={() => 设置智能对比设置弹窗展示(true)}
                 size='small'
               >
@@ -201,7 +203,7 @@ function 头部组件(props: 头部组件类型) {
                 title={
                   <div>
                     <p>对比默认精炼等级下切换至另一件装备dps波动。</p>
-                    <p>注意：目标为橙武时不会自动切换循环。</p>
+                    <p>开启后默认同时显示DPS差值和收益百分比，以当前配装为基准。</p>
                     {/* <p>考虑性能，暂时只开放13200品以上装备的智能对比。</p> */}
                     <p>开启后打开装备选择框时会略微卡顿。</p>
                   </div>

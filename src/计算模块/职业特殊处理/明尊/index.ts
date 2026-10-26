@@ -19,7 +19,7 @@ import { 明尊秘籍选项 } from '@/心法模块/心法/明尊琉璃体/秘籍
 import { 使用基础循环格式 } from '@/心法模块/心法/明尊琉璃体/计算循环/基础循环'
 import { 计算明尊基础循环 } from './基础循环'
 import { 获取明尊技能显示信息 } from './技能显示'
-import { findGearItem } from '@/心法模块/心法/明尊琉璃体/装备'
+import { findGearItem, isMingzunOrangeWeapon } from '@/心法模块/心法/明尊琉璃体/装备'
 import type { EquippedSpecialEffect } from '@/心法模块/心法/明尊琉璃体/装备特效'
 import { matchMajorEnchant } from '@/心法模块/心法/明尊琉璃体/大附魔'
 import { 获取明尊增益属性, 获取明尊战斗增益 } from '@/心法模块/心法/明尊琉璃体/增益'
@@ -160,6 +160,9 @@ export function 明尊秒伤计算(参数: {
     原始,
   )
   设置.equipmentEffects = 获取明尊已选装备特效(参数.装备信息)
+  设置.mingzunOrangeWeapon = (参数.装备信息?.装备列表 || []).some((行) =>
+    isMingzunOrangeWeapon(行?.id),
+  )
   if (使用基础循环格式(参数.技能列表)) {
     return 计算明尊基础循环(
       获取明尊原始属性(参数.装备信息?.装备基础属性),

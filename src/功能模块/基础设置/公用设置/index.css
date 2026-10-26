@@ -71,3 +71,16 @@
 .mingzun-cycle-settings > .ant-btn {
   width: 100%;
 }
+
+.character-config-actions {
+  display: flex;
+  gap: 8px;
+  padding-top: 4px;
+  padding-bottom: 12px;
+}
+
+.character-config-actions > .ant-btn {
+  flex: 1;
+  min-width: 0;
+  height: 32px;
+}

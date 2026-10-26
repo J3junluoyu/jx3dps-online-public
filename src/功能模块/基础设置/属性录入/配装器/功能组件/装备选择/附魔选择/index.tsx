@@ -4,7 +4,7 @@ import { 附魔数据类型 } from '@/@types/附魔'
 import { 秒伤计算 } from '@/计算模块/计算函数'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import 根据表单选项获取装备信息 from '../../../工具函数/根据表单选项获取装备信息'
-import { 格式化附魔名称 } from '../../../工具函数/附魔显示'
+import { 格式化附魔名称, 格式化附魔数值 } from '../../../工具函数/附魔显示'
 import './index.css'
 import classNames from 'classnames'
 import { 装备位置部位枚举 } from '@/@types/装备'
@@ -117,12 +117,7 @@ function 附魔选择(props: 附魔选择入参) {
       {...rest}
     >
       {list.map((item) => {
-        const upItem = dpsUpList?.find(
-          (up) => up.uuid === `${item?.附魔名称}${item?.附魔支持部位}`,
-        ) || {
-          dpsUp: 0,
-          dpsPercent: 0,
-        }
+        const upItem = dpsUpList?.find((up) => up.uuid === `${item?.附魔名称}${item?.附魔支持部位}`)
 
         const 附魔显示名称 = 格式化附魔名称(item.附魔名称)
         const 颜色: any = item?.挑战附魔 ? '橙' : item?.附魔颜色 || '紫'
@@ -131,24 +126,25 @@ function 附魔选择(props: 附魔选择入参) {
           <Select.Option
             key={item.附魔名称}
             value={item.附魔名称}
-            label={附魔显示名称}
+            label={格式化附魔数值(item.附魔名称)}
             title={附魔显示名称}
           >
             <div className='fumo-diff-wrap'>
               <span className='fumo-diff-name-wrap'>{附魔显示名称}</span>
               <div className='fumo-diff-right'>
-                {upItem?.dpsUp !== 0 && 开启装备智能对比 ? (
+                {upItem && 开启装备智能对比 ? (
                   <span
                     className={`zhuangbei-diff ${
                       +upItem?.dpsUp > 0 ? 'dps-up-color' : 'dps-low-color'
                     }`}
                   >
                     {+upItem?.dpsUp > 0 ? '+' : ''}
-                    {对比显示百分比
-                      ? `${upItem?.dpsPercent}%`
-                      : typeof upItem?.dpsUp === 'number'
-                        ? upItem.dpsUp.toFixed(2)
-                        : upItem?.dpsUp}
+                    {typeof upItem?.dpsUp === 'number' ? upItem.dpsUp.toFixed(2) : upItem?.dpsUp}
+                    {对比显示百分比 &&
+                    upItem.dpsPercent !== '' &&
+                    Number.isFinite(Number(upItem.dpsPercent))
+                      ? `（${Number(upItem.dpsPercent) > 0 ? '+' : ''}${Number(upItem.dpsPercent).toFixed(2)}%）`
+                      : null}
                   </span>
                 ) : null}
                 <span className={`fumo-name-number fumo-name-${颜色枚举?.[颜色]?.样式}`}>

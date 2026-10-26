@@ -121,6 +121,20 @@ test('理论循环两档独立使用原配装、团队增益及约束，不将�
   expect(spy.mock.calls.every(([request]) => request.cycle.循环详情.length === 1)).toBe(true)
 })
 
+test('普通循环选择橙武品级时，两档统一采用理论模板且保留所选品级', () => {
+  const input = { ...输入(), orangeWeaponLevel: 1240 }
+  const spy = jest
+    .spyOn(优化模块, '优化明尊方案')
+    .mockImplementation((request) => 返回方案(request, 1000))
+  const result = 对比明尊加速档位(input)
+  expect(result.entries.map((row) => row.cycleName)).toEqual(['0.75理论循环', '0.8125理论循环'])
+  for (const [request] of spy.mock.calls) {
+    expect(request.orangeWeaponLevel).toBe(1240)
+    expect(request.initial).toBe(input.initial)
+    expect(request.minToughness).toBe(input.minToughness)
+  }
+})
+
 test('自适应理论两档秒伤相同时优先当前实际GCD，避免默认选中第一档', () => {
   const input = { ...输入(), cycle: 循环列表.find((cycle) => cycle.名称 === '自适应理论循环') }
   jest.spyOn(优化模块, '优化明尊方案').mockImplementation((request) => 返回方案(request, 1000))

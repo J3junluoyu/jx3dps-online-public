@@ -64,10 +64,11 @@ const visit = (node) => {
     if (typeof value === 'object') visit(value)
   }
 }
-for (const file of walk(path.join(repo, 'src/心法模块/心法/明尊琉璃体')).filter((file) =>
-  file.endsWith('.json'),
-))
-  visit(JSON.parse(fs.readFileSync(file, 'utf8').replace(/^\uFEFF/, '')))
+for (const kungfu of ['明尊琉璃体', '洗髓经'])
+  for (const file of walk(path.join(repo, 'src/心法模块/心法', kungfu)).filter((file) =>
+    file.endsWith('.json'),
+  ))
+    visit(JSON.parse(fs.readFileSync(file, 'utf8').replace(/^\uFEFF/, '')))
 visit(JSON.parse(fs.readFileSync(path.join(repo, 'src/数据/静态数据/图标.json'), 'utf8')))
 for (const file of ['增益.ts', '阵眼.ts']) {
   const source = fs.readFileSync(path.join(repo, 'src/心法模块/心法/明尊琉璃体', file), 'utf8')

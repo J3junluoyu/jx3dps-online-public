@@ -9,7 +9,7 @@ import 配装器 from './配装器'
 
 import './index.css'
 
-function 属性录入() {
+function 属性录入({ 紧凑布局 = false }: { 紧凑布局?: boolean }) {
   const 配装器弹窗显示状态 = useAppSelector((state) => state.system.配装器弹窗显示状态)
   const 当前引导步骤 = useAppSelector((state) => state.system.当前引导步骤)
   const dispatch = useAppDispatch()
@@ -36,10 +36,11 @@ function 属性录入() {
   }
 
   return (
-    <div className={'character-set'}>
+    <div className={紧凑布局 ? 'character-set character-set-compact' : 'character-set'}>
       <Button
         id='Guide_1'
         className={'character-set-btn'}
+        size={紧凑布局 ? 'small' : 'middle'}
         onClick={() => {
           修改显示状态(true)
           校验引导状态()

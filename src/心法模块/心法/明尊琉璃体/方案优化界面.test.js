@@ -8,8 +8,30 @@ jest.mock('@/功能模块/基础设置/属性录入/配装器/功能组件/方�
 jest.mock('antd', () => {
   const React = require('react')
   const element = React.createElement
-  const Group = ({ options, value }) =>
-    element('div', null, `${value.length}/${options.length}部位`)
+  const Group = ({ options, value, onChange, disabled }) =>
+    element(
+      'div',
+      null,
+      `${value.length}/${options.length}部位`,
+      ...options.map((option) =>
+        element(
+          'label',
+          { key: option.value },
+          element('input', {
+            type: 'checkbox',
+            checked: value.includes(option.value),
+            disabled,
+            onChange: (e) =>
+              onChange(
+                e.target.checked
+                  ? [...value, option.value]
+                  : value.filter((v) => v !== option.value),
+              ),
+          }),
+          option.label,
+        ),
+      ),
+    )
   const Checkbox = ({ checked, onChange, disabled, children }) =>
     element(
       'label',
@@ -260,6 +282,60 @@ test('加速增益默认参与，取消后旧结果失效并更新后台条件�
   expect(finish().input.includeHasteConsumables).toBe(false)
 })
 
+test('橙武品级默认不选，选择后切换理论比较并传给后台，变更清除旧结果且运行时不可修改', async () => {
+  const props = render()
+  await click('方案推荐')
+  const select = getByRole(container, 'combobox', { name: '橙武品级' })
+  expect(select.value).toBe('0')
+  expect(Array.from(select.options, (option) => option.text)).toEqual([
+    '不选择橙武',
+    '719品',
+    '1110品',
+    '1170品',
+    '1240品',
+  ])
+  await click('开始推荐')
+  expect(finish().input.orangeWeaponLevel).toBe(0)
+  act(() => fireEvent.change(select, { target: { value: '1240' } }))
+  expect(getByRole(container, 'button', { name: '应用并计算' }).disabled).toBe(true)
+  expect(container.textContent).toContain('1240品明尊橙武独立加入武器候选')
+  await click('开始推荐')
+  expect(select.disabled).toBe(true)
+  const enabled = finish()
+  expect(enabled.input.orangeWeaponLevel).toBe(1240)
+  expect(enabled.input.cycle.名称).toBe('0.8125理论循环')
+  await click('应用并计算')
+  expect(props.应用方案).toHaveBeenCalledWith(enabled.result.plan, '自适应理论循环', false)
+  await click('方案推荐')
+  act(() =>
+    fireEvent.change(getByRole(container, 'combobox', { name: '橙武品级' }), {
+      target: { value: '0' },
+    }),
+  )
+  expect(getByRole(container, 'button', { name: '应用并计算' }).disabled).toBe(true)
+  await click('开始推荐')
+  const disabled = finish()
+  expect(disabled.input.orangeWeaponLevel).toBe(0)
+  expect(disabled.input.cycle.名称).toBe('0.8125GCD循环')
+})
+
+test('选择橙武品级会纳入武器部位，取消武器部位同时清除品级，避免选择了却不参与比较', async () => {
+  render()
+  await click('方案推荐')
+  const weapon = getByRole(container, 'checkbox', { name: '近战武器' })
+  act(() => fireEvent.click(weapon))
+  expect(weapon.checked).toBe(false)
+  const level = getByRole(container, 'combobox', { name: '橙武品级' })
+  act(() => fireEvent.change(level, { target: { value: '719' } }))
+  expect(weapon.checked).toBe(true)
+  await click('开始推荐')
+  const { input } = finish()
+  expect(input.orangeWeaponLevel).toBe(719)
+  expect(input.slots).toContain('primary_weapon')
+  act(() => fireEvent.click(weapon))
+  expect(level.value).toBe('0')
+})
+
 test('计入团队增益默认关闭，修改后旧结果失效，开启时传入原配置并在应用时保留', async () => {
   const props = render()
   await click('方案推荐')
@@ -429,7 +505,7 @@ test('优化方式直接选择0.75或0.81，移除目标GCD，0.81仍传入精�
     '0.75 / 0.81双档对比',
   ])
   expect(container.textContent).not.toContain('目标GCD')
-  expect(container.querySelectorAll('select')).toHaveLength(2)
+  expect(container.querySelectorAll('select')).toHaveLength(3)
   expect(container.textContent).not.toContain('0.8125')
   await click('开始推荐')
   const { input } = finish()

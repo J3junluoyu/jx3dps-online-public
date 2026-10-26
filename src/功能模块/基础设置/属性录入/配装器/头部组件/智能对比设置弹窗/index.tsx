@@ -18,7 +18,7 @@ const 智能对比设置弹窗 = (props) => {
             checked={对比显示百分比}
             onChange={(e) => 设置对比显示百分比(e?.target?.checked)}
           >
-            <div>差异按百分比显示</div>
+            <div>同时显示收益百分比</div>
           </Checkbox>
         </div>
         <Checkbox checked={对比加速} onChange={(e) => 设置对比加速(e?.target?.checked)}>

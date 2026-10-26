@@ -150,7 +150,7 @@ test('没有符合范围的装备时明确失败，不使用范围外的初始�
   expect(() => 优化明尊方案({ ...输入(), gearKeys: [] })).toThrow('没有候选装备')
 })
 
-test('橙武暂不参与推荐，初始橙武必须替换，不能绕过候选限制', () => {
+test('不选橙武时排除候选，武器参与更换则替换，不参与更换则保留当前橙武', () => {
   const input = 输入(循环列表[0])
   const orange = GEAR_ITEMS.find((item) => item.orangeWeapon)
   const ordinary = GEAR_ITEMS.find((item) => item.key === input.initial.slots.primary_weapon.key)
@@ -165,7 +165,7 @@ test('橙武暂不参与推荐，初始橙武必须替换，不能绕过候选�
   input.gearKeys = [orange.key]
   input.minToughness = 0
   expect(() => 优化明尊方案(input)).toThrow('没有候选装备')
-  expect(() => 优化明尊方案({ ...input, slots: [] })).toThrow('橙武暂不参与推荐')
+  expect(优化明尊方案({ ...input, slots: [] }).plan.slots.primary_weapon.key).toBe(orange.key)
   const result = 优化明尊方案({ ...input, gearKeys: [orange.key, ordinary.key] })
   expect(result.plan).toBeDefined()
   expect(result.plan.slots.primary_weapon.key).toBe(ordinary.key)

@@ -1,0 +1,43 @@
+{
+  "source": {
+    "repository": "https://github.com/IcyTide/Generator",
+    "sha256": "bd9f3c142164f56a947692e26a7343bc1db1d4c94e4cba12e864d373f6e5c344"
+  },
+  "skills": [
+    {
+      "key": "4941:35065:2",
+      "group": "4941",
+      "id": "35065",
+      "level": "2",
+      "label": "愿火长燃",
+      "record": {
+        "name": "愿火长燃",
+        "critical_strike": "solar_critical_strike",
+        "damages": [
+          {
+            "damage": "int(int(int(int(int(int(int(int(int(int(int(int(7 + rand + int(solar_attack_power * 0.20608479791788403))) * (1 + magical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + solar_overcome)) * shield_constant / (int(solar_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (solar_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + solar_damage_scale))"
+          }
+        ]
+      }
+    },
+    {
+      "key": "25796:25796:1",
+      "group": "25796",
+      "id": "25796",
+      "level": "1",
+      "label": "日月斩·神兵",
+      "record": {
+        "name": "日月斩·神兵",
+        "critical_strike": "solar_critical_strike",
+        "damages": [
+          {
+            "damage": "int(int(int(int(int(int(int(int(int(int(int(int(rand * 2 + int(solar_attack_power * 0.019320449804801628))) * (1 + magical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + solar_overcome)) * shield_constant / (int(solar_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (solar_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + solar_damage_scale))"
+          },
+          {
+            "damage": "int(int(int(int(int(int(int(int(int(int(int(int(rand * 2 + int(lunar_attack_power * 0.019320449804801628))) * (1 + magical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + lunar_overcome)) * shield_constant / (int(lunar_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (solar_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + lunar_damage_scale))"
+          }
+        ]
+      }
+    }
+  ]
+}

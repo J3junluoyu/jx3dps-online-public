@@ -24,6 +24,8 @@ import {
   SLOTS,
   STONES,
   gearAttributeSuffix,
+  MINGZUN_ORANGE_WEAPON_LEVELS,
+  XISUI_ORANGE_WEAPON_LEVELS,
 } from '@/心法模块/心法/明尊琉璃体/装备'
 import { 明尊小药小吃, 圣浴常驻名称 } from '@/心法模块/心法/明尊琉璃体/增益'
 import 循环列表 from '@/心法模块/心法/明尊琉璃体/计算循环'
@@ -33,9 +35,13 @@ import type {
   方案优化结果,
   方案优化进度,
 } from '@/心法模块/心法/明尊琉璃体/方案优化'
-import { 是橙色腰坠 } from '@/心法模块/心法/明尊琉璃体/方案优化'
+import { 是橙色腰坠, 使用橙武推荐模型 } from '@/心法模块/心法/明尊琉璃体/方案优化'
 import { 获取档位对比循环 } from '@/心法模块/心法/明尊琉璃体/方案档位对比'
-import { 规范理论循环名称 } from '@/心法模块/心法/明尊琉璃体/计算循环/理论循环'
+import {
+  规范理论循环名称,
+  自适应理论循环名称,
+  获取理论档位循环,
+} from '@/心法模块/心法/明尊琉璃体/计算循环/理论循环'
 import type { 档位对比结果 } from '@/心法模块/心法/明尊琉璃体/方案档位对比'
 import { 格式化明尊GCD } from '@/心法模块/心法/明尊琉璃体/GCD显示'
 import { 格式化附魔名称 } from '../../工具函数/附魔显示'
@@ -73,6 +79,7 @@ function 方案优化(props: 方案优化入参) {
   const [minToughness, setMinToughness] = useState(8)
   const [includeMowen, setIncludeMowen] = useState(true)
   const [includeHasteConsumables, setIncludeHasteConsumables] = useState(true)
+  const [orangeWeaponLevel, setOrangeWeaponLevel] = useState(0)
   const [includeTeamGains, setIncludeTeamGains] = useState(false)
   const [gearScope, setGearScope] = useState<方案优化输入['gearScope']>('includeStreamlined')
   const [slots, setSlots] = useState<string[]>(SLOTS.map(([key]) => key))
@@ -92,11 +99,20 @@ function 方案优化(props: 方案优化入参) {
   const 圣浴常驻独立开启 =
     !洗髓模式 && 增益数据?.团队增益?.some((item) => item.增益名称 === 圣浴常驻名称 && item.启用)
   const compareGcd = 洗髓模式 || mode === 'compare'
+  const orangeModel =
+    !洗髓模式 &&
+    (orangeWeaponLevel > 0 ||
+      (initial &&
+        使用橙武推荐模型({
+          initial,
+          slots,
+          orangeWeaponLevel,
+        })))
   const cycles = props.循环待补充
     ? []
     : 洗髓模式
       ? 获取洗髓档位对比循环()
-      : 获取档位对比循环(props.循环名称 || 循环列表[0].名称)
+      : 获取档位对比循环(orangeModel ? 自适应理论循环名称 : props.循环名称 || 循环列表[0].名称)
   const cycle =
     cycles.find((item) =>
       compareGcd ? item.名称 === props.循环名称 : item.名称.startsWith(`${mode}`),
@@ -180,6 +196,14 @@ function 方案优化(props: 方案优化入参) {
             true,
           )
       setInitial(before)
+      const requestCycle = 使用橙武推荐模型({
+        kungfu: 洗髓模式 ? 'xsj' : 'mzllt',
+        initial: before,
+        slots,
+        orangeWeaponLevel,
+      })
+        ? 获取理论档位循环(Number(cycle.循环详情[0].循环加速等级) === 4 ? 0.75 : 0.8125)
+        : cycle
       worker.current = 创建优化Worker()
       worker.current.onmessage = (event) => {
         if (currentRun !== runId.current) return
@@ -204,11 +228,12 @@ function 方案优化(props: 方案优化入参) {
         allowHigherHaste: true,
         exploreHighLevelCandidates: true,
         initial: before,
-        cycle,
+        cycle: requestCycle,
         settings,
         minToughness,
         includeMowen,
         includeHasteConsumables,
+        orangeWeaponLevel,
         gearScope,
         compareGcd,
         teamGains: 增益数据.团队增益
@@ -350,73 +375,104 @@ function 方案优化(props: 方案优化入参) {
         }
       >
         <div className={styles.requirements}>
-          <label>
-            推荐方式{' '}
-            <Select
-              aria-label='推荐方式'
-              disabled={running || props.循环待补充}
-              placeholder={props.循环待补充 ? '循环模板待补充' : undefined}
-              value={props.循环待补充 ? undefined : 洗髓模式 ? 'compare' : mode}
-              onChange={(value) => 设置条件(() => setMode(value))}
-              options={
-                props.循环待补充
-                  ? []
-                  : 洗髓模式
-                    ? [{ label: '3 / 4 / 5档自适应对比', value: 'compare' }]
-                    : [
-                        { label: '0.75GCD', value: '0.75' },
-                        { label: '0.81GCD', value: '0.8125' },
-                        { label: '0.75 / 0.81双档对比', value: 'compare' },
-                      ]
-              }
-            />
-          </label>
-          <label>
-            装备范围{' '}
-            <Select
-              aria-label='装备范围'
+          <div className={styles.selectionFields}>
+            <label>
+              推荐方式{' '}
+              <Select
+                aria-label='推荐方式'
+                disabled={running || props.循环待补充}
+                placeholder={props.循环待补充 ? '循环模板待补充' : undefined}
+                value={props.循环待补充 ? undefined : 洗髓模式 ? 'compare' : mode}
+                onChange={(value) => 设置条件(() => setMode(value))}
+                options={
+                  props.循环待补充
+                    ? []
+                    : 洗髓模式
+                      ? [{ label: '3 / 4 / 5档自适应对比', value: 'compare' }]
+                      : [
+                          { label: '0.75GCD', value: '0.75' },
+                          { label: '0.81GCD', value: '0.8125' },
+                          { label: '0.75 / 0.81双档对比', value: 'compare' },
+                        ]
+                }
+              />
+            </label>
+            <label>
+              装备范围{' '}
+              <Select
+                aria-label='装备范围'
+                disabled={running}
+                value={gearScope}
+                onChange={(value) => 设置条件(() => setGearScope(value))}
+                options={[
+                  { label: '仅防御装备', value: 'defensive' },
+                  { label: '防御＋精简/特效内功', value: 'includeStreamlined' },
+                ]}
+              />
+            </label>
+            {!props.循环待补充 && (
+              <label>
+                橙武品级{' '}
+                <Select
+                  aria-label='橙武品级'
+                  disabled={running}
+                  value={orangeWeaponLevel}
+                  onChange={(value) =>
+                    设置条件(() => {
+                      const level = Number(value)
+                      setOrangeWeaponLevel(level)
+                      if (level && !slots.includes('primary_weapon'))
+                        setSlots([...slots, 'primary_weapon'])
+                    })
+                  }
+                  options={[
+                    { label: '不选择橙武', value: 0 },
+                    ...(洗髓模式 ? XISUI_ORANGE_WEAPON_LEVELS : MINGZUN_ORANGE_WEAPON_LEVELS).map(
+                      (level) => ({
+                        label: `${level}品`,
+                        value: level,
+                      }),
+                    ),
+                  ]}
+                />
+              </label>
+            )}
+            <label>
+              最低御劲{' '}
+              <InputNumber
+                disabled={running}
+                min={0}
+                max={100}
+                precision={2}
+                suffix='%'
+                value={minToughness}
+                onChange={(value) => 设置条件(() => setMinToughness(value ?? 0))}
+              />
+            </label>
+          </div>
+          <div className={styles.toggleFields}>
+            <Checkbox
               disabled={running}
-              value={gearScope}
-              onChange={(value) => 设置条件(() => setGearScope(value))}
-              options={[
-                { label: '仅防御装备', value: 'defensive' },
-                { label: '防御＋精简/特效内功', value: 'includeStreamlined' },
-              ]}
-            />
-          </label>
-          <label>
-            最低御劲{' '}
-            <InputNumber
+              checked={includeMowen}
+              onChange={(e) => 设置条件(() => setIncludeMowen(e.target.checked))}
+            >
+              计算莫问阵
+            </Checkbox>
+            <Checkbox
               disabled={running}
-              min={0}
-              max={100}
-              precision={2}
-              suffix='%'
-              value={minToughness}
-              onChange={(value) => 设置条件(() => setMinToughness(value ?? 0))}
-            />
-          </label>
-          <Checkbox
-            disabled={running}
-            checked={includeMowen}
-            onChange={(e) => 设置条件(() => setIncludeMowen(e.target.checked))}
-          >
-            计算莫问阵
-          </Checkbox>
-          <Checkbox
-            disabled={running}
-            checked={includeHasteConsumables}
-            onChange={(e) => 设置条件(() => setIncludeHasteConsumables(e.target.checked))}
-          >
-            加速增益
-          </Checkbox>
-          <Checkbox
-            disabled={running}
-            checked={includeTeamGains}
-            onChange={(e) => 设置条件(() => setIncludeTeamGains(e.target.checked))}
-          >
-            计入当前团队增益
-          </Checkbox>
+              checked={includeHasteConsumables}
+              onChange={(e) => 设置条件(() => setIncludeHasteConsumables(e.target.checked))}
+            >
+              加速增益
+            </Checkbox>
+            <Checkbox
+              disabled={running}
+              checked={includeTeamGains}
+              onChange={(e) => 设置条件(() => setIncludeTeamGains(e.target.checked))}
+            >
+              计入当前团队增益
+            </Checkbox>
+          </div>
         </div>
         <div className={styles.slots}>
           <span>参与优化的装备及附魔部位</span>
@@ -424,7 +480,13 @@ function 方案优化(props: 方案优化入参) {
             disabled={running}
             value={slots}
             options={SLOTS.map(([value, label]) => ({ value, label }))}
-            onChange={(value) => 设置条件(() => setSlots(value as string[]))}
+            onChange={(value) =>
+              设置条件(() => {
+                const next = value as string[]
+                setSlots(next)
+                if (!next.includes('primary_weapon')) setOrangeWeaponLevel(0)
+              })
+            }
           />
         </div>
         <Alert
@@ -433,7 +495,7 @@ function 方案优化(props: 方案优化入参) {
           message={
             props.循环待补充
               ? '洗髓经循环模板待补充。装备、附魔、增益及参与部位沿用本界面设置，补充循环后再接入推荐计算。'
-              : `装备沿用配装器筛选范围，${gearScope === 'defensive' ? '参与优化的部位仅选择防御装备' : '可选择防御装备和精简/特效内功装备'}，橙武暂不参与推荐；品级以配装器筛选范围为准，全部候选按伤害收益比较，同伤害优先高品级。装备加速达到模拟档位或更高即可参与，不为压低加速而降品。未参与的部位保持当前装备；附魔沿用各部位当前数值档位，排除御劲附魔，未选附魔保持空置。药品增强与食品增强须选择同属性组合。药食酒与阵眼参与优化，五彩石固定；同伤害下酒品优先低数值档位。${includeHasteConsumables ? '加速药品与食品参与优化。' : '加速药品与食品不参与优化，家园酒品仍参与。'}${includeTeamGains ? '按当前已启用团队增益的层数和覆盖率计算，团队配置保持固定。' : '团队增益不计入。'}${圣浴常驻独立开启 ? '圣浴常驻按自身开关独立计入。' : ''}${
+              : `装备沿用配装器筛选范围，${gearScope === 'defensive' ? '参与优化的部位仅选择防御装备' : '可选择防御装备和精简/特效内功装备'}，${orangeWeaponLevel ? `${orangeWeaponLevel}品${洗髓模式 ? '洗髓' : '明尊'}橙武独立加入武器候选，与普通武器比较，不强制装备，不受普通装备品级筛选限制` : '排除橙武候选'}；其他品级以配装器筛选范围为准，全部候选按伤害收益比较，同伤害优先高品级。装备加速达到模拟档位或更高即可参与，不为压低加速而降品。未参与的部位保持当前装备${洗髓模式 ? '' : '，已装备的橙武照常计入特效，不因候选排除而中断'}。附魔沿用各部位当前数值档位，排除御劲附魔，未选附魔保持空置。药品增强与食品增强须选择同属性组合。药食酒与阵眼参与优化，五彩石固定；同伤害下酒品优先低数值档位。${includeHasteConsumables ? '加速药品与食品参与优化。' : '加速药品与食品不参与优化，家园酒品仍参与。'}${includeTeamGains ? '按当前已启用团队增益的层数和覆盖率计算，团队配置保持固定。' : '团队增益不计入。'}${圣浴常驻独立开启 ? '圣浴常驻按自身开关独立计入。' : ''}${
                   compareGcd
                     ? `分别使用${cycles
                         .map((cycle) => 格式化明尊GCD(cycle.名称))

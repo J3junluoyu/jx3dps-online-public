@@ -32,7 +32,7 @@ export default function 明尊大附魔选择(props: Props) {
     form,
   } = props
   const dispatch = useAppDispatch()
-  const [gains, setGains] = useState<Record<number, number>>({})
+  const [gains, setGains] = useState<Record<number, { dps: number; percent?: number }>>({})
   const selected = matchMajorEnchant(value, position, gearKind)
   const options = majorEnchantsForGear(position, gearKind)
   const compareOptions = () => {
@@ -46,21 +46,28 @@ export default function 明尊大附魔选择(props: Props) {
         }),
       ).秒伤
     const baseline = calculate(values)
-    const next: Record<number, number> = {}
+    const next: Record<number, { dps: number; percent?: number }> = {}
     for (const id of [0, ...options.map((item) => item.id)]) {
       const dps = calculate({ ...values, [slotIndex]: { ...values[slotIndex], 大附魔: id } })
-      next[id] = percent ? (baseline ? ((dps - baseline) / baseline) * 100 : 0) : dps - baseline
+      next[id] = {
+        dps: dps - baseline,
+        percent: baseline > 0 ? ((dps - baseline) / baseline) * 100 : undefined,
+      }
     }
     setGains(next)
   }
   const delta = (id: number) =>
     compare && gains[id] !== undefined ? (
       <span
-        className={gains[id] > 0 ? 'major-enchant-up' : gains[id] < 0 ? 'major-enchant-down' : ''}
+        className={
+          gains[id].dps > 0 ? 'major-enchant-up' : gains[id].dps < 0 ? 'major-enchant-down' : ''
+        }
       >
-        {gains[id] > 0 ? '+' : ''}
-        {gains[id].toFixed(2)}
-        {percent ? '%' : ' DPS'}
+        {gains[id].dps > 0 ? '+' : ''}
+        {gains[id].dps.toFixed(2)}
+        {percent && gains[id].percent !== undefined
+          ? `（${gains[id].percent! > 0 ? '+' : ''}${gains[id].percent!.toFixed(2)}%）`
+          : ' DPS'}
       </span>
     ) : null
   return (
@@ -79,7 +86,7 @@ export default function 明尊大附魔选择(props: Props) {
         onChange={onChange}
         optionLabelProp='label'
         popupClassName='mingzun-major-enchant-popup'
-        popupMatchSelectWidth={360}
+        popupMatchSelectWidth={percent ? 440 : 360}
         onDropdownVisibleChange={(open) => (open ? compareOptions() : setGains({}))}
       >
         <Select.Option value={0} label='无大附魔'>

@@ -1,7 +1,7 @@
 import type { 循环数据 } from '@/@types/循环'
 import 循环列表 from './计算循环'
 import { 获取理论档位循环, 规范理论循环名称, 自适应理论循环名称 } from './计算循环/理论循环'
-import { 优化明尊方案 } from './方案优化'
+import { 优化明尊方案, 使用橙武推荐模型 } from './方案优化'
 import type { 方案优化输入, 方案优化结果, 方案优化进度 } from './方案优化'
 import { 获取洗髓档位对比循环 } from '../洗髓经/循环'
 
@@ -36,7 +36,9 @@ export function 对比明尊加速档位(
 ): 档位对比结果 {
   const started = Date.now()
   const xisui = input.kungfu === 'xsj'
-  const cycles = xisui ? 获取洗髓档位对比循环() : 获取档位对比循环(input.cycle.名称)
+  const cycles = xisui
+    ? 获取洗髓档位对比循环()
+    : 获取档位对比循环(使用橙武推荐模型(input) ? 自适应理论循环名称 : input.cycle.名称)
   const entries: 档位优化结果[] = []
   let evaluations = 0
   for (const [index, cycle] of cycles.entries()) {

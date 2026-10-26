@@ -4,7 +4,7 @@ import { calculateLoadout } from '../明尊琉璃体/装备'
 import { 计算洗髓面板, 获取洗髓计算设置, 获取洗髓增益属性, 计算洗髓循环 } from './计算'
 import { 洗髓自适应循环, 获取洗髓GCD } from './循环'
 import 配装 from './测试配装.json'
-import { GEAR_ITEMS } from '../明尊琉璃体/装备'
+import { GEAR_ITEMS, XISUI_ORANGE_WEAPON_LEVELS } from '../明尊琉璃体/装备'
 
 jest.setTimeout(120000)
 afterEach(() => jest.restoreAllMocks())
@@ -20,6 +20,64 @@ const input = (minToughness = 9) => ({
   slots: [],
   defaultEmbedLevel: 8,
   teamGains: [],
+})
+
+test('洗髓橙武只纳入所选品级的降魔境，不选时排除，719品不受普通范围限制', () => {
+  expect(XISUI_ORANGE_WEAPON_LEVELS).toEqual([719, 1110, 1170, 1240])
+  const data = { ...input(), gearKeys: GEAR_ITEMS.map((row) => row.key), gearScope: 'defensive' }
+  const oranges = (request) =>
+    优化模块
+      .获取最高品级候选(request)
+      .map((key) => GEAR_ITEMS.find((row) => row.key === key))
+      .filter((row) => row.orangeWeapon)
+  expect(oranges(data)).toEqual([])
+  for (const level of XISUI_ORANGE_WEAPON_LEVELS) {
+    const selected = oranges({ ...data, orangeWeaponLevel: level, gearKeys: [] })
+    expect(selected).toHaveLength(1)
+    expect(selected[0]).toMatchObject({ school: '少林', level })
+  }
+  expect(() => 优化模块.优化明尊方案({ ...data, orangeWeaponLevel: 999 })).toThrow(
+    '请选择装备库中可用的洗髓橙武品级',
+  )
+})
+
+test('选定洗髓橙武品级后自动纳入武器部位，三档均按洗髓自身计算入口推荐', () => {
+  const data = {
+    ...input(0),
+    orangeWeaponLevel: 1240,
+    gearKeys: [],
+    allowHigherHaste: true,
+  }
+  const snapshot = JSON.stringify(data)
+  expect(优化模块.使用橙武推荐模型(data)).toBe(false)
+  const comparison = 对比明尊加速档位(data)
+  expect(comparison.entries).toHaveLength(3)
+  expect(comparison.entries.every((entry) => entry.result?.plan)).toBe(true)
+  for (const entry of comparison.entries) {
+    const plan = entry.result.plan
+    expect(plan.slots.primary_weapon.key).toBe('weapons:47865')
+    const equipment = calculateLoadout(plan.slots, plan.stone)
+    const settings = {
+      ...data.settings,
+      gains: 获取洗髓增益属性(
+        { 阵眼: plan.formation, 小吃: plan.consumables, 团队增益: data.teamGains },
+        true,
+      ),
+      equipmentEffects: equipment.specialEffects,
+    }
+    const detail = 洗髓自适应循环.循环详情.find((row) => (24 - row.循环加速等级) / 16 === entry.gcd)
+    expect(计算洗髓循环(equipment.stats, settings, detail.技能详情, 300, false).秒伤).toBe(
+      entry.result.after.dps,
+    )
+  }
+  expect(JSON.stringify(data)).toBe(snapshot)
+  const fixed = 优化模块.优化明尊方案({
+    ...data,
+    initial: comparison.entries[0].result.plan,
+    orangeWeaponLevel: 0,
+    slots: [],
+  })
+  expect(fixed.plan.slots.primary_weapon.key).toBe('weapons:47865')
 })
 
 test('三档从相同配装独立开始，完整传递同一个御劲要求和团队增益，未达标结果不参与推荐', () => {

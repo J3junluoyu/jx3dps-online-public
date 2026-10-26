@@ -234,6 +234,78 @@ async function verify(basePath) {
   assert.equal(enchanted.result.plan.slots.wrist.majorEnchantId, 16682, '推荐换装后丢失大附魔')
   assert(enchanted.result.before.dps > last.result.before.dps, '生产Worker遗漏大附魔增益')
   console.log(`大附魔Worker验证通过 ${basePath}：选择生效，推荐方案保留大附魔`)
+  const orange = require('../src/心法模块/心法/明尊琉璃体/测试数据/橙武当前配装.json')
+  const orangeRequest = {
+    ...request,
+    settings: orange.settings,
+    initial: {
+      slots: orange.slots,
+      stone: orange.stone,
+      consumables: orange.gainData.小吃,
+      formation: orange.gainData.阵眼,
+    },
+    allowHigherHaste: true,
+    gearKeys: Object.values(orange.slots).map((item) => item.key),
+    orangeWeaponLevel: 1240,
+    compareGcd: true,
+  }
+  messages.length = 0
+  sandbox.onmessage({ data: orangeRequest })
+  const orangeReply = messages.at(-1)
+  assert.equal(orangeReply?.type, 'comparison', JSON.stringify(orangeReply))
+  assert.deepEqual(
+    Array.from(orangeReply.comparison.entries, (entry) => entry.cycleName),
+    ['0.75理论循环', '0.8125理论循环'],
+  )
+  for (const entry of orangeReply.comparison.entries) {
+    assert.equal(entry.error, undefined)
+    assert.equal(entry.result.plan.slots.primary_weapon.key, 'weapons:47882')
+    assert(
+      Math.abs(entry.result.before.dps - orange.expectedDps) < 1e-8,
+      '生产Worker未按当前橙武配装计入主动和被动特效',
+    )
+  }
+  messages.length = 0
+  sandbox.onmessage({ data: { ...orangeRequest, compareGcd: false, orangeWeaponLevel: 0 } })
+  assert.equal(messages.at(-1)?.type, 'result')
+  assert.equal(messages.at(-1).result.plan.slots.primary_weapon.key, 'weapons:47882')
+  console.log(
+    `橙武品级Worker验证通过 ${basePath}：所选品级加入对比，不选时固定的当前橙武仍可优化其他部位`,
+  )
+  const xisuiLoadout = require('../src/心法模块/心法/洗髓经/测试配装.json')
+  const xisuiCycles = require('../src/心法模块/心法/洗髓经/循环记录.json')
+  messages.length = 0
+  sandbox.onmessage({
+    data: {
+      ...request,
+      kungfu: 'xsj',
+      initial: { ...xisuiLoadout, formation: '', consumables: [] },
+      cycle: {
+        名称: '自适应理论循环',
+        循环详情: [3, 4, 5].map((tier) => ({
+          循环加速等级: tier,
+          战斗时间: 300,
+          技能详情: xisuiCycles[tier].技能详情,
+        })),
+      },
+      settings: { ...request.settings, targetLevel: 54, stance: 'mainTank' },
+      minToughness: 0,
+      slots: [],
+      gearKeys: [],
+      orangeWeaponLevel: 1240,
+      allowHigherHaste: true,
+      compareGcd: true,
+    },
+  })
+  const xisuiReply = messages.at(-1)
+  assert.equal(xisuiReply?.type, 'comparison', JSON.stringify(xisuiReply))
+  assert.equal(xisuiReply.comparison.entries.length, 3)
+  for (const entry of xisuiReply.comparison.entries) {
+    assert.equal(entry.error, undefined, `洗髓档位计算失败：${entry.cycleName}`)
+    assert.equal(entry.result.plan.slots.primary_weapon.key, 'weapons:47865')
+    assert(entry.result.after.dps > 0)
+  }
+  console.log(`洗髓橙武Worker验证通过 ${basePath}：所选降魔境参与三档推荐`)
 }
 
 async function main() {
