@@ -3,7 +3,7 @@ import { 计算洗髓循环, 计算洗髓面板, 获取洗髓计算设置 } from
 import { 获取洗髓GCD, 获取洗髓加速档位, 洗髓自适应循环, 获取洗髓档位对比循环 } from './循环'
 import 配装 from './测试配装.json'
 import 记录 from './循环记录.json'
-import { 明尊小药小吃 } from '../明尊琉璃体/增益'
+import { 明尊小药小吃, 明尊团队增益 } from '../明尊琉璃体/增益'
 
 const settings = 获取洗髓计算设置({ 洗髓设置: { stance: 'mainTank' } }, false, 54)
 const equipment = calculateLoadout(配装.slots, 配装.stone)
@@ -65,4 +65,25 @@ test('配装或增益变化会重新结算，档位由实际加速匹配，团�
     计算洗髓循环({ ...stats, vitality: stats.vitality + 100 }, settings, rows, 300).秒伤,
   ).toBeGreaterThan(计算洗髓循环(stats, settings, rows, 300).秒伤)
   expect(获取洗髓档位对比循环().map((row) => row.循环详情.length)).toEqual([1, 1, 1])
+})
+
+test('团队勾选立地成佛代表额外来源，总增益关闭时仅保留循环自身立地，开启后叠加计伤', () => {
+  const gains = {
+    洗髓设置: { stance: 'mainTank' },
+    团队增益: [{ ...明尊团队增益.find((row) => row.增益名称 === '立地成佛'), 启用: true }],
+  }
+  const off = 获取洗髓计算设置(gains, false, 54)
+  const on = 获取洗髓计算设置(gains, true, 54)
+  const stats = equipment.stats
+  const self = 计算洗髓面板(stats, off, { lidi: true })
+  expect(self.variables.solar_shield).toBe(
+    计算洗髓面板(stats, settings, { lidi: true }).variables.solar_shield,
+  )
+  expect(计算洗髓面板(stats, on, { lidi: true }).variables.solar_shield).toBeLessThan(
+    self.variables.solar_shield,
+  )
+  const rows = 洗髓自适应循环.循环详情[1].技能详情
+  const base = 计算洗髓循环(stats, off, rows, 300).秒伤
+  expect(base).toBe(计算洗髓循环(stats, settings, rows, 300).秒伤)
+  expect(计算洗髓循环(stats, on, rows, 300).秒伤).toBeGreaterThan(base)
 })

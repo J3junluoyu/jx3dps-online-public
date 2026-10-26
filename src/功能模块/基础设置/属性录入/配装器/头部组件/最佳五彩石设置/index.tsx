@@ -1,4 +1,4 @@
-// 一键设置最佳附魔
+// 一键设置最佳五彩石
 import { App, Button, Modal, Table } from 'antd'
 import React, { useEffect, useState } from 'react'
 import classNames from 'classnames'
@@ -7,6 +7,7 @@ import { RiseOutlined } from '@ant-design/icons'
 import { 角色基础属性类型 } from '@/@types/角色'
 import { 秒伤计算 } from '@/计算模块/计算函数'
 import 获取当前数据 from '@/数据/数据工具/获取当前数据'
+import { 使用五十级装备 } from '@/心法模块/模块工具/心法模式'
 import { 数据埋点 } from '@/工具函数/tools/log'
 
 import 根据装备信息获取基础属性, {
@@ -69,13 +70,12 @@ function 最佳五彩石设置({ 一键替换五彩石, 对比秒伤, 对比装�
     if (五彩石原始数据?.length) {
       for (let i = 0; i < 五彩石原始数据?.length; i++) {
         const 当前五彩石 = 五彩石原始数据[i]
-        const 明尊装备信息 =
-          名称 === '明尊琉璃体'
-            ? 根据装备信息获取基础属性({ ...对比装备信息, 五彩石: 当前五彩石.五彩石名称 })
-            : undefined
-        const 五彩石计算数据 = 明尊装备信息
+        const 重算装备信息 = 使用五十级装备(名称)
+          ? 根据装备信息获取基础属性({ ...对比装备信息, 五彩石: 当前五彩石.五彩石名称 })
+          : undefined
+        const 五彩石计算数据 = 重算装备信息
           ? {
-              计算后属性: 明尊装备信息.装备基础属性,
+              计算后属性: 重算装备信息.装备基础属性,
               五彩石郭氏增益: [],
             }
           : 五彩石计算(当前五彩石?.五彩石名称, 无五彩石装备属性 as 角色基础属性类型)
