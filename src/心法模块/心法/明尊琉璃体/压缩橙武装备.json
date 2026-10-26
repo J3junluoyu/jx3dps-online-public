@@ -1,0 +1,76 @@
+{
+  "source": {
+    "repository": "https://github.com/IcyTide/Generator",
+    "commit": "b7d609a4a87f92a7b3907efe9141bdfdfb8c3f9e",
+    "file": "assets/json/weapons.json",
+    "description": "130级42500品橙武压缩到50级后的719品版本，保留原装备ID和属性。"
+  },
+  "items": [
+    {
+      "key": "weapons:45319",
+      "id": 45319,
+      "name": "圣辉月雪",
+      "school": "明教",
+      "kind": "防御",
+      "usage": "ALL",
+      "position": "primary_weapon",
+      "level": 719,
+      "maxStrength": 8,
+      "orangeWeapon": true,
+      "base": {
+        "weapon_damage_base": 59,
+        "weapon_damage_rand": 40
+      },
+      "magic": {
+        "vitality_base": 793,
+        "physical_shield_base": 1072,
+        "magical_shield_base": 1072,
+        "haste_base": 357,
+        "toughness_base": 179,
+        "strain_base": 482,
+        "recipe": "recipe_1544_1 | recipe_1545_1 | recipe_17333_1 | recipe_17246_1 | recipe_17337_1 | recipe_17343_1",
+        "event": "gain_19_1 | gain_25796_1"
+      },
+      "embed": {
+        "vitality_base": 225,
+        "physical_shield_base": 225,
+        "dodge_base": 225
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
+      "key": "weapons:45302",
+      "id": 45302,
+      "name": "降魔境",
+      "school": "少林",
+      "kind": "防御",
+      "usage": "ALL",
+      "position": "primary_weapon",
+      "level": 719,
+      "maxStrength": 8,
+      "orangeWeapon": true,
+      "base": {
+        "weapon_damage_base": 101,
+        "weapon_damage_rand": 67
+      },
+      "magic": {
+        "vitality_base": 793,
+        "physical_shield_base": 1072,
+        "magical_shield_base": 1072,
+        "haste_base": 357,
+        "toughness_base": 179,
+        "strain_base": 482,
+        "recipe": "recipe_1514_1 | recipe_1515_1 | recipe_17356_1 | recipe_17246_1 | recipe_17360_1 | recipe_17361_1",
+        "event": "gain_19_1 | gain_25794_1"
+      },
+      "embed": {
+        "vitality_base": 225,
+        "physical_shield_base": 225,
+        "magical_shield_base": 225
+      },
+      "setId": 0,
+      "sets": {}
+    }
+  ]
+}

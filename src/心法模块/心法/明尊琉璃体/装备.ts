@@ -1,6 +1,7 @@
 import data from './装备数据.json'
 import waterWindData from './水风特效装备.json'
 import xisuiOrangeData from '../洗髓经/橙武装备.json'
+import compressedOrangeData from './压缩橙武装备.json'
 import { EMPTY_EQUIPMENT } from './计算'
 import type { EquipmentStats } from './计算'
 import type { EquipmentSpecialEffect, EquippedSpecialEffect } from './装备特效'
@@ -51,9 +52,11 @@ const eligibleGear = [
   ...database.items,
   ...(waterWindData.items as unknown as GearItem[]),
   ...(xisuiOrangeData.items as unknown as GearItem[]),
+  ...(compressedOrangeData.items as unknown as GearItem[]),
 ].filter(
   (row) =>
-    row.level >= MIN_GEAR_LEVEL &&
+    (row.level >= MIN_GEAR_LEVEL ||
+      (row.orangeWeapon && row.level === 719 && row.position === 'primary_weapon')) &&
     (row.kind !== '防御' ||
       Number(row.magic.haste_base) > 0 ||
       row.specialEffects?.some((effect) => effect.key === 'gain_4877_89')) &&

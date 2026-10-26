@@ -24,8 +24,8 @@ const selection = (item, overrides = {}) => ({
 })
 const slot = (item) => (item.position === 'ring' ? 'ring1' : item.position)
 
-test('无修去重、水风特效及洗髓橙武入库后131件装备，精炼和镶嵌均产生有效属性', () => {
-  expect(GEAR_ITEMS).toHaveLength(131)
+test('无修去重、水风特效及两心法橙武入库后133件装备，精炼和镶嵌均产生有效属性', () => {
+  expect(GEAR_ITEMS).toHaveLength(133)
   expect(new Set(GEAR_ITEMS.map((item) => item.key)).size).toBe(GEAR_ITEMS.length)
   for (const item of GEAR_ITEMS) {
     const result = calculateLoadout({
@@ -130,7 +130,7 @@ test('1240品圣辉月雪精炼8和三孔8级正确汇总，武伤不随精炼�
   })
   expect(
     GEAR_ITEMS.filter((row) => row.orangeWeapon && row.school === '明教').map((row) => row.id),
-  ).toEqual([47816, 47849, 47882])
+  ).toEqual([47816, 47849, 47882, 45319])
 })
 
 test('精简内功防具、首饰和暗器加入装备库并正确汇总攻击、会心与无双', () => {
@@ -328,9 +328,9 @@ test('旧配装仅清除被移除的附魔和五彩石，保留装备、精炼�
   expect(normalizeLoadout(result.slots, 5790).stone).toBe(5754)
 })
 
-test('保留1110品边界，清理低品与无加速防御装、归正附魔，并保留其余配装', () => {
+test('普通装备保留1110品边界，橙武719品除外，清理无加速防御装和归正附魔', () => {
   expect(GEAR_ITEMS.find((row) => row.key === 'armors:111949').level).toBe(1110)
-  expect(GEAR_ITEMS.some((row) => row.level < 1110)).toBe(false)
+  expect(GEAR_ITEMS.some((row) => row.level < 1110 && !row.orangeWeapon)).toBe(false)
   expect(
     GEAR_ITEMS.filter((row) => row.kind === '防御' && !(row.magic.haste_base > 0))
       .map((row) => row.id)

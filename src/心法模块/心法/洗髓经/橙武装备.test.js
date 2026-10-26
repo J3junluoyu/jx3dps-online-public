@@ -59,8 +59,8 @@ test('各心法只显示自己的橙武，洗髓品级与明尊一致', () => {
   const oranges = (name) => 获取五十级装备数据(name).武器.filter((row) => row.装备类型 === '橙武')
   const mz = oranges('明尊琉璃体')
   const xsj = oranges('洗髓经')
-  expect(xsj.map((row) => row.id)).toEqual([47865, 47832, 47799])
-  expect(mz.map((row) => row.id)).toEqual([47882, 47849, 47816])
+  expect(xsj.map((row) => row.id)).toEqual([47865, 47832, 47799, 45302])
+  expect(mz.map((row) => row.id)).toEqual([47882, 47849, 47816, 45319])
   expect(xsj.map((row) => row.装备品级)).toEqual(mz.map((row) => row.装备品级))
   expect(xsj.every((row) => row.装备名称 === '降魔境' && row.所属门派 === '少林')).toBe(true)
   expect(mz.every((row) => row.装备名称 === '圣辉月雪' && row.所属门派 === '明教')).toBe(true)
@@ -92,6 +92,7 @@ test('1240品降魔境精炼8及三孔8级汇总正确，导入导出保留原�
 })
 
 test.each([
+  [45319, 45302],
   [47816, 47799],
   [47849, 47832],
   [47882, 47865],
