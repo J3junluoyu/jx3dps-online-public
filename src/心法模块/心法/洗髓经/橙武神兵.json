@@ -1,0 +1,15 @@
+{
+  "group": "25794",
+  "id": "25794",
+  "level": "1",
+  "record": {
+    "name": "韦陀献杵·神兵",
+    "critical_strike": "solar_critical_strike",
+    "damages": [
+      {
+        "damage": "int(int(int(int(int(int(int(int(int(int(int(int(rand * 2 + int(solar_attack_power * 0.032200749674669384))) * (1 + magical_damage_addition)) * (1 + skill_damage_addition)) * (1 + move_state_damage_addition)) * (1 + solar_overcome)) * shield_constant / (int(solar_shield * (1 - all_shield_ignore / 1024)) + shield_constant)) * (1 + is_critical * (solar_critical_power - 1))) * (1 - (level - 50) * 0.05)) * (1 + strain)) * (1 + pve_damage_addition)) * (1 + solar_damage_scale))"
+      }
+    ]
+  },
+  "source": "考拉本地公共技能缓存SKILLS[0][25794][25794][1]"
+}

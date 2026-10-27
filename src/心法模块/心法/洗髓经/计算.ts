@@ -15,6 +15,8 @@ import { 洗髓秘籍选项 } from './秘籍'
 import { 洗髓原始技能 } from './招式'
 import { 获取洗髓设置, 洗髓气劲 } from './气劲'
 import 参考数据 from './参考数据.json'
+import 橙武神兵 from './橙武神兵.json'
+import { 适配洗髓橙武循环 } from './橙武循环'
 
 type 状态 = NonNullable<循环技能详情['洗髓技能状态']>
 const 奇穴ID = [...洗髓常规奇穴ID, ...洗髓混池奇穴ID]
@@ -25,6 +27,7 @@ const 秘籍 = Object.fromEntries(
   ].map((key) => [key, 1]),
 )
 const 技能 = new Map<string, Skill>()
+技能.set('orange:25794', { ...橙武神兵, key: 'orange:25794', label: 橙武神兵.record.name } as Skill)
 for (const row of 洗髓原始技能) {
   const key = `${row.group}:${row.id}`
   const skill = { ...row, key } as Skill
@@ -90,10 +93,11 @@ export function 计算洗髓面板(stats: EquipmentStats, settings: Settings, fl
   if (flags.dashan) add(参考数据.buffs['25353']['18222']['1'].attributes, flags.dashan)
   // 自身和团队立地来自不同来源，直接叠加减防值。
   if (flags.lidi) add({ solar_shield_gain: -154 })
-  let panel = calculateAttributePanel(stats, settings, { ...attrs }, 秘籍, 'solar')
+  const recipes = { ...秘籍, recipe_2862_1: settings.xisuiOrangeWeapon && flags.cw ? 1 : 0 }
+  let panel = calculateAttributePanel(stats, settings, { ...attrs }, recipes, 'solar')
   if (flags.chanyu) {
     add({ strain_base: Math.min(100, Math.floor(panel.baseVitality / 95)) * 5 })
-    panel = calculateAttributePanel(stats, settings, { ...attrs }, 秘籍, 'solar')
+    panel = calculateAttributePanel(stats, settings, { ...attrs }, recipes, 'solar')
   }
   return panel
 }
@@ -107,21 +111,24 @@ export function 计算洗髓循环(
   details = true,
 ): 当前计算结果类型 {
   if (!Number.isFinite(duration) || duration <= 0) throw new Error('循环时长必须大于零')
+  rows = 适配洗髓橙武循环(rows, settings)
   const basePanel = 计算洗髓面板(stats, { ...settings, equipmentProcGains: {} })
   const entries = rows.map((row) => {
     const skill = 技能.get(row.洗髓技能状态?.技能键 || '')
     if (!skill || !row.洗髓技能状态) throw new Error(`未知洗髓循环技能：${row.技能名称}`)
     if (!Number.isSafeInteger(row.技能数量) || row.技能数量 < 0)
       throw new Error('循环命中次数必须为非负整数')
-    return { row, skill, flags: row.洗髓技能状态 }
+    // 神兵按一次韦驮施展机会计一次307/1024期望，不按内功和武伤重复判定。
+    const weight = skill.id === '25794' ? (settings.xisuiOrangeWeapon ? 307 / 1024 : 0) : 1
+    return { row, skill, flags: row.洗髓技能状态, weight }
   })
-  const hits = rows.reduce((sum, row) => sum + row.技能数量, 0)
+  const hits = entries.reduce((sum, { row, weight }) => sum + row.技能数量 * weight, 0)
   const effects = settings.equipmentEffects || []
   const majorContext = effects.some(({ effect }) => isMajorEnchant(effect))
     ? majorEnchantContext(
-        entries.map(({ row, skill }) => ({
+        entries.map(({ row, skill, weight }) => ({
           id: skill.id,
-          count: row.技能数量,
+          count: row.技能数量 * weight,
           critical: calculateSkill(skill, basePanel).critical,
         })),
       )
@@ -130,8 +137,8 @@ export function 计算洗髓循环(
   const panels = new Map<string, ReturnType<typeof 计算洗髓面板>>()
   const resultRows = new Map<string, 计算结果技能列表类型>()
   let total = 0
-  for (const { row, skill, flags } of entries) {
-    if (!row.技能数量) continue
+  for (const { row, skill, flags, weight } of entries) {
+    if (!row.技能数量 || !weight) continue
     const name = row.技能名称.startsWith('武伤')
       ? '武伤'
       : row.技能名称.replace(/（[123]禅那）/, '')
@@ -143,6 +150,7 @@ export function 计算洗髓循环(
         flags.lidi,
         flags.dashan,
         flags.chanyu,
+        flags.cw,
         index,
       ])
       if (!panels.has(key))
@@ -152,7 +160,7 @@ export function 计算洗髓循环(
         )
       const panel = panels.get(key)!
       const damage = calculateSkill(skill, panel)
-      const count = row.技能数量 * state.weight
+      const count = row.技能数量 * weight * state.weight
       total += damage.expected * count
       if (!details) continue
       const min = calculateSkill(skill, { ...panel, variables: { ...panel.variables, rand: 0 } })

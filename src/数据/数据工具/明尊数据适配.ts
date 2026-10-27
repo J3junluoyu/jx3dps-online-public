@@ -300,11 +300,13 @@ export function 计算明尊装备属性(
 /** Refresh the newly supported field in saved plans without replacing their other stats. */
 export function 更新明尊装备威胁(装备信息: 装备信息数据类型) {
   if (!装备信息?.装备列表?.some((装备) => 装备?.id)) return 装备信息
-  const { slots } = 获取明尊配装(装备信息)
-  const { threat } = calculateLoadout(slots).stats
+  const { slots, stone } = 获取明尊配装(装备信息)
+  const result = calculateLoadout(slots, stone)
+  const { threat } = result.stats
   return {
     ...装备信息,
     装备列表: 规范明尊装备列表(装备信息),
+    明尊未计入效果: result.warnings,
     装备基础属性: {
       ...装备信息.装备基础属性,
       明尊属性: { ...EMPTY_EQUIPMENT, ...装备信息.装备基础属性?.明尊属性, threat },

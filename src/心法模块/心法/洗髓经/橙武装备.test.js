@@ -4,6 +4,7 @@ import {
   转换明尊配装,
   获取明尊配装,
   规范洗髓橙武,
+  更新明尊装备威胁,
 } from '@/数据/数据工具/明尊数据适配'
 import { 属性类型 } from '@/@types/属性'
 
@@ -47,8 +48,9 @@ test.each([
       weaponMax,
       dodge: 0,
     })
-    // 只读取属性，未实现的橙武回豆和增伤不能当成已计入。
-    expect(result.warnings).toEqual(expect.arrayContaining(['触发特效', '技能秘籍或套装招式效果']))
+    // 主动与神兵已接入；威胁类秘籍仍单独列作未计入，不掩盖其他效果。
+    expect(result.warnings).not.toContain('触发特效')
+    expect(result.warnings).toContain('技能秘籍或套装招式效果')
     expect(item.magic.recipe).toContain('recipe_1514_1')
     expect(item.magic.recipe).toContain('recipe_1515_1')
     expect(item.magic.event).toBe('gain_1855_9 | gain_25794_1')
@@ -117,4 +119,11 @@ test.each([
 test('未借用明尊橙武的洗髓方案不改动', () => {
   const ordinary = 转换明尊配装({ primary_weapon: selection(46764) })
   expect(规范洗髓橙武(ordinary)).toBe(ordinary)
+})
+
+test('旧缓存重新载入时清理已支持的橙武触发提示，保留其他未计入效果', () => {
+  const equipment = 转换明尊配装({ primary_weapon: selection(47865, { embeds: [0, 0, 0] }) })
+  const cached = { ...equipment, 明尊未计入效果: ['触发特效', '技能秘籍或套装招式效果'] }
+  expect(更新明尊装备威胁(cached).明尊未计入效果).toEqual(['技能秘籍或套装招式效果'])
+  expect(cached.明尊未计入效果).toContain('触发特效')
 })

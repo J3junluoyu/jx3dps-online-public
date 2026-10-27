@@ -120,6 +120,8 @@ export interface Settings {
   equipmentEffects?: EquippedSpecialEffect[]
   /** 当前装备ID检测结果；仅在自适应理论循环内使用橙武时间轴。 */
   mingzunOrangeWeapon?: boolean
+  /** 当前装备ID检测结果；洗髓自适应循环自动采用主动＋被动橙武模板。 */
+  xisuiOrangeWeapon?: boolean
   /** 内部结算当前触发状态；不传时角色面板按稳态覆盖显示。 */
   equipmentProcGains?: Record<string, number>
 }

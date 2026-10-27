@@ -106,6 +106,11 @@ export function isMingzunOrangeWeapon(identifier?: string | number): boolean {
   return item?.orangeWeapon === true && item.school === '明教'
 }
 
+export function isXisuiOrangeWeapon(identifier?: string | number): boolean {
+  const item = identifier == null ? undefined : findGearItem(identifier, 'primary_weapon')
+  return item?.orangeWeapon === true && item.school === '少林'
+}
+
 const orangeWeaponLevels = (school: string) =>
   [
     ...new Set(
@@ -397,6 +402,7 @@ export function calculateLoadout(loadout: Loadout, stoneId = 0) {
   const sets = new Map<number, { count: number; bonuses: Record<string, Attributes> }>()
   let selectedCount = 0
   let hasPrimary = false
+  const xisuiOrange = isXisuiOrangeWeapon(loadout.primary_weapon?.key)
   const add = (attributes: Attributes, multiplier = 1, refine = false) => {
     for (const [key, value] of Object.entries(attributes)) {
       // The normalized field supersedes its legacy alias on the same attribute source.
@@ -408,6 +414,7 @@ export function calculateLoadout(loadout: Loadout, stoneId = 0) {
             .split(/\s*\|\s*/)
             .filter(Boolean)
             .every((event) =>
+              (xisuiOrange && ['gain_1855_8', 'gain_1855_9', 'gain_25794_1'].includes(event)) ||
               specialEffects.some(
                 ({ effect }) => effect.key === event && equipmentEffectSupported(effect),
               ),

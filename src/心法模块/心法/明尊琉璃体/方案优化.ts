@@ -10,6 +10,7 @@ import {
   calculateLoadout,
   slotPosition,
   isMingzunOrangeWeapon,
+  isXisuiOrangeWeapon,
   MINGZUN_ORANGE_WEAPON_LEVELS,
   XISUI_ORANGE_WEAPON_LEVELS,
 } from './装备'
@@ -399,6 +400,7 @@ function 搜索推荐方案(
       gains,
       equipmentEffects: specialEffects,
       mingzunOrangeWeapon: !xisui && isMingzunOrangeWeapon(plan.slots.primary_weapon?.key),
+      xisuiOrangeWeapon: xisui && isXisuiOrangeWeapon(plan.slots.primary_weapon?.key),
       equipmentProcGains: undefined,
     }
     const panel = xisui ? 计算洗髓面板(stats, settings) : calculateAttributes(stats, settings)

@@ -306,6 +306,28 @@ async function verify(basePath) {
     assert(entry.result.after.dps > 0)
   }
   console.log(`洗髓橙武Worker验证通过 ${basePath}：所选降魔境参与三档推荐`)
+  const xisuiOrange = require('../src/心法模块/心法/洗髓经/橙武测试配装.json')
+  messages.length = 0
+  sandbox.onmessage({ data: {
+    ...request,
+    kungfu: 'xsj',
+    initial: { ...xisuiOrange, formation: '', consumables: [] },
+    cycle: {
+      名称: '自适应理论循环',
+      循环详情: [3, 4, 5].map((tier) => ({ 循环加速等级: tier, 战斗时间: 300, 技能详情: xisuiCycles[tier].技能详情 })),
+    },
+    settings: { ...request.settings, targetLevel: 54, stance: 'mainTank' },
+    minToughness: 0, slots: [], gearKeys: [], orangeWeaponLevel: 0,
+    allowHigherHaste: true, compareGcd: true,
+  } })
+  const xisuiActive = messages.at(-1)
+  assert.equal(xisuiActive?.type, 'comparison', JSON.stringify(xisuiActive))
+  for (const entry of xisuiActive.comparison.entries) {
+    assert.equal(entry.error, undefined)
+    assert.equal(entry.result.plan.slots.primary_weapon.key, 'weapons:47865')
+    assert(Math.abs(entry.result.before.dps - 38895.82446151993) < 1e-8, '洗髓Worker未计入当前橙武主动与神兵被动')
+  }
+  console.log(`洗髓橙武特效Worker验证通过 ${basePath}：当前5档38895.82DPS，三档推荐共享主动与被动计伤`)
 }
 
 async function main() {

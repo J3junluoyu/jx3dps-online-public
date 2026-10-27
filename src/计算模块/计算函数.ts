@@ -20,6 +20,7 @@ import 获取当前数据 from '@/数据/数据工具/获取当前数据'
 import { 明尊秒伤计算 } from './职业特殊处理/明尊'
 import { 获取明尊原始属性, 获取明尊已选装备特效 } from './职业特殊处理/明尊'
 import { 计算洗髓循环, 获取洗髓计算设置 } from '@/心法模块/心法/洗髓经/计算'
+import { isXisuiOrangeWeapon } from '@/心法模块/心法/明尊琉璃体/装备'
 
 interface CurrentDpsFunctionProps {
   是否更新显示计算结果?: boolean // 是否更新当前dps结果
@@ -104,6 +105,7 @@ export const 秒伤计算 =
             {
               ...获取洗髓计算设置(增益数据, 增益启用, 当前目标.等级),
               equipmentEffects: 获取明尊已选装备特效(当前装备信息),
+              xisuiOrangeWeapon: (当前装备信息.装备列表 || []).some((row) => isXisuiOrangeWeapon(row?.id)),
             },
             当前循环技能列表,
             更新计算时间 || 实际计算循环详情?.战斗时间 || 300,

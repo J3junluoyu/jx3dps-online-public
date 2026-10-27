@@ -4,7 +4,7 @@ import { calculateLoadout } from '../明尊琉璃体/装备'
 import { 计算洗髓面板, 获取洗髓计算设置, 获取洗髓增益属性, 计算洗髓循环 } from './计算'
 import { 洗髓自适应循环, 获取洗髓GCD } from './循环'
 import 配装 from './测试配装.json'
-import { GEAR_ITEMS, XISUI_ORANGE_WEAPON_LEVELS } from '../明尊琉璃体/装备'
+import { GEAR_ITEMS, XISUI_ORANGE_WEAPON_LEVELS, isXisuiOrangeWeapon } from '../明尊琉璃体/装备'
 
 jest.setTimeout(120000)
 afterEach(() => jest.restoreAllMocks())
@@ -64,6 +64,7 @@ test('选定洗髓橙武品级后自动纳入武器部位，三档均按洗髓�
         true,
       ),
       equipmentEffects: equipment.specialEffects,
+      xisuiOrangeWeapon: isXisuiOrangeWeapon(plan.slots.primary_weapon?.key),
     }
     const detail = 洗髓自适应循环.循环详情.find((row) => (24 - row.循环加速等级) / 16 === entry.gcd)
     expect(计算洗髓循环(equipment.stats, settings, detail.技能详情, 300, false).秒伤).toBe(
@@ -127,6 +128,7 @@ test('实际配装三档推荐按最终增益面板校验御劲与GCD，重新�
         true,
       ),
       equipmentEffects: equipment.specialEffects,
+      xisuiOrangeWeapon: isXisuiOrangeWeapon(plan.slots.primary_weapon?.key),
     }
     const panel = 计算洗髓面板(equipment.stats, settings)
     expect(panel.toughness * 100 + 1e-10).toBeGreaterThanOrEqual(9.5)
