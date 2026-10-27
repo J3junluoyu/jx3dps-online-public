@@ -38,18 +38,16 @@ let mockSelectProps
 let mockTier = 4
 global.IS_REACT_ACT_ENVIRONMENT = true
 
-test.each([3, 4])('加速档位%s仅显示一个可选自适应理论循环，手动选择不覆盖当前奇穴', (tier) => {
+test.each([3, 4])('加速档位%s仅显示光明心自适应循环，原单档入口隐藏', (tier) => {
   mockTier = tier
   const container = document.createElement('div')
   const root = createRoot(container)
   act(() => root.render(<循环选择 不提示循环 />))
   const options = mockSelectProps.children
-  expect(options.filter((r) => r.props.value.includes('理论循环'))).toHaveLength(1)
-  expect(options.find((r) => r.props.value === '自适应理论循环').props.disabled).toBe(false)
-  expect(options.find((r) => r.props.value === '0.8125GCD循环').props.label).toBe('0.81GCD循环')
-  act(() => mockSelectProps.onChange('自适应理论循环'))
-  expect(mockDispatch).toHaveBeenCalledWith({ 属性: '当前计算循环名称', 数据: '自适应理论循环' })
-  expect(mockDispatch.mock.calls.some(([r]) => r.属性 === '当前奇穴信息')).toBe(false)
+  expect(options.map((r) => r.props.value)).toEqual(['自适应光明心循环'])
+  expect(options.find((r) => r.props.value === '自适应光明心循环').props.disabled).toBe(false)
+  act(() => mockSelectProps.onChange('自适应光明心循环'))
+  expect(mockDispatch).toHaveBeenCalledWith({ 属性: '当前计算循环名称', 数据: '自适应光明心循环' })
   expect(mockDispatch).toHaveBeenCalledWith({ type: 'calculate' })
   act(() => root.unmount())
 })
@@ -60,7 +58,7 @@ test('低于0.81档时自适应理论选项禁用，不借用另一档计算', (
   const root = createRoot(container)
   act(() => root.render(<循环选择 不提示循环 />))
   expect(
-    mockSelectProps.children.find((r) => r.props.value === '自适应理论循环').props.disabled,
+    mockSelectProps.children.find((r) => r.props.value === '自适应光明心循环').props.disabled,
   ).toBe(true)
   act(() => root.unmount())
 })

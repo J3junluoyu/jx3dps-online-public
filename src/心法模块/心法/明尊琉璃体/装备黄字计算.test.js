@@ -195,7 +195,7 @@ test.each([false, true])(
   '普通与理论循环均追加独立伤害统计，快速评分与完整统计一致，理论=%s',
   (theory) => {
     const list = theory
-      ? cycles.find((row) => row.名称 === '自适应理论循环').循环详情[0].技能详情
+      ? cycles.find((row) => row.名称 === '自适应光明心循环').循环详情[0].技能详情
       : normal
     const input = { ...settings, equipmentEffects: effects(112458, 112483, 47972, 112706) }
     const result = 计算明尊基础循环(equipment, input, list, 300)

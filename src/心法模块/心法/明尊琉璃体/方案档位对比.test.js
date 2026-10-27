@@ -8,8 +8,8 @@ jest.setTimeout(120000)
 afterEach(() => jest.restoreAllMocks())
 
 test.each([
-  ['0.75GCD循环', ['0.75GCD循环', '0.8125GCD循环']],
-  ['0.8125GCD循环', ['0.75GCD循环', '0.8125GCD循环']],
+  ['0.75GCD循环', ['0.75理论循环', '0.8125理论循环']],
+  ['0.8125GCD循环', ['0.75理论循环', '0.8125理论循环']],
   ['0.75理论循环', ['0.75理论循环', '0.8125理论循环']],
   ['0.8125理论循环', ['0.75理论循环', '0.8125理论循环']],
   ['自适应理论循环', ['0.75理论循环', '0.8125理论循环']],
@@ -84,8 +84,8 @@ test('实际装备库按相同条件分别优化两档，严格满足GCD和御�
     stage: '双档对比完成',
     evaluations: comparison.evaluations,
   })
-  expect(progress.some((entry) => entry.stage.startsWith('0.75GCD循环：'))).toBe(true)
-  expect(progress.some((entry) => entry.stage.startsWith('0.8125GCD循环：'))).toBe(true)
+  expect(progress.some((entry) => entry.stage.startsWith('0.75理论循环：'))).toBe(true)
+  expect(progress.some((entry) => entry.stage.startsWith('0.8125理论循环：'))).toBe(true)
   expect(JSON.stringify(input)).toBe(original)
 })
 
@@ -98,7 +98,7 @@ const 返回方案 = (input, dps) => ({
 })
 
 test('理论循环两档独立使用原配装、团队增益及约束，不将第一档的优化结果作为第二档起点', () => {
-  const input = { ...输入(), cycle: 循环列表.find((cycle) => cycle.名称 === '自适应理论循环') }
+  const input = { ...输入(), cycle: 循环列表.find((cycle) => cycle.名称 === '自适应光明心循环') }
   const spy = jest.spyOn(优化模块, '优化明尊方案').mockImplementation((request) => ({
     ...返回方案(request, request.cycle.名称 === '0.75理论循环' ? 1000 : 1100),
     plan: { ...request.initial, formation: '万灵阵' },
@@ -136,7 +136,7 @@ test('普通循环选择橙武品级时，两档统一采用理论模板且保�
 })
 
 test('自适应理论两档秒伤相同时优先当前实际GCD，避免默认选中第一档', () => {
-  const input = { ...输入(), cycle: 循环列表.find((cycle) => cycle.名称 === '自适应理论循环') }
+  const input = { ...输入(), cycle: 循环列表.find((cycle) => cycle.名称 === '自适应光明心循环') }
   jest.spyOn(优化模块, '优化明尊方案').mockImplementation((request) => 返回方案(request, 1000))
   expect(对比明尊加速档位(input).recommendedCycleName).toBe('0.8125理论循环')
 })
@@ -155,7 +155,7 @@ test.each(['未找到方案', '优化报错'])('第一档%s时仍完成第二档
   expect(result.entries[0].result?.plan).toBeUndefined()
   expect(result.entries[0].error).toBe(scenario === '优化报错' ? '该档位没有候选' : undefined)
   expect(result.entries[1].result.plan).toBeDefined()
-  expect(result.recommendedCycleName).toBe('0.8125GCD循环')
+  expect(result.recommendedCycleName).toBe('0.8125理论循环')
 })
 
 test('两档均无解不产生推荐，同秒伤优先当前循环', () => {
@@ -165,5 +165,5 @@ test('两档均无解不产生推荐，同秒伤优先当前循环', () => {
     .mockImplementation((request) => 返回方案(request, 0))
   expect(对比明尊加速档位(input).recommendedCycleName).toBeUndefined()
   spy.mockImplementation((request) => 返回方案(request, 1000))
-  expect(对比明尊加速档位(input).recommendedCycleName).toBe(input.cycle.名称)
+  expect(对比明尊加速档位(input).recommendedCycleName).toBe('0.8125理论循环')
 })

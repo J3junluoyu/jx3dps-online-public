@@ -153,7 +153,7 @@ test('只保留角色属性旁的一个启用增益入口，一次点击同时�
   expect(mockState.data.增益启用).toBe(true)
   expect(checkbox().checked).toBe(true)
   expect(hasteRow().textContent).toContain('0.75s')
-  expect(useCycle().当前循环信息.名称).toBe('自适应理论循环')
+  expect(useCycle().当前循环信息.名称).toBe('自适应光明心循环')
   expect(useCycle().计算循环详情.循环加速等级).toBe(4)
   expect(mockState.data.当前计算结果.秒伤).toBeGreaterThan(before.秒伤)
   expect(mockDispatch.mock.calls[0][0]).toEqual({

@@ -87,3 +87,20 @@ test('团队勾选立地成佛代表额外来源，总增益关闭时仅保留�
   expect(base).toBe(计算洗髓循环(stats, settings, rows, 300).秒伤)
   expect(计算洗髓循环(stats, on, rows, 300).秒伤).toBeGreaterThan(base)
 })
+
+test('洗髓没有自身戒火覆盖，团队戒火按启用及覆盖率计入，收益比较可反映变化', () => {
+  const data = {
+    团队增益: [{ 增益名称: '戒火斩', 启用: true, 层数: 1, 覆盖率: 100 }],
+  }
+  const off = 获取洗髓计算设置(data, false, 54)
+  const on = 获取洗髓计算设置(data, true, 54)
+  expect(off.gains.solar_damage_cof || 0).toBe(0)
+  expect(on.gains.solar_damage_cof).toBe(21)
+  expect(on.gains.physical_damage_cof).toBe(21)
+  const half = 获取洗髓计算设置({ 团队增益: [{ ...data.团队增益[0], 覆盖率: 50 }] }, true, 54)
+  expect(half.gains.solar_damage_cof).toBe(10.5)
+  const rows = 洗髓自适应循环.循环详情[1].技能详情
+  expect(计算洗髓循环(equipment.stats, on, rows, 300).秒伤).toBeGreaterThan(
+    计算洗髓循环(equipment.stats, off, rows, 300).秒伤,
+  )
+})

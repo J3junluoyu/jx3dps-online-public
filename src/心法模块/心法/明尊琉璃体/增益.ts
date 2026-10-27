@@ -293,6 +293,7 @@ export function 获取明尊增益属性(
   enabled = false,
   常驻层数?: number,
   talents: Settings['talents'] = [],
+  循环已覆盖戒火 = true,
 ): Attributes {
   const result: Attributes = {}
   const add = (attributes: Attributes, multiplier = 1) => {
@@ -312,7 +313,7 @@ export function 获取明尊增益属性(
   const applied = new Set<string>()
   for (const item of 明尊团队增益) {
     // 戒火易伤由循环自身覆盖结算，团队选项保留但不重复加算。
-    if (item.增益名称 === '戒火斩') continue
+    if (循环已覆盖戒火 && item.增益名称 === '戒火斩') continue
     // 圣浴常驻由自身开关控制；总开关只控制其余团队增益、药食及阵眼。
     if (!enabled && item.增益名称 !== 圣浴常驻名称) continue
     const selection = selected.get(item.增益名称)

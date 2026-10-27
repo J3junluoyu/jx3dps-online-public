@@ -11,6 +11,7 @@ import { 装备部位枚举 } from '@/@types/枚举'
 import { 装备位置部位枚举, 装备特效枚举 } from '@/@types/装备'
 import classNames from 'classnames'
 import { 格式化明尊GCD } from '@/心法模块/心法/明尊琉璃体/GCD显示'
+import { 自适应理论循环名称 } from '@/心法模块/心法/明尊琉璃体/计算循环/理论循环'
 import './index.css'
 
 const { 名称, 装备数据 } = 获取当前数据()
@@ -155,87 +156,92 @@ function 循环选择(props) {
             </>
           )}
         >
-          {全部循环.map((item) => {
-            const cls = classnames(
-              'cycle-select-item-tag',
-              item.标记 === '紫武' ? 'cycle-select-item-tag-purple' : '',
-              item.标记 === '橙武' ? 'cycle-select-item-tag-orange' : '',
-              item.标记 === '特效' ? 'cycle-select-item-tag-texiao' : '',
-              item.标记 === '助手' ? 'cycle-select-item-tag-green' : '',
-            )
+          {全部循环
+            .filter((item) => !item.隐藏)
+            .map((item) => {
+              const cls = classnames(
+                'cycle-select-item-tag',
+                item.标记 === '紫武' ? 'cycle-select-item-tag-purple' : '',
+                item.标记 === '橙武' ? 'cycle-select-item-tag-orange' : '',
+                item.标记 === '特效' ? 'cycle-select-item-tag-texiao' : '',
+                item.标记 === '助手' ? 'cycle-select-item-tag-green' : '',
+              )
 
-            const 快照计算列表 = 根据循环判断快照计算列表(item?.循环详情?.[0]?.技能详情 || [])
-            return (
-              <Select.Option
-                value={item?.名称}
-                key={item.名称}
-                label={显示循环(item.名称)}
-                disabled={
-                  item.自动选择 === false &&
-                  当前加速等级 !== undefined &&
-                  !item.循环详情.some((详情) => Number(详情.循环加速等级) === 当前加速等级)
-                }
-              >
-                <Popover
-                  placement='right'
-                  zIndex={2000}
-                  title='说明'
-                  open={item.提供者 || item.备注 ? undefined : false}
-                  content={
-                    item.提供者 || item.备注 || 快照计算列表?.length ? (
-                      <div className='cycle-select-popover-content'>
-                        <>
-                          {item.提供者 !== '模拟' ? (
-                            <p>
-                              该循环计算数据由
-                              <span className='cycle-select-provider'> {item.提供者} </span>
-                              提供
-                            </p>
-                          ) : (
-                            <p>
-                              该循环计算数据由
-                              <span className='cycle-select-provider'> 模拟器 </span>生成
-                            </p>
-                          )}
-                          <p dangerouslySetInnerHTML={{ __html: 显示循环(item?.备注) as any }} />
-                        </>
-                        {快照计算列表?.length ? (
-                          <div>
-                            以下增益支持快照计算
-                            <div>
-                              {快照计算列表?.map((data, index) => {
-                                return (
-                                  <span
-                                    className='cycle-select-provider'
-                                    key={`增益快照计算${data}`}
-                                  >
-                                    {data?.replace('_快照', '')}
-                                    {index < (快照计算列表?.length || 0) - 1 ? '｜' : ''}
-                                  </span>
-                                )
-                              })}
-                            </div>
-                          </div>
-                        ) : null}
-                      </div>
-                    ) : (
-                      <div>该循环无特殊说明</div>
-                    )
+              const 快照计算列表 = 根据循环判断快照计算列表(item?.循环详情?.[0]?.技能详情 || [])
+              const 仅显示备注 = 名称 === '明尊琉璃体' && item.名称 === 自适应理论循环名称
+              return (
+                <Select.Option
+                  value={item?.名称}
+                  key={item.名称}
+                  label={显示循环(item.名称)}
+                  disabled={
+                    item.自动选择 === false &&
+                    当前加速等级 !== undefined &&
+                    !item.循环详情.some((详情) => Number(详情.循环加速等级) === 当前加速等级)
                   }
                 >
-                  <div className='cycle-select-item'>
-                    <div dangerouslySetInnerHTML={{ __html: 显示循环(item.标题 || item.名称) }} />
-                    <div>
-                      {item.提供者 ? (
-                        <span className='cycle-select-provider'>{item.提供者}</span>
-                      ) : null}
-                      <span className={cls}>{item.标记}</span>
+                  <Popover
+                    placement='right'
+                    zIndex={2000}
+                    title='说明'
+                    open={item.提供者 || item.备注 ? undefined : false}
+                    content={
+                      仅显示备注 ? (
+                        <div className='cycle-select-popover-content'>{item.备注}</div>
+                      ) : item.提供者 || item.备注 || 快照计算列表?.length ? (
+                        <div className='cycle-select-popover-content'>
+                          <>
+                            {item.提供者 !== '模拟' ? (
+                              <p>
+                                该循环计算数据由
+                                <span className='cycle-select-provider'> {item.提供者} </span>
+                                提供
+                              </p>
+                            ) : (
+                              <p>
+                                该循环计算数据由
+                                <span className='cycle-select-provider'> 模拟器 </span>生成
+                              </p>
+                            )}
+                            <p dangerouslySetInnerHTML={{ __html: 显示循环(item?.备注) as any }} />
+                          </>
+                          {快照计算列表?.length ? (
+                            <div>
+                              以下增益支持快照计算
+                              <div>
+                                {快照计算列表?.map((data, index) => {
+                                  return (
+                                    <span
+                                      className='cycle-select-provider'
+                                      key={`增益快照计算${data}`}
+                                    >
+                                      {data?.replace('_快照', '')}
+                                      {index < (快照计算列表?.length || 0) - 1 ? '｜' : ''}
+                                    </span>
+                                  )
+                                })}
+                              </div>
+                            </div>
+                          ) : null}
+                        </div>
+                      ) : (
+                        <div>该循环无特殊说明</div>
+                      )
+                    }
+                  >
+                    <div className='cycle-select-item'>
+                      <div dangerouslySetInnerHTML={{ __html: 显示循环(item.标题 || item.名称) }} />
+                      <div>
+                        {item.提供者 ? (
+                          <span className='cycle-select-provider'>{item.提供者}</span>
+                        ) : null}
+                        <span className={cls}>{item.标记}</span>
+                      </div>
                     </div>
-                  </div>
-                </Popover>
-              </Select.Option>
-            )
-          })}
+                  </Popover>
+                </Select.Option>
+              )
+            })}
         </Select>
       </div>
     </div>

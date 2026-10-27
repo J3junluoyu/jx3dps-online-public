@@ -53,6 +53,9 @@ export function 获取洗髓增益属性(data?: 增益选项数据类型, enable
       团队增益: (data?.团队增益 || []).filter((row) => row.增益名称 !== 圣浴常驻名称),
     },
     enabled,
+    undefined,
+    [],
+    false,
   )
 }
 

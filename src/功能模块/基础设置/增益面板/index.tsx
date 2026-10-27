@@ -72,7 +72,6 @@ function 增益面板() {
         </div>
         <div className={'zengyi-operator'}>
           <Checkbox
-            disabled={名称 === '洗髓经'}
             className='zengyi-operator-checkbox'
             checked={!!开启智能对比}
             onChange={(e) => 设置开启智能对比(e?.target?.checked)}

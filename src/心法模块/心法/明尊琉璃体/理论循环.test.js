@@ -19,7 +19,7 @@ const 合计 = (rows, field, value, sumField) =>
 test('保留原有默认循环顺序，两档合并为手动选择的自适应理论循环且不绑定奇穴', () => {
   expect(循环列表.slice(0, 2).map((r) => r.名称)).toEqual(['0.8125GCD循环', '0.75GCD循环'])
   expect(循环列表.slice(2)).toEqual(自适应循环)
-  expect(自适应循环.map((r) => r.名称)).toEqual(['自适应理论循环'])
+  expect(自适应循环.map((r) => r.名称)).toEqual(['自适应光明心循环'])
   expect(自适应循环[0].循环详情.map((r) => r.循环加速等级)).toEqual([4, 3])
   for (const cycle of 自适应循环) {
     expect(cycle).toMatchObject({

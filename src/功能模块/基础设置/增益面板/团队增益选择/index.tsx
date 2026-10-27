@@ -199,7 +199,6 @@ function 团队增益选择({ 保存数据并计算 }) {
           className={'tuandui-setting-btn'}
           size='small'
           type='dashed'
-          disabled={名称 === '洗髓经'}
           onClick={() => {
             if (新手引导流程状态) {
               return

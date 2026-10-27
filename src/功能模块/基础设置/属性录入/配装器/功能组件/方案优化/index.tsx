@@ -77,10 +77,9 @@ function 方案优化(props: 方案优化入参) {
   const [open, setOpen] = useState(false)
   const [mode, setMode] = useState(默认优化方式(props.循环名称))
   const [minToughness, setMinToughness] = useState(8)
-  const [includeMowen, setIncludeMowen] = useState(true)
-  const [includeHasteConsumables, setIncludeHasteConsumables] = useState(true)
+  const [includeMowen, setIncludeMowen] = useState(false)
+  const [includeHasteConsumables, setIncludeHasteConsumables] = useState(false)
   const [orangeWeaponLevel, setOrangeWeaponLevel] = useState(0)
-  const [includeTeamGains, setIncludeTeamGains] = useState(false)
   const [gearScope, setGearScope] = useState<方案优化输入['gearScope']>('includeStreamlined')
   const [slots, setSlots] = useState<string[]>(SLOTS.map(([key]) => key))
   const [running, setRunning] = useState(false)
@@ -112,7 +111,7 @@ function 方案优化(props: 方案优化入参) {
     ? []
     : 洗髓模式
       ? 获取洗髓档位对比循环()
-      : 获取档位对比循环(orangeModel ? 自适应理论循环名称 : props.循环名称 || 循环列表[0].名称)
+      : 获取档位对比循环(orangeModel ? 自适应理论循环名称 : props.循环名称 || 自适应理论循环名称)
   const cycle =
     cycles.find((item) =>
       compareGcd ? item.名称 === props.循环名称 : item.名称.startsWith(`${mode}`),
@@ -237,7 +236,7 @@ function 方案优化(props: 方案优化入参) {
         gearScope,
         compareGcd,
         teamGains: 增益数据.团队增益
-          .filter((item) => includeTeamGains || (!洗髓模式 && item.增益名称 === 圣浴常驻名称))
+          .filter((item) => !洗髓模式 && item.增益名称 === 圣浴常驻名称)
           .map((item) => ({ ...item })),
         gearKeys: props.获取候选装备键(),
         slots,
@@ -362,7 +361,7 @@ function 方案优化(props: 方案优化入参) {
                     props.应用方案(
                       result.plan,
                       洗髓模式 ? 洗髓循环名称 : 规范理论循环名称(resultCycleName),
-                      includeTeamGains,
+                      false,
                     )
                     关闭()
                   }
@@ -456,7 +455,7 @@ function 方案优化(props: 方案优化入参) {
               checked={includeMowen}
               onChange={(e) => 设置条件(() => setIncludeMowen(e.target.checked))}
             >
-              计算莫问阵
+              计算莫问阵3%御劲
             </Checkbox>
             <Checkbox
               disabled={running}
@@ -465,13 +464,6 @@ function 方案优化(props: 方案优化入参) {
             >
               加速增益
             </Checkbox>
-            <Checkbox
-              disabled={running}
-              checked={includeTeamGains}
-              onChange={(e) => 设置条件(() => setIncludeTeamGains(e.target.checked))}
-            >
-              计入当前团队增益
-            </Checkbox>
           </div>
         </div>
         <div className={styles.slots}>
@@ -479,12 +471,15 @@ function 方案优化(props: 方案优化入参) {
           <Checkbox.Group
             disabled={running}
             value={slots}
-            options={SLOTS.map(([value, label]) => ({ value, label }))}
+            options={SLOTS.map(([value, label]) => ({
+              value,
+              label,
+              disabled: !!orangeWeaponLevel && value === 'primary_weapon',
+            }))}
             onChange={(value) =>
               设置条件(() => {
                 const next = value as string[]
                 setSlots(next)
-                if (!next.includes('primary_weapon')) setOrangeWeaponLevel(0)
               })
             }
           />
@@ -495,7 +490,7 @@ function 方案优化(props: 方案优化入参) {
           message={
             props.循环待补充
               ? '洗髓经循环模板待补充。装备、附魔、增益及参与部位沿用本界面设置，补充循环后再接入推荐计算。'
-              : `装备沿用配装器筛选范围，${gearScope === 'defensive' ? '参与优化的部位仅选择防御装备' : '可选择防御装备和精简/特效内功装备'}，${orangeWeaponLevel ? `${orangeWeaponLevel}品${洗髓模式 ? '洗髓' : '明尊'}橙武独立加入武器候选，与普通武器比较，不强制装备，不受普通装备品级筛选限制` : '排除橙武候选'}；其他品级以配装器筛选范围为准，全部候选按伤害收益比较，同伤害优先高品级。装备加速达到模拟档位或更高即可参与，不为压低加速而降品。未参与的部位保持当前装备${洗髓模式 ? '' : '，已装备的橙武照常计入特效，不因候选排除而中断'}。附魔沿用各部位当前数值档位，排除御劲附魔，未选附魔保持空置。药品增强与食品增强须选择同属性组合。药食酒与阵眼参与优化，五彩石固定；同伤害下酒品优先低数值档位。${includeHasteConsumables ? '加速药品与食品参与优化。' : '加速药品与食品不参与优化，家园酒品仍参与。'}${includeTeamGains ? '按当前已启用团队增益的层数和覆盖率计算，团队配置保持固定。' : '团队增益不计入。'}${圣浴常驻独立开启 ? '圣浴常驻按自身开关独立计入。' : ''}${
+              : `装备沿用配装器筛选范围，${gearScope === 'defensive' ? '参与优化的部位仅选择防御装备' : '可选择防御装备和精简/特效内功装备'}，${orangeWeaponLevel ? `固定装备${orangeWeaponLevel}品${洗髓模式 ? '洗髓' : '明尊'}橙武，不会更换其他武器，不受普通装备品级筛选限制` : '排除橙武候选'}；其他品级以配装器筛选范围为准，全部候选按伤害收益比较，同伤害优先高品级。装备加速达到模拟档位或更高即可参与，不为压低加速而降品。未参与的部位保持当前装备${洗髓模式 ? '' : '，已装备的橙武照常计入特效，不因候选排除而中断'}。附魔沿用各部位当前数值档位，排除御劲附魔，未选附魔保持空置。药品增强与食品增强须选择同属性组合。药食酒与阵眼参与优化，五彩石固定；同伤害下酒品优先低数值档位。${includeHasteConsumables ? '加速药品与食品参与优化。' : '加速药品与食品不参与优化，家园酒品仍参与。'}团队增益不计入。${圣浴常驻独立开启 ? '圣浴常驻按自身开关独立计入。' : ''}${
                   compareGcd
                     ? `分别使用${cycles
                         .map((cycle) => 格式化明尊GCD(cycle.名称))
@@ -651,9 +646,7 @@ function 方案优化(props: 方案优化入参) {
               ]}
             />
             <p className={styles.note}>
-              {includeTeamGains
-                ? '以上秒伤计入当前已启用的团队增益。应用后启用推荐常规增益，保留团队增益设置。用时'
-                : '以上秒伤均不计团队增益。应用后启用推荐常规增益，并关闭团队增益开关，保留其配置。用时'}
+              以上秒伤均不计团队增益。应用后启用推荐常规增益，并关闭团队增益开关，保留其配置。用时
               {(result.elapsed / 1000).toFixed(2)}秒。
             </p>
           </>

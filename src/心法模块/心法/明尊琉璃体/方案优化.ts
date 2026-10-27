@@ -49,7 +49,7 @@ export interface 方案优化输入 {
   minToughness: number
   includeMowen?: boolean
   includeHasteConsumables?: boolean
-  /** 0或未选时排除橙武候选；所选品级橙武独立加入候选，不锁定最终武器。 */
+  /** 0或未选时排除橙武候选；选择品级后固定装备该心法的对应橙武。 */
   orangeWeaponLevel?: number
   gearScope?: 'defensive' | 'includeStreamlined'
   teamGains?: 团队增益选项数据类型[]
@@ -175,6 +175,7 @@ const 是当前心法橙武 = (input: Pick<方案优化输入, 'kungfu'>, item: 
   item.school === (input.kungfu === 'xsj' ? '少林' : '明教')
 
 const 允许装备候选 = (input: 方案优化输入, item: GearItem) =>
+  (!input.orangeWeaponLevel || item.position !== 'primary_weapon' || item.orangeWeapon === true) &&
   (item.orangeWeapon
     ? item.level === input.orangeWeaponLevel && 是当前心法橙武(input, item)
     : input.gearKeys.includes(item.key)) &&
@@ -231,7 +232,7 @@ function 搜索推荐方案(
   const started = Date.now()
   if (input.gearScope && !['defensive', 'includeStreamlined'].includes(input.gearScope))
     throw new Error('装备范围无效')
-  // 普通装备沿用配装器范围；用户单独选定品级的橙武作为额外候选，不能强制选用。
+  // 普通装备沿用配装器范围；选择橙武品级后，武器仅允许该心法的对应橙武。
   const allowed = new Set(
     GEAR_ITEMS.filter((item) => 允许装备候选(input, item)).map((item) => item.key),
   )
@@ -477,8 +478,11 @@ function 搜索推荐方案(
       ...(input.allowHigherHaste ? { simulatedGcd: initial.metrics.gcd } : {}),
     }
   }
+  const seedInitial = input.orangeWeaponLevel
+    ? groups.find((group) => group.slot === 'primary_weapon')!.apply[0](input.initial)
+    : input.initial
   const seed = evaluate({
-    ...input.initial,
+    ...seedInitial,
     formation: formations.includes(input.initial.formation) ? input.initial.formation : '',
     consumables: validEnhancements.has(enhancementKey(input.initial.consumables))
       ? input.initial.consumables

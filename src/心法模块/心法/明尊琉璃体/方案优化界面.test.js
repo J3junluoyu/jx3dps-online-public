@@ -20,7 +20,7 @@ jest.mock('antd', () => {
           element('input', {
             type: 'checkbox',
             checked: value.includes(option.value),
-            disabled,
+            disabled: disabled || option.disabled,
             onChange: (e) =>
               onChange(
                 e.target.checked
@@ -194,8 +194,8 @@ test('方案优化先预览再应用，后台请求保留固定五彩石并清�
   expect(input.allowHigherHaste).toBe(true)
   expect(input.exploreHighLevelCandidates).toBe(true)
   expect(input.preferHighLevel).toBeUndefined()
-  expect(input.includeMowen).toBe(true)
-  expect(input.includeHasteConsumables).toBe(true)
+  expect(input.includeMowen).toBe(false)
+  expect(input.includeHasteConsumables).toBe(false)
   expect(input.teamGains).toEqual([])
   expect(input.settings.gains.toughness_base || 0).toBe(0)
   expect(input.settings.gains.vitality_gain || 0).toBe(0)
@@ -203,7 +203,7 @@ test('方案优化先预览再应用，后台请求保留固定五彩石并清�
   expect(container.textContent).toContain('12345.68')
   expect(container.textContent).toContain('8.12%')
   await click('应用并计算')
-  expect(props.应用方案).toHaveBeenCalledWith(result.plan, 循环列表[0].名称, false)
+  expect(props.应用方案).toHaveBeenCalledWith(result.plan, '自适应光明心循环', false)
   expect(task.terminate).toHaveBeenCalled()
   expect(container.querySelector('[role="dialog"]')).toBeNull()
 })
@@ -243,43 +243,44 @@ test('读取配装期间关闭弹窗会取消任务，不创建遗留后台计�
   expect(创建优化Worker).not.toHaveBeenCalled()
 })
 
-test('莫问阵默认参与优化，取消勾选会清除旧结果并更新后台条件，计算中禁止修改', async () => {
+test('莫问阵3%御劲默认关闭，勾选会清除旧结果并更新后台条件，计算中禁止修改', async () => {
   render()
   await click('方案推荐')
-  const checkbox = container.querySelector('input[type="checkbox"]')
-  expect(checkbox.checked).toBe(true)
+  const checkbox = getByRole(container, 'checkbox', { name: '计算莫问阵3%御劲' })
+  expect(checkbox.checked).toBe(false)
   await click('开始推荐')
   expect(checkbox.disabled).toBe(true)
-  expect(finish().input.includeMowen).toBe(true)
+  expect(finish().input.includeMowen).toBe(false)
   expect(checkbox.disabled).toBe(false)
   act(() => fireEvent.click(checkbox))
-  expect(checkbox.checked).toBe(false)
+  expect(checkbox.checked).toBe(true)
   expect(
     [...container.querySelectorAll('button')].find((item) => item.textContent === '应用并计算')
       .disabled,
   ).toBe(true)
   await click('开始推荐')
   const task = 创建优化Worker.mock.results.at(-1).value
-  expect(task.postMessage.mock.calls[0][0].includeMowen).toBe(false)
+  expect(task.postMessage.mock.calls[0][0].includeMowen).toBe(true)
   await click('停止计算')
 })
 
-test('加速增益默认参与，取消后旧结果失效并更新后台条件，计算期间禁止修改', async () => {
+test('加速增益默认关闭，勾选后旧结果失效并更新后台条件，计算期间禁止修改', async () => {
   render()
   await click('方案推荐')
   const checkbox = getByRole(container, 'checkbox', { name: '加速增益' })
-  expect(checkbox.checked).toBe(true)
-  await click('开始推荐')
-  expect(checkbox.disabled).toBe(true)
-  expect(finish().input.includeHasteConsumables).toBe(true)
-  expect(checkbox.disabled).toBe(false)
-  act(() => fireEvent.click(checkbox))
   expect(checkbox.checked).toBe(false)
-  expect(getByRole(container, 'button', { name: '应用并计算' }).disabled).toBe(true)
   expect(container.textContent).toContain('加速药品与食品不参与优化，家园酒品仍参与')
   await click('开始推荐')
   expect(checkbox.disabled).toBe(true)
   expect(finish().input.includeHasteConsumables).toBe(false)
+  expect(checkbox.disabled).toBe(false)
+  act(() => fireEvent.click(checkbox))
+  expect(checkbox.checked).toBe(true)
+  expect(getByRole(container, 'button', { name: '应用并计算' }).disabled).toBe(true)
+  expect(container.textContent).toContain('加速药品与食品参与优化')
+  await click('开始推荐')
+  expect(checkbox.disabled).toBe(true)
+  expect(finish().input.includeHasteConsumables).toBe(true)
 })
 
 test('橙武品级默认不选，选择后切换理论比较并传给后台，变更清除旧结果且运行时不可修改', async () => {
@@ -298,14 +299,14 @@ test('橙武品级默认不选，选择后切换理论比较并传给后台，�
   expect(finish().input.orangeWeaponLevel).toBe(0)
   act(() => fireEvent.change(select, { target: { value: '1240' } }))
   expect(getByRole(container, 'button', { name: '应用并计算' }).disabled).toBe(true)
-  expect(container.textContent).toContain('1240品明尊橙武独立加入武器候选')
+  expect(container.textContent).toContain('固定装备1240品明尊橙武，不会更换其他武器')
   await click('开始推荐')
   expect(select.disabled).toBe(true)
   const enabled = finish()
   expect(enabled.input.orangeWeaponLevel).toBe(1240)
   expect(enabled.input.cycle.名称).toBe('0.8125理论循环')
   await click('应用并计算')
-  expect(props.应用方案).toHaveBeenCalledWith(enabled.result.plan, '自适应理论循环', false)
+  expect(props.应用方案).toHaveBeenCalledWith(enabled.result.plan, '自适应光明心循环', false)
   await click('方案推荐')
   act(() =>
     fireEvent.change(getByRole(container, 'combobox', { name: '橙武品级' }), {
@@ -316,10 +317,10 @@ test('橙武品级默认不选，选择后切换理论比较并传给后台，�
   await click('开始推荐')
   const disabled = finish()
   expect(disabled.input.orangeWeaponLevel).toBe(0)
-  expect(disabled.input.cycle.名称).toBe('0.8125GCD循环')
+  expect(disabled.input.cycle.名称).toBe('0.8125理论循环')
 })
 
-test('选择橙武品级会纳入武器部位，取消武器部位同时清除品级，避免选择了却不参与比较', async () => {
+test('选择橙武品级后武器部位锁定，取消品级后恢复可选', async () => {
   render()
   await click('方案推荐')
   const weapon = getByRole(container, 'checkbox', { name: '近战武器' })
@@ -332,29 +333,22 @@ test('选择橙武品级会纳入武器部位，取消武器部位同时清除�
   const { input } = finish()
   expect(input.orangeWeaponLevel).toBe(719)
   expect(input.slots).toContain('primary_weapon')
-  act(() => fireEvent.click(weapon))
+  expect(weapon.disabled).toBe(true)
+  act(() => fireEvent.change(level, { target: { value: '0' } }))
+  expect(weapon.disabled).toBe(false)
   expect(level.value).toBe('0')
 })
 
-test('计入团队增益默认关闭，修改后旧结果失效，开启时传入原配置并在应用时保留', async () => {
+test('移除计入团队增益选项，推荐请求排除团队增益并保留原配置', async () => {
   const props = render()
   await click('方案推荐')
-  const checkbox = getByRole(container, 'checkbox', { name: '计入当前团队增益' })
-  expect(checkbox.checked).toBe(false)
+  expect(container.textContent).not.toContain('计入当前团队增益')
   await click('开始推荐')
-  expect(finish().input.teamGains).toEqual([])
-  act(() => fireEvent.click(checkbox))
-  expect(getByRole(container, 'button', { name: '应用并计算' }).disabled).toBe(true)
-  await click('开始推荐')
-  expect(checkbox.disabled).toBe(true)
   const { input, result } = finish()
-  expect(input.teamGains).toEqual(mockState.data.增益数据.团队增益)
-  expect(input.teamGains).not.toBe(mockState.data.增益数据.团队增益)
-  expect(input.teamGains[0]).not.toBe(mockState.data.增益数据.团队增益[0])
-  expect(container.textContent).toContain('以上秒伤计入当前已启用的团队增益')
+  expect(input.teamGains).toEqual([])
   expect(mockState.data.增益数据.团队增益[0].启用).toBe(true)
   await click('应用并计算')
-  expect(props.应用方案).toHaveBeenCalledWith(result.plan, 循环列表[0].名称, true)
+  expect(props.应用方案).toHaveBeenCalledWith(result.plan, '自适应光明心循环', false)
 })
 
 test('总开关关闭且不计入团队增益时，方案推荐仍沿用独立开启的圣浴常驻', async () => {
@@ -371,7 +365,7 @@ test('总开关关闭且不计入团队增益时，方案推荐仍沿用独立�
   try {
     render()
     await click('方案推荐')
-    expect(getByRole(container, 'checkbox', { name: '计入当前团队增益' }).checked).toBe(false)
+    expect(container.textContent).not.toContain('计入当前团队增益')
     await click('开始推荐')
     expect(finish().input.teamGains).toEqual([
       { 增益名称: '圣浴明心（常驻）', 启用: true, 层数: 0, 覆盖率: 100 },
@@ -439,13 +433,12 @@ test('双档对比展示收益差，默认查看推荐档，允许切换到另�
   await click('方案推荐')
   changeSelect('推荐方式', 'compare')
   changeSelect('装备范围', 'defensive')
-  act(() => fireEvent.click(getByRole(container, 'checkbox', { name: '计入当前团队增益' })))
   await click('开始双档对比')
   expect(getByRole(container, 'combobox', { name: '推荐方式' }).disabled).toBe(true)
   const { input, comparison } = finishComparison()
   expect(input.compareGcd).toBe(true)
   expect(input.gearScope).toBe('defensive')
-  expect(input.teamGains).toEqual(mockState.data.增益数据.团队增益)
+  expect(input.teamGains).toEqual([])
   expect(container.textContent).toContain('推荐0.75GCD循环，比0.81GCD循环高2000.00秒伤（10.00%）')
   expect(container.textContent).toContain('下方展示0.75GCD循环')
   expect(props.应用方案).not.toHaveBeenCalled()
@@ -454,8 +447,8 @@ test('双档对比展示收益差，默认查看推荐档，允许切换到另�
   await click('应用并计算')
   expect(props.应用方案).toHaveBeenCalledWith(
     comparison.entries[1].result.plan,
-    '0.8125GCD循环',
-    true,
+    '自适应光明心循环',
+    false,
   )
 })
 
@@ -509,7 +502,7 @@ test('优化方式直接选择0.75或0.81，移除目标GCD，0.81仍传入精�
   expect(container.textContent).not.toContain('0.8125')
   await click('开始推荐')
   const { input } = finish()
-  expect(input.cycle.名称).toBe('0.8125GCD循环')
+  expect(input.cycle.名称).toBe('0.8125理论循环')
   expect(input.cycle.循环详情[0].循环加速等级).toBe(3)
   expect(container.textContent).toContain('模拟GCD0.81s')
   expect(container.textContent).toContain('加速1800.00')
@@ -518,7 +511,7 @@ test('优化方式直接选择0.75或0.81，移除目标GCD，0.81仍传入精�
   expect(getByRole(container, 'button', { name: '应用并计算' }).disabled).toBe(true)
   await click('开始推荐')
   const next = 创建优化Worker.mock.results.at(-1).value.postMessage.mock.calls[0][0]
-  expect(next.cycle.名称).toBe('0.75GCD循环')
+  expect(next.cycle.名称).toBe('0.75理论循环')
   expect(next.compareGcd).toBe(false)
 })
 
@@ -532,7 +525,7 @@ test('优化档位选项沿用主界面已选理论循环，0.81理论循环保�
   expect(container.textContent).toContain('使用0.81理论循环寻优')
   expect(container.textContent).not.toContain('0.8125')
   await click('应用并计算')
-  expect(props.应用方案).toHaveBeenCalledWith(result.plan, '自适应理论循环', false)
+  expect(props.应用方案).toHaveBeenCalledWith(result.plan, '自适应光明心循环', false)
 })
 
 test('洗髓等待循环时沿用推荐设置，不提供明尊循环或启动后台伤害计算', async () => {
