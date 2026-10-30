@@ -25,16 +25,16 @@ test.each([
   (id, level, vitality, shield, haste, toughness, strain, weaponMin, weaponMax) => {
     const item = GEAR_ITEMS.find((row) => row.id === id)
     expect(item).toMatchObject({
-      name: '降魔境_测试用',
+      name: '海印三昧',
       school: '少林',
       level,
       orangeWeapon: true,
       maxStrength: 8,
     })
     expect(item.embed).toEqual({
-      vitality_base: 225,
-      physical_shield_base: 225,
-      magical_shield_base: 225,
+      vitality_base: 304,
+      physical_shield_base: 304,
+      magical_shield_base: 304,
     })
     const result = calculateLoadout({ primary_weapon: selection(id) })
     expect(result.stats).toMatchObject({
@@ -64,17 +64,17 @@ test('各心法只显示自己的橙武，洗髓品级与明尊一致', () => {
   expect(xsj.map((row) => row.id)).toEqual([47865, 47832, 47799, 45302])
   expect(mz.map((row) => row.id)).toEqual([47882, 47849, 47816, 45319])
   expect(xsj.map((row) => row.装备品级)).toEqual(mz.map((row) => row.装备品级))
-  expect(xsj.every((row) => row.装备名称 === '降魔境' && row.所属门派 === '少林')).toBe(true)
-  expect(mz.every((row) => row.装备名称 === '圣辉月雪' && row.所属门派 === '明教')).toBe(true)
+  expect(xsj.every((row) => row.装备名称 === (row.装备品级 === 719 ? '降魔境' : '海印三昧') && row.所属门派 === '少林')).toBe(true)
+  expect(mz.every((row) => row.装备名称 === (row.装备品级 === 719 ? '圣辉月雪' : '望明') && row.所属门派 === '明教')).toBe(true)
 })
 
 test('1240品降魔境精炼8及三孔8级汇总正确，导入导出保留原始ID和孔类型', () => {
   const chosen = selection(47865, { strength: 8, embeds: [8, 8, 8] })
   const result = calculateLoadout({ primary_weapon: chosen })
   expect(result.stats).toMatchObject({
-    vitality: 1634,
-    physicalShield: 2106,
-    magicalShield: 2106,
+    vitality: 1644,
+    physicalShield: 2116,
+    magicalShield: 2116,
     haste: 692,
     toughness: 346,
     strain: 1227,

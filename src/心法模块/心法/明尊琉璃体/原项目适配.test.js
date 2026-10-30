@@ -49,29 +49,30 @@ afterEach(() => {
   delete global.localStorage
 })
 
-test('无修旧ID导入与缓存恢复映射到保留装备，精炼、附魔及孔等级完整保留', () => {
-  const canonical = GEAR_ITEMS.find(row => row.id === 112699)
-  const enchantId = ENCHANTS.find(row => row.position === 'hat').id
+test('退役测试ID导入与缓存恢复映射到正式装备，精炼、附魔及孔等级完整保留', () => {
+  const canonical = GEAR_ITEMS.find((row) => row.id === 114853)
+  const enchantId = ENCHANTS.find((row) => row.position === 'hat').id
   const slots = { hat: { key: canonical.key, strength: 6, embeds: [8, 7], enchantId } }
   const original = 制作配装(slots)
   const old = {
     ...original,
-    装备列表: original.装备列表.map(row => row.id === canonical.id
-      ? { ...row, id: 112783 } : row),
+    装备列表: original.装备列表.map((row) =>
+      row.id === canonical.id ? { ...row, id: 112699 } : row,
+    ),
   }
-  expect(获取明尊装备条目('帽子', 112783).id).toBe(canonical.id)
-  expect(获取明尊装备条目('衣服', 112783)).toBeUndefined()
+  expect(获取明尊装备条目('帽子', 112699).id).toBe(canonical.id)
+  expect(获取明尊装备条目('衣服', 112699)).toBeUndefined()
   expect(获取明尊配装(old).slots.hat).toEqual(slots.hat)
   const calculated = 计算明尊装备属性(old)
-  expect(calculated.装备列表.find(row => row.id === canonical.id)).toEqual(
-    original.装备列表.find(row => row.id === canonical.id),
+  expect(calculated.装备列表.find((row) => row.id === canonical.id)).toEqual(
+    original.装备列表.find((row) => row.id === canonical.id),
   )
   expect(获取明尊原始属性(calculated.装备基础属性)).toEqual(calculateLoadout(slots).stats)
   const cached = 更新明尊装备威胁(old)
-  expect(cached.装备列表.find(row => row.id === canonical.id)).toEqual(
-    original.装备列表.find(row => row.id === canonical.id),
+  expect(cached.装备列表.find((row) => row.id === canonical.id)).toEqual(
+    original.装备列表.find((row) => row.id === canonical.id),
   )
-  expect(old.装备列表.some(row => row.id === 112783)).toBe(true)
+  expect(old.装备列表.some((row) => row.id === 112699)).toBe(true)
 })
 
 test('最佳五彩石数据使用中文属性和数值，体质百分比仅作显示换算', () => {
@@ -101,17 +102,17 @@ test('原配装器完整保留体质孔、仇恨孔、附魔及特例五彩石�
   expect(新装备.明尊未计入效果).toEqual(原结果.warnings)
   expect(明尊装备数据.帽子.find((项) => 项.id === 112319).镶嵌孔数组).toHaveLength(2)
   const 面板 = 获取明尊显示面板(新装备, 奇穴, 增益数据)
-  expect(面板.明尊招式威胁).toBe(221)
+  expect(面板.明尊招式威胁).toBe(222)
   expect(面板.明尊面板).toEqual(
     calculateCycle(原结果.stats, { ...DEFAULT_SETTINGS, stance: 'mainTank' }, {}, 60).panel,
   )
 })
 
-test('圣辉月雪以橙武显示并保留精炼8及体质外防闪避孔，导入后属性一致', () => {
+test('望明以橙武显示并保留精炼8及体质外防闪避孔，导入后属性一致', () => {
   for (const id of [47816, 47849, 47882]) {
     const item = GEAR_ITEMS.find((row) => row.id === id)
     const row = 明尊装备数据.武器.find((row) => row.id === id)
-    expect(row).toMatchObject({ 装备名称: '圣辉月雪', 装备类型: '橙武', 最大精炼等级: 8 })
+    expect(row).toMatchObject({ 装备名称: '望明', 装备类型: '橙武', 最大精炼等级: 8 })
     const slots = {
       primary_weapon: { key: item.key, strength: 8, embeds: [8, 8, 8], enchantId: 0 },
     }
@@ -131,11 +132,11 @@ test('旧方案加载时按装备和原孔位更新威胁，保留其他属性�
   const 更新 = 更新明尊装备威胁(原方案)
   expect(更新.装备基础属性).toEqual({
     ...原方案.装备基础属性,
-    明尊属性: { ...原方案.装备基础属性.明尊属性, threat: 222 },
+    明尊属性: { ...原方案.装备基础属性.明尊属性, threat: 223 },
   })
   expect(更新.装备列表).toBe(原方案.装备列表)
   expect(原方案.装备基础属性.明尊属性.threat).toBe(0)
-  expect(获取明尊显示面板(更新, 奇穴, 增益数据).明尊招式威胁).toBe(222)
+  expect(获取明尊显示面板(更新, 奇穴, 增益数据).明尊招式威胁).toBe(223)
   const 手动 = { 装备列表: [], 装备基础属性: 原方案.装备基础属性 }
   expect(更新明尊装备威胁(手动)).toBe(手动)
 })

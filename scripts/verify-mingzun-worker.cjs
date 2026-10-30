@@ -2,6 +2,8 @@ const assert = require('node:assert/strict')
 const fs = require('node:fs')
 const path = require('node:path')
 const vm = require('node:vm')
+const loadSource = require('./load-calculator-source.cjs')
+const { 对比明尊加速档位: compareSource } = loadSource('心法模块/心法/明尊琉璃体/方案档位对比.ts')
 
 const build = process.argv[2] ? path.resolve(process.argv[2]) : path.resolve(__dirname, '../build')
 const entry = fs
@@ -210,7 +212,9 @@ async function verify(basePath) {
     yellowScores.push(reply.result.before.dps)
   }
   // 54级压制、默认戒火21/1024；300秒共173跳，不吃攻击或破防。
-  const expectedDot = (Math.trunc(Math.trunc(899 * 0.8) * (1 + 21 / 1024)) * 173) / 300
+  const dotBase = require('../src/心法模块/心法/明尊琉璃体/装备黄字数值.json').damage.gain_42767_3
+    .base
+  const expectedDot = (Math.trunc(Math.trunc(dotBase * 0.8) * (1 + 21 / 1024)) * 173) / 300
   assert(
     Math.abs(yellowScores[1] - yellowScores[0] - expectedDot) < 1e-8,
     '生产Worker遗漏或重复计入加速DOT',
@@ -252,6 +256,7 @@ async function verify(basePath) {
   messages.length = 0
   sandbox.onmessage({ data: orangeRequest })
   const orangeReply = messages.at(-1)
+  const orangeReference = compareSource(orangeRequest)
   assert.equal(orangeReply?.type, 'comparison', JSON.stringify(orangeReply))
   assert.deepEqual(
     Array.from(orangeReply.comparison.entries, (entry) => entry.cycleName),
@@ -261,7 +266,11 @@ async function verify(basePath) {
     assert.equal(entry.error, undefined)
     assert.equal(entry.result.plan.slots.primary_weapon.key, 'weapons:47882')
     assert(
-      Math.abs(entry.result.before.dps - orange.expectedDps) < 1e-8,
+      Math.abs(
+        entry.result.before.dps -
+          orangeReference.entries.find((row) => row.cycleName === entry.cycleName).result.before
+            .dps,
+      ) < 1e-8,
       '生产Worker未按当前橙武配装计入主动和被动特效',
     )
   }
@@ -305,29 +314,45 @@ async function verify(basePath) {
     assert.equal(entry.result.plan.slots.primary_weapon.key, 'weapons:47865')
     assert(entry.result.after.dps > 0)
   }
-  console.log(`洗髓橙武Worker验证通过 ${basePath}：所选降魔境参与三档推荐`)
+  console.log(`洗髓橙武Worker验证通过 ${basePath}：所选洗髓橙武参与三档推荐`)
   const xisuiOrange = require('../src/心法模块/心法/洗髓经/橙武测试配装.json')
   messages.length = 0
-  sandbox.onmessage({ data: {
+  const xisuiActiveRequest = {
     ...request,
     kungfu: 'xsj',
     initial: { ...xisuiOrange, formation: '', consumables: [] },
     cycle: {
       名称: '自适应理论循环',
-      循环详情: [3, 4, 5].map((tier) => ({ 循环加速等级: tier, 战斗时间: 300, 技能详情: xisuiCycles[tier].技能详情 })),
+      循环详情: [3, 4, 5].map((tier) => ({
+        循环加速等级: tier,
+        战斗时间: 300,
+        技能详情: xisuiCycles[tier].技能详情,
+      })),
     },
     settings: { ...request.settings, targetLevel: 54, stance: 'mainTank' },
-    minToughness: 0, slots: [], gearKeys: [], orangeWeaponLevel: 0,
-    allowHigherHaste: true, compareGcd: true,
-  } })
+    minToughness: 0,
+    slots: [],
+    gearKeys: [],
+    orangeWeaponLevel: 0,
+    allowHigherHaste: true,
+    compareGcd: true,
+  }
+  sandbox.onmessage({ data: xisuiActiveRequest })
   const xisuiActive = messages.at(-1)
+  const xisuiActiveReference = compareSource(xisuiActiveRequest)
   assert.equal(xisuiActive?.type, 'comparison', JSON.stringify(xisuiActive))
   for (const entry of xisuiActive.comparison.entries) {
     assert.equal(entry.error, undefined)
     assert.equal(entry.result.plan.slots.primary_weapon.key, 'weapons:47865')
-    assert(Math.abs(entry.result.before.dps - 38895.82446151993) < 1e-8, '洗髓Worker未计入当前橙武主动与神兵被动')
+    const reference = xisuiActiveReference.entries.find(
+      (row) => row.cycleName === entry.cycleName,
+    ).result
+    assert(
+      Math.abs(entry.result.before.dps - reference.before.dps) < 1e-8,
+      '洗髓Worker未按当前装备计入橙武主动与神兵被动',
+    )
   }
-  console.log(`洗髓橙武特效Worker验证通过 ${basePath}：当前5档38895.82DPS，三档推荐共享主动与被动计伤`)
+  console.log(`洗髓橙武特效Worker验证通过 ${basePath}：三档推荐与当前装备源码评分一致`)
 }
 
 async function main() {

@@ -5,6 +5,7 @@ import type { 装备信息数据类型, 装备属性信息模型 } from '@/@type
 import type { 角色基础属性类型 } from '@/@types/角色'
 import {
   GEAR_ITEMS,
+  EQUIPMENT_DATA_VERSION,
   ENCHANTS,
   STONES,
   SLOTS,
@@ -293,8 +294,20 @@ export function 计算明尊装备属性(
     装备基础属性: 转换明尊基础属性(结果.stats),
     装备镶嵌附魔属性: 转换明尊基础属性(EMPTY_EQUIPMENT),
     明尊未计入效果: 结果.warnings,
+    明尊装备数据版本: EQUIPMENT_DATA_VERSION,
     装备增益: {},
   }
+}
+
+/** 源库更新后按原装备、精炼、宝石与附魔重新汇总；纯手动面板不改动。 */
+export function 更新五十级装备数据(装备信息: 装备信息数据类型) {
+  if (
+    !装备信息?.装备列表?.some((装备) => 装备?.id) ||
+    装备信息.明尊装备数据版本 === EQUIPMENT_DATA_VERSION
+  )
+    return 装备信息
+  const { slots, stone } = 获取明尊配装(装备信息)
+  return { ...装备信息, ...转换明尊配装(slots, stone) }
 }
 
 /** Refresh the newly supported field in saved plans without replacing their other stats. */

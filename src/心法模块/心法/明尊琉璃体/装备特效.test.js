@@ -39,9 +39,9 @@ test('去重后可选精简装备的34条黄字完整显示，并保留原始han
   }
   expect(database.effectSource).toMatchObject({
     repository: 'https://github.com/IcyTide/Generator',
-    commit: 'b7d609a4a87f92a7b3907efe9141bdfdfb8c3f9e',
-    itemCount: 65,
-    effectCount: 65,
+    commit: 'ee2c4c0f502c82a3ab615355cdc80073b6bf1713',
+    itemCount: 59,
+    effectCount: 59,
   })
   expect(
     database.items
@@ -69,7 +69,7 @@ test('霜锋引保留进战会心破防188，特效数值不会随装备精炼�
   expect(plain.specialEffects).toEqual(refined.specialEffects)
   expect(refined.specialEffects[0].effect.rules.attributes.all_critical_strike_base).toBe(188)
   expect(refined.stats.critical).toBeGreaterThan(plain.stats.critical)
-  expect(plain.stats.critical).toBe(172)
+  expect(plain.stats.critical).toBe(157)
   expect(JSON.stringify(gear)).toBe(original)
 })
 
@@ -81,10 +81,10 @@ test('生命值条件、触发冷却、持续时间及受伤终止规则分别�
       cooldownSeconds: 10,
     },
   })
-  expect(effect(112705)).toMatchObject({
+  expect(effect(112789)).toMatchObject({
     kind: 'triggered_attributes',
     rules: {
-      attributes: { all_overcome_base: 130 },
+      attributes: { all_overcome_base: 974 },
       durationSeconds: 10,
       cooldownSeconds: 20,
       breakOnDamageAboveMaxHealthPercent: 30,
@@ -101,13 +101,13 @@ test('生命值条件、触发冷却、持续时间及受伤终止规则分别�
   expect(effect(49931).rules.cooldownSeconds).toBeUndefined()
 })
 
-test('属性转换保留每档实际分母与上限，包括特殊66点换1点的项链', () => {
+test('属性转换保留每档实际分母与上限，包括更新后的破防转攻击项链', () => {
   expect(effect(51444).rules.conversion).toEqual({
     from: 'base_overcome',
     to: 'all_attack_power_base',
-    per: 66,
-    amount: 1,
-    cap: 28,
+    per: 10,
+    amount: 2,
+    cap: 268,
   })
   expect(effect(51445).rules.conversion).toEqual({
     from: 'base_overcome',
@@ -123,9 +123,9 @@ test('属性转换保留每档实际分母与上限，包括特殊66点换1点�
     amount: 2,
     cap: 470,
   })
-  expect(effect(112699)).toMatchObject({
+  expect(effect(112783)).toMatchObject({
     kind: 'highest_rating',
-    rules: { chooseHighest: ['overcome', 'critical'], amount: 75 },
+    rules: { chooseHighest: ['overcome', 'critical'], amount: 563 },
   })
 })
 
@@ -133,7 +133,7 @@ test('加速延长持续时间和同类触发限制有结构化记录，不猜�
   expect(effect(48038)).toMatchObject({
     kind: 'triggered_attributes',
     rules: {
-      attributes: { all_attack_power_base: 537 },
+      attributes: { all_attack_power_base: 189 },
       durationRangeSeconds: [6, 11],
       hasteForMaxDuration: 2024,
       cooldownSeconds: 20,

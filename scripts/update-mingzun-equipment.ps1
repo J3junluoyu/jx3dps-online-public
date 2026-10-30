@@ -1,67 +1,20 @@
+param(
+    [string]$SourceDirectory,
+    [string]$Commit = 'ee2c4c0f502c82a3ab615355cdc80073b6bf1713',
+    [string]$Repository = 'IcyTide/Generator',
+    [string]$NodeExecutable = 'node'
+)
 $ErrorActionPreference = 'Stop'
-$commit = '8fad4eb8b52fa435bc656e7731ccbf40d6d41126'
-$raw = "https://raw.githubusercontent.com/J3junluoyu/Generator/$commit/assets/json"
-function Attribute-Map($entries, [bool]$preserveUnmapped = $false) {
-    $result = [ordered]@{}
-    foreach ($entry in $entries) {
-        $attributeKey = $entry.attr_type
-        if (-not $attributeKey -and $preserveUnmapped) { $attributeKey = $entry.attr }
-        if ($attributeKey) {
-            if ($entry.value -is [string]) {
-                $result[$attributeKey] = (@($result[$attributeKey], $entry.value) | Where-Object { $_ }) -join ' | '
-            } else { $result[$attributeKey] = ($result[$attributeKey] + $entry.value) }
-        }
-    }
-    return $result
-}
-$items = @()
-$effectSources = [ordered]@{}
-foreach ($category in @('armors', 'trinkets', 'weapons')) {
-    $all = Invoke-RestMethod -Uri "$raw/$category.json" -TimeoutSec 120
-    $effectSources[$category] = $all
-    foreach ($row in $all.PSObject.Properties.Value) {
-        $isTank = $row.kind -eq '防御' -and $row.school -in @('明教', '通用')
-        $isSimplifiedInner = $row.school -eq '精简' -and $row.kind -eq '内功'
-        # ALL equipment can be used in PVE too (including the Mingzun legendary weapon).
-        if ((-not $isTank -and -not $isSimplifiedInner) -or $row.usage -notin @('PVE', 'ALL') -or $row.level -lt 1110) { continue }
-        if ($isTank -and @($row.magic | Where-Object { $_.attr_type -eq 'haste_base' -and $_.value -gt 0 }).Count -eq 0) { continue }
-        if ($row.position -eq 'primary_weapon' -and $row.school -ne '明教') { continue }
-        $sets = [ordered]@{}
-        foreach ($bonus in $row.sets.PSObject.Properties) { $sets[$bonus.Name] = Attribute-Map $bonus.Value }
-        $item = [ordered]@{
-            key = "$category`:$($row.id)"; id = $row.id; name = $row.name; school = $row.school
-            kind = $row.kind; usage = $row.usage
-            position = $row.position; level = $row.level; maxStrength = $row.max_strength
-            base = Attribute-Map $row.base; magic = Attribute-Map $row.magic
-            embed = Attribute-Map $row.embed $true; setId = $row.set_id; sets = $sets
-        }
-        if ($row.position -eq 'primary_weapon' -and $row.school -eq '明教' -and $row.skill -and $row.skill[0] -eq 4941) {
-            $item.orangeWeapon = $true
-        }
-        $items += $item
+if ($Commit -notmatch '^[a-f0-9]{40}$') { throw '必须固定考拉完整提交SHA' }
+if (-not $SourceDirectory) {
+    $SourceDirectory = Join-Path $PSScriptRoot "../../.cache/koala-equipment-$Commit"
+    New-Item -ItemType Directory -Force -Path $SourceDirectory | Out-Null
+    foreach ($category in @('armors', 'trinkets', 'weapons', 'enchants', 'stones', 'skills')) {
+        $destination = Join-Path $SourceDirectory "assets_json_$category.json"
+        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/$Repository/$Commit/assets/json/$category.json" -OutFile $destination -UseBasicParsing -TimeoutSec 120
     }
 }
-$allEnchants = Invoke-RestMethod -Uri "$raw/enchants.json" -TimeoutSec 120
-$enchants = @($allEnchants.PSObject.Properties.Value | Where-Object { -not $_.temporary } | ForEach-Object {
-    [ordered]@{ id = $_.id; name = $_.name; position = $_.position; attributes = Attribute-Map $_.attributes }
-})
-$allStones = Invoke-RestMethod -Uri "$raw/stones.json" -TimeoutSec 120
-$seen = @{}
-$stones = @($allStones.PSObject.Properties.Value | Where-Object {
-    if ($_.level -eq 6 -and -not $seen[$_.enchant_id]) { $seen[$_.enchant_id] = $true; $true } else { $false }
-} | ForEach-Object {
-    [ordered]@{ id = $_.enchant_id; name = $_.name; level = $_.level; attributes = Attribute-Map $_.attributes $true }
-})
-$output = [ordered]@{ commit = $commit; items = $items; enchants = $enchants; stones = $stones }
-$destination = Join-Path $PSScriptRoot '../src/心法模块/心法/明尊琉璃体/装备数据.json'
-$output | ConvertTo-Json -Depth 30 | Set-Content -LiteralPath $destination -Encoding utf8
-Write-Output "Equipment: $($items.Count); enchants: $($enchants.Count); stones: $($stones.Count)"
-$effectSourceFile = Join-Path ([IO.Path]::GetTempPath()) ("mingzun-effects-" + [guid]::NewGuid().ToString('N') + '.json')
-try {
-    $effectSources | ConvertTo-Json -Depth 40 | Set-Content -LiteralPath $effectSourceFile -Encoding utf8
-    & node (Join-Path $PSScriptRoot 'update-mingzun-effects.cjs') --source $effectSourceFile --repository 'https://github.com/J3junluoyu/Generator' --commit $commit
-    if ($LASTEXITCODE -ne 0) { throw '装备黄字特效导入失败' }
-} finally {
-    Remove-Item -LiteralPath $effectSourceFile -ErrorAction SilentlyContinue
-}
-& (Join-Path $PSScriptRoot 'update-mingzun-threat.ps1')
+# 同一提交一次适配普通装备、两心法橙武、水风特效、附魔、五彩石及黄字伤害；
+# 不再调用固定旧提交的threat脚本，避免把新装备的威胁属性覆盖回旧值。
+& $NodeExecutable (Join-Path $PSScriptRoot 'sync-koala-equipment.cjs') --source-dir $SourceDirectory --repository "https://github.com/$Repository" --commit $Commit --write
+if ($LASTEXITCODE -ne 0) { throw '考拉装备同步失败，检查源数据和错误说明' }

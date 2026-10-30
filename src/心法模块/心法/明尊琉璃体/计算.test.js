@@ -86,15 +86,17 @@ test('裸身基础属性与心法只计入一次', () => {
   expect(panel.dodgeRating).toBe(459)
 })
 
-test('朝圣按基础体质每95点向下取整，上限100层', () => {
+test('朝圣按基础体质每96点向下取整，上限100层', () => {
   for (const [baseVitality, stacks] of [
     [18, 0],
-    [94, 0],
-    [95, 1],
-    [949, 9],
-    [950, 10],
-    [9499, 99],
-    [9500, 100],
+    [95, 0],
+    [96, 1],
+    [950, 9],
+    [959, 9],
+    [960, 10],
+    [9500, 98],
+    [9599, 99],
+    [9600, 100],
     [19000, 100],
   ]) {
     const panel = calculateAttributes(gear({ vitality: baseVitality - 18 }), settings())
@@ -108,7 +110,7 @@ test('朝圣计入生效的固定体质和全主属性，排除装备及增益�
   const base = calculateAttributes(equipment, settings())
   expect(base.baseVitality).toBe(950)
   expect(base.vitality).toBe(1900)
-  expect(base.pilgrimageStacks).toBe(10)
+  expect(base.pilgrimageStacks).toBe(9)
   const gained = calculateAttributes(
     equipment,
     settings({ gains: { vitality_base: 203, all_major_base: 45, vitality_gain: 1024 } }),
@@ -181,7 +183,8 @@ test('极本溯源的90/1024体质转会心依赖气劲，无视防御常驻', (
   const withBuff = calculateAttributes(gear({ vitality: 1006 }), { ...config, stance: 'mainTank' })
   expect(noBuff.criticalRating).toBe(4)
   expect(withBuff.criticalRating).toBe(94)
-  expect(noBuff.variables.all_shield_ignore).toBe(461)
+  expect(noBuff.variables.all_shield_ignore).toBe(563)
+  expect(withBuff.variables.all_shield_ignore).toBe(563)
 })
 test('全能按1.22转无双并参与化劲，50级不产生破招', () => {
   const panel = calculateAttributes(gear({ pvx: 100 }), settings())

@@ -99,7 +99,7 @@ export function 计算洗髓面板(stats: EquipmentStats, settings: Settings, fl
   const recipes = { ...秘籍, recipe_2862_1: settings.xisuiOrangeWeapon && flags.cw ? 1 : 0 }
   let panel = calculateAttributePanel(stats, settings, { ...attrs }, recipes, 'solar')
   if (flags.chanyu) {
-    add({ strain_base: Math.min(100, Math.floor(panel.baseVitality / 95)) * 5 })
+    add({ strain_base: panel.pilgrimageStacks * 5 })
     panel = calculateAttributePanel(stats, settings, { ...attrs }, recipes, 'solar')
   }
   return panel

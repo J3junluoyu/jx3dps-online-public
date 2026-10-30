@@ -1,14 +1,15 @@
 {
   "source": {
-    "repository": "https://github.com/J3junluoyu/Generator",
-    "commit": "8fad4eb8b52fa435bc656e7731ccbf40d6d41126",
-    "file": "assets/json/weapons.json"
+    "repository": "https://github.com/IcyTide/Generator",
+    "commit": "ee2c4c0f502c82a3ab615355cdc80073b6bf1713",
+    "file": "assets/json/weapons.json",
+    "importedAt": "2026-10-30T04:54:00.338Z"
   },
   "items": [
     {
       "key": "weapons:47799",
       "id": 47799,
-      "name": "降魔境_测试用",
+      "name": "海印三昧",
       "school": "少林",
       "kind": "防御",
       "usage": "ALL",
@@ -31,9 +32,9 @@
         "event": "gain_1855_9 | gain_25794_1"
       },
       "embed": {
-        "vitality_base": 225,
-        "physical_shield_base": 225,
-        "magical_shield_base": 225
+        "vitality_base": 304,
+        "physical_shield_base": 304,
+        "magical_shield_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -41,7 +42,7 @@
     {
       "key": "weapons:47832",
       "id": 47832,
-      "name": "降魔境_测试用",
+      "name": "海印三昧",
       "school": "少林",
       "kind": "防御",
       "usage": "ALL",
@@ -64,9 +65,9 @@
         "event": "gain_1855_9 | gain_25794_1"
       },
       "embed": {
-        "vitality_base": 225,
-        "physical_shield_base": 225,
-        "magical_shield_base": 225
+        "vitality_base": 304,
+        "physical_shield_base": 304,
+        "magical_shield_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -74,7 +75,7 @@
     {
       "key": "weapons:47865",
       "id": 47865,
-      "name": "降魔境_测试用",
+      "name": "海印三昧",
       "school": "少林",
       "kind": "防御",
       "usage": "ALL",
@@ -97,9 +98,9 @@
         "event": "gain_1855_9 | gain_25794_1"
       },
       "embed": {
-        "vitality_base": 225,
-        "physical_shield_base": 225,
-        "magical_shield_base": 225
+        "vitality_base": 304,
+        "physical_shield_base": 304,
+        "magical_shield_base": 304
       },
       "setId": 0,
       "sets": {}

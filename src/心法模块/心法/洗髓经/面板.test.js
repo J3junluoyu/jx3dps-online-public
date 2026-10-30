@@ -2,6 +2,8 @@ import { 获取洗髓显示面板 } from './面板'
 import { EMPTY_EQUIPMENT, ratingScale } from '@/心法模块/心法/明尊琉璃体/计算'
 import { 转换明尊基础属性 } from '@/数据/数据工具/明尊数据适配'
 import { 明尊小药小吃, 圣浴常驻名称 } from '@/心法模块/心法/明尊琉璃体/增益'
+import { 计算洗髓面板, 获取洗髓计算设置 } from './计算'
+import { 洗髓混池奇穴 } from './奇穴'
 
 const 装备 = (属性 = {}) => ({
   装备列表: [],
@@ -12,6 +14,27 @@ const 增益 = (stance = 'mainTank') => ({
   小吃: [],
   团队增益: [],
   洗髓设置: { stance },
+})
+
+test('禅语按每96点基础体质一层结算自身无双，上限100层且排除百分比体质', () => {
+  const settings = 获取洗髓计算设置(增益(), false, 54)
+  for (const [baseVitality, stacks] of [
+    [95, 0],
+    [96, 1],
+    [9500, 98],
+    [9599, 99],
+    [9600, 100],
+    [19200, 100],
+  ]) {
+    const stats = { ...EMPTY_EQUIPMENT, vitality: baseVitality - 18, vitalityGain: 100 }
+    const before = 计算洗髓面板(stats, settings)
+    const after = 计算洗髓面板(stats, settings, { chanyu: true })
+    expect(before.pilgrimageStacks).toBe(stacks)
+    expect(after.strainRating - before.strainRating).toBe(stacks * 5)
+  }
+  expect(洗髓混池奇穴.find((row) => row.奇穴名称 === '禅语').奇穴描述).toContain(
+    '每96点基础体质',
+  )
 })
 
 test('共用角色面板按洗髓心法加主副T气劲换算，不将明尊属性或技能增益带入', () => {

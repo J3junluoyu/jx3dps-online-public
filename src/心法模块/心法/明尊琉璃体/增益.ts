@@ -7,6 +7,7 @@ import { ATTRIBUTE_LABELS } from './装备'
 import { 获取明尊阵眼属性 } from './阵眼'
 import { 获取团队增益禁用原因 } from '@/数据/数据工具/团队增益限制'
 import { calculateAttributes } from './计算'
+import { 获取体质增益层数 } from './体质层数'
 import type { EquipmentStats, Settings } from './计算'
 
 type Attributes = Record<string, number>
@@ -190,7 +191,7 @@ const 同袍属性 = { toughness_base: 10 }
 const 寒啸团队属性 = { strain_base: 3 }
 export const 圣浴常驻名称 = '圣浴明心（常驻）'
 export const 获取圣浴常驻层数 = (baseVitality: number) =>
-  Math.floor(Math.min(100, Math.max(0, Math.floor(baseVitality / 95))) / 10)
+  Math.floor(获取体质增益层数(baseVitality) / 10)
 export const 明尊团队增益: TeamGain[] = [
   team('31208', '29294', '1', '治疗Buff增益'),
   team('567', '20938', '1', '治疗Buff增益'),

@@ -1,10 +1,10 @@
 {
-  "commit": "8fad4eb8b52fa435bc656e7731ccbf40d6d41126",
+  "commit": "ee2c4c0f502c82a3ab615355cdc80073b6bf1713",
   "items": [
     {
       "key": "armors:111949",
       "id": 111949,
-      "name": "寻踪觅宝·麟定腰带_测试用",
+      "name": "寻踪觅宝·闻古腰带",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -25,22 +25,20 @@
         "threat_gain": 178
       },
       "embed": {
-        "magical_shield_base": 225,
-        "physical_shield_base": 225
+        "magical_shield_base": 304,
+        "physical_shield_base": 304
       },
       "setId": 6981,
       "sets": {
         "2": {},
         "3": {},
-        "4": {
-          "event": ""
-        }
+        "4": {}
       }
     },
     {
       "key": "armors:111961",
       "id": 111961,
-      "name": "寻踪觅宝·麟定帽_测试用",
+      "name": "寻踪觅宝·闻古帽",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -61,22 +59,20 @@
         "threat_gain": 178
       },
       "embed": {
-        "vitality_base": 225,
-        "threat_gain": 21
+        "vitality_base": 304,
+        "threat_gain": 29
       },
       "setId": 6981,
       "sets": {
         "2": {},
         "3": {},
-        "4": {
-          "event": ""
-        }
+        "4": {}
       }
     },
     {
       "key": "armors:112049",
       "id": 112049,
-      "name": "玄阙·耀镜鞋_测试用",
+      "name": "苍黎·照世鞋",
       "school": "明教",
       "kind": "防御",
       "usage": "PVE",
@@ -97,8 +93,8 @@
         "threat_gain": 178
       },
       "embed": {
-        "vitality_base": 225,
-        "physical_shield_base": 225
+        "vitality_base": 304,
+        "physical_shield_base": 304
       },
       "setId": 6999,
       "sets": {
@@ -113,7 +109,7 @@
     {
       "key": "armors:112081",
       "id": 112081,
-      "name": "玄阙·耀镜冠_测试用",
+      "name": "苍黎·照世冠",
       "school": "明教",
       "kind": "防御",
       "usage": "PVE",
@@ -134,8 +130,8 @@
         "threat_gain": 178
       },
       "embed": {
-        "vitality_base": 225,
-        "threat_gain": 21
+        "vitality_base": 304,
+        "threat_gain": 29
       },
       "setId": 6999,
       "sets": {
@@ -150,7 +146,7 @@
     {
       "key": "armors:112133",
       "id": 112133,
-      "name": "棘心护手_测试用",
+      "name": "隐寥护手",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -171,8 +167,8 @@
         "threat_gain": 178
       },
       "embed": {
-        "vitality_base": 225,
-        "threat_gain": 21
+        "vitality_base": 304,
+        "threat_gain": 29
       },
       "setId": 0,
       "sets": {}
@@ -180,7 +176,7 @@
     {
       "key": "armors:112139",
       "id": 112139,
-      "name": "棘心带_测试用",
+      "name": "隐寥带",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -201,8 +197,8 @@
         "threat_gain": 178
       },
       "embed": {
-        "magical_shield_base": 225,
-        "physical_shield_base": 225
+        "magical_shield_base": 304,
+        "physical_shield_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -210,7 +206,7 @@
     {
       "key": "armors:112145",
       "id": 112145,
-      "name": "棘心靴_测试用",
+      "name": "隐寥靴",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -231,8 +227,8 @@
         "threat_gain": 178
       },
       "embed": {
-        "threat_gain": 21,
-        "physical_shield_base": 225
+        "threat_gain": 29,
+        "physical_shield_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -240,7 +236,7 @@
     {
       "key": "armors:112169",
       "id": 112169,
-      "name": "承德护手_测试用",
+      "name": "运制护手",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -261,8 +257,8 @@
         "threat_gain": 178
       },
       "embed": {
-        "magical_shield_base": 225,
-        "physical_shield_base": 225
+        "magical_shield_base": 304,
+        "physical_shield_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -270,7 +266,7 @@
     {
       "key": "armors:112175",
       "id": 112175,
-      "name": "承德腰带_测试用",
+      "name": "运制腰带",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -291,8 +287,8 @@
         "threat_gain": 178
       },
       "embed": {
-        "physical_shield_base": 225,
-        "vitality_base": 225
+        "physical_shield_base": 304,
+        "vitality_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -300,7 +296,7 @@
     {
       "key": "armors:112193",
       "id": 112193,
-      "name": "承德帽_测试用",
+      "name": "运制帽",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -321,8 +317,8 @@
         "threat_gain": 178
       },
       "embed": {
-        "vitality_base": 225,
-        "magical_shield_base": 225
+        "vitality_base": 304,
+        "magical_shield_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -330,7 +326,7 @@
     {
       "key": "armors:112199",
       "id": 112199,
-      "name": "承德衣_测试用",
+      "name": "运制衣",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -351,8 +347,8 @@
         "threat_gain": 178
       },
       "embed": {
-        "threat_gain": 21,
-        "magical_shield_base": 225
+        "threat_gain": 29,
+        "magical_shield_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -360,7 +356,7 @@
     {
       "key": "armors:112205",
       "id": 112205,
-      "name": "露津裤_测试用",
+      "name": "除芒裤",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -381,8 +377,8 @@
         "threat_gain": 178
       },
       "embed": {
-        "vitality_base": 225,
-        "magical_shield_base": 225
+        "vitality_base": 304,
+        "magical_shield_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -390,7 +386,7 @@
     {
       "key": "armors:112287",
       "id": 112287,
-      "name": "玄阙·耀镜鞋_测试用",
+      "name": "元元·燃夜鞋",
       "school": "明教",
       "kind": "防御",
       "usage": "PVE",
@@ -411,8 +407,8 @@
         "threat_gain": 205
       },
       "embed": {
-        "vitality_base": 225,
-        "physical_shield_base": 225
+        "vitality_base": 304,
+        "physical_shield_base": 304
       },
       "setId": 6999,
       "sets": {
@@ -427,7 +423,7 @@
     {
       "key": "armors:112319",
       "id": 112319,
-      "name": "玄阙·耀镜冠_测试用",
+      "name": "元元·燃夜冠",
       "school": "明教",
       "kind": "防御",
       "usage": "PVE",
@@ -448,8 +444,8 @@
         "threat_gain": 205
       },
       "embed": {
-        "vitality_base": 225,
-        "threat_gain": 21
+        "vitality_base": 304,
+        "threat_gain": 29
       },
       "setId": 6999,
       "sets": {
@@ -464,7 +460,7 @@
     {
       "key": "armors:112371",
       "id": 112371,
-      "name": "不摧袖_测试用",
+      "name": "抱火袖",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -485,8 +481,8 @@
         "threat_gain": 205
       },
       "embed": {
-        "vitality_base": 225,
-        "threat_gain": 21
+        "vitality_base": 304,
+        "threat_gain": 29
       },
       "setId": 0,
       "sets": {}
@@ -494,7 +490,7 @@
     {
       "key": "armors:112377",
       "id": 112377,
-      "name": "不摧腰带_测试用",
+      "name": "抱火腰带",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -515,8 +511,8 @@
         "threat_gain": 205
       },
       "embed": {
-        "magical_shield_base": 225,
-        "physical_shield_base": 225
+        "magical_shield_base": 304,
+        "physical_shield_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -524,7 +520,7 @@
     {
       "key": "armors:112383",
       "id": 112383,
-      "name": "不摧鞋_测试用",
+      "name": "抱火鞋",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -545,8 +541,8 @@
         "threat_gain": 205
       },
       "embed": {
-        "threat_gain": 21,
-        "physical_shield_base": 225
+        "threat_gain": 29,
+        "physical_shield_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -554,7 +550,7 @@
     {
       "key": "armors:112407",
       "id": 112407,
-      "name": "固岚袖_测试用",
+      "name": "朴磐袖",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -575,8 +571,8 @@
         "threat_gain": 205
       },
       "embed": {
-        "magical_shield_base": 225,
-        "physical_shield_base": 225
+        "magical_shield_base": 304,
+        "physical_shield_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -584,7 +580,7 @@
     {
       "key": "armors:112413",
       "id": 112413,
-      "name": "固岚腰带_测试用",
+      "name": "朴磐腰带",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -605,8 +601,8 @@
         "threat_gain": 205
       },
       "embed": {
-        "physical_shield_base": 225,
-        "vitality_base": 225
+        "physical_shield_base": 304,
+        "vitality_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -614,7 +610,7 @@
     {
       "key": "armors:112431",
       "id": 112431,
-      "name": "固岚冠_测试用",
+      "name": "朴磐冠",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -635,8 +631,8 @@
         "threat_gain": 205
       },
       "embed": {
-        "vitality_base": 225,
-        "magical_shield_base": 225
+        "vitality_base": 304,
+        "magical_shield_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -644,7 +640,7 @@
     {
       "key": "armors:112437",
       "id": 112437,
-      "name": "固岚衣_测试用",
+      "name": "朴磐衣",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -665,8 +661,8 @@
         "threat_gain": 205
       },
       "embed": {
-        "threat_gain": 21,
-        "magical_shield_base": 225
+        "threat_gain": 29,
+        "magical_shield_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -674,7 +670,7 @@
     {
       "key": "armors:112443",
       "id": 112443,
-      "name": "玉蛇裤_测试用",
+      "name": "天曜裤",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -695,8 +691,8 @@
         "threat_gain": 205
       },
       "embed": {
-        "vitality_base": 225,
-        "magical_shield_base": 225
+        "vitality_base": 304,
+        "magical_shield_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -704,7 +700,7 @@
     {
       "key": "armors:112444",
       "id": 112444,
-      "name": "清岳护腰·尊_测试用",
+      "name": "迟舟护腰·尊",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -717,12 +713,12 @@
       },
       "magic": {
         "vitality_base": 472,
-        "magical_attack_power_base": 563,
-        "strain_base": 1152
+        "magical_attack_power_base": 485,
+        "strain_base": 1127
       },
       "embed": {
-        "magical_overcome_base": 225,
-        "strain_base": 225
+        "magical_overcome_base": 304,
+        "strain_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -730,7 +726,7 @@
     {
       "key": "armors:112445",
       "id": 112445,
-      "name": "鹤芝护腰·悟_测试用",
+      "name": "倾夜护腰·悟",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -748,8 +744,8 @@
         "strain_base": 751
       },
       "embed": {
-        "magical_attack_power_base": 225,
-        "strain_base": 225
+        "magical_attack_power_base": 304,
+        "strain_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -757,7 +753,7 @@
     {
       "key": "armors:112446",
       "id": 112446,
-      "name": "蛊雕护腰·破_测试用",
+      "name": "遥风护腰·破",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -775,8 +771,8 @@
         "strain_base": 751
       },
       "embed": {
-        "magical_overcome_base": 225,
-        "magical_attack_power_base": 225
+        "magical_overcome_base": 304,
+        "magical_attack_power_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -784,7 +780,7 @@
     {
       "key": "armors:112448",
       "id": 112448,
-      "name": "长右护腰·觉_测试用",
+      "name": "月漾护腰·觉",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -803,8 +799,8 @@
         "strain_base": 501
       },
       "embed": {
-        "all_critical_power_base": 225,
-        "magical_attack_power_base": 225
+        "all_critical_power_base": 304,
+        "magical_attack_power_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -812,7 +808,7 @@
     {
       "key": "armors:112451",
       "id": 112451,
-      "name": "钦原护腰·迅_测试用",
+      "name": "玄霁护腰·迅",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -830,8 +826,8 @@
         "strain_base": 626
       },
       "embed": {
-        "all_critical_strike_base": 225,
-        "strain_base": 225
+        "all_critical_strike_base": 304,
+        "strain_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -839,7 +835,7 @@
     {
       "key": "armors:112452",
       "id": 112452,
-      "name": "霜锋引_测试用",
+      "name": "夜将暗",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -852,15 +848,15 @@
       },
       "magic": {
         "vitality_base": 472,
-        "magical_attack_power_base": 470,
-        "all_critical_strike_base": 172,
+        "magical_attack_power_base": 438,
+        "all_critical_strike_base": 157,
         "all_critical_power_base": 157,
-        "strain_base": 551,
+        "strain_base": 451,
         "event": "gain_40790_4"
       },
       "embed": {
-        "magical_overcome_base": 225,
-        "strain_base": 225
+        "magical_overcome_base": 304,
+        "strain_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -888,7 +884,7 @@
     {
       "key": "armors:112453",
       "id": 112453,
-      "name": "素影寒_测试用",
+      "name": "悬空叶",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -906,8 +902,8 @@
         "event": "gain_40791_4"
       },
       "embed": {
-        "all_critical_power_base": 225,
-        "strain_base": 225
+        "all_critical_power_base": 304,
+        "strain_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -915,12 +911,12 @@
         {
           "key": "gain_40791_4",
           "sourceAttribute": "magic",
-          "rawDescription": "<Text>text=\"命中目标后，自身破防等级、会心等级中最低的属性将获得548点增幅，持续20秒，该效果每20秒最多生效一次。名剑大会中无法生效。\" font=101 </text>",
-          "description": "命中目标后，自身破防等级、会心等级中最低的属性将获得548点增幅，持续20秒，该效果每20秒最多生效一次。名剑大会中无法生效。",
+          "rawDescription": "<Text>text=\"命中目标后，自身破防等级、会心等级中最低的属性将获得595点增幅，持续20秒，该效果每20秒最多生效一次。名剑大会中无法生效。\" font=101 </text>",
+          "description": "命中目标后，自身破防等级、会心等级中最低的属性将获得595点增幅，持续20秒，该效果每20秒最多生效一次。名剑大会中无法生效。",
           "handlerId": 40791,
           "level": 4,
           "kind": "lowest_rating",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "hit",
@@ -930,7 +926,7 @@
               "overcome",
               "critical"
             ],
-            "amount": 548
+            "amount": 595
           }
         }
       ]
@@ -938,7 +934,7 @@
     {
       "key": "armors:112454",
       "id": 112454,
-      "name": "苍茫渡_测试用",
+      "name": "万里逐",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -951,14 +947,14 @@
       },
       "magic": {
         "vitality_base": 472,
-        "magical_attack_power_base": 250,
-        "all_critical_strike_base": 516,
-        "strain_base": 651,
+        "magical_attack_power_base": 203,
+        "all_critical_strike_base": 470,
+        "strain_base": 526,
         "event": "gain_40790_6"
       },
       "embed": {
-        "magical_attack_power_base": 225,
-        "strain_base": 225
+        "magical_attack_power_base": 304,
+        "strain_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -986,7 +982,7 @@
     {
       "key": "armors:112455",
       "id": 112455,
-      "name": "连九霄_测试用",
+      "name": "千载问",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -999,14 +995,14 @@
       },
       "magic": {
         "vitality_base": 472,
-        "magical_attack_power_base": 250,
-        "magical_overcome_base": 516,
-        "strain_base": 651,
+        "magical_attack_power_base": 203,
+        "magical_overcome_base": 470,
+        "strain_base": 526,
         "event": "gain_40790_6"
       },
       "embed": {
-        "magical_overcome_base": 225,
-        "magical_attack_power_base": 225
+        "magical_overcome_base": 304,
+        "magical_attack_power_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -1034,7 +1030,7 @@
     {
       "key": "armors:112456",
       "id": 112456,
-      "name": "烟霞客_测试用",
+      "name": "涧鹤眠",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -1052,8 +1048,8 @@
         "event": "gain_40791_4"
       },
       "embed": {
-        "magical_overcome_base": 225,
-        "strain_base": 225
+        "magical_overcome_base": 304,
+        "strain_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -1061,12 +1057,12 @@
         {
           "key": "gain_40791_4",
           "sourceAttribute": "magic",
-          "rawDescription": "<Text>text=\"命中目标后，自身破防等级、会心等级中最低的属性将获得548点增幅，持续20秒，该效果每20秒最多生效一次。名剑大会中无法生效。\" font=101 </text>",
-          "description": "命中目标后，自身破防等级、会心等级中最低的属性将获得548点增幅，持续20秒，该效果每20秒最多生效一次。名剑大会中无法生效。",
+          "rawDescription": "<Text>text=\"命中目标后，自身破防等级、会心等级中最低的属性将获得595点增幅，持续20秒，该效果每20秒最多生效一次。名剑大会中无法生效。\" font=101 </text>",
+          "description": "命中目标后，自身破防等级、会心等级中最低的属性将获得595点增幅，持续20秒，该效果每20秒最多生效一次。名剑大会中无法生效。",
           "handlerId": 40791,
           "level": 4,
           "kind": "lowest_rating",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "hit",
@@ -1076,7 +1072,7 @@
               "overcome",
               "critical"
             ],
-            "amount": 548
+            "amount": 595
           }
         }
       ]
@@ -1084,7 +1080,7 @@
     {
       "key": "armors:112457",
       "id": 112457,
-      "name": "覆乾坤_测试用",
+      "name": "道风烟",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -1100,12 +1096,12 @@
         "magical_attack_power_base": 438,
         "all_critical_strike_base": 188,
         "magical_overcome_base": 188,
-        "strain_base": 301,
+        "strain_base": 275,
         "event": "gain_40790_5"
       },
       "embed": {
-        "all_critical_power_base": 225,
-        "magical_attack_power_base": 225
+        "all_critical_power_base": 304,
+        "magical_attack_power_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -1133,7 +1129,7 @@
     {
       "key": "armors:112458",
       "id": 112458,
-      "name": "凌顶观_测试用",
+      "name": "月照庭",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -1152,8 +1148,8 @@
         "event": "gain_42767_3"
       },
       "embed": {
-        "all_critical_strike_base": 225,
-        "strain_base": 225
+        "all_critical_strike_base": 304,
+        "strain_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -1181,7 +1177,7 @@
     {
       "key": "armors:112474",
       "id": 112474,
-      "name": "烬燃护腕·尊_测试用",
+      "name": "蘅岚护腕·尊",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -1194,12 +1190,12 @@
       },
       "magic": {
         "vitality_base": 472,
-        "magical_attack_power_base": 563,
-        "strain_base": 1152
+        "magical_attack_power_base": 485,
+        "strain_base": 1127
       },
       "embed": {
-        "magical_overcome_base": 225,
-        "strain_base": 225
+        "magical_overcome_base": 304,
+        "strain_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -1207,7 +1203,7 @@
     {
       "key": "armors:112475",
       "id": 112475,
-      "name": "寒蚀护腕·悟_测试用",
+      "name": "凌尘护腕·悟",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -1225,8 +1221,8 @@
         "strain_base": 601
       },
       "embed": {
-        "magical_attack_power_base": 225,
-        "strain_base": 225
+        "magical_attack_power_base": 304,
+        "strain_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -1234,7 +1230,7 @@
     {
       "key": "armors:112476",
       "id": 112476,
-      "name": "冷骨护腕·破_测试用",
+      "name": "沉芒护腕·破",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -1252,8 +1248,8 @@
         "strain_base": 601
       },
       "embed": {
-        "magical_overcome_base": 225,
-        "magical_attack_power_base": 225
+        "magical_overcome_base": 304,
+        "magical_attack_power_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -1261,7 +1257,7 @@
     {
       "key": "armors:112478",
       "id": 112478,
-      "name": "尘霜护腕·觉_测试用",
+      "name": "露微护腕·觉",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -1280,8 +1276,8 @@
         "strain_base": 501
       },
       "embed": {
-        "all_critical_power_base": 225,
-        "magical_attack_power_base": 225
+        "all_critical_power_base": 304,
+        "magical_attack_power_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -1289,7 +1285,7 @@
     {
       "key": "armors:112481",
       "id": 112481,
-      "name": "谷息护腕·迅_测试用",
+      "name": "素鸿护腕·迅",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -1307,8 +1303,8 @@
         "strain_base": 626
       },
       "embed": {
-        "all_critical_strike_base": 225,
-        "strain_base": 225
+        "all_critical_strike_base": 304,
+        "strain_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -1316,7 +1312,7 @@
     {
       "key": "armors:112482",
       "id": 112482,
-      "name": "暗渡无声_测试用",
+      "name": "清尘雨",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -1334,8 +1330,8 @@
         "event": "gain_40788_7"
       },
       "embed": {
-        "all_critical_power_base": 225,
-        "strain_base": 225
+        "all_critical_power_base": 304,
+        "strain_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -1348,15 +1344,12 @@
           "handlerId": 40788,
           "level": 7,
           "kind": "triggered_damage",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "hit",
             "cooldownSeconds": 10,
-            "selfHealthAbovePercent": 75,
-            "requiresVerification": [
-              "伤害公式与触发招式"
-            ]
+            "selfHealthAbovePercent": 75
           }
         }
       ]
@@ -1364,7 +1357,7 @@
     {
       "key": "armors:112483",
       "id": 112483,
-      "name": "寒鸦啼血_测试用",
+      "name": "影侵窗",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -1377,15 +1370,15 @@
       },
       "magic": {
         "vitality_base": 472,
-        "magical_attack_power_base": 470,
-        "all_critical_strike_base": 172,
+        "magical_attack_power_base": 438,
+        "all_critical_strike_base": 157,
         "all_critical_power_base": 157,
-        "strain_base": 551,
+        "strain_base": 451,
         "event": "gain_40788_4"
       },
       "embed": {
-        "magical_overcome_base": 225,
-        "strain_base": 225
+        "magical_overcome_base": 304,
+        "strain_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -1411,7 +1404,7 @@
     {
       "key": "armors:112484",
       "id": 112484,
-      "name": "毒雾藏针_测试用",
+      "name": "风起野",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -1424,14 +1417,14 @@
       },
       "magic": {
         "vitality_base": 472,
-        "magical_attack_power_base": 250,
-        "all_critical_strike_base": 516,
-        "strain_base": 651,
+        "magical_attack_power_base": 203,
+        "all_critical_strike_base": 470,
+        "strain_base": 526,
         "event": "gain_40788_6"
       },
       "embed": {
-        "magical_attack_power_base": 225,
-        "strain_base": 225
+        "magical_attack_power_base": 304,
+        "strain_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -1457,7 +1450,7 @@
     {
       "key": "armors:112485",
       "id": 112485,
-      "name": "缚风锁云_测试用",
+      "name": "风云阔",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -1470,14 +1463,14 @@
       },
       "magic": {
         "vitality_base": 472,
-        "magical_attack_power_base": 250,
-        "magical_overcome_base": 516,
-        "strain_base": 651,
+        "magical_attack_power_base": 203,
+        "magical_overcome_base": 470,
+        "strain_base": 526,
         "event": "gain_40788_6"
       },
       "embed": {
-        "magical_overcome_base": 225,
-        "magical_attack_power_base": 225
+        "magical_overcome_base": 304,
+        "magical_attack_power_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -1503,7 +1496,7 @@
     {
       "key": "armors:112486",
       "id": 112486,
-      "name": "夜分刀气_测试用",
+      "name": "青云起",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -1521,8 +1514,8 @@
         "event": "gain_40788_7"
       },
       "embed": {
-        "magical_overcome_base": 225,
-        "strain_base": 225
+        "magical_overcome_base": 304,
+        "strain_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -1535,15 +1528,12 @@
           "handlerId": 40788,
           "level": 7,
           "kind": "triggered_damage",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "hit",
             "cooldownSeconds": 10,
-            "selfHealthAbovePercent": 75,
-            "requiresVerification": [
-              "伤害公式与触发招式"
-            ]
+            "selfHealthAbovePercent": 75
           }
         }
       ]
@@ -1551,7 +1541,7 @@
     {
       "key": "armors:112487",
       "id": 112487,
-      "name": "幽壑藏身_测试用",
+      "name": "暮铃歇",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -1567,12 +1557,12 @@
         "magical_attack_power_base": 438,
         "all_critical_strike_base": 188,
         "magical_overcome_base": 188,
-        "strain_base": 301,
+        "strain_base": 275,
         "event": "gain_40788_5"
       },
       "embed": {
-        "all_critical_power_base": 225,
-        "magical_attack_power_base": 225
+        "all_critical_power_base": 304,
+        "magical_attack_power_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -1598,7 +1588,7 @@
     {
       "key": "armors:112488",
       "id": 112488,
-      "name": "一息归尘_测试用",
+      "name": "满庭月",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -1617,8 +1607,8 @@
         "event": "gain_42767_3"
       },
       "embed": {
-        "all_critical_strike_base": 225,
-        "strain_base": 225
+        "all_critical_strike_base": 304,
+        "strain_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -1646,7 +1636,7 @@
     {
       "key": "armors:112504",
       "id": 112504,
-      "name": "蕴元裤·尊_测试用",
+      "name": "逐尘裤·尊",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -1659,12 +1649,12 @@
       },
       "magic": {
         "vitality_base": 675,
-        "magical_attack_power_base": 805,
-        "strain_base": 1646
+        "magical_attack_power_base": 693,
+        "strain_base": 1610
       },
       "embed": {
-        "magical_overcome_base": 225,
-        "strain_base": 225
+        "magical_overcome_base": 304,
+        "strain_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -1672,7 +1662,7 @@
     {
       "key": "armors:112505",
       "id": 112505,
-      "name": "皎然裤·悟_测试用",
+      "name": "暗暮裤·悟",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -1690,8 +1680,8 @@
         "strain_base": 1073
       },
       "embed": {
-        "magical_attack_power_base": 225,
-        "strain_base": 225
+        "magical_attack_power_base": 304,
+        "strain_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -1699,7 +1689,7 @@
     {
       "key": "armors:112506",
       "id": 112506,
-      "name": "无愁裤·破_测试用",
+      "name": "宁归裤·破",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -1717,8 +1707,8 @@
         "strain_base": 1073
       },
       "embed": {
-        "magical_overcome_base": 225,
-        "magical_attack_power_base": 225
+        "magical_overcome_base": 304,
+        "magical_attack_power_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -1726,7 +1716,7 @@
     {
       "key": "armors:112508",
       "id": 112508,
-      "name": "芳生裤·觉_测试用",
+      "name": "蘅雪裤·觉",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -1745,8 +1735,8 @@
         "strain_base": 715
       },
       "embed": {
-        "all_critical_power_base": 225,
-        "magical_attack_power_base": 225
+        "all_critical_power_base": 304,
+        "magical_attack_power_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -1754,7 +1744,7 @@
     {
       "key": "armors:112511",
       "id": 112511,
-      "name": "话情裤·迅_测试用",
+      "name": "行渺裤·迅",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -1767,12 +1757,12 @@
       },
       "magic": {
         "vitality_base": 675,
-        "magical_attack_power_base": 850,
-        "haste_base": 816
+        "magical_attack_power_base": 961,
+        "haste_base": 872
       },
       "embed": {
-        "all_critical_strike_base": 225,
-        "magical_overcome_base": 225
+        "all_critical_strike_base": 304,
+        "magical_overcome_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -1780,7 +1770,7 @@
     {
       "key": "armors:112560",
       "id": 112560,
-      "name": "尧御护腕_测试用",
+      "name": "玄元星平护腕",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -1801,8 +1791,8 @@
         "threat_gain": 208
       },
       "embed": {
-        "vitality_base": 225,
-        "threat_gain": 21
+        "vitality_base": 304,
+        "threat_gain": 29
       },
       "setId": 7019,
       "sets": {
@@ -1817,7 +1807,7 @@
     {
       "key": "armors:112578",
       "id": 112578,
-      "name": "尧御裤_测试用",
+      "name": "玄元星平裤",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -1838,8 +1828,8 @@
         "threat_gain": 208
       },
       "embed": {
-        "physical_shield_base": 225,
-        "threat_gain": 21
+        "physical_shield_base": 304,
+        "threat_gain": 29
       },
       "setId": 7019,
       "sets": {
@@ -1854,7 +1844,7 @@
     {
       "key": "armors:112590",
       "id": 112590,
-      "name": "尧御衫_测试用",
+      "name": "玄元星平衫",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -1875,8 +1865,8 @@
         "threat_gain": 208
       },
       "embed": {
-        "physical_shield_base": 225,
-        "vitality_base": 225
+        "physical_shield_base": 304,
+        "vitality_base": 304
       },
       "setId": 7019,
       "sets": {
@@ -1891,7 +1881,7 @@
     {
       "key": "armors:112602",
       "id": 112602,
-      "name": "棘心下裳_测试用",
+      "name": "隐寥下裳",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -1912,8 +1902,8 @@
         "threat_gain": 178
       },
       "embed": {
-        "physical_shield_base": 225,
-        "threat_gain": 21
+        "physical_shield_base": 304,
+        "threat_gain": 29
       },
       "setId": 0,
       "sets": {}
@@ -1921,7 +1911,7 @@
     {
       "key": "armors:112620",
       "id": 112620,
-      "name": "不摧裤_测试用",
+      "name": "抱火裤",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -1942,313 +1932,16 @@
         "threat_gain": 205
       },
       "embed": {
-        "physical_shield_base": 225,
-        "threat_gain": 21
+        "physical_shield_base": 304,
+        "threat_gain": 29
       },
       "setId": 0,
       "sets": {}
     },
     {
-      "key": "armors:112699",
-      "id": 112699,
-      "name": "无修冠·内·天_测试用",
-      "school": "精简",
-      "kind": "内功",
-      "usage": "PVE",
-      "position": "hat",
-      "level": 1280,
-      "maxStrength": 6,
-      "base": {
-        "physical_shield_base": 34,
-        "magical_shield_base": 42
-      },
-      "magic": {
-        "vitality_base": 607,
-        "magical_attack_power_base": 604,
-        "magical_overcome_base": 604,
-        "strain_base": 773,
-        "event": "gain_38934_10"
-      },
-      "embed": {
-        "magical_overcome_base": 225,
-        "magical_attack_power_base": 225
-      },
-      "setId": 0,
-      "sets": {},
-      "specialEffects": [
-        {
-          "key": "gain_38934_10",
-          "sourceAttribute": "magic",
-          "rawDescription": "<Text>text=\"进入战斗后使当前破防等级、会心等级中最高的属性提高75点，名剑大会中无法生效。\" font=101 </text>",
-          "description": "进入战斗后使当前破防等级、会心等级中最高的属性提高75点，名剑大会中无法生效。",
-          "handlerId": 38934,
-          "level": 10,
-          "kind": "highest_rating",
-          "calculationStatus": "verified",
-          "rules": {
-            "disabledInArena": true,
-            "trigger": "combat",
-            "chooseHighest": [
-              "overcome",
-              "critical"
-            ],
-            "amount": 75
-          }
-        }
-      ]
-    },
-    {
-      "key": "armors:112700",
-      "id": 112700,
-      "name": "无修冠·内·天_测试用",
-      "school": "精简",
-      "kind": "内功",
-      "usage": "PVE",
-      "position": "hat",
-      "level": 1280,
-      "maxStrength": 6,
-      "base": {
-        "physical_shield_base": 34,
-        "magical_shield_base": 42
-      },
-      "magic": {
-        "vitality_base": 607,
-        "magical_attack_power_base": 604,
-        "all_critical_strike_base": 604,
-        "strain_base": 773,
-        "event": "gain_38934_10"
-      },
-      "embed": {
-        "magical_attack_power_base": 225,
-        "strain_base": 225
-      },
-      "setId": 0,
-      "sets": {},
-      "specialEffects": [
-        {
-          "key": "gain_38934_10",
-          "sourceAttribute": "magic",
-          "rawDescription": "<Text>text=\"进入战斗后使当前破防等级、会心等级中最高的属性提高75点，名剑大会中无法生效。\" font=101 </text>",
-          "description": "进入战斗后使当前破防等级、会心等级中最高的属性提高75点，名剑大会中无法生效。",
-          "handlerId": 38934,
-          "level": 10,
-          "kind": "highest_rating",
-          "calculationStatus": "verified",
-          "rules": {
-            "disabledInArena": true,
-            "trigger": "combat",
-            "chooseHighest": [
-              "overcome",
-              "critical"
-            ],
-            "amount": 75
-          }
-        }
-      ]
-    },
-    {
-      "key": "armors:112701",
-      "id": 112701,
-      "name": "无修冠·内·天_测试用",
-      "school": "精简",
-      "kind": "内功",
-      "usage": "PVE",
-      "position": "hat",
-      "level": 1280,
-      "maxStrength": 6,
-      "base": {
-        "physical_shield_base": 34,
-        "magical_shield_base": 42
-      },
-      "magic": {
-        "vitality_base": 607,
-        "magical_attack_power_base": 523,
-        "all_critical_strike_base": 382,
-        "magical_overcome_base": 382,
-        "strain_base": 644,
-        "event": "gain_38934_10"
-      },
-      "embed": {
-        "all_critical_power_base": 225,
-        "magical_attack_power_base": 225
-      },
-      "setId": 0,
-      "sets": {},
-      "specialEffects": [
-        {
-          "key": "gain_38934_10",
-          "sourceAttribute": "magic",
-          "rawDescription": "<Text>text=\"进入战斗后使当前破防等级、会心等级中最高的属性提高75点，名剑大会中无法生效。\" font=101 </text>",
-          "description": "进入战斗后使当前破防等级、会心等级中最高的属性提高75点，名剑大会中无法生效。",
-          "handlerId": 38934,
-          "level": 10,
-          "kind": "highest_rating",
-          "calculationStatus": "verified",
-          "rules": {
-            "disabledInArena": true,
-            "trigger": "combat",
-            "chooseHighest": [
-              "overcome",
-              "critical"
-            ],
-            "amount": 75
-          }
-        }
-      ]
-    },
-    {
-      "key": "armors:112705",
-      "id": 112705,
-      "name": "无修鞋·内·天_测试用",
-      "school": "精简",
-      "kind": "内功",
-      "usage": "PVE",
-      "position": "shoes",
-      "level": 1280,
-      "maxStrength": 6,
-      "base": {
-        "physical_shield_base": 21,
-        "magical_shield_base": 26
-      },
-      "magic": {
-        "vitality_base": 472,
-        "magical_attack_power_base": 470,
-        "magical_overcome_base": 376,
-        "strain_base": 751,
-        "event": "gain_38944_10"
-      },
-      "embed": {
-        "magical_overcome_base": 225,
-        "magical_attack_power_base": 225
-      },
-      "setId": 0,
-      "sets": {},
-      "specialEffects": [
-        {
-          "key": "gain_38944_10",
-          "sourceAttribute": "magic",
-          "rawDescription": "<Text>text=\"命中目标后提升自身130点破防等级，持续10秒，持续期间受到超过最大气血值30%的伤害则效果提前结束，该效果每20秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
-          "description": "命中目标后提升自身130点破防等级，持续10秒，持续期间受到超过最大气血值30%的伤害则效果提前结束，该效果每20秒最多触发一次。名剑大会中无法生效。",
-          "handlerId": 38944,
-          "level": 10,
-          "kind": "triggered_attributes",
-          "calculationStatus": "verified",
-          "rules": {
-            "disabledInArena": true,
-            "trigger": "hit",
-            "cooldownSeconds": 20,
-            "durationSeconds": 10,
-            "breakOnDamageAboveMaxHealthPercent": 30,
-            "attributes": {
-              "all_overcome_base": 130
-            }
-          }
-        }
-      ]
-    },
-    {
-      "key": "armors:112706",
-      "id": 112706,
-      "name": "无修鞋·内·天_测试用",
-      "school": "精简",
-      "kind": "内功",
-      "usage": "PVE",
-      "position": "shoes",
-      "level": 1280,
-      "maxStrength": 6,
-      "base": {
-        "physical_shield_base": 21,
-        "magical_shield_base": 26
-      },
-      "magic": {
-        "vitality_base": 472,
-        "magical_attack_power_base": 470,
-        "all_critical_strike_base": 376,
-        "strain_base": 751,
-        "event": "gain_38939_10"
-      },
-      "embed": {
-        "magical_attack_power_base": 225,
-        "strain_base": 225
-      },
-      "setId": 0,
-      "sets": {},
-      "specialEffects": [
-        {
-          "key": "gain_38939_10",
-          "sourceAttribute": "magic",
-          "rawDescription": "<Text>text=\"命中目标后提升自身130点会心等级，持续10秒，持续期间受到超过最大气血值30%的伤害则效果提前结束，该效果每20秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
-          "description": "命中目标后提升自身130点会心等级，持续10秒，持续期间受到超过最大气血值30%的伤害则效果提前结束，该效果每20秒最多触发一次。名剑大会中无法生效。",
-          "handlerId": 38939,
-          "level": 10,
-          "kind": "triggered_attributes",
-          "calculationStatus": "verified",
-          "rules": {
-            "disabledInArena": true,
-            "trigger": "hit",
-            "cooldownSeconds": 20,
-            "durationSeconds": 10,
-            "breakOnDamageAboveMaxHealthPercent": 30,
-            "attributes": {
-              "all_critical_strike_base": 130
-            }
-          }
-        }
-      ]
-    },
-    {
-      "key": "armors:112707",
-      "id": 112707,
-      "name": "无修鞋·内·天_测试用",
-      "school": "精简",
-      "kind": "内功",
-      "usage": "PVE",
-      "position": "shoes",
-      "level": 1280,
-      "maxStrength": 6,
-      "base": {
-        "physical_shield_base": 21,
-        "magical_shield_base": 26
-      },
-      "magic": {
-        "vitality_base": 472,
-        "magical_attack_power_base": 563,
-        "strain_base": 1152,
-        "event": "gain_38944_10"
-      },
-      "embed": {
-        "magical_overcome_base": 225,
-        "strain_base": 225
-      },
-      "setId": 0,
-      "sets": {},
-      "specialEffects": [
-        {
-          "key": "gain_38944_10",
-          "sourceAttribute": "magic",
-          "rawDescription": "<Text>text=\"命中目标后提升自身130点破防等级，持续10秒，持续期间受到超过最大气血值30%的伤害则效果提前结束，该效果每20秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
-          "description": "命中目标后提升自身130点破防等级，持续10秒，持续期间受到超过最大气血值30%的伤害则效果提前结束，该效果每20秒最多触发一次。名剑大会中无法生效。",
-          "handlerId": 38944,
-          "level": 10,
-          "kind": "triggered_attributes",
-          "calculationStatus": "verified",
-          "rules": {
-            "disabledInArena": true,
-            "trigger": "hit",
-            "cooldownSeconds": 20,
-            "durationSeconds": 10,
-            "breakOnDamageAboveMaxHealthPercent": 30,
-            "attributes": {
-              "all_overcome_base": 130
-            }
-          }
-        }
-      ]
-    },
-    {
       "key": "armors:112783",
       "id": 112783,
-      "name": "无修冠·内·天_测试用",
+      "name": "无观冠·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -2261,14 +1954,14 @@
       },
       "magic": {
         "vitality_base": 607,
-        "magical_attack_power_base": 604,
+        "magical_attack_power_base": 262,
         "magical_overcome_base": 604,
-        "strain_base": 773,
+        "strain_base": 676,
         "event": "gain_38934_10"
       },
       "embed": {
-        "magical_overcome_base": 225,
-        "magical_attack_power_base": 225
+        "magical_overcome_base": 304,
+        "magical_attack_power_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -2276,8 +1969,8 @@
         {
           "key": "gain_38934_10",
           "sourceAttribute": "magic",
-          "rawDescription": "<Text>text=\"进入战斗后使当前破防等级、会心等级中最高的属性提高75点，名剑大会中无法生效。\" font=101 </text>",
-          "description": "进入战斗后使当前破防等级、会心等级中最高的属性提高75点，名剑大会中无法生效。",
+          "rawDescription": "<Text>text=\"进入战斗后使当前破防等级、会心等级中最高的属性提高563点，名剑大会中无法生效。\" font=101 </text>",
+          "description": "进入战斗后使当前破防等级、会心等级中最高的属性提高563点，名剑大会中无法生效。",
           "handlerId": 38934,
           "level": 10,
           "kind": "highest_rating",
@@ -2289,7 +1982,7 @@
               "overcome",
               "critical"
             ],
-            "amount": 75
+            "amount": 563
           }
         }
       ]
@@ -2297,7 +1990,7 @@
     {
       "key": "armors:112784",
       "id": 112784,
-      "name": "无修冠·内·天_测试用",
+      "name": "无观冠·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -2310,14 +2003,14 @@
       },
       "magic": {
         "vitality_base": 607,
-        "magical_attack_power_base": 604,
+        "magical_attack_power_base": 262,
         "all_critical_strike_base": 604,
-        "strain_base": 773,
+        "strain_base": 676,
         "event": "gain_38934_10"
       },
       "embed": {
-        "magical_attack_power_base": 225,
-        "strain_base": 225
+        "magical_attack_power_base": 304,
+        "strain_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -2325,8 +2018,8 @@
         {
           "key": "gain_38934_10",
           "sourceAttribute": "magic",
-          "rawDescription": "<Text>text=\"进入战斗后使当前破防等级、会心等级中最高的属性提高75点，名剑大会中无法生效。\" font=101 </text>",
-          "description": "进入战斗后使当前破防等级、会心等级中最高的属性提高75点，名剑大会中无法生效。",
+          "rawDescription": "<Text>text=\"进入战斗后使当前破防等级、会心等级中最高的属性提高563点，名剑大会中无法生效。\" font=101 </text>",
+          "description": "进入战斗后使当前破防等级、会心等级中最高的属性提高563点，名剑大会中无法生效。",
           "handlerId": 38934,
           "level": 10,
           "kind": "highest_rating",
@@ -2338,7 +2031,7 @@
               "overcome",
               "critical"
             ],
-            "amount": 75
+            "amount": 563
           }
         }
       ]
@@ -2346,7 +2039,7 @@
     {
       "key": "armors:112785",
       "id": 112785,
-      "name": "无修冠·内·天_测试用",
+      "name": "无观冠·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -2359,15 +2052,15 @@
       },
       "magic": {
         "vitality_base": 607,
-        "magical_attack_power_base": 523,
-        "all_critical_strike_base": 382,
-        "magical_overcome_base": 382,
-        "strain_base": 644,
+        "magical_attack_power_base": 563,
+        "all_critical_strike_base": 241,
+        "magical_overcome_base": 241,
+        "strain_base": 354,
         "event": "gain_38934_10"
       },
       "embed": {
-        "all_critical_power_base": 225,
-        "magical_attack_power_base": 225
+        "all_critical_power_base": 304,
+        "magical_attack_power_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -2375,8 +2068,8 @@
         {
           "key": "gain_38934_10",
           "sourceAttribute": "magic",
-          "rawDescription": "<Text>text=\"进入战斗后使当前破防等级、会心等级中最高的属性提高75点，名剑大会中无法生效。\" font=101 </text>",
-          "description": "进入战斗后使当前破防等级、会心等级中最高的属性提高75点，名剑大会中无法生效。",
+          "rawDescription": "<Text>text=\"进入战斗后使当前破防等级、会心等级中最高的属性提高563点，名剑大会中无法生效。\" font=101 </text>",
+          "description": "进入战斗后使当前破防等级、会心等级中最高的属性提高563点，名剑大会中无法生效。",
           "handlerId": 38934,
           "level": 10,
           "kind": "highest_rating",
@@ -2388,7 +2081,7 @@
               "overcome",
               "critical"
             ],
-            "amount": 75
+            "amount": 563
           }
         }
       ]
@@ -2396,7 +2089,7 @@
     {
       "key": "armors:112789",
       "id": 112789,
-      "name": "无修鞋·内·天_测试用",
+      "name": "无观鞋·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -2409,14 +2102,14 @@
       },
       "magic": {
         "vitality_base": 472,
-        "magical_attack_power_base": 470,
-        "magical_overcome_base": 376,
-        "strain_base": 751,
+        "magical_attack_power_base": 203,
+        "magical_overcome_base": 470,
+        "strain_base": 526,
         "event": "gain_38944_10"
       },
       "embed": {
-        "magical_overcome_base": 225,
-        "magical_attack_power_base": 225
+        "magical_overcome_base": 304,
+        "magical_attack_power_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -2424,8 +2117,8 @@
         {
           "key": "gain_38944_10",
           "sourceAttribute": "magic",
-          "rawDescription": "<Text>text=\"命中目标后提升自身130点破防等级，持续10秒，持续期间受到超过最大气血值30%的伤害则效果提前结束，该效果每20秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
-          "description": "命中目标后提升自身130点破防等级，持续10秒，持续期间受到超过最大气血值30%的伤害则效果提前结束，该效果每20秒最多触发一次。名剑大会中无法生效。",
+          "rawDescription": "<Text>text=\"命中目标后提升自身974点破防等级，持续10秒，持续期间受到超过最大气血值30%的伤害则效果提前结束，该效果每20秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
+          "description": "命中目标后提升自身974点破防等级，持续10秒，持续期间受到超过最大气血值30%的伤害则效果提前结束，该效果每20秒最多触发一次。名剑大会中无法生效。",
           "handlerId": 38944,
           "level": 10,
           "kind": "triggered_attributes",
@@ -2437,7 +2130,7 @@
             "durationSeconds": 10,
             "breakOnDamageAboveMaxHealthPercent": 30,
             "attributes": {
-              "all_overcome_base": 130
+              "all_overcome_base": 974
             }
           }
         }
@@ -2446,7 +2139,7 @@
     {
       "key": "armors:112790",
       "id": 112790,
-      "name": "无修鞋·内·天_测试用",
+      "name": "无观鞋·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -2459,14 +2152,14 @@
       },
       "magic": {
         "vitality_base": 472,
-        "magical_attack_power_base": 470,
-        "all_critical_strike_base": 376,
-        "strain_base": 751,
+        "magical_attack_power_base": 203,
+        "all_critical_strike_base": 470,
+        "strain_base": 526,
         "event": "gain_38939_10"
       },
       "embed": {
-        "magical_attack_power_base": 225,
-        "strain_base": 225
+        "magical_attack_power_base": 304,
+        "strain_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -2474,8 +2167,8 @@
         {
           "key": "gain_38939_10",
           "sourceAttribute": "magic",
-          "rawDescription": "<Text>text=\"命中目标后提升自身130点会心等级，持续10秒，持续期间受到超过最大气血值30%的伤害则效果提前结束，该效果每20秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
-          "description": "命中目标后提升自身130点会心等级，持续10秒，持续期间受到超过最大气血值30%的伤害则效果提前结束，该效果每20秒最多触发一次。名剑大会中无法生效。",
+          "rawDescription": "<Text>text=\"命中目标后提升自身974点会心等级，持续10秒，持续期间受到超过最大气血值30%的伤害则效果提前结束，该效果每20秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
+          "description": "命中目标后提升自身974点会心等级，持续10秒，持续期间受到超过最大气血值30%的伤害则效果提前结束，该效果每20秒最多触发一次。名剑大会中无法生效。",
           "handlerId": 38939,
           "level": 10,
           "kind": "triggered_attributes",
@@ -2487,7 +2180,7 @@
             "durationSeconds": 10,
             "breakOnDamageAboveMaxHealthPercent": 30,
             "attributes": {
-              "all_critical_strike_base": 130
+              "all_critical_strike_base": 974
             }
           }
         }
@@ -2496,7 +2189,7 @@
     {
       "key": "armors:112791",
       "id": 112791,
-      "name": "无修鞋·内·天_测试用",
+      "name": "无观鞋·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -2509,13 +2202,15 @@
       },
       "magic": {
         "vitality_base": 472,
-        "magical_attack_power_base": 563,
-        "strain_base": 1152,
+        "magical_attack_power_base": 438,
+        "all_critical_strike_base": 188,
+        "magical_overcome_base": 188,
+        "strain_base": 275,
         "event": "gain_38944_10"
       },
       "embed": {
-        "magical_overcome_base": 225,
-        "strain_base": 225
+        "all_critical_power_base": 304,
+        "magical_attack_power_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -2523,8 +2218,8 @@
         {
           "key": "gain_38944_10",
           "sourceAttribute": "magic",
-          "rawDescription": "<Text>text=\"命中目标后提升自身130点破防等级，持续10秒，持续期间受到超过最大气血值30%的伤害则效果提前结束，该效果每20秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
-          "description": "命中目标后提升自身130点破防等级，持续10秒，持续期间受到超过最大气血值30%的伤害则效果提前结束，该效果每20秒最多触发一次。名剑大会中无法生效。",
+          "rawDescription": "<Text>text=\"命中目标后提升自身974点破防等级，持续10秒，持续期间受到超过最大气血值30%的伤害则效果提前结束，该效果每20秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
+          "description": "命中目标后提升自身974点破防等级，持续10秒，持续期间受到超过最大气血值30%的伤害则效果提前结束，该效果每20秒最多触发一次。名剑大会中无法生效。",
           "handlerId": 38944,
           "level": 10,
           "kind": "triggered_attributes",
@@ -2536,7 +2231,7 @@
             "durationSeconds": 10,
             "breakOnDamageAboveMaxHealthPercent": 30,
             "attributes": {
-              "all_overcome_base": 130
+              "all_overcome_base": 974
             }
           }
         }
@@ -2545,7 +2240,7 @@
     {
       "key": "armors:112818",
       "id": 112818,
-      "name": "曜护下裳_测试用",
+      "name": "宸心下裳",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -2566,8 +2261,8 @@
         "threat_gain": 112
       },
       "embed": {
-        "physical_shield_base": 225,
-        "threat_gain": 21
+        "physical_shield_base": 304,
+        "threat_gain": 29
       },
       "setId": 0,
       "sets": {}
@@ -2575,7 +2270,7 @@
     {
       "key": "armors:112824",
       "id": 112824,
-      "name": "曜护冠_测试用",
+      "name": "宸心冠",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -2596,8 +2291,8 @@
         "threat_gain": 112
       },
       "embed": {
-        "vitality_base": 225,
-        "threat_gain": 21
+        "vitality_base": 304,
+        "threat_gain": 29
       },
       "setId": 0,
       "sets": {}
@@ -2605,7 +2300,7 @@
     {
       "key": "armors:114414",
       "id": 114414,
-      "name": "幽墟荡秽·护阙下裳_测试用",
+      "name": "冥关孤渡·封障下裳",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -2626,8 +2321,8 @@
         "threat_gain": 178
       },
       "embed": {
-        "physical_shield_base": 225,
-        "threat_gain": 21
+        "physical_shield_base": 304,
+        "threat_gain": 29
       },
       "setId": 0,
       "sets": {}
@@ -2635,7 +2330,7 @@
     {
       "key": "armors:114420",
       "id": 114420,
-      "name": "幽墟荡秽·护阙冠_测试用",
+      "name": "冥关孤渡·封障冠",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -2656,8 +2351,8 @@
         "threat_gain": 178
       },
       "embed": {
-        "vitality_base": 225,
-        "threat_gain": 21
+        "vitality_base": 304,
+        "threat_gain": 29
       },
       "setId": 0,
       "sets": {}
@@ -2665,7 +2360,7 @@
     {
       "key": "armors:114853",
       "id": 114853,
-      "name": "无修冠·内·天_测试用",
+      "name": "无观冠·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -2683,8 +2378,8 @@
         "strain_base": 773
       },
       "embed": {
-        "magical_overcome_base": 225,
-        "magical_attack_power_base": 225
+        "magical_overcome_base": 304,
+        "magical_attack_power_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -2692,7 +2387,7 @@
     {
       "key": "armors:114854",
       "id": 114854,
-      "name": "无修冠·内·天_测试用",
+      "name": "无观冠·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -2710,8 +2405,8 @@
         "strain_base": 773
       },
       "embed": {
-        "magical_attack_power_base": 225,
-        "strain_base": 225
+        "magical_attack_power_base": 304,
+        "strain_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -2719,7 +2414,7 @@
     {
       "key": "armors:114855",
       "id": 114855,
-      "name": "无修冠·内·天_测试用",
+      "name": "无观冠·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -2738,8 +2433,8 @@
         "strain_base": 644
       },
       "embed": {
-        "all_critical_power_base": 225,
-        "magical_attack_power_base": 225
+        "all_critical_power_base": 304,
+        "magical_attack_power_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -2747,7 +2442,7 @@
     {
       "key": "armors:114859",
       "id": 114859,
-      "name": "无修鞋·内·天_测试用",
+      "name": "无观鞋·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -2761,12 +2456,12 @@
       "magic": {
         "vitality_base": 472,
         "magical_attack_power_base": 470,
-        "magical_overcome_base": 376,
-        "strain_base": 751
+        "magical_overcome_base": 470,
+        "strain_base": 601
       },
       "embed": {
-        "magical_overcome_base": 225,
-        "magical_attack_power_base": 225
+        "magical_overcome_base": 304,
+        "magical_attack_power_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -2774,7 +2469,7 @@
     {
       "key": "armors:114860",
       "id": 114860,
-      "name": "无修鞋·内·天_测试用",
+      "name": "无观鞋·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -2788,12 +2483,12 @@
       "magic": {
         "vitality_base": 472,
         "magical_attack_power_base": 470,
-        "all_critical_strike_base": 376,
-        "strain_base": 751
+        "all_critical_strike_base": 470,
+        "strain_base": 601
       },
       "embed": {
-        "magical_attack_power_base": 225,
-        "strain_base": 225
+        "magical_attack_power_base": 304,
+        "strain_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -2801,7 +2496,7 @@
     {
       "key": "armors:114861",
       "id": 114861,
-      "name": "无修鞋·内·天_测试用",
+      "name": "无观鞋·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -2814,12 +2509,14 @@
       },
       "magic": {
         "vitality_base": 472,
-        "magical_attack_power_base": 563,
-        "strain_base": 1152
+        "magical_attack_power_base": 407,
+        "all_critical_strike_base": 297,
+        "magical_overcome_base": 297,
+        "strain_base": 501
       },
       "embed": {
-        "magical_overcome_base": 225,
-        "strain_base": 225
+        "all_critical_power_base": 304,
+        "magical_attack_power_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -2827,7 +2524,7 @@
     {
       "key": "trinkets:49843",
       "id": 49843,
-      "name": "承德项饰_测试用",
+      "name": "运制项饰",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -2844,7 +2541,7 @@
         "strain_base": 260
       },
       "embed": {
-        "physical_shield_base": 225
+        "physical_shield_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -2852,7 +2549,7 @@
     {
       "key": "trinkets:49849",
       "id": 49849,
-      "name": "承德坠_测试用",
+      "name": "运制坠",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -2869,7 +2566,7 @@
         "strain_base": 260
       },
       "embed": {
-        "vitality_base": 225
+        "vitality_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -2877,7 +2574,7 @@
     {
       "key": "trinkets:49867",
       "id": 49867,
-      "name": "露津戒_测试用",
+      "name": "除芒戒",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -2900,7 +2597,7 @@
     {
       "key": "trinkets:49891",
       "id": 49891,
-      "name": "固岚链_测试用",
+      "name": "朴磐链",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -2917,7 +2614,7 @@
         "strain_base": 322
       },
       "embed": {
-        "physical_shield_base": 225
+        "physical_shield_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -2925,7 +2622,7 @@
     {
       "key": "trinkets:49897",
       "id": 49897,
-      "name": "固岚佩_测试用",
+      "name": "朴磐佩",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -2942,7 +2639,7 @@
         "strain_base": 322
       },
       "embed": {
-        "vitality_base": 225
+        "vitality_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -2950,7 +2647,7 @@
     {
       "key": "trinkets:49915",
       "id": 49915,
-      "name": "玉蛇指环_测试用",
+      "name": "天曜指环",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -2973,7 +2670,7 @@
     {
       "key": "trinkets:49922",
       "id": 49922,
-      "name": "玄溟戒·尊_测试用",
+      "name": "苍垂戒·尊",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -2983,8 +2680,8 @@
       "base": {},
       "magic": {
         "vitality_base": 337,
-        "magical_attack_power_base": 402,
-        "strain_base": 823
+        "magical_attack_power_base": 347,
+        "strain_base": 805
       },
       "embed": {},
       "setId": 0,
@@ -2993,7 +2690,7 @@
     {
       "key": "trinkets:49923",
       "id": 49923,
-      "name": "灵寂戒·悟_测试用",
+      "name": "叩竹戒·悟",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -3014,7 +2711,7 @@
     {
       "key": "trinkets:49924",
       "id": 49924,
-      "name": "毋垢戒·破_测试用",
+      "name": "衔篁戒·破",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -3035,7 +2732,7 @@
     {
       "key": "trinkets:49926",
       "id": 49926,
-      "name": "荟茫戒·觉_测试用",
+      "name": "岁曙戒·觉",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -3057,7 +2754,7 @@
     {
       "key": "trinkets:49929",
       "id": 49929,
-      "name": "愁予戒·迅_测试用",
+      "name": "荒戍戒·迅",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -3067,8 +2764,8 @@
       "base": {},
       "magic": {
         "vitality_base": 337,
-        "magical_attack_power_base": 425,
-        "haste_base": 408
+        "magical_attack_power_base": 481,
+        "haste_base": 436
       },
       "embed": {},
       "setId": 0,
@@ -3077,7 +2774,7 @@
     {
       "key": "trinkets:49930",
       "id": 49930,
-      "name": "残霞卷_测试用",
+      "name": "花影稠",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -3098,19 +2795,19 @@
         {
           "key": "gain_40803_6",
           "sourceAttribute": "magic",
-          "rawDescription": "<Text>text=\"招式命中生命值百分比低于自身的目标时，提高自身391点会心等级，持续10秒。名剑大会中无法生效。\" font=101 </text>",
-          "description": "招式命中生命值百分比低于自身的目标时，提高自身391点会心等级，持续10秒。名剑大会中无法生效。",
+          "rawDescription": "<Text>text=\"招式命中生命值百分比低于自身的目标时，提高自身425点会心等级，持续10秒。名剑大会中无法生效。\" font=101 </text>",
+          "description": "招式命中生命值百分比低于自身的目标时，提高自身425点会心等级，持续10秒。名剑大会中无法生效。",
           "handlerId": 40803,
           "level": 6,
           "kind": "triggered_attributes",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "hit",
             "durationSeconds": 10,
             "targetHealthBelowSelf": true,
             "attributes": {
-              "all_critical_strike_base": 391
+              "all_critical_strike_base": 425
             }
           }
         }
@@ -3119,7 +2816,7 @@
     {
       "key": "trinkets:49931",
       "id": 49931,
-      "name": "梦冷星_测试用",
+      "name": "荡云天",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -3129,10 +2826,10 @@
       "base": {},
       "magic": {
         "vitality_base": 337,
-        "magical_attack_power_base": 335,
-        "all_critical_strike_base": 123,
+        "magical_attack_power_base": 313,
+        "all_critical_strike_base": 112,
         "all_critical_power_base": 112,
-        "strain_base": 394,
+        "strain_base": 322,
         "event": "gain_40803_4"
       },
       "embed": {},
@@ -3163,7 +2860,7 @@
     {
       "key": "trinkets:49932",
       "id": 49932,
-      "name": "松影静_测试用",
+      "name": "烟笼春",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -3184,19 +2881,19 @@
         {
           "key": "gain_40802_6",
           "sourceAttribute": "magic",
-          "rawDescription": "<Text>text=\"招式命中生命值百分比低于自身的目标时，提高自身391点破防等级，持续10秒。名剑大会中无法生效。\" font=101 </text>",
-          "description": "招式命中生命值百分比低于自身的目标时，提高自身391点破防等级，持续10秒。名剑大会中无法生效。",
+          "rawDescription": "<Text>text=\"招式命中生命值百分比低于自身的目标时，提高自身425点破防等级，持续10秒。名剑大会中无法生效。\" font=101 </text>",
+          "description": "招式命中生命值百分比低于自身的目标时，提高自身425点破防等级，持续10秒。名剑大会中无法生效。",
           "handlerId": 40802,
           "level": 6,
           "kind": "triggered_attributes",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "hit",
             "durationSeconds": 10,
             "targetHealthBelowSelf": true,
             "attributes": {
-              "all_overcome_base": 391
+              "all_overcome_base": 425
             }
           }
         }
@@ -3205,7 +2902,7 @@
     {
       "key": "trinkets:49933",
       "id": 49933,
-      "name": "浪歌行_测试用",
+      "name": "星沉渡",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -3215,9 +2912,9 @@
       "base": {},
       "magic": {
         "vitality_base": 337,
-        "magical_attack_power_base": 179,
-        "all_critical_strike_base": 369,
-        "strain_base": 465,
+        "magical_attack_power_base": 145,
+        "all_critical_strike_base": 335,
+        "strain_base": 376,
         "event": "gain_40803_5"
       },
       "embed": {},
@@ -3248,7 +2945,7 @@
     {
       "key": "trinkets:49934",
       "id": 49934,
-      "name": "墨锋隐_测试用",
+      "name": "留客梦",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -3258,9 +2955,9 @@
       "base": {},
       "magic": {
         "vitality_base": 337,
-        "magical_attack_power_base": 179,
-        "magical_overcome_base": 369,
-        "strain_base": 465,
+        "magical_attack_power_base": 145,
+        "magical_overcome_base": 335,
+        "strain_base": 376,
         "event": "gain_40802_5"
       },
       "embed": {},
@@ -3291,7 +2988,7 @@
     {
       "key": "trinkets:49935",
       "id": 49935,
-      "name": "赤阳踏_测试用",
+      "name": "枕清霜",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -3304,7 +3001,7 @@
         "magical_attack_power_base": 313,
         "all_critical_strike_base": 134,
         "magical_overcome_base": 134,
-        "strain_base": 215,
+        "strain_base": 197,
         "event": "gain_40802_4"
       },
       "embed": {},
@@ -3335,7 +3032,7 @@
     {
       "key": "trinkets:49936",
       "id": 49936,
-      "name": "龙影起_测试用",
+      "name": "月落影",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -3345,8 +3042,8 @@
       "base": {},
       "magic": {
         "vitality_base": 337,
-        "magical_attack_power_base": 425,
-        "haste_base": 408,
+        "magical_attack_power_base": 481,
+        "haste_base": 436,
         "event": "gain_41065_4"
       },
       "embed": {},
@@ -3361,7 +3058,7 @@
           "handlerId": 41065,
           "level": 4,
           "kind": "combat_attributes",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "combat",
@@ -3375,7 +3072,7 @@
     {
       "key": "trinkets:49988",
       "id": 49988,
-      "name": "镇甲链_测试用",
+      "name": "煞胆链",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -3392,7 +3089,7 @@
         "strain_base": 292
       },
       "embed": {
-        "magical_shield_base": 225
+        "magical_shield_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -3400,7 +3097,7 @@
     {
       "key": "trinkets:49994",
       "id": 49994,
-      "name": "玄毅佩_测试用",
+      "name": "洛阙佩",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -3417,7 +3114,7 @@
         "strain_base": 292
       },
       "embed": {
-        "magical_shield_base": 225
+        "magical_shield_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -3425,7 +3122,7 @@
     {
       "key": "trinkets:50000",
       "id": 50000,
-      "name": "镇甲链_测试用",
+      "name": "煞胆链",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -3442,7 +3139,7 @@
         "strain_base": 330
       },
       "embed": {
-        "magical_shield_base": 225
+        "magical_shield_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -3450,7 +3147,7 @@
     {
       "key": "trinkets:50006",
       "id": 50006,
-      "name": "玄毅佩_测试用",
+      "name": "洛阙佩",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -3467,7 +3164,7 @@
         "strain_base": 330
       },
       "embed": {
-        "magical_shield_base": 225
+        "magical_shield_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -3475,7 +3172,7 @@
     {
       "key": "trinkets:50012",
       "id": 50012,
-      "name": "棘心戒指_测试用",
+      "name": "隐寥戒指",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -3498,7 +3195,7 @@
     {
       "key": "trinkets:50018",
       "id": 50018,
-      "name": "不摧指环_测试用",
+      "name": "抱火指环",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -3521,7 +3218,7 @@
     {
       "key": "trinkets:51358",
       "id": 51358,
-      "name": "固岚佩_测试用",
+      "name": "朴磐佩",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -3538,7 +3235,7 @@
         "strain_base": 313
       },
       "embed": {
-        "vitality_base": 225
+        "vitality_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -3546,7 +3243,7 @@
     {
       "key": "trinkets:51370",
       "id": 51370,
-      "name": "玄毅佩_测试用",
+      "name": "洛阙佩",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -3563,7 +3260,7 @@
         "strain_base": 321
       },
       "embed": {
-        "magical_shield_base": 225
+        "magical_shield_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -3571,22 +3268,22 @@
     {
       "key": "trinkets:51431",
       "id": 51431,
-      "name": "无修项链·内·天_测试用",
+      "name": "无观项链·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
       "position": "necklace",
-      "level": 1160,
+      "level": 1110,
       "maxStrength": 6,
       "base": {},
       "magic": {
-        "vitality_base": 303,
-        "magical_attack_power_base": 304,
-        "all_critical_strike_base": 304,
-        "strain_base": 370
+        "vitality_base": 289,
+        "magical_attack_power_base": 291,
+        "all_critical_strike_base": 233,
+        "strain_base": 433
       },
       "embed": {
-        "magical_attack_power_base": 225
+        "magical_attack_power_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -3594,22 +3291,22 @@
     {
       "key": "trinkets:51432",
       "id": 51432,
-      "name": "无修项链·内·天_测试用",
+      "name": "无观项链·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
       "position": "necklace",
-      "level": 1160,
+      "level": 1110,
       "maxStrength": 6,
       "base": {},
       "magic": {
-        "vitality_base": 303,
-        "magical_attack_power_base": 304,
-        "magical_overcome_base": 304,
-        "strain_base": 370
+        "vitality_base": 289,
+        "magical_attack_power_base": 291,
+        "magical_overcome_base": 233,
+        "strain_base": 433
       },
       "embed": {
-        "magical_overcome_base": 225
+        "magical_overcome_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -3617,23 +3314,23 @@
     {
       "key": "trinkets:51433",
       "id": 51433,
-      "name": "无修项链·内·天_测试用",
+      "name": "无观项链·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
       "position": "necklace",
-      "level": 1160,
+      "level": 1110,
       "maxStrength": 6,
       "base": {},
       "magic": {
-        "vitality_base": 303,
-        "magical_attack_power_base": 284,
-        "all_critical_strike_base": 122,
-        "magical_overcome_base": 122,
-        "strain_base": 185
+        "vitality_base": 289,
+        "magical_attack_power_base": 252,
+        "all_critical_strike_base": 184,
+        "magical_overcome_base": 184,
+        "strain_base": 289
       },
       "embed": {
-        "all_critical_power_base": 225
+        "all_critical_power_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -3641,23 +3338,23 @@
     {
       "key": "trinkets:51437",
       "id": 51437,
-      "name": "无修项链·内·天_测试用",
+      "name": "无观项链·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
       "position": "necklace",
-      "level": 1220,
+      "level": 1195,
       "maxStrength": 6,
       "base": {},
       "magic": {
-        "vitality_base": 320,
-        "magical_attack_power_base": 170,
-        "all_critical_strike_base": 352,
-        "strain_base": 433,
+        "vitality_base": 313,
+        "magical_attack_power_base": 136,
+        "all_critical_strike_base": 313,
+        "strain_base": 339,
         "event": "gain_38945_9"
       },
       "embed": {
-        "magical_attack_power_base": 225
+        "magical_attack_power_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -3688,23 +3385,23 @@
     {
       "key": "trinkets:51438",
       "id": 51438,
-      "name": "无修项链·内·天_测试用",
+      "name": "无观项链·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
       "position": "necklace",
-      "level": 1220,
+      "level": 1195,
       "maxStrength": 6,
       "base": {},
       "magic": {
-        "vitality_base": 320,
-        "magical_attack_power_base": 170,
-        "magical_overcome_base": 352,
-        "strain_base": 433,
+        "vitality_base": 313,
+        "magical_attack_power_base": 136,
+        "magical_overcome_base": 313,
+        "strain_base": 339,
         "event": "gain_38946_10"
       },
       "embed": {
-        "magical_overcome_base": 225
+        "magical_overcome_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -3735,24 +3432,24 @@
     {
       "key": "trinkets:51439",
       "id": 51439,
-      "name": "无修项链·内·天_测试用",
+      "name": "无观项链·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
       "position": "necklace",
-      "level": 1220,
+      "level": 1195,
       "maxStrength": 6,
       "base": {},
       "magic": {
-        "vitality_base": 320,
-        "magical_attack_power_base": 298,
-        "all_critical_strike_base": 128,
-        "magical_overcome_base": 128,
-        "strain_base": 200,
+        "vitality_base": 313,
+        "magical_attack_power_base": 292,
+        "all_critical_strike_base": 125,
+        "magical_overcome_base": 125,
+        "strain_base": 177,
         "event": "gain_38946_9"
       },
       "embed": {
-        "all_critical_power_base": 225
+        "all_critical_power_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -3783,7 +3480,7 @@
     {
       "key": "trinkets:51443",
       "id": 51443,
-      "name": "无修项链·内·天_测试用",
+      "name": "无观项链·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -3793,13 +3490,13 @@
       "base": {},
       "magic": {
         "vitality_base": 337,
-        "magical_attack_power_base": 335,
-        "all_critical_strike_base": 268,
-        "strain_base": 537,
+        "magical_attack_power_base": 145,
+        "all_critical_strike_base": 335,
+        "strain_base": 376,
         "event": "gain_38945_10"
       },
       "embed": {
-        "magical_attack_power_base": 225
+        "magical_attack_power_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -3830,7 +3527,7 @@
     {
       "key": "trinkets:51444",
       "id": 51444,
-      "name": "无修项链·内·天_测试用",
+      "name": "无观项链·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -3840,13 +3537,13 @@
       "base": {},
       "magic": {
         "vitality_base": 337,
-        "magical_attack_power_base": 335,
-        "magical_overcome_base": 268,
-        "strain_base": 537,
+        "magical_attack_power_base": 145,
+        "magical_overcome_base": 335,
+        "strain_base": 376,
         "event": "gain_38946_13"
       },
       "embed": {
-        "magical_overcome_base": 225
+        "magical_overcome_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -3854,8 +3551,8 @@
         {
           "key": "gain_38946_13",
           "sourceAttribute": "magic",
-          "rawDescription": "<Text>text=\"进入战斗后，自身每66点基础破防等级将提高1点全攻击，最多提高28点，名剑大会中无法生效。\" font=101 </text>",
-          "description": "进入战斗后，自身每66点基础破防等级将提高1点全攻击，最多提高28点，名剑大会中无法生效。",
+          "rawDescription": "<Text>text=\"进入战斗后，自身每10点基础破防等级将提高2点全攻击，最多提高268点，名剑大会中无法生效。\" font=101 </text>",
+          "description": "进入战斗后，自身每10点基础破防等级将提高2点全攻击，最多提高268点，名剑大会中无法生效。",
           "handlerId": 38946,
           "level": 13,
           "kind": "rating_conversion",
@@ -3866,9 +3563,9 @@
             "conversion": {
               "from": "base_overcome",
               "to": "all_attack_power_base",
-              "per": 66,
-              "amount": 1,
-              "cap": 28
+              "per": 10,
+              "amount": 2,
+              "cap": 268
             }
           }
         }
@@ -3877,7 +3574,7 @@
     {
       "key": "trinkets:51445",
       "id": 51445,
-      "name": "无修项链·内·天_测试用",
+      "name": "无观项链·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -3890,11 +3587,11 @@
         "magical_attack_power_base": 313,
         "all_critical_strike_base": 134,
         "magical_overcome_base": 134,
-        "strain_base": 215,
+        "strain_base": 197,
         "event": "gain_38946_12"
       },
       "embed": {
-        "all_critical_power_base": 225
+        "all_critical_power_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -3925,22 +3622,22 @@
     {
       "key": "trinkets:51473",
       "id": 51473,
-      "name": "无修项链·内·天_测试用",
+      "name": "无观项链·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
       "position": "necklace",
-      "level": 1160,
+      "level": 1110,
       "maxStrength": 6,
       "base": {},
       "magic": {
-        "vitality_base": 303,
-        "magical_attack_power_base": 304,
-        "all_critical_strike_base": 304,
-        "strain_base": 370
+        "vitality_base": 289,
+        "magical_attack_power_base": 291,
+        "all_critical_strike_base": 233,
+        "strain_base": 433
       },
       "embed": {
-        "magical_attack_power_base": 225
+        "magical_attack_power_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -3948,22 +3645,22 @@
     {
       "key": "trinkets:51474",
       "id": 51474,
-      "name": "无修项链·内·天_测试用",
+      "name": "无观项链·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
       "position": "necklace",
-      "level": 1160,
+      "level": 1110,
       "maxStrength": 6,
       "base": {},
       "magic": {
-        "vitality_base": 303,
-        "magical_attack_power_base": 304,
-        "magical_overcome_base": 304,
-        "strain_base": 370
+        "vitality_base": 289,
+        "magical_attack_power_base": 291,
+        "magical_overcome_base": 233,
+        "strain_base": 433
       },
       "embed": {
-        "magical_overcome_base": 225
+        "magical_overcome_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -3971,23 +3668,23 @@
     {
       "key": "trinkets:51475",
       "id": 51475,
-      "name": "无修项链·内·天_测试用",
+      "name": "无观项链·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
       "position": "necklace",
-      "level": 1160,
+      "level": 1110,
       "maxStrength": 6,
       "base": {},
       "magic": {
-        "vitality_base": 303,
-        "magical_attack_power_base": 284,
-        "all_critical_strike_base": 122,
-        "magical_overcome_base": 122,
-        "strain_base": 185
+        "vitality_base": 289,
+        "magical_attack_power_base": 252,
+        "all_critical_strike_base": 184,
+        "magical_overcome_base": 184,
+        "strain_base": 289
       },
       "embed": {
-        "all_critical_power_base": 225
+        "all_critical_power_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -3995,23 +3692,23 @@
     {
       "key": "trinkets:51479",
       "id": 51479,
-      "name": "无修项链·内·天_测试用",
+      "name": "无观项链·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
       "position": "necklace",
-      "level": 1220,
+      "level": 1195,
       "maxStrength": 6,
       "base": {},
       "magic": {
-        "vitality_base": 320,
-        "magical_attack_power_base": 170,
-        "all_critical_strike_base": 352,
-        "strain_base": 433,
+        "vitality_base": 313,
+        "magical_attack_power_base": 136,
+        "all_critical_strike_base": 313,
+        "strain_base": 339,
         "event": "gain_38945_9"
       },
       "embed": {
-        "magical_attack_power_base": 225
+        "magical_attack_power_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -4042,23 +3739,23 @@
     {
       "key": "trinkets:51480",
       "id": 51480,
-      "name": "无修项链·内·天_测试用",
+      "name": "无观项链·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
       "position": "necklace",
-      "level": 1220,
+      "level": 1195,
       "maxStrength": 6,
       "base": {},
       "magic": {
-        "vitality_base": 320,
-        "magical_attack_power_base": 170,
-        "magical_overcome_base": 352,
-        "strain_base": 433,
+        "vitality_base": 313,
+        "magical_attack_power_base": 136,
+        "magical_overcome_base": 313,
+        "strain_base": 339,
         "event": "gain_38946_10"
       },
       "embed": {
-        "magical_overcome_base": 225
+        "magical_overcome_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -4089,24 +3786,24 @@
     {
       "key": "trinkets:51481",
       "id": 51481,
-      "name": "无修项链·内·天_测试用",
+      "name": "无观项链·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
       "position": "necklace",
-      "level": 1220,
+      "level": 1195,
       "maxStrength": 6,
       "base": {},
       "magic": {
-        "vitality_base": 320,
-        "magical_attack_power_base": 298,
-        "all_critical_strike_base": 128,
-        "magical_overcome_base": 128,
-        "strain_base": 200,
+        "vitality_base": 313,
+        "magical_attack_power_base": 292,
+        "all_critical_strike_base": 125,
+        "magical_overcome_base": 125,
+        "strain_base": 177,
         "event": "gain_38946_9"
       },
       "embed": {
-        "all_critical_power_base": 225
+        "all_critical_power_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -4137,7 +3834,7 @@
     {
       "key": "trinkets:51485",
       "id": 51485,
-      "name": "无修项链·内·天_测试用",
+      "name": "无观项链·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -4147,13 +3844,13 @@
       "base": {},
       "magic": {
         "vitality_base": 337,
-        "magical_attack_power_base": 335,
-        "all_critical_strike_base": 268,
-        "strain_base": 537,
+        "magical_attack_power_base": 145,
+        "all_critical_strike_base": 335,
+        "strain_base": 376,
         "event": "gain_38945_10"
       },
       "embed": {
-        "magical_attack_power_base": 225
+        "magical_attack_power_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -4184,7 +3881,7 @@
     {
       "key": "trinkets:51486",
       "id": 51486,
-      "name": "无修项链·内·天_测试用",
+      "name": "无观项链·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -4194,13 +3891,13 @@
       "base": {},
       "magic": {
         "vitality_base": 337,
-        "magical_attack_power_base": 335,
-        "magical_overcome_base": 268,
-        "strain_base": 537,
+        "magical_attack_power_base": 145,
+        "magical_overcome_base": 335,
+        "strain_base": 376,
         "event": "gain_38946_13"
       },
       "embed": {
-        "magical_overcome_base": 225
+        "magical_overcome_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -4208,8 +3905,8 @@
         {
           "key": "gain_38946_13",
           "sourceAttribute": "magic",
-          "rawDescription": "<Text>text=\"进入战斗后，自身每66点基础破防等级将提高1点全攻击，最多提高28点，名剑大会中无法生效。\" font=101 </text>",
-          "description": "进入战斗后，自身每66点基础破防等级将提高1点全攻击，最多提高28点，名剑大会中无法生效。",
+          "rawDescription": "<Text>text=\"进入战斗后，自身每10点基础破防等级将提高2点全攻击，最多提高268点，名剑大会中无法生效。\" font=101 </text>",
+          "description": "进入战斗后，自身每10点基础破防等级将提高2点全攻击，最多提高268点，名剑大会中无法生效。",
           "handlerId": 38946,
           "level": 13,
           "kind": "rating_conversion",
@@ -4220,9 +3917,9 @@
             "conversion": {
               "from": "base_overcome",
               "to": "all_attack_power_base",
-              "per": 66,
-              "amount": 1,
-              "cap": 28
+              "per": 10,
+              "amount": 2,
+              "cap": 268
             }
           }
         }
@@ -4231,7 +3928,7 @@
     {
       "key": "trinkets:51487",
       "id": 51487,
-      "name": "无修项链·内·天_测试用",
+      "name": "无观项链·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -4244,11 +3941,11 @@
         "magical_attack_power_base": 313,
         "all_critical_strike_base": 134,
         "magical_overcome_base": 134,
-        "strain_base": 215,
+        "strain_base": 197,
         "event": "gain_38946_12"
       },
       "embed": {
-        "all_critical_power_base": 225
+        "all_critical_power_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -4279,21 +3976,21 @@
     {
       "key": "trinkets:51499",
       "id": 51499,
-      "name": "无修项链·内·天_测试用",
+      "name": "无观项链·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
       "position": "necklace",
-      "level": 1160,
+      "level": 1110,
       "maxStrength": 6,
       "base": {},
       "magic": {
-        "vitality_base": 303,
-        "magical_attack_power_base": 385,
-        "haste_base": 370
+        "vitality_base": 289,
+        "magical_attack_power_base": 417,
+        "haste_base": 378
       },
       "embed": {
-        "all_critical_strike_base": 225
+        "all_critical_strike_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -4301,22 +3998,22 @@
     {
       "key": "trinkets:51501",
       "id": 51501,
-      "name": "无修项链·内·天_测试用",
+      "name": "无观项链·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
       "position": "necklace",
-      "level": 1220,
+      "level": 1195,
       "maxStrength": 6,
       "base": {},
       "magic": {
-        "vitality_base": 320,
-        "magical_attack_power_base": 405,
-        "haste_base": 389,
+        "vitality_base": 313,
+        "magical_attack_power_base": 449,
+        "haste_base": 407,
         "event": "gain_38946_11"
       },
       "embed": {
-        "all_critical_strike_base": 225
+        "all_critical_strike_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -4324,12 +4021,12 @@
         {
           "key": "gain_38946_11",
           "sourceAttribute": "magic",
-          "rawDescription": "<Text>text=\"进入战斗后，自身每10点基础破防等级将提高2点全攻击，最多提高182点，名剑大会中无法生效。\" font=101 </text>",
-          "description": "进入战斗后，自身每10点基础破防等级将提高2点全攻击，最多提高182点，名剑大会中无法生效。",
+          "rawDescription": "<Text>text=\"进入战斗后，自身每10点基础破防等级将提高2点全攻击，最多提高64点，名剑大会中无法生效。\" font=101 </text>",
+          "description": "进入战斗后，自身每10点基础破防等级将提高2点全攻击，最多提高64点，名剑大会中无法生效。",
           "handlerId": 38946,
           "level": 11,
           "kind": "rating_conversion",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "combat",
@@ -4338,7 +4035,7 @@
               "to": "all_attack_power_base",
               "per": 10,
               "amount": 2,
-              "cap": 182
+              "cap": 64
             }
           }
         }
@@ -4347,7 +4044,7 @@
     {
       "key": "trinkets:51503",
       "id": 51503,
-      "name": "无修项链·内·天_测试用",
+      "name": "无观项链·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -4357,12 +4054,12 @@
       "base": {},
       "magic": {
         "vitality_base": 337,
-        "magical_attack_power_base": 425,
-        "haste_base": 408,
+        "magical_attack_power_base": 481,
+        "haste_base": 436,
         "event": "gain_38946_14"
       },
       "embed": {
-        "all_critical_strike_base": 225
+        "all_critical_strike_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -4370,12 +4067,12 @@
         {
           "key": "gain_38946_14",
           "sourceAttribute": "magic",
-          "rawDescription": "<Text>text=\"进入战斗后，自身每10点基础破防等级将提高2点全攻击，最多提高190点，名剑大会中无法生效。\" font=101 </text>",
-          "description": "进入战斗后，自身每10点基础破防等级将提高2点全攻击，最多提高190点，名剑大会中无法生效。",
+          "rawDescription": "<Text>text=\"进入战斗后，自身每10点基础破防等级将提高2点全攻击，最多提高68点，名剑大会中无法生效。\" font=101 </text>",
+          "description": "进入战斗后，自身每10点基础破防等级将提高2点全攻击，最多提高68点，名剑大会中无法生效。",
           "handlerId": 38946,
           "level": 14,
           "kind": "rating_conversion",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "combat",
@@ -4384,7 +4081,7 @@
               "to": "all_attack_power_base",
               "per": 10,
               "amount": 2,
-              "cap": 190
+              "cap": 68
             }
           }
         }
@@ -4393,21 +4090,21 @@
     {
       "key": "trinkets:51513",
       "id": 51513,
-      "name": "无修项链·内·天_测试用",
+      "name": "无观项链·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
       "position": "necklace",
-      "level": 1160,
+      "level": 1110,
       "maxStrength": 6,
       "base": {},
       "magic": {
-        "vitality_base": 303,
-        "magical_attack_power_base": 385,
-        "haste_base": 370
+        "vitality_base": 289,
+        "magical_attack_power_base": 417,
+        "haste_base": 378
       },
       "embed": {
-        "all_critical_strike_base": 225
+        "all_critical_strike_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -4415,22 +4112,22 @@
     {
       "key": "trinkets:51515",
       "id": 51515,
-      "name": "无修项链·内·天_测试用",
+      "name": "无观项链·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
       "position": "necklace",
-      "level": 1220,
+      "level": 1195,
       "maxStrength": 6,
       "base": {},
       "magic": {
-        "vitality_base": 320,
-        "magical_attack_power_base": 405,
-        "haste_base": 389,
+        "vitality_base": 313,
+        "magical_attack_power_base": 449,
+        "haste_base": 407,
         "event": "gain_38946_11"
       },
       "embed": {
-        "all_critical_strike_base": 225
+        "all_critical_strike_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -4438,12 +4135,12 @@
         {
           "key": "gain_38946_11",
           "sourceAttribute": "magic",
-          "rawDescription": "<Text>text=\"进入战斗后，自身每10点基础破防等级将提高2点全攻击，最多提高182点，名剑大会中无法生效。\" font=101 </text>",
-          "description": "进入战斗后，自身每10点基础破防等级将提高2点全攻击，最多提高182点，名剑大会中无法生效。",
+          "rawDescription": "<Text>text=\"进入战斗后，自身每10点基础破防等级将提高2点全攻击，最多提高64点，名剑大会中无法生效。\" font=101 </text>",
+          "description": "进入战斗后，自身每10点基础破防等级将提高2点全攻击，最多提高64点，名剑大会中无法生效。",
           "handlerId": 38946,
           "level": 11,
           "kind": "rating_conversion",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "combat",
@@ -4452,7 +4149,7 @@
               "to": "all_attack_power_base",
               "per": 10,
               "amount": 2,
-              "cap": 182
+              "cap": 64
             }
           }
         }
@@ -4461,7 +4158,7 @@
     {
       "key": "trinkets:51517",
       "id": 51517,
-      "name": "无修项链·内·天_测试用",
+      "name": "无观项链·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -4471,12 +4168,12 @@
       "base": {},
       "magic": {
         "vitality_base": 337,
-        "magical_attack_power_base": 425,
-        "haste_base": 408,
+        "magical_attack_power_base": 481,
+        "haste_base": 436,
         "event": "gain_38946_14"
       },
       "embed": {
-        "all_critical_strike_base": 225
+        "all_critical_strike_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -4484,12 +4181,12 @@
         {
           "key": "gain_38946_14",
           "sourceAttribute": "magic",
-          "rawDescription": "<Text>text=\"进入战斗后，自身每10点基础破防等级将提高2点全攻击，最多提高190点，名剑大会中无法生效。\" font=101 </text>",
-          "description": "进入战斗后，自身每10点基础破防等级将提高2点全攻击，最多提高190点，名剑大会中无法生效。",
+          "rawDescription": "<Text>text=\"进入战斗后，自身每10点基础破防等级将提高2点全攻击，最多提高68点，名剑大会中无法生效。\" font=101 </text>",
+          "description": "进入战斗后，自身每10点基础破防等级将提高2点全攻击，最多提高68点，名剑大会中无法生效。",
           "handlerId": 38946,
           "level": 14,
           "kind": "rating_conversion",
-          "calculationStatus": "pending",
+          "calculationStatus": "verified",
           "rules": {
             "disabledInArena": true,
             "trigger": "combat",
@@ -4498,7 +4195,7 @@
               "to": "all_attack_power_base",
               "per": 10,
               "amount": 2,
-              "cap": 190
+              "cap": 68
             }
           }
         }
@@ -4507,63 +4204,7 @@
     {
       "key": "weapons:46530",
       "id": 46530,
-      "name": "寻踪觅宝·幽华双刀_测试用",
-      "school": "明教",
-      "kind": "防御",
-      "usage": "PVE",
-      "position": "primary_weapon",
-      "level": 1110,
-      "maxStrength": 6,
-      "base": {
-        "weapon_damage_base": 104,
-        "weapon_damage_rand": 69
-      },
-      "magic": {
-        "vitality_base": 942,
-        "physical_shield_base": 541,
-        "magical_shield_base": 781,
-        "haste_base": 240,
-        "toughness_base": 240,
-        "strain_base": 806,
-        "event": ""
-      },
-      "embed": {
-        "vitality_base": 225,
-        "physical_shield_base": 225,
-        "magical_shield_base": 225
-      },
-      "setId": 0,
-      "sets": {}
-    },
-    {
-      "key": "weapons:46550",
-      "id": 46550,
-      "name": "棘心囊_测试用",
-      "school": "通用",
-      "kind": "防御",
-      "usage": "PVE",
-      "position": "tertiary_weapon",
-      "level": 1110,
-      "maxStrength": 6,
-      "base": {},
-      "magic": {
-        "vitality_base": 471,
-        "physical_shield_base": 209,
-        "magical_shield_base": 302,
-        "haste_base": 93,
-        "toughness_base": 93,
-        "strain_base": 312
-      },
-      "embed": {
-        "vitality_base": 225
-      },
-      "setId": 0,
-      "sets": {}
-    },
-    {
-      "key": "weapons:46569",
-      "id": 46569,
-      "name": "火棘双刀_测试用",
+      "name": "寻踪觅宝·轮缺双刀",
       "school": "明教",
       "kind": "防御",
       "usage": "PVE",
@@ -4583,9 +4224,64 @@
         "strain_base": 806
       },
       "embed": {
-        "vitality_base": 225,
-        "physical_shield_base": 225,
-        "magical_shield_base": 225
+        "vitality_base": 304,
+        "physical_shield_base": 304,
+        "magical_shield_base": 304
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
+      "key": "weapons:46550",
+      "id": 46550,
+      "name": "隐寥囊",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "tertiary_weapon",
+      "level": 1110,
+      "maxStrength": 6,
+      "base": {},
+      "magic": {
+        "vitality_base": 471,
+        "physical_shield_base": 209,
+        "magical_shield_base": 302,
+        "haste_base": 93,
+        "toughness_base": 93,
+        "strain_base": 312
+      },
+      "embed": {
+        "vitality_base": 304
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
+      "key": "weapons:46569",
+      "id": 46569,
+      "name": "焚闲双刀",
+      "school": "明教",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "primary_weapon",
+      "level": 1110,
+      "maxStrength": 6,
+      "base": {
+        "weapon_damage_base": 104,
+        "weapon_damage_rand": 69
+      },
+      "magic": {
+        "vitality_base": 942,
+        "physical_shield_base": 541,
+        "magical_shield_base": 781,
+        "haste_base": 240,
+        "toughness_base": 240,
+        "strain_base": 806
+      },
+      "embed": {
+        "vitality_base": 304,
+        "physical_shield_base": 304,
+        "magical_shield_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -4593,7 +4289,7 @@
     {
       "key": "weapons:46609",
       "id": 46609,
-      "name": "重离双刀_测试用",
+      "name": "突薪双刀",
       "school": "明教",
       "kind": "防御",
       "usage": "PVE",
@@ -4613,9 +4309,9 @@
         "strain_base": 806
       },
       "embed": {
-        "vitality_base": 225,
-        "physical_shield_base": 225,
-        "magical_shield_base": 225
+        "vitality_base": 304,
+        "physical_shield_base": 304,
+        "magical_shield_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -4623,7 +4319,7 @@
     {
       "key": "weapons:46630",
       "id": 46630,
-      "name": "不摧囊_测试用",
+      "name": "抱火囊",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -4640,7 +4336,7 @@
         "strain_base": 386
       },
       "embed": {
-        "vitality_base": 225
+        "vitality_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -4648,7 +4344,7 @@
     {
       "key": "weapons:46649",
       "id": 46649,
-      "name": "明障双刀_测试用",
+      "name": "业离双刀",
       "school": "明教",
       "kind": "防御",
       "usage": "PVE",
@@ -4668,9 +4364,9 @@
         "strain_base": 997
       },
       "embed": {
-        "vitality_base": 225,
-        "physical_shield_base": 225,
-        "magical_shield_base": 225
+        "vitality_base": 304,
+        "physical_shield_base": 304,
+        "magical_shield_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -4678,7 +4374,7 @@
     {
       "key": "weapons:46690",
       "id": 46690,
-      "name": "明御双刀_测试用",
+      "name": "烈霄双刀",
       "school": "明教",
       "kind": "防御",
       "usage": "PVE",
@@ -4698,9 +4394,9 @@
         "strain_base": 997
       },
       "embed": {
-        "vitality_base": 225,
-        "physical_shield_base": 225,
-        "magical_shield_base": 225
+        "vitality_base": 304,
+        "physical_shield_base": 304,
+        "magical_shield_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -4708,7 +4404,7 @@
     {
       "key": "weapons:46745",
       "id": 46745,
-      "name": "暮山重_测试用",
+      "name": "千峰锁",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -4725,7 +4421,7 @@
         "strain_base": 386
       },
       "embed": {
-        "threat_gain": 21
+        "threat_gain": 29
       },
       "setId": 0,
       "sets": {}
@@ -4733,7 +4429,7 @@
     {
       "key": "weapons:46764",
       "id": 46764,
-      "name": "马蹄江南_测试用",
+      "name": "赤穹熠",
       "school": "明教",
       "kind": "防御",
       "usage": "PVE",
@@ -4753,9 +4449,9 @@
         "strain_base": 1021
       },
       "embed": {
-        "vitality_base": 225,
-        "physical_shield_base": 225,
-        "magical_shield_base": 225
+        "vitality_base": 304,
+        "physical_shield_base": 304,
+        "magical_shield_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -4763,7 +4459,7 @@
     {
       "key": "weapons:47516",
       "id": 47516,
-      "name": "幽墟荡秽·护阙囊_测试用",
+      "name": "冥关孤渡·封障囊",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -4780,7 +4476,106 @@
         "strain_base": 312
       },
       "embed": {
-        "threat_gain": 21
+        "threat_gain": 29
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
+      "key": "weapons:47816",
+      "id": 47816,
+      "name": "望明",
+      "school": "明教",
+      "kind": "防御",
+      "usage": "ALL",
+      "position": "primary_weapon",
+      "level": 1110,
+      "maxStrength": 8,
+      "orangeWeapon": true,
+      "base": {
+        "weapon_damage_base": 115,
+        "weapon_damage_rand": 77
+      },
+      "magic": {
+        "vitality_base": 1268,
+        "physical_shield_base": 1655,
+        "magical_shield_base": 1655,
+        "haste_base": 552,
+        "toughness_base": 276,
+        "strain_base": 925,
+        "recipe": "recipe_1544_1 | recipe_1545_1 | recipe_17333_1 | recipe_17246_1 | recipe_17337_1 | recipe_17343_1",
+        "event": "gain_4941_9 | gain_25796_1"
+      },
+      "embed": {
+        "vitality_base": 304,
+        "physical_shield_base": 304,
+        "dodge_base": 304
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
+      "key": "weapons:47849",
+      "id": 47849,
+      "name": "望明",
+      "school": "明教",
+      "kind": "防御",
+      "usage": "ALL",
+      "position": "primary_weapon",
+      "level": 1170,
+      "maxStrength": 8,
+      "orangeWeapon": true,
+      "base": {
+        "weapon_damage_base": 124,
+        "weapon_damage_rand": 83
+      },
+      "magic": {
+        "vitality_base": 1342,
+        "physical_shield_base": 1745,
+        "magical_shield_base": 1745,
+        "haste_base": 582,
+        "toughness_base": 291,
+        "strain_base": 1001,
+        "recipe": "recipe_1544_1 | recipe_1545_1 | recipe_17333_1 | recipe_17246_1 | recipe_17337_1 | recipe_17343_1",
+        "event": "gain_4941_9 | gain_25796_1"
+      },
+      "embed": {
+        "vitality_base": 304,
+        "physical_shield_base": 304,
+        "dodge_base": 304
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
+      "key": "weapons:47882",
+      "id": 47882,
+      "name": "望明",
+      "school": "明教",
+      "kind": "防御",
+      "usage": "ALL",
+      "position": "primary_weapon",
+      "level": 1240,
+      "maxStrength": 8,
+      "orangeWeapon": true,
+      "base": {
+        "weapon_damage_base": 134,
+        "weapon_damage_rand": 89
+      },
+      "magic": {
+        "vitality_base": 1429,
+        "physical_shield_base": 1849,
+        "magical_shield_base": 1849,
+        "haste_base": 616,
+        "toughness_base": 308,
+        "strain_base": 1092,
+        "recipe": "recipe_1544_1 | recipe_1545_1 | recipe_17333_1 | recipe_17246_1 | recipe_17337_1 | recipe_17343_1",
+        "event": "gain_4941_9 | gain_25796_1"
+      },
+      "embed": {
+        "vitality_base": 304,
+        "physical_shield_base": 304,
+        "dodge_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -4788,7 +4583,7 @@
     {
       "key": "weapons:47902",
       "id": 47902,
-      "name": "胃擎囊_测试用",
+      "name": "护昴囊",
       "school": "通用",
       "kind": "防御",
       "usage": "PVE",
@@ -4805,7 +4600,7 @@
         "strain_base": 351
       },
       "embed": {
-        "threat_gain": 21
+        "threat_gain": 29
       },
       "setId": 0,
       "sets": {}
@@ -4813,22 +4608,22 @@
     {
       "key": "weapons:47966",
       "id": 47966,
-      "name": "无修囊·内·天_测试用",
+      "name": "无观囊·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
       "position": "tertiary_weapon",
-      "level": 1160,
+      "level": 1110,
       "maxStrength": 6,
       "base": {},
       "magic": {
-        "vitality_base": 364,
-        "magical_attack_power_base": 365,
-        "all_critical_strike_base": 365,
-        "strain_base": 444
+        "vitality_base": 347,
+        "magical_attack_power_base": 349,
+        "all_critical_strike_base": 279,
+        "strain_base": 520
       },
       "embed": {
-        "magical_attack_power_base": 225
+        "magical_attack_power_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -4836,22 +4631,22 @@
     {
       "key": "weapons:47967",
       "id": 47967,
-      "name": "无修囊·内·天_测试用",
+      "name": "无观囊·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
       "position": "tertiary_weapon",
-      "level": 1160,
+      "level": 1110,
       "maxStrength": 6,
       "base": {},
       "magic": {
-        "vitality_base": 364,
-        "magical_attack_power_base": 365,
-        "magical_overcome_base": 365,
-        "strain_base": 444
+        "vitality_base": 347,
+        "magical_attack_power_base": 349,
+        "magical_overcome_base": 279,
+        "strain_base": 520
       },
       "embed": {
-        "magical_overcome_base": 225
+        "magical_overcome_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -4859,23 +4654,21 @@
     {
       "key": "weapons:47968",
       "id": 47968,
-      "name": "无修囊·内·天_测试用",
+      "name": "无观囊·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
       "position": "tertiary_weapon",
-      "level": 1160,
+      "level": 1110,
       "maxStrength": 6,
       "base": {},
       "magic": {
-        "vitality_base": 364,
-        "magical_attack_power_base": 365,
-        "all_critical_strike_base": 134,
-        "all_critical_power_base": 122,
-        "strain_base": 407
+        "vitality_base": 347,
+        "magical_attack_power_base": 361,
+        "strain_base": 780
       },
       "embed": {
-        "magical_overcome_base": 225
+        "magical_overcome_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -4883,23 +4676,23 @@
     {
       "key": "weapons:47972",
       "id": 47972,
-      "name": "无修囊·内·天_测试用",
+      "name": "无观囊·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
       "position": "tertiary_weapon",
-      "level": 1220,
+      "level": 1195,
       "maxStrength": 6,
       "base": {},
       "magic": {
-        "vitality_base": 385,
-        "magical_attack_power_base": 205,
-        "all_critical_strike_base": 422,
-        "strain_base": 519,
+        "vitality_base": 376,
+        "magical_attack_power_base": 163,
+        "all_critical_strike_base": 376,
+        "strain_base": 407,
         "event": "gain_38950_10"
       },
       "embed": {
-        "magical_attack_power_base": 225
+        "magical_attack_power_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -4924,23 +4717,23 @@
     {
       "key": "weapons:47973",
       "id": 47973,
-      "name": "无修囊·内·天_测试用",
+      "name": "无观囊·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
       "position": "tertiary_weapon",
-      "level": 1220,
+      "level": 1195,
       "maxStrength": 6,
       "base": {},
       "magic": {
-        "vitality_base": 385,
-        "magical_attack_power_base": 205,
-        "magical_overcome_base": 422,
-        "strain_base": 519,
+        "vitality_base": 376,
+        "magical_attack_power_base": 163,
+        "magical_overcome_base": 376,
+        "strain_base": 407,
         "event": "gain_38950_10"
       },
       "embed": {
-        "magical_overcome_base": 225
+        "magical_overcome_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -4965,24 +4758,24 @@
     {
       "key": "weapons:47974",
       "id": 47974,
-      "name": "无修囊·内·天_测试用",
+      "name": "无观囊·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
       "position": "tertiary_weapon",
-      "level": 1220,
+      "level": 1195,
       "maxStrength": 6,
       "base": {},
       "magic": {
-        "vitality_base": 385,
-        "magical_attack_power_base": 384,
-        "all_critical_strike_base": 141,
-        "all_critical_power_base": 128,
-        "strain_base": 439,
+        "vitality_base": 376,
+        "magical_attack_power_base": 351,
+        "all_critical_strike_base": 125,
+        "all_critical_power_base": 125,
+        "strain_base": 349,
         "event": "gain_38950_9"
       },
       "embed": {
-        "magical_overcome_base": 225
+        "magical_overcome_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -5007,7 +4800,7 @@
     {
       "key": "weapons:47978",
       "id": 47978,
-      "name": "无修囊·内·天_测试用",
+      "name": "无观囊·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -5017,13 +4810,13 @@
       "base": {},
       "magic": {
         "vitality_base": 405,
-        "magical_attack_power_base": 402,
-        "all_critical_strike_base": 322,
-        "strain_base": 644,
+        "magical_attack_power_base": 174,
+        "all_critical_strike_base": 402,
+        "strain_base": 451,
         "event": "gain_38950_14"
       },
       "embed": {
-        "magical_attack_power_base": 225
+        "magical_attack_power_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -5048,7 +4841,7 @@
     {
       "key": "weapons:47979",
       "id": 47979,
-      "name": "无修囊·内·天_测试用",
+      "name": "无观囊·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -5058,13 +4851,13 @@
       "base": {},
       "magic": {
         "vitality_base": 405,
-        "magical_attack_power_base": 402,
-        "magical_overcome_base": 322,
-        "strain_base": 644,
+        "magical_attack_power_base": 174,
+        "magical_overcome_base": 402,
+        "strain_base": 451,
         "event": "gain_38950_14"
       },
       "embed": {
-        "magical_overcome_base": 225
+        "magical_overcome_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -5089,7 +4882,7 @@
     {
       "key": "weapons:47980",
       "id": 47980,
-      "name": "无修囊·内·天_测试用",
+      "name": "无观囊·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -5099,14 +4892,14 @@
       "base": {},
       "magic": {
         "vitality_base": 405,
-        "magical_attack_power_base": 402,
-        "all_critical_strike_base": 148,
+        "magical_attack_power_base": 376,
+        "all_critical_strike_base": 134,
         "all_critical_power_base": 134,
-        "strain_base": 472,
+        "strain_base": 386,
         "event": "gain_38950_13"
       },
       "embed": {
-        "magical_overcome_base": 225
+        "magical_overcome_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -5131,22 +4924,22 @@
     {
       "key": "weapons:48008",
       "id": 48008,
-      "name": "无修囊·内·天_测试用",
+      "name": "无观囊·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
       "position": "tertiary_weapon",
-      "level": 1160,
+      "level": 1110,
       "maxStrength": 6,
       "base": {},
       "magic": {
-        "vitality_base": 364,
-        "magical_attack_power_base": 365,
-        "all_critical_strike_base": 365,
-        "strain_base": 444
+        "vitality_base": 347,
+        "magical_attack_power_base": 349,
+        "all_critical_strike_base": 279,
+        "strain_base": 520
       },
       "embed": {
-        "magical_attack_power_base": 225
+        "magical_attack_power_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -5154,22 +4947,22 @@
     {
       "key": "weapons:48009",
       "id": 48009,
-      "name": "无修囊·内·天_测试用",
+      "name": "无观囊·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
       "position": "tertiary_weapon",
-      "level": 1160,
+      "level": 1110,
       "maxStrength": 6,
       "base": {},
       "magic": {
-        "vitality_base": 364,
-        "magical_attack_power_base": 365,
-        "magical_overcome_base": 365,
-        "strain_base": 444
+        "vitality_base": 347,
+        "magical_attack_power_base": 349,
+        "magical_overcome_base": 279,
+        "strain_base": 520
       },
       "embed": {
-        "magical_overcome_base": 225
+        "magical_overcome_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -5177,23 +4970,21 @@
     {
       "key": "weapons:48010",
       "id": 48010,
-      "name": "无修囊·内·天_测试用",
+      "name": "无观囊·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
       "position": "tertiary_weapon",
-      "level": 1160,
+      "level": 1110,
       "maxStrength": 6,
       "base": {},
       "magic": {
-        "vitality_base": 364,
-        "magical_attack_power_base": 365,
-        "all_critical_strike_base": 134,
-        "all_critical_power_base": 122,
-        "strain_base": 407
+        "vitality_base": 347,
+        "magical_attack_power_base": 361,
+        "strain_base": 780
       },
       "embed": {
-        "magical_overcome_base": 225
+        "magical_overcome_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -5201,23 +4992,23 @@
     {
       "key": "weapons:48014",
       "id": 48014,
-      "name": "无修囊·内·天_测试用",
+      "name": "无观囊·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
       "position": "tertiary_weapon",
-      "level": 1220,
+      "level": 1195,
       "maxStrength": 6,
       "base": {},
       "magic": {
-        "vitality_base": 385,
-        "magical_attack_power_base": 205,
-        "all_critical_strike_base": 422,
-        "strain_base": 519,
+        "vitality_base": 376,
+        "magical_attack_power_base": 163,
+        "all_critical_strike_base": 376,
+        "strain_base": 407,
         "event": "gain_38950_10"
       },
       "embed": {
-        "magical_attack_power_base": 225
+        "magical_attack_power_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -5242,23 +5033,23 @@
     {
       "key": "weapons:48015",
       "id": 48015,
-      "name": "无修囊·内·天_测试用",
+      "name": "无观囊·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
       "position": "tertiary_weapon",
-      "level": 1220,
+      "level": 1195,
       "maxStrength": 6,
       "base": {},
       "magic": {
-        "vitality_base": 385,
-        "magical_attack_power_base": 205,
-        "magical_overcome_base": 422,
-        "strain_base": 519,
+        "vitality_base": 376,
+        "magical_attack_power_base": 163,
+        "magical_overcome_base": 376,
+        "strain_base": 407,
         "event": "gain_38950_10"
       },
       "embed": {
-        "magical_overcome_base": 225
+        "magical_overcome_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -5283,24 +5074,24 @@
     {
       "key": "weapons:48016",
       "id": 48016,
-      "name": "无修囊·内·天_测试用",
+      "name": "无观囊·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
       "position": "tertiary_weapon",
-      "level": 1220,
+      "level": 1195,
       "maxStrength": 6,
       "base": {},
       "magic": {
-        "vitality_base": 385,
-        "magical_attack_power_base": 384,
-        "all_critical_strike_base": 141,
-        "all_critical_power_base": 128,
-        "strain_base": 439,
+        "vitality_base": 376,
+        "magical_attack_power_base": 351,
+        "all_critical_strike_base": 125,
+        "all_critical_power_base": 125,
+        "strain_base": 349,
         "event": "gain_38950_9"
       },
       "embed": {
-        "magical_overcome_base": 225
+        "magical_overcome_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -5325,7 +5116,7 @@
     {
       "key": "weapons:48020",
       "id": 48020,
-      "name": "无修囊·内·天_测试用",
+      "name": "无观囊·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -5335,13 +5126,13 @@
       "base": {},
       "magic": {
         "vitality_base": 405,
-        "magical_attack_power_base": 402,
-        "all_critical_strike_base": 322,
-        "strain_base": 644,
+        "magical_attack_power_base": 174,
+        "all_critical_strike_base": 402,
+        "strain_base": 451,
         "event": "gain_38950_14"
       },
       "embed": {
-        "magical_attack_power_base": 225
+        "magical_attack_power_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -5366,7 +5157,7 @@
     {
       "key": "weapons:48021",
       "id": 48021,
-      "name": "无修囊·内·天_测试用",
+      "name": "无观囊·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -5376,13 +5167,13 @@
       "base": {},
       "magic": {
         "vitality_base": 405,
-        "magical_attack_power_base": 402,
-        "magical_overcome_base": 322,
-        "strain_base": 644,
+        "magical_attack_power_base": 174,
+        "magical_overcome_base": 402,
+        "strain_base": 451,
         "event": "gain_38950_14"
       },
       "embed": {
-        "magical_overcome_base": 225
+        "magical_overcome_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -5407,7 +5198,7 @@
     {
       "key": "weapons:48022",
       "id": 48022,
-      "name": "无修囊·内·天_测试用",
+      "name": "无观囊·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -5417,14 +5208,14 @@
       "base": {},
       "magic": {
         "vitality_base": 405,
-        "magical_attack_power_base": 402,
-        "all_critical_strike_base": 148,
+        "magical_attack_power_base": 376,
+        "all_critical_strike_base": 134,
         "all_critical_power_base": 134,
-        "strain_base": 472,
+        "strain_base": 386,
         "event": "gain_38950_13"
       },
       "embed": {
-        "magical_overcome_base": 225
+        "magical_overcome_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -5449,22 +5240,22 @@
     {
       "key": "weapons:48034",
       "id": 48034,
-      "name": "无修囊·内·天_测试用",
+      "name": "无观囊·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
       "position": "tertiary_weapon",
-      "level": 1160,
+      "level": 1110,
       "maxStrength": 6,
       "base": {},
       "magic": {
-        "vitality_base": 364,
-        "magical_attack_power_base": 353,
-        "haste_base": 377,
-        "strain_base": 407
+        "vitality_base": 347,
+        "magical_attack_power_base": 337,
+        "haste_base": 361,
+        "strain_base": 381
       },
       "embed": {
-        "all_critical_strike_base": 225
+        "all_critical_strike_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -5472,23 +5263,23 @@
     {
       "key": "weapons:48036",
       "id": 48036,
-      "name": "无修囊·内·天_测试用",
+      "name": "无观囊·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
       "position": "tertiary_weapon",
-      "level": 1220,
+      "level": 1195,
       "maxStrength": 6,
       "base": {},
       "magic": {
-        "vitality_base": 385,
-        "magical_attack_power_base": 371,
-        "haste_base": 396,
-        "strain_base": 439,
+        "vitality_base": 376,
+        "magical_attack_power_base": 363,
+        "haste_base": 388,
+        "strain_base": 426,
         "event": "gain_46727_1"
       },
       "embed": {
-        "all_critical_strike_base": 225
+        "all_critical_strike_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -5496,8 +5287,8 @@
         {
           "key": "gain_46727_1",
           "sourceAttribute": "magic",
-          "rawDescription": "<Text>text=\"命中目标后，使自身全攻击提高511点，持续6至11秒。加速等级越高，持续时间越长，达到2024点加速等级时持续11秒。该效果每20秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
-          "description": "命中目标后，使自身全攻击提高511点，持续6至11秒。加速等级越高，持续时间越长，达到2024点加速等级时持续11秒。该效果每20秒最多触发一次。名剑大会中无法生效。",
+          "rawDescription": "<Text>text=\"命中目标后，使自身全攻击提高181点，持续6至11秒。加速等级越高，持续时间越长，达到2024点加速等级时持续11秒。该效果每20秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
+          "description": "命中目标后，使自身全攻击提高181点，持续6至11秒。加速等级越高，持续时间越长，达到2024点加速等级时持续11秒。该效果每20秒最多触发一次。名剑大会中无法生效。",
           "handlerId": 46727,
           "level": 1,
           "kind": "triggered_attributes",
@@ -5508,7 +5299,7 @@
             "cooldownSeconds": 20,
             "durationSeconds": 11,
             "attributes": {
-              "all_attack_power_base": 511
+              "all_attack_power_base": 181
             },
             "durationRangeSeconds": [
               6,
@@ -5522,7 +5313,7 @@
     {
       "key": "weapons:48038",
       "id": 48038,
-      "name": "无修囊·内·天_测试用",
+      "name": "无观囊·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -5538,7 +5329,7 @@
         "event": "gain_46727_2"
       },
       "embed": {
-        "all_critical_strike_base": 225
+        "all_critical_strike_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -5546,8 +5337,8 @@
         {
           "key": "gain_46727_2",
           "sourceAttribute": "magic",
-          "rawDescription": "<Text>text=\"命中目标后，使自身全攻击提高537点，持续6至11秒。加速等级越高，持续时间越长，达到2024点加速等级时持续11秒。该效果每20秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
-          "description": "命中目标后，使自身全攻击提高537点，持续6至11秒。加速等级越高，持续时间越长，达到2024点加速等级时持续11秒。该效果每20秒最多触发一次。名剑大会中无法生效。",
+          "rawDescription": "<Text>text=\"命中目标后，使自身全攻击提高189点，持续6至11秒。加速等级越高，持续时间越长，达到2024点加速等级时持续11秒。该效果每20秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
+          "description": "命中目标后，使自身全攻击提高189点，持续6至11秒。加速等级越高，持续时间越长，达到2024点加速等级时持续11秒。该效果每20秒最多触发一次。名剑大会中无法生效。",
           "handlerId": 46727,
           "level": 2,
           "kind": "triggered_attributes",
@@ -5558,7 +5349,7 @@
             "cooldownSeconds": 20,
             "durationSeconds": 11,
             "attributes": {
-              "all_attack_power_base": 537
+              "all_attack_power_base": 189
             },
             "durationRangeSeconds": [
               6,
@@ -5572,22 +5363,22 @@
     {
       "key": "weapons:48048",
       "id": 48048,
-      "name": "无修囊·内·天_测试用",
+      "name": "无观囊·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
       "position": "tertiary_weapon",
-      "level": 1160,
+      "level": 1110,
       "maxStrength": 6,
       "base": {},
       "magic": {
-        "vitality_base": 364,
-        "magical_attack_power_base": 353,
-        "haste_base": 377,
-        "strain_base": 407
+        "vitality_base": 347,
+        "magical_attack_power_base": 337,
+        "haste_base": 361,
+        "strain_base": 381
       },
       "embed": {
-        "all_critical_strike_base": 225
+        "all_critical_strike_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -5595,23 +5386,23 @@
     {
       "key": "weapons:48050",
       "id": 48050,
-      "name": "无修囊·内·天_测试用",
+      "name": "无观囊·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
       "position": "tertiary_weapon",
-      "level": 1220,
+      "level": 1195,
       "maxStrength": 6,
       "base": {},
       "magic": {
-        "vitality_base": 385,
-        "magical_attack_power_base": 371,
-        "haste_base": 396,
-        "strain_base": 439,
+        "vitality_base": 376,
+        "magical_attack_power_base": 363,
+        "haste_base": 388,
+        "strain_base": 426,
         "event": "gain_46727_1"
       },
       "embed": {
-        "all_critical_strike_base": 225
+        "all_critical_strike_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -5619,8 +5410,8 @@
         {
           "key": "gain_46727_1",
           "sourceAttribute": "magic",
-          "rawDescription": "<Text>text=\"命中目标后，使自身全攻击提高511点，持续6至11秒。加速等级越高，持续时间越长，达到2024点加速等级时持续11秒。该效果每20秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
-          "description": "命中目标后，使自身全攻击提高511点，持续6至11秒。加速等级越高，持续时间越长，达到2024点加速等级时持续11秒。该效果每20秒最多触发一次。名剑大会中无法生效。",
+          "rawDescription": "<Text>text=\"命中目标后，使自身全攻击提高181点，持续6至11秒。加速等级越高，持续时间越长，达到2024点加速等级时持续11秒。该效果每20秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
+          "description": "命中目标后，使自身全攻击提高181点，持续6至11秒。加速等级越高，持续时间越长，达到2024点加速等级时持续11秒。该效果每20秒最多触发一次。名剑大会中无法生效。",
           "handlerId": 46727,
           "level": 1,
           "kind": "triggered_attributes",
@@ -5631,7 +5422,7 @@
             "cooldownSeconds": 20,
             "durationSeconds": 11,
             "attributes": {
-              "all_attack_power_base": 511
+              "all_attack_power_base": 181
             },
             "durationRangeSeconds": [
               6,
@@ -5645,7 +5436,7 @@
     {
       "key": "weapons:48052",
       "id": 48052,
-      "name": "无修囊·内·天_测试用",
+      "name": "无观囊·内·荒",
       "school": "精简",
       "kind": "内功",
       "usage": "PVE",
@@ -5661,7 +5452,7 @@
         "event": "gain_46727_2"
       },
       "embed": {
-        "all_critical_strike_base": 225
+        "all_critical_strike_base": 304
       },
       "setId": 0,
       "sets": {},
@@ -5669,8 +5460,8 @@
         {
           "key": "gain_46727_2",
           "sourceAttribute": "magic",
-          "rawDescription": "<Text>text=\"命中目标后，使自身全攻击提高537点，持续6至11秒。加速等级越高，持续时间越长，达到2024点加速等级时持续11秒。该效果每20秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
-          "description": "命中目标后，使自身全攻击提高537点，持续6至11秒。加速等级越高，持续时间越长，达到2024点加速等级时持续11秒。该效果每20秒最多触发一次。名剑大会中无法生效。",
+          "rawDescription": "<Text>text=\"命中目标后，使自身全攻击提高189点，持续6至11秒。加速等级越高，持续时间越长，达到2024点加速等级时持续11秒。该效果每20秒最多触发一次。名剑大会中无法生效。\" font=101 </text>",
+          "description": "命中目标后，使自身全攻击提高189点，持续6至11秒。加速等级越高，持续时间越长，达到2024点加速等级时持续11秒。该效果每20秒最多触发一次。名剑大会中无法生效。",
           "handlerId": 46727,
           "level": 2,
           "kind": "triggered_attributes",
@@ -5681,7 +5472,7 @@
             "cooldownSeconds": 20,
             "durationSeconds": 11,
             "attributes": {
-              "all_attack_power_base": 537
+              "all_attack_power_base": 189
             },
             "durationRangeSeconds": [
               6,
@@ -5693,1092 +5484,38 @@
       ]
     },
     {
-      "key": "weapons:47816",
-      "id": 47816,
-      "name": "圣辉月雪_测试用",
-      "school": "明教",
+      "key": "weapons:48492",
+      "id": 48492,
+      "name": "虚白生",
+      "school": "通用",
       "kind": "防御",
-      "usage": "ALL",
-      "position": "primary_weapon",
+      "usage": "PVE",
+      "position": "tertiary_weapon",
       "level": 1110,
-      "maxStrength": 8,
-      "base": {
-        "weapon_damage_base": 115,
-        "weapon_damage_rand": 77
-      },
+      "maxStrength": 6,
+      "base": {},
       "magic": {
-        "vitality_base": 1268,
-        "physical_shield_base": 1655,
-        "magical_shield_base": 1655,
-        "haste_base": 552,
-        "toughness_base": 276,
-        "strain_base": 925,
-        "recipe": "recipe_1544_1 | recipe_1545_1 | recipe_17333_1 | recipe_17246_1 | recipe_17337_1 | recipe_17343_1",
-        "event": "gain_4941_9 | gain_25796_1"
+        "vitality_base": 471,
+        "physical_shield_base": 302,
+        "magical_shield_base": 209,
+        "haste_base": 93,
+        "toughness_base": 93,
+        "strain_base": 312
       },
       "embed": {
-        "vitality_base": 225,
-        "physical_shield_base": 225,
-        "dodge_base": 225
+        "threat_gain": 29
       },
       "setId": 0,
-      "sets": {},
-      "orangeWeapon": true
-    },
-    {
-      "key": "weapons:47849",
-      "id": 47849,
-      "name": "圣辉月雪_测试用",
-      "school": "明教",
-      "kind": "防御",
-      "usage": "ALL",
-      "position": "primary_weapon",
-      "level": 1170,
-      "maxStrength": 8,
-      "base": {
-        "weapon_damage_base": 124,
-        "weapon_damage_rand": 83
-      },
-      "magic": {
-        "vitality_base": 1342,
-        "physical_shield_base": 1745,
-        "magical_shield_base": 1745,
-        "haste_base": 582,
-        "toughness_base": 291,
-        "strain_base": 1001,
-        "recipe": "recipe_1544_1 | recipe_1545_1 | recipe_17333_1 | recipe_17246_1 | recipe_17337_1 | recipe_17343_1",
-        "event": "gain_4941_9 | gain_25796_1"
-      },
-      "embed": {
-        "vitality_base": 225,
-        "physical_shield_base": 225,
-        "dodge_base": 225
-      },
-      "setId": 0,
-      "sets": {},
-      "orangeWeapon": true
-    },
-    {
-      "key": "weapons:47882",
-      "id": 47882,
-      "name": "圣辉月雪_测试用",
-      "school": "明教",
-      "kind": "防御",
-      "usage": "ALL",
-      "position": "primary_weapon",
-      "level": 1240,
-      "maxStrength": 8,
-      "base": {
-        "weapon_damage_base": 134,
-        "weapon_damage_rand": 89
-      },
-      "magic": {
-        "vitality_base": 1429,
-        "physical_shield_base": 1849,
-        "magical_shield_base": 1849,
-        "haste_base": 616,
-        "toughness_base": 308,
-        "strain_base": 1092,
-        "recipe": "recipe_1544_1 | recipe_1545_1 | recipe_17333_1 | recipe_17246_1 | recipe_17337_1 | recipe_17343_1",
-        "event": "gain_4941_9 | gain_25796_1"
-      },
-      "embed": {
-        "vitality_base": 225,
-        "physical_shield_base": 225,
-        "dodge_base": 225
-      },
-      "setId": 0,
-      "sets": {},
-      "orangeWeapon": true
+      "sets": {}
     }
   ],
   "enchants": [
     {
-      "id": 16664,
-      "name": "铸世·归正·暗器（加速）",
-      "position": "tertiary_weapon",
-      "attributes": {
-        "haste_base": 126
-      }
-    },
-    {
-      "id": 16663,
-      "name": "铸世·归正·暗器（破防）",
-      "position": "tertiary_weapon",
-      "attributes": {
-        "all_overcome_base": 126
-      }
-    },
-    {
-      "id": 16662,
-      "name": "铸世·归正·暗器（身法）",
-      "position": "tertiary_weapon",
-      "attributes": {
-        "agility_base": 126
-      }
-    },
-    {
-      "id": 16661,
-      "name": "铸世·归正·暗器（元气）",
-      "position": "tertiary_weapon",
-      "attributes": {
-        "spunk_base": 126
-      }
-    },
-    {
-      "id": 16660,
-      "name": "铸世·归正·暗器（力道）",
-      "position": "tertiary_weapon",
-      "attributes": {
-        "strength_base": 126
-      }
-    },
-    {
-      "id": 16659,
-      "name": "铸世·归正·暗器（根骨）",
-      "position": "tertiary_weapon",
-      "attributes": {
-        "spirit_base": 126
-      }
-    },
-    {
-      "id": 16658,
-      "name": "铸世·归正·戒指（攻击）",
-      "position": "ring",
-      "attributes": {
-        "all_attack_power_base": 126
-      }
-    },
-    {
-      "id": 16657,
-      "name": "铸世·归正·戒指（身法）",
-      "position": "ring",
-      "attributes": {
-        "agility_base": 126
-      }
-    },
-    {
-      "id": 16656,
-      "name": "铸世·归正·戒指（元气）",
-      "position": "ring",
-      "attributes": {
-        "spunk_base": 126
-      }
-    },
-    {
-      "id": 16655,
-      "name": "铸世·归正·戒指（力道）",
-      "position": "ring",
-      "attributes": {
-        "strength_base": 126
-      }
-    },
-    {
-      "id": 16654,
-      "name": "铸世·归正·戒指（根骨）",
-      "position": "ring",
-      "attributes": {
-        "spirit_base": 126
-      }
-    },
-    {
-      "id": 16653,
-      "name": "铸世·归正·腰坠（化劲）",
-      "position": "pendant",
-      "attributes": {
-        "decritical_power_base": 126
-      }
-    },
-    {
-      "id": 16652,
-      "name": "铸世·归正·腰坠（体质）",
-      "position": "pendant",
-      "attributes": {
-        "vitality_base": 126
-      }
-    },
-    {
-      "id": 16651,
-      "name": "铸世·归正·项链（御劲）",
-      "position": "necklace",
-      "attributes": {
-        "toughness_base": 126
-      }
-    },
-    {
-      "id": 16650,
-      "name": "铸世·归正·项链（体质）",
-      "position": "necklace",
-      "attributes": {
-        "vitality_base": 126
-      }
-    },
-    {
-      "id": 16649,
-      "name": "铸世·息烽·暗器（加速）",
-      "position": "tertiary_weapon",
-      "attributes": {
-        "haste_base": 126
-      }
-    },
-    {
-      "id": 16648,
-      "name": "铸世·息烽·暗器（破防）",
-      "position": "tertiary_weapon",
-      "attributes": {
-        "all_overcome_base": 126
-      }
-    },
-    {
-      "id": 16647,
-      "name": "铸世·息烽·暗器（身法）",
-      "position": "tertiary_weapon",
-      "attributes": {
-        "agility_base": 126
-      }
-    },
-    {
-      "id": 16646,
-      "name": "铸世·息烽·暗器（元气）",
-      "position": "tertiary_weapon",
-      "attributes": {
-        "spunk_base": 126
-      }
-    },
-    {
-      "id": 16645,
-      "name": "铸世·息烽·暗器（力道）",
-      "position": "tertiary_weapon",
-      "attributes": {
-        "strength_base": 126
-      }
-    },
-    {
-      "id": 16644,
-      "name": "铸世·息烽·暗器（根骨）",
-      "position": "tertiary_weapon",
-      "attributes": {
-        "spirit_base": 126
-      }
-    },
-    {
-      "id": 16643,
-      "name": "铸世·息烽·戒指（攻击）",
-      "position": "ring",
-      "attributes": {
-        "all_attack_power_base": 126
-      }
-    },
-    {
-      "id": 16642,
-      "name": "铸世·息烽·戒指（身法）",
-      "position": "ring",
-      "attributes": {
-        "agility_base": 126
-      }
-    },
-    {
-      "id": 16641,
-      "name": "铸世·息烽·戒指（元气）",
-      "position": "ring",
-      "attributes": {
-        "spunk_base": 126
-      }
-    },
-    {
-      "id": 16640,
-      "name": "铸世·息烽·戒指（力道）",
-      "position": "ring",
-      "attributes": {
-        "strength_base": 126
-      }
-    },
-    {
-      "id": 16639,
-      "name": "铸世·息烽·戒指（根骨）",
-      "position": "ring",
-      "attributes": {
-        "spirit_base": 126
-      }
-    },
-    {
-      "id": 16638,
-      "name": "铸世·息烽·腰坠（会心）",
-      "position": "pendant",
-      "attributes": {
-        "all_critical_strike_base": 126
-      }
-    },
-    {
-      "id": 16637,
-      "name": "铸世·息烽·腰坠（体质）",
-      "position": "pendant",
-      "attributes": {
-        "vitality_base": 126
-      }
-    },
-    {
-      "id": 16636,
-      "name": "铸世·息烽·项链（身法）",
-      "position": "necklace",
-      "attributes": {
-        "agility_base": 126
-      }
-    },
-    {
-      "id": 16635,
-      "name": "铸世·息烽·项链（元气）",
-      "position": "necklace",
-      "attributes": {
-        "spunk_base": 126
-      }
-    },
-    {
-      "id": 16634,
-      "name": "铸世·息烽·项链（力道）",
-      "position": "necklace",
-      "attributes": {
-        "strength_base": 126
-      }
-    },
-    {
-      "id": 16633,
-      "name": "铸世·息烽·项链（根骨）",
-      "position": "necklace",
-      "attributes": {
-        "spirit_base": 126
-      }
-    },
-    {
-      "id": 16632,
-      "name": "铸世·息烽·项链（体质）",
-      "position": "necklace",
-      "attributes": {
-        "vitality_base": 126
-      }
-    },
-    {
-      "id": 16631,
-      "name": "镇渊石·暗器（加速）",
-      "position": "tertiary_weapon",
-      "attributes": {
-        "haste_base": 90
-      }
-    },
-    {
-      "id": 16630,
-      "name": "镇渊石·暗器（破防）",
-      "position": "tertiary_weapon",
-      "attributes": {
-        "all_overcome_base": 90
-      }
-    },
-    {
-      "id": 16629,
-      "name": "镇渊石·暗器（身法）",
-      "position": "tertiary_weapon",
-      "attributes": {
-        "agility_base": 90
-      }
-    },
-    {
-      "id": 16628,
-      "name": "镇渊石·暗器（元气）",
-      "position": "tertiary_weapon",
-      "attributes": {
-        "spunk_base": 90
-      }
-    },
-    {
-      "id": 16627,
-      "name": "镇渊石·暗器（力道）",
-      "position": "tertiary_weapon",
-      "attributes": {
-        "strength_base": 90
-      }
-    },
-    {
-      "id": 16626,
-      "name": "镇渊石·暗器（根骨）",
-      "position": "tertiary_weapon",
-      "attributes": {
-        "spirit_base": 90
-      }
-    },
-    {
-      "id": 16625,
-      "name": "镇渊石·戒指（攻击）",
-      "position": "ring",
-      "attributes": {
-        "all_attack_power_base": 90
-      }
-    },
-    {
-      "id": 16624,
-      "name": "镇渊石·戒指（身法）",
-      "position": "ring",
-      "attributes": {
-        "agility_base": 90
-      }
-    },
-    {
-      "id": 16623,
-      "name": "镇渊石·戒指（元气）",
-      "position": "ring",
-      "attributes": {
-        "spunk_base": 90
-      }
-    },
-    {
-      "id": 16622,
-      "name": "镇渊石·戒指（力道）",
-      "position": "ring",
-      "attributes": {
-        "strength_base": 90
-      }
-    },
-    {
-      "id": 16621,
-      "name": "镇渊石·戒指（根骨）",
-      "position": "ring",
-      "attributes": {
-        "spirit_base": 90
-      }
-    },
-    {
-      "id": 16620,
-      "name": "镇渊石·腰坠（化劲）",
-      "position": "pendant",
-      "attributes": {
-        "decritical_power_base": 90
-      }
-    },
-    {
-      "id": 16619,
-      "name": "镇渊石·腰坠（体质）",
-      "position": "pendant",
-      "attributes": {
-        "vitality_base": 90
-      }
-    },
-    {
-      "id": 16618,
-      "name": "镇渊石·项链（御劲）",
-      "position": "necklace",
-      "attributes": {
-        "toughness_base": 90
-      }
-    },
-    {
-      "id": 16617,
-      "name": "镇渊石·项链（体质）",
-      "position": "necklace",
-      "attributes": {
-        "vitality_base": 90
-      }
-    },
-    {
-      "id": 16567,
-      "name": "云锦绣·衣（御劲）",
-      "position": "jacket",
-      "attributes": {
-        "toughness_base": 90
-      }
-    },
-    {
-      "id": 16566,
-      "name": "云锦绣·衣（化劲）",
-      "position": "jacket",
-      "attributes": {
-        "decritical_power_base": 90
-      }
-    },
-    {
-      "id": 16565,
-      "name": "云锦绣·衣（体质）",
-      "position": "jacket",
-      "attributes": {
-        "vitality_base": 90
-      }
-    },
-    {
-      "id": 16564,
-      "name": "云锦绣·鞋（急速）",
-      "position": "shoes",
-      "attributes": {
-        "haste_base": 90
-      }
-    },
-    {
-      "id": 16563,
-      "name": "云锦绣·鞋（治疗）",
-      "position": "shoes",
-      "attributes": {
-        "therapy_power_base": 90
-      }
-    },
-    {
-      "id": 16562,
-      "name": "云锦绣·鞋（攻击）",
-      "position": "shoes",
-      "attributes": {
-        "all_attack_power_base": 90
-      }
-    },
-    {
-      "id": 16561,
-      "name": "云锦绣·腕（无双）",
-      "position": "wrist",
-      "attributes": {
-        "strain_base": 90
-      }
-    },
-    {
-      "id": 16560,
-      "name": "云锦绣·腕（会心）",
-      "position": "wrist",
-      "attributes": {
-        "all_critical_strike_base": 90
-      }
-    },
-    {
-      "id": 16559,
-      "name": "云锦绣·腕（破防）",
-      "position": "wrist",
-      "attributes": {
-        "all_overcome_base": 90
-      }
-    },
-    {
-      "id": 16558,
-      "name": "云锦绣·腕（仇恨）",
-      "position": "wrist",
-      "attributes": {}
-    },
-    {
-      "id": 16557,
-      "name": "云锦绣·腕（根骨）",
-      "position": "wrist",
-      "attributes": {
-        "spirit_base": 90
-      }
-    },
-    {
-      "id": 16556,
-      "name": "云锦绣·腕（力道）",
-      "position": "wrist",
-      "attributes": {
-        "strength_base": 90
-      }
-    },
-    {
-      "id": 16555,
-      "name": "云锦绣·腕（元气）",
-      "position": "wrist",
-      "attributes": {
-        "spunk_base": 90
-      }
-    },
-    {
-      "id": 16554,
-      "name": "云锦绣·腕（身法）",
-      "position": "wrist",
-      "attributes": {
-        "agility_base": 90
-      }
-    },
-    {
-      "id": 16521,
-      "name": "峡金焠·腰（化劲）",
-      "position": "belt",
-      "attributes": {
-        "decritical_power_base": 90
-      }
-    },
-    {
-      "id": 16520,
-      "name": "峡金焠·腰（御劲）",
-      "position": "belt",
-      "attributes": {
-        "toughness_base": 90
-      }
-    },
-    {
-      "id": 16519,
-      "name": "峡金焠·腰（体质）",
-      "position": "belt",
-      "attributes": {
-        "vitality_base": 90
-      }
-    },
-    {
-      "id": 16518,
-      "name": "峡金焠·头（急速）",
-      "position": "hat",
-      "attributes": {
-        "haste_base": 90
-      }
-    },
-    {
-      "id": 16517,
-      "name": "峡金焠·头（治疗）",
-      "position": "hat",
-      "attributes": {
-        "therapy_power_base": 90
-      }
-    },
-    {
-      "id": 16516,
-      "name": "峡金焠·头（攻击）",
-      "position": "hat",
-      "attributes": {
-        "all_attack_power_base": 90
-      }
-    },
-    {
-      "id": 16515,
-      "name": "峡金焠·裤（无双）",
-      "position": "bottoms",
-      "attributes": {
-        "strain_base": 90
-      }
-    },
-    {
-      "id": 16514,
-      "name": "峡金焠·裤（会心）",
-      "position": "bottoms",
-      "attributes": {
-        "all_critical_strike_base": 90
-      }
-    },
-    {
-      "id": 16513,
-      "name": "峡金焠·裤（破防）",
-      "position": "bottoms",
-      "attributes": {
-        "all_overcome_base": 90
-      }
-    },
-    {
-      "id": 16512,
-      "name": "峡金焠·裤（仇恨）",
-      "position": "bottoms",
-      "attributes": {}
-    },
-    {
-      "id": 16511,
-      "name": "峡金焠·裤（根骨）",
-      "position": "bottoms",
-      "attributes": {
-        "spirit_base": 90
-      }
-    },
-    {
-      "id": 16510,
-      "name": "峡金焠·裤（力道）",
-      "position": "bottoms",
-      "attributes": {
-        "strength_base": 90
-      }
-    },
-    {
-      "id": 16509,
-      "name": "峡金焠·裤（元气）",
-      "position": "bottoms",
-      "attributes": {
-        "spunk_base": 90
-      }
-    },
-    {
-      "id": 16508,
-      "name": "峡金焠·裤（身法）",
-      "position": "bottoms",
-      "attributes": {
-        "agility_base": 90
-      }
-    },
-    {
-      "id": 16507,
-      "name": "峡金焠·兵（仇恨）",
+      "id": 16486,
+      "name": "峡金铸·兵（攻击）",
       "position": "primary_weapon",
-      "attributes": {}
-    },
-    {
-      "id": 16506,
-      "name": "峡金焠·兵（武伤）",
-      "position": "primary_weapon",
-      "attributes": {
-        "weapon_damage_base": 15
-      }
-    },
-    {
-      "id": 16505,
-      "name": "峡金焠·兵（疗伤）",
-      "position": "primary_weapon",
-      "attributes": {
-        "therapy_power_base": 90
-      }
-    },
-    {
-      "id": 16504,
-      "name": "峡金焠·兵（攻击）",
-      "position": "primary_weapon",
-      "attributes": {
-        "all_attack_power_base": 90
-      }
-    },
-    {
-      "id": 16616,
-      "name": "河清砂·暗器（加速）",
-      "position": "tertiary_weapon",
-      "attributes": {
-        "haste_base": 72
-      }
-    },
-    {
-      "id": 16615,
-      "name": "河清砂·暗器（破防）",
-      "position": "tertiary_weapon",
-      "attributes": {
-        "all_overcome_base": 72
-      }
-    },
-    {
-      "id": 16614,
-      "name": "河清砂·暗器（身法）",
-      "position": "tertiary_weapon",
-      "attributes": {
-        "agility_base": 72
-      }
-    },
-    {
-      "id": 16613,
-      "name": "河清砂·暗器（元气）",
-      "position": "tertiary_weapon",
-      "attributes": {
-        "spunk_base": 72
-      }
-    },
-    {
-      "id": 16612,
-      "name": "河清砂·暗器（力道）",
-      "position": "tertiary_weapon",
-      "attributes": {
-        "strength_base": 72
-      }
-    },
-    {
-      "id": 16611,
-      "name": "河清砂·暗器（根骨）",
-      "position": "tertiary_weapon",
-      "attributes": {
-        "spirit_base": 72
-      }
-    },
-    {
-      "id": 16610,
-      "name": "河清砂·戒指（攻击）",
-      "position": "ring",
       "attributes": {
         "all_attack_power_base": 72
-      }
-    },
-    {
-      "id": 16609,
-      "name": "河清砂·戒指（身法）",
-      "position": "ring",
-      "attributes": {
-        "agility_base": 72
-      }
-    },
-    {
-      "id": 16608,
-      "name": "河清砂·戒指（元气）",
-      "position": "ring",
-      "attributes": {
-        "spunk_base": 72
-      }
-    },
-    {
-      "id": 16607,
-      "name": "河清砂·戒指（力道）",
-      "position": "ring",
-      "attributes": {
-        "strength_base": 72
-      }
-    },
-    {
-      "id": 16606,
-      "name": "河清砂·戒指（根骨）",
-      "position": "ring",
-      "attributes": {
-        "spirit_base": 72
-      }
-    },
-    {
-      "id": 16605,
-      "name": "河清砂·腰坠（化劲）",
-      "position": "pendant",
-      "attributes": {
-        "decritical_power_base": 72
-      }
-    },
-    {
-      "id": 16604,
-      "name": "河清砂·腰坠（体质）",
-      "position": "pendant",
-      "attributes": {
-        "vitality_base": 72
-      }
-    },
-    {
-      "id": 16603,
-      "name": "河清砂·项链（御劲）",
-      "position": "necklace",
-      "attributes": {
-        "toughness_base": 72
-      }
-    },
-    {
-      "id": 16602,
-      "name": "河清砂·项链（体质）",
-      "position": "necklace",
-      "attributes": {
-        "vitality_base": 72
-      }
-    },
-    {
-      "id": 16553,
-      "name": "蜀锦绣·衣（御劲）",
-      "position": "jacket",
-      "attributes": {
-        "toughness_base": 72
-      }
-    },
-    {
-      "id": 16552,
-      "name": "蜀锦绣·衣（化劲）",
-      "position": "jacket",
-      "attributes": {
-        "decritical_power_base": 72
-      }
-    },
-    {
-      "id": 16551,
-      "name": "蜀锦绣·衣（体质）",
-      "position": "jacket",
-      "attributes": {
-        "vitality_base": 72
-      }
-    },
-    {
-      "id": 16550,
-      "name": "蜀锦绣·鞋（急速）",
-      "position": "shoes",
-      "attributes": {
-        "haste_base": 72
-      }
-    },
-    {
-      "id": 16549,
-      "name": "蜀锦绣·鞋（治疗）",
-      "position": "shoes",
-      "attributes": {
-        "therapy_power_base": 72
-      }
-    },
-    {
-      "id": 16548,
-      "name": "蜀锦绣·鞋（攻击）",
-      "position": "shoes",
-      "attributes": {
-        "all_attack_power_base": 72
-      }
-    },
-    {
-      "id": 16547,
-      "name": "蜀锦绣·腕（无双）",
-      "position": "wrist",
-      "attributes": {
-        "strain_base": 72
-      }
-    },
-    {
-      "id": 16546,
-      "name": "蜀锦绣·腕（会心）",
-      "position": "wrist",
-      "attributes": {
-        "all_critical_strike_base": 72
-      }
-    },
-    {
-      "id": 16545,
-      "name": "蜀锦绣·腕（破防）",
-      "position": "wrist",
-      "attributes": {
-        "all_overcome_base": 72
-      }
-    },
-    {
-      "id": 16544,
-      "name": "蜀锦绣·腕（仇恨）",
-      "position": "wrist",
-      "attributes": {}
-    },
-    {
-      "id": 16543,
-      "name": "蜀锦绣·腕（根骨）",
-      "position": "wrist",
-      "attributes": {
-        "spirit_base": 72
-      }
-    },
-    {
-      "id": 16542,
-      "name": "蜀锦绣·腕（力道）",
-      "position": "wrist",
-      "attributes": {
-        "strength_base": 72
-      }
-    },
-    {
-      "id": 16541,
-      "name": "蜀锦绣·腕（元气）",
-      "position": "wrist",
-      "attributes": {
-        "spunk_base": 72
-      }
-    },
-    {
-      "id": 16540,
-      "name": "蜀锦绣·腕（身法）",
-      "position": "wrist",
-      "attributes": {
-        "agility_base": 72
-      }
-    },
-    {
-      "id": 16503,
-      "name": "峡金铸·腰（化劲）",
-      "position": "belt",
-      "attributes": {
-        "decritical_power_base": 72
-      }
-    },
-    {
-      "id": 16502,
-      "name": "峡金铸·腰（御劲）",
-      "position": "belt",
-      "attributes": {
-        "toughness_base": 72
-      }
-    },
-    {
-      "id": 16501,
-      "name": "峡金铸·腰（体质）",
-      "position": "belt",
-      "attributes": {
-        "vitality_base": 72
-      }
-    },
-    {
-      "id": 16500,
-      "name": "峡金铸·头（急速）",
-      "position": "hat",
-      "attributes": {
-        "haste_base": 72
-      }
-    },
-    {
-      "id": 16499,
-      "name": "峡金铸·头（治疗）",
-      "position": "hat",
-      "attributes": {
-        "therapy_power_base": 72
-      }
-    },
-    {
-      "id": 16498,
-      "name": "峡金铸·头（攻击）",
-      "position": "hat",
-      "attributes": {
-        "all_attack_power_base": 72
-      }
-    },
-    {
-      "id": 16497,
-      "name": "峡金铸·裤（无双）",
-      "position": "bottoms",
-      "attributes": {
-        "strain_base": 72
-      }
-    },
-    {
-      "id": 16496,
-      "name": "峡金铸·裤（会心）",
-      "position": "bottoms",
-      "attributes": {
-        "all_critical_strike_base": 72
-      }
-    },
-    {
-      "id": 16495,
-      "name": "峡金铸·裤（破防）",
-      "position": "bottoms",
-      "attributes": {
-        "all_overcome_base": 72
-      }
-    },
-    {
-      "id": 16494,
-      "name": "峡金铸·裤（仇恨）",
-      "position": "bottoms",
-      "attributes": {}
-    },
-    {
-      "id": 16493,
-      "name": "峡金铸·裤（根骨）",
-      "position": "bottoms",
-      "attributes": {
-        "spirit_base": 72
-      }
-    },
-    {
-      "id": 16492,
-      "name": "峡金铸·裤（力道）",
-      "position": "bottoms",
-      "attributes": {
-        "strength_base": 72
-      }
-    },
-    {
-      "id": 16491,
-      "name": "峡金铸·裤（元气）",
-      "position": "bottoms",
-      "attributes": {
-        "spunk_base": 72
-      }
-    },
-    {
-      "id": 16490,
-      "name": "峡金铸·裤（身法）",
-      "position": "bottoms",
-      "attributes": {
-        "agility_base": 72
-      }
-    },
-    {
-      "id": 16489,
-      "name": "峡金铸·兵（仇恨）",
-      "position": "primary_weapon",
-      "attributes": {}
-    },
-    {
-      "id": 16488,
-      "name": "峡金铸·兵（武伤）",
-      "position": "primary_weapon",
-      "attributes": {
-        "weapon_damage_base": 12
       }
     },
     {
@@ -6790,253 +5527,275 @@
       }
     },
     {
-      "id": 16486,
-      "name": "峡金铸·兵（攻击）",
+      "id": 16488,
+      "name": "峡金铸·兵（武伤）",
       "position": "primary_weapon",
+      "attributes": {
+        "weapon_damage_base": 12
+      }
+    },
+    {
+      "id": 16489,
+      "name": "峡金铸·兵（仇恨）",
+      "position": "primary_weapon",
+      "attributes": {
+        "threat_gain": 0
+      }
+    },
+    {
+      "id": 16490,
+      "name": "峡金铸·裤（身法）",
+      "position": "bottoms",
+      "attributes": {
+        "agility_base": 72
+      }
+    },
+    {
+      "id": 16491,
+      "name": "峡金铸·裤（元气）",
+      "position": "bottoms",
+      "attributes": {
+        "spunk_base": 72
+      }
+    },
+    {
+      "id": 16492,
+      "name": "峡金铸·裤（力道）",
+      "position": "bottoms",
+      "attributes": {
+        "strength_base": 72
+      }
+    },
+    {
+      "id": 16493,
+      "name": "峡金铸·裤（根骨）",
+      "position": "bottoms",
+      "attributes": {
+        "spirit_base": 72
+      }
+    },
+    {
+      "id": 16494,
+      "name": "峡金铸·裤（仇恨）",
+      "position": "bottoms",
+      "attributes": {
+        "threat_gain": 0
+      }
+    },
+    {
+      "id": 16495,
+      "name": "峡金铸·裤（破防）",
+      "position": "bottoms",
+      "attributes": {
+        "all_overcome_base": 72
+      }
+    },
+    {
+      "id": 16496,
+      "name": "峡金铸·裤（会心）",
+      "position": "bottoms",
+      "attributes": {
+        "all_critical_strike_base": 72
+      }
+    },
+    {
+      "id": 16497,
+      "name": "峡金铸·裤（无双）",
+      "position": "bottoms",
+      "attributes": {
+        "strain_base": 72
+      }
+    },
+    {
+      "id": 16498,
+      "name": "峡金铸·头（攻击）",
+      "position": "hat",
       "attributes": {
         "all_attack_power_base": 72
       }
     },
     {
-      "id": 16581,
-      "name": "河洛纹·衣（御劲）",
-      "position": "jacket",
-      "attributes": {
-        "toughness_base": 36
-      }
-    },
-    {
-      "id": 16580,
-      "name": "河洛纹·衣（化劲）",
-      "position": "jacket",
-      "attributes": {
-        "decritical_power_base": 36
-      }
-    },
-    {
-      "id": 16579,
-      "name": "河洛纹·衣（体质）",
-      "position": "jacket",
-      "attributes": {
-        "vitality_base": 36
-      }
-    },
-    {
-      "id": 16578,
-      "name": "河洛纹·鞋（急速）",
-      "position": "shoes",
-      "attributes": {
-        "haste_base": 36
-      }
-    },
-    {
-      "id": 16577,
-      "name": "河洛纹·鞋（治疗）",
-      "position": "shoes",
-      "attributes": {
-        "therapy_power_base": 36
-      }
-    },
-    {
-      "id": 16576,
-      "name": "河洛纹·鞋（攻击）",
-      "position": "shoes",
-      "attributes": {
-        "all_attack_power_base": 36
-      }
-    },
-    {
-      "id": 16575,
-      "name": "河洛纹·腕（无双）",
-      "position": "wrist",
-      "attributes": {
-        "strain_base": 36
-      }
-    },
-    {
-      "id": 16574,
-      "name": "河洛纹·腕（会心）",
-      "position": "wrist",
-      "attributes": {
-        "all_critical_strike_base": 36
-      }
-    },
-    {
-      "id": 16573,
-      "name": "河洛纹·腕（破防）",
-      "position": "wrist",
-      "attributes": {
-        "all_overcome_base": 36
-      }
-    },
-    {
-      "id": 16572,
-      "name": "河洛纹·腕（仇恨）",
-      "position": "wrist",
-      "attributes": {}
-    },
-    {
-      "id": 16571,
-      "name": "河洛纹·腕（根骨）",
-      "position": "wrist",
-      "attributes": {
-        "spirit_base": 36
-      }
-    },
-    {
-      "id": 16570,
-      "name": "河洛纹·腕（力道）",
-      "position": "wrist",
-      "attributes": {
-        "strength_base": 36
-      }
-    },
-    {
-      "id": 16569,
-      "name": "河洛纹·腕（元气）",
-      "position": "wrist",
-      "attributes": {
-        "spunk_base": 36
-      }
-    },
-    {
-      "id": 16568,
-      "name": "河洛纹·腕（身法）",
-      "position": "wrist",
-      "attributes": {
-        "agility_base": 36
-      }
-    },
-    {
-      "id": 16539,
-      "name": "云冈石·兵（仇恨）",
-      "position": "primary_weapon",
-      "attributes": {}
-    },
-    {
-      "id": 16538,
-      "name": "云冈石·兵（武伤）",
-      "position": "primary_weapon",
-      "attributes": {
-        "weapon_damage_base": 6
-      }
-    },
-    {
-      "id": 16537,
-      "name": "云冈石·兵（疗伤）",
-      "position": "primary_weapon",
-      "attributes": {
-        "therapy_power_base": 36
-      }
-    },
-    {
-      "id": 16536,
-      "name": "云冈石·兵（攻击）",
-      "position": "primary_weapon",
-      "attributes": {
-        "all_attack_power_base": 36
-      }
-    },
-    {
-      "id": 16535,
-      "name": "云冈石·腰（化劲）",
-      "position": "belt",
-      "attributes": {
-        "decritical_power_base": 36
-      }
-    },
-    {
-      "id": 16534,
-      "name": "云冈石·腰（御劲）",
-      "position": "belt",
-      "attributes": {
-        "toughness_base": 36
-      }
-    },
-    {
-      "id": 16533,
-      "name": "云冈石·腰（体质）",
-      "position": "belt",
-      "attributes": {
-        "vitality_base": 36
-      }
-    },
-    {
-      "id": 16532,
-      "name": "云冈石·头（急速）",
+      "id": 16499,
+      "name": "峡金铸·头（治疗）",
       "position": "hat",
       "attributes": {
-        "haste_base": 36
+        "therapy_power_base": 72
       }
     },
     {
-      "id": 16531,
-      "name": "云冈石·头（治疗）",
+      "id": 16500,
+      "name": "峡金铸·头（急速）",
       "position": "hat",
       "attributes": {
-        "therapy_power_base": 36
+        "haste_base": 72
       }
     },
     {
-      "id": 16530,
-      "name": "云冈石·头（攻击）",
+      "id": 16501,
+      "name": "峡金铸·腰（体质）",
+      "position": "belt",
+      "attributes": {
+        "vitality_base": 72
+      }
+    },
+    {
+      "id": 16502,
+      "name": "峡金铸·腰（御劲）",
+      "position": "belt",
+      "attributes": {
+        "toughness_base": 72
+      }
+    },
+    {
+      "id": 16503,
+      "name": "峡金铸·腰（化劲）",
+      "position": "belt",
+      "attributes": {
+        "decritical_power_base": 72
+      }
+    },
+    {
+      "id": 16504,
+      "name": "峡金焠·兵（攻击）",
+      "position": "primary_weapon",
+      "attributes": {
+        "all_attack_power_base": 90
+      }
+    },
+    {
+      "id": 16505,
+      "name": "峡金焠·兵（疗伤）",
+      "position": "primary_weapon",
+      "attributes": {
+        "therapy_power_base": 90
+      }
+    },
+    {
+      "id": 16506,
+      "name": "峡金焠·兵（武伤）",
+      "position": "primary_weapon",
+      "attributes": {
+        "weapon_damage_base": 15
+      }
+    },
+    {
+      "id": 16507,
+      "name": "峡金焠·兵（仇恨）",
+      "position": "primary_weapon",
+      "attributes": {
+        "threat_gain": 0
+      }
+    },
+    {
+      "id": 16508,
+      "name": "峡金焠·裤（身法）",
+      "position": "bottoms",
+      "attributes": {
+        "agility_base": 90
+      }
+    },
+    {
+      "id": 16509,
+      "name": "峡金焠·裤（元气）",
+      "position": "bottoms",
+      "attributes": {
+        "spunk_base": 90
+      }
+    },
+    {
+      "id": 16510,
+      "name": "峡金焠·裤（力道）",
+      "position": "bottoms",
+      "attributes": {
+        "strength_base": 90
+      }
+    },
+    {
+      "id": 16511,
+      "name": "峡金焠·裤（根骨）",
+      "position": "bottoms",
+      "attributes": {
+        "spirit_base": 90
+      }
+    },
+    {
+      "id": 16512,
+      "name": "峡金焠·裤（仇恨）",
+      "position": "bottoms",
+      "attributes": {
+        "threat_gain": 0
+      }
+    },
+    {
+      "id": 16513,
+      "name": "峡金焠·裤（破防）",
+      "position": "bottoms",
+      "attributes": {
+        "all_overcome_base": 90
+      }
+    },
+    {
+      "id": 16514,
+      "name": "峡金焠·裤（会心）",
+      "position": "bottoms",
+      "attributes": {
+        "all_critical_strike_base": 90
+      }
+    },
+    {
+      "id": 16515,
+      "name": "峡金焠·裤（无双）",
+      "position": "bottoms",
+      "attributes": {
+        "strain_base": 90
+      }
+    },
+    {
+      "id": 16516,
+      "name": "峡金焠·头（攻击）",
       "position": "hat",
       "attributes": {
-        "all_attack_power_base": 36
+        "all_attack_power_base": 90
       }
     },
     {
-      "id": 16529,
-      "name": "云冈石·裤（无双）",
-      "position": "bottoms",
+      "id": 16517,
+      "name": "峡金焠·头（治疗）",
+      "position": "hat",
       "attributes": {
-        "strain_base": 36
+        "therapy_power_base": 90
       }
     },
     {
-      "id": 16528,
-      "name": "云冈石·裤（会心）",
-      "position": "bottoms",
+      "id": 16518,
+      "name": "峡金焠·头（急速）",
+      "position": "hat",
       "attributes": {
-        "all_critical_strike_base": 36
+        "haste_base": 90
       }
     },
     {
-      "id": 16527,
-      "name": "云冈石·裤（破防）",
-      "position": "bottoms",
+      "id": 16519,
+      "name": "峡金焠·腰（体质）",
+      "position": "belt",
       "attributes": {
-        "all_overcome_base": 36
+        "vitality_base": 90
       }
     },
     {
-      "id": 16526,
-      "name": "云冈石·裤（仇恨）",
-      "position": "bottoms",
-      "attributes": {}
-    },
-    {
-      "id": 16525,
-      "name": "云冈石·裤（根骨）",
-      "position": "bottoms",
+      "id": 16520,
+      "name": "峡金焠·腰（御劲）",
+      "position": "belt",
       "attributes": {
-        "spirit_base": 36
+        "toughness_base": 90
       }
     },
     {
-      "id": 16524,
-      "name": "云冈石·裤（力道）",
-      "position": "bottoms",
+      "id": 16521,
+      "name": "峡金焠·腰（化劲）",
+      "position": "belt",
       "attributes": {
-        "strength_base": 36
-      }
-    },
-    {
-      "id": 16523,
-      "name": "云冈石·裤（元气）",
-      "position": "bottoms",
-      "attributes": {
-        "spunk_base": 36
+        "decritical_power_base": 90
       }
     },
     {
@@ -7048,61 +5807,553 @@
       }
     },
     {
-      "id": 16601,
-      "name": "撑天·腰·减仇",
-      "position": "belt",
-      "attributes": {}
-    },
-    {
-      "id": 16600,
-      "name": "撑天·腰·无双",
-      "position": "belt",
+      "id": 16523,
+      "name": "云冈石·裤（元气）",
+      "position": "bottoms",
       "attributes": {
-        "strain_base": 22
+        "spunk_base": 36
       }
     },
     {
-      "id": 16599,
-      "name": "撑天·衣·减仇",
-      "position": "jacket",
-      "attributes": {}
-    },
-    {
-      "id": 16598,
-      "name": "撑天·衣·无双",
-      "position": "jacket",
+      "id": 16524,
+      "name": "云冈石·裤（力道）",
+      "position": "bottoms",
       "attributes": {
-        "strain_base": 22
+        "strength_base": 36
       }
     },
     {
-      "id": 16597,
-      "name": "撑天·鞋·外功",
+      "id": 16525,
+      "name": "云冈石·裤（根骨）",
+      "position": "bottoms",
+      "attributes": {
+        "spirit_base": 36
+      }
+    },
+    {
+      "id": 16526,
+      "name": "云冈石·裤（仇恨）",
+      "position": "bottoms",
+      "attributes": {
+        "threat_gain": 0
+      }
+    },
+    {
+      "id": 16527,
+      "name": "云冈石·裤（破防）",
+      "position": "bottoms",
+      "attributes": {
+        "all_overcome_base": 36
+      }
+    },
+    {
+      "id": 16528,
+      "name": "云冈石·裤（会心）",
+      "position": "bottoms",
+      "attributes": {
+        "all_critical_strike_base": 36
+      }
+    },
+    {
+      "id": 16529,
+      "name": "云冈石·裤（无双）",
+      "position": "bottoms",
+      "attributes": {
+        "strain_base": 36
+      }
+    },
+    {
+      "id": 16530,
+      "name": "云冈石·头（攻击）",
+      "position": "hat",
+      "attributes": {
+        "all_attack_power_base": 36
+      }
+    },
+    {
+      "id": 16531,
+      "name": "云冈石·头（治疗）",
+      "position": "hat",
+      "attributes": {
+        "therapy_power_base": 36
+      }
+    },
+    {
+      "id": 16532,
+      "name": "云冈石·头（急速）",
+      "position": "hat",
+      "attributes": {
+        "haste_base": 36
+      }
+    },
+    {
+      "id": 16533,
+      "name": "云冈石·腰（体质）",
+      "position": "belt",
+      "attributes": {
+        "vitality_base": 36
+      }
+    },
+    {
+      "id": 16534,
+      "name": "云冈石·腰（御劲）",
+      "position": "belt",
+      "attributes": {
+        "toughness_base": 36
+      }
+    },
+    {
+      "id": 16535,
+      "name": "云冈石·腰（化劲）",
+      "position": "belt",
+      "attributes": {
+        "decritical_power_base": 36
+      }
+    },
+    {
+      "id": 16536,
+      "name": "云冈石·兵（攻击）",
+      "position": "primary_weapon",
+      "attributes": {
+        "all_attack_power_base": 36
+      }
+    },
+    {
+      "id": 16537,
+      "name": "云冈石·兵（疗伤）",
+      "position": "primary_weapon",
+      "attributes": {
+        "therapy_power_base": 36
+      }
+    },
+    {
+      "id": 16538,
+      "name": "云冈石·兵（武伤）",
+      "position": "primary_weapon",
+      "attributes": {
+        "weapon_damage_base": 6
+      }
+    },
+    {
+      "id": 16539,
+      "name": "云冈石·兵（仇恨）",
+      "position": "primary_weapon",
+      "attributes": {
+        "threat_gain": 0
+      }
+    },
+    {
+      "id": 16540,
+      "name": "蜀锦绣·腕（身法）",
+      "position": "wrist",
+      "attributes": {
+        "agility_base": 72
+      }
+    },
+    {
+      "id": 16541,
+      "name": "蜀锦绣·腕（元气）",
+      "position": "wrist",
+      "attributes": {
+        "spunk_base": 72
+      }
+    },
+    {
+      "id": 16542,
+      "name": "蜀锦绣·腕（力道）",
+      "position": "wrist",
+      "attributes": {
+        "strength_base": 72
+      }
+    },
+    {
+      "id": 16543,
+      "name": "蜀锦绣·腕（根骨）",
+      "position": "wrist",
+      "attributes": {
+        "spirit_base": 72
+      }
+    },
+    {
+      "id": 16544,
+      "name": "蜀锦绣·腕（仇恨）",
+      "position": "wrist",
+      "attributes": {
+        "threat_gain": 0
+      }
+    },
+    {
+      "id": 16545,
+      "name": "蜀锦绣·腕（破防）",
+      "position": "wrist",
+      "attributes": {
+        "all_overcome_base": 72
+      }
+    },
+    {
+      "id": 16546,
+      "name": "蜀锦绣·腕（会心）",
+      "position": "wrist",
+      "attributes": {
+        "all_critical_strike_base": 72
+      }
+    },
+    {
+      "id": 16547,
+      "name": "蜀锦绣·腕（无双）",
+      "position": "wrist",
+      "attributes": {
+        "strain_base": 72
+      }
+    },
+    {
+      "id": 16548,
+      "name": "蜀锦绣·鞋（攻击）",
       "position": "shoes",
       "attributes": {
-        "all_attack_power_base": 29
+        "all_attack_power_base": 72
       }
     },
     {
-      "id": 16595,
-      "name": "撑天·鞋·急速",
+      "id": 16549,
+      "name": "蜀锦绣·鞋（治疗）",
       "position": "shoes",
+      "attributes": {
+        "therapy_power_base": 72
+      }
+    },
+    {
+      "id": 16550,
+      "name": "蜀锦绣·鞋（急速）",
+      "position": "shoes",
+      "attributes": {
+        "haste_base": 72
+      }
+    },
+    {
+      "id": 16551,
+      "name": "蜀锦绣·衣（体质）",
+      "position": "jacket",
+      "attributes": {
+        "vitality_base": 72
+      }
+    },
+    {
+      "id": 16552,
+      "name": "蜀锦绣·衣（化劲）",
+      "position": "jacket",
+      "attributes": {
+        "decritical_power_base": 72
+      }
+    },
+    {
+      "id": 16553,
+      "name": "蜀锦绣·衣（御劲）",
+      "position": "jacket",
+      "attributes": {
+        "toughness_base": 72
+      }
+    },
+    {
+      "id": 16554,
+      "name": "云锦绣·腕（身法）",
+      "position": "wrist",
+      "attributes": {
+        "agility_base": 90
+      }
+    },
+    {
+      "id": 16555,
+      "name": "云锦绣·腕（元气）",
+      "position": "wrist",
+      "attributes": {
+        "spunk_base": 90
+      }
+    },
+    {
+      "id": 16556,
+      "name": "云锦绣·腕（力道）",
+      "position": "wrist",
+      "attributes": {
+        "strength_base": 90
+      }
+    },
+    {
+      "id": 16557,
+      "name": "云锦绣·腕（根骨）",
+      "position": "wrist",
+      "attributes": {
+        "spirit_base": 90
+      }
+    },
+    {
+      "id": 16558,
+      "name": "云锦绣·腕（仇恨）",
+      "position": "wrist",
+      "attributes": {
+        "threat_gain": 0
+      }
+    },
+    {
+      "id": 16559,
+      "name": "云锦绣·腕（破防）",
+      "position": "wrist",
+      "attributes": {
+        "all_overcome_base": 90
+      }
+    },
+    {
+      "id": 16560,
+      "name": "云锦绣·腕（会心）",
+      "position": "wrist",
+      "attributes": {
+        "all_critical_strike_base": 90
+      }
+    },
+    {
+      "id": 16561,
+      "name": "云锦绣·腕（无双）",
+      "position": "wrist",
+      "attributes": {
+        "strain_base": 90
+      }
+    },
+    {
+      "id": 16562,
+      "name": "云锦绣·鞋（攻击）",
+      "position": "shoes",
+      "attributes": {
+        "all_attack_power_base": 90
+      }
+    },
+    {
+      "id": 16563,
+      "name": "云锦绣·鞋（治疗）",
+      "position": "shoes",
+      "attributes": {
+        "therapy_power_base": 90
+      }
+    },
+    {
+      "id": 16564,
+      "name": "云锦绣·鞋（急速）",
+      "position": "shoes",
+      "attributes": {
+        "haste_base": 90
+      }
+    },
+    {
+      "id": 16565,
+      "name": "云锦绣·衣（体质）",
+      "position": "jacket",
+      "attributes": {
+        "vitality_base": 90
+      }
+    },
+    {
+      "id": 16566,
+      "name": "云锦绣·衣（化劲）",
+      "position": "jacket",
+      "attributes": {
+        "decritical_power_base": 90
+      }
+    },
+    {
+      "id": 16567,
+      "name": "云锦绣·衣（御劲）",
+      "position": "jacket",
+      "attributes": {
+        "toughness_base": 90
+      }
+    },
+    {
+      "id": 16568,
+      "name": "河洛纹·腕（身法）",
+      "position": "wrist",
+      "attributes": {
+        "agility_base": 36
+      }
+    },
+    {
+      "id": 16569,
+      "name": "河洛纹·腕（元气）",
+      "position": "wrist",
+      "attributes": {
+        "spunk_base": 36
+      }
+    },
+    {
+      "id": 16570,
+      "name": "河洛纹·腕（力道）",
+      "position": "wrist",
+      "attributes": {
+        "strength_base": 36
+      }
+    },
+    {
+      "id": 16571,
+      "name": "河洛纹·腕（根骨）",
+      "position": "wrist",
+      "attributes": {
+        "spirit_base": 36
+      }
+    },
+    {
+      "id": 16572,
+      "name": "河洛纹·腕（仇恨）",
+      "position": "wrist",
+      "attributes": {
+        "threat_gain": 0
+      }
+    },
+    {
+      "id": 16573,
+      "name": "河洛纹·腕（破防）",
+      "position": "wrist",
+      "attributes": {
+        "all_overcome_base": 36
+      }
+    },
+    {
+      "id": 16574,
+      "name": "河洛纹·腕（会心）",
+      "position": "wrist",
+      "attributes": {
+        "all_critical_strike_base": 36
+      }
+    },
+    {
+      "id": 16575,
+      "name": "河洛纹·腕（无双）",
+      "position": "wrist",
+      "attributes": {
+        "strain_base": 36
+      }
+    },
+    {
+      "id": 16576,
+      "name": "河洛纹·鞋（攻击）",
+      "position": "shoes",
+      "attributes": {
+        "all_attack_power_base": 36
+      }
+    },
+    {
+      "id": 16577,
+      "name": "河洛纹·鞋（治疗）",
+      "position": "shoes",
+      "attributes": {
+        "therapy_power_base": 36
+      }
+    },
+    {
+      "id": 16578,
+      "name": "河洛纹·鞋（急速）",
+      "position": "shoes",
+      "attributes": {
+        "haste_base": 36
+      }
+    },
+    {
+      "id": 16579,
+      "name": "河洛纹·衣（体质）",
+      "position": "jacket",
+      "attributes": {
+        "vitality_base": 36
+      }
+    },
+    {
+      "id": 16580,
+      "name": "河洛纹·衣（化劲）",
+      "position": "jacket",
+      "attributes": {
+        "decritical_power_base": 36
+      }
+    },
+    {
+      "id": 16581,
+      "name": "河洛纹·衣（御劲）",
+      "position": "jacket",
+      "attributes": {
+        "toughness_base": 36
+      }
+    },
+    {
+      "id": 16582,
+      "name": "撑天·裤·会心",
+      "position": "bottoms",
+      "attributes": {
+        "all_critical_strike_base": 29
+      }
+    },
+    {
+      "id": 16583,
+      "name": "撑天·腕·会心",
+      "position": "wrist",
+      "attributes": {
+        "all_critical_strike_base": 29
+      }
+    },
+    {
+      "id": 16584,
+      "name": "撑天·头·急速",
+      "position": "hat",
       "attributes": {
         "haste_base": 29
       }
     },
     {
-      "id": 16594,
-      "name": "撑天·腰·御劲",
-      "position": "belt",
+      "id": 16585,
+      "name": "撑天·裤·破防",
+      "position": "bottoms",
       "attributes": {
-        "toughness_base": 29
+        "all_overcome_base": 29
       }
     },
     {
-      "id": 16593,
-      "name": "撑天·腰·化劲",
-      "position": "belt",
+      "id": 16586,
+      "name": "撑天·裤·无双",
+      "position": "bottoms",
+      "attributes": {
+        "strain_base": 29
+      }
+    },
+    {
+      "id": 16587,
+      "name": "撑天·头·攻击",
+      "position": "hat",
+      "attributes": {
+        "all_attack_power_base": 29
+      }
+    },
+    {
+      "id": 16588,
+      "name": "撑天·头·治疗",
+      "position": "hat",
+      "attributes": {
+        "therapy_power_base": 29
+      }
+    },
+    {
+      "id": 16589,
+      "name": "撑天·腕·破防",
+      "position": "wrist",
+      "attributes": {
+        "all_overcome_base": 29
+      }
+    },
+    {
+      "id": 16590,
+      "name": "撑天·腕·无双",
+      "position": "wrist",
+      "attributes": {
+        "strain_base": 29
+      }
+    },
+    {
+      "id": 16591,
+      "name": "撑天·衣·化劲",
+      "position": "jacket",
       "attributes": {
         "decritical_power_base": 29
       }
@@ -7116,83 +6367,571 @@
       }
     },
     {
-      "id": 16591,
-      "name": "撑天·衣·化劲",
-      "position": "jacket",
+      "id": 16593,
+      "name": "撑天·腰·化劲",
+      "position": "belt",
       "attributes": {
         "decritical_power_base": 29
       }
     },
     {
-      "id": 16590,
-      "name": "撑天·腕·无双",
-      "position": "wrist",
+      "id": 16594,
+      "name": "撑天·腰·御劲",
+      "position": "belt",
       "attributes": {
-        "strain_base": 29
+        "toughness_base": 29
       }
     },
     {
-      "id": 16589,
-      "name": "撑天·腕·破防",
-      "position": "wrist",
-      "attributes": {
-        "all_overcome_base": 29
-      }
-    },
-    {
-      "id": 16588,
-      "name": "撑天·头·治疗",
-      "position": "hat",
-      "attributes": {
-        "therapy_power_base": 29
-      }
-    },
-    {
-      "id": 16587,
-      "name": "撑天·头·攻击",
-      "position": "hat",
-      "attributes": {
-        "all_attack_power_base": 29
-      }
-    },
-    {
-      "id": 16586,
-      "name": "撑天·裤·无双",
-      "position": "bottoms",
-      "attributes": {
-        "strain_base": 29
-      }
-    },
-    {
-      "id": 16585,
-      "name": "撑天·裤·破防",
-      "position": "bottoms",
-      "attributes": {
-        "all_overcome_base": 29
-      }
-    },
-    {
-      "id": 16584,
-      "name": "撑天·头·急速",
-      "position": "hat",
+      "id": 16595,
+      "name": "撑天·鞋·急速",
+      "position": "shoes",
       "attributes": {
         "haste_base": 29
       }
     },
     {
-      "id": 16583,
-      "name": "撑天·腕·会心",
-      "position": "wrist",
+      "id": 16597,
+      "name": "撑天·鞋·外功",
+      "position": "shoes",
       "attributes": {
-        "all_critical_strike_base": 29
+        "all_attack_power_base": 29
       }
     },
     {
-      "id": 16582,
-      "name": "撑天·裤·会心",
-      "position": "bottoms",
+      "id": 16598,
+      "name": "撑天·衣·无双",
+      "position": "jacket",
       "attributes": {
-        "all_critical_strike_base": 29
+        "strain_base": 22
+      }
+    },
+    {
+      "id": 16599,
+      "name": "撑天·衣·减仇",
+      "position": "jacket",
+      "attributes": {
+        "threat_gain": 0
+      }
+    },
+    {
+      "id": 16600,
+      "name": "撑天·腰·无双",
+      "position": "belt",
+      "attributes": {
+        "strain_base": 22
+      }
+    },
+    {
+      "id": 16601,
+      "name": "撑天·腰·减仇",
+      "position": "belt",
+      "attributes": {
+        "threat_gain": 0
+      }
+    },
+    {
+      "id": 16602,
+      "name": "河清砂·项链（体质）",
+      "position": "necklace",
+      "attributes": {
+        "vitality_base": 72
+      }
+    },
+    {
+      "id": 16603,
+      "name": "河清砂·项链（御劲）",
+      "position": "necklace",
+      "attributes": {
+        "toughness_base": 72
+      }
+    },
+    {
+      "id": 16604,
+      "name": "河清砂·腰坠（体质）",
+      "position": "pendant",
+      "attributes": {
+        "vitality_base": 72
+      }
+    },
+    {
+      "id": 16605,
+      "name": "河清砂·腰坠（化劲）",
+      "position": "pendant",
+      "attributes": {
+        "decritical_power_base": 72
+      }
+    },
+    {
+      "id": 16606,
+      "name": "河清砂·戒指（根骨）",
+      "position": "ring",
+      "attributes": {
+        "spirit_base": 72
+      }
+    },
+    {
+      "id": 16607,
+      "name": "河清砂·戒指（力道）",
+      "position": "ring",
+      "attributes": {
+        "strength_base": 72
+      }
+    },
+    {
+      "id": 16608,
+      "name": "河清砂·戒指（元气）",
+      "position": "ring",
+      "attributes": {
+        "spunk_base": 72
+      }
+    },
+    {
+      "id": 16609,
+      "name": "河清砂·戒指（身法）",
+      "position": "ring",
+      "attributes": {
+        "agility_base": 72
+      }
+    },
+    {
+      "id": 16610,
+      "name": "河清砂·戒指（攻击）",
+      "position": "ring",
+      "attributes": {
+        "all_attack_power_base": 72
+      }
+    },
+    {
+      "id": 16611,
+      "name": "河清砂·暗器（根骨）",
+      "position": "tertiary_weapon",
+      "attributes": {
+        "spirit_base": 72
+      }
+    },
+    {
+      "id": 16612,
+      "name": "河清砂·暗器（力道）",
+      "position": "tertiary_weapon",
+      "attributes": {
+        "strength_base": 72
+      }
+    },
+    {
+      "id": 16613,
+      "name": "河清砂·暗器（元气）",
+      "position": "tertiary_weapon",
+      "attributes": {
+        "spunk_base": 72
+      }
+    },
+    {
+      "id": 16614,
+      "name": "河清砂·暗器（身法）",
+      "position": "tertiary_weapon",
+      "attributes": {
+        "agility_base": 72
+      }
+    },
+    {
+      "id": 16615,
+      "name": "河清砂·暗器（破防）",
+      "position": "tertiary_weapon",
+      "attributes": {
+        "all_overcome_base": 72
+      }
+    },
+    {
+      "id": 16616,
+      "name": "河清砂·暗器（加速）",
+      "position": "tertiary_weapon",
+      "attributes": {
+        "haste_base": 72
+      }
+    },
+    {
+      "id": 16617,
+      "name": "镇渊石·项链（体质）",
+      "position": "necklace",
+      "attributes": {
+        "vitality_base": 90
+      }
+    },
+    {
+      "id": 16618,
+      "name": "镇渊石·项链（御劲）",
+      "position": "necklace",
+      "attributes": {
+        "toughness_base": 90
+      }
+    },
+    {
+      "id": 16619,
+      "name": "镇渊石·腰坠（体质）",
+      "position": "pendant",
+      "attributes": {
+        "vitality_base": 90
+      }
+    },
+    {
+      "id": 16620,
+      "name": "镇渊石·腰坠（化劲）",
+      "position": "pendant",
+      "attributes": {
+        "decritical_power_base": 90
+      }
+    },
+    {
+      "id": 16621,
+      "name": "镇渊石·戒指（根骨）",
+      "position": "ring",
+      "attributes": {
+        "spirit_base": 90
+      }
+    },
+    {
+      "id": 16622,
+      "name": "镇渊石·戒指（力道）",
+      "position": "ring",
+      "attributes": {
+        "strength_base": 90
+      }
+    },
+    {
+      "id": 16623,
+      "name": "镇渊石·戒指（元气）",
+      "position": "ring",
+      "attributes": {
+        "spunk_base": 90
+      }
+    },
+    {
+      "id": 16624,
+      "name": "镇渊石·戒指（身法）",
+      "position": "ring",
+      "attributes": {
+        "agility_base": 90
+      }
+    },
+    {
+      "id": 16625,
+      "name": "镇渊石·戒指（攻击）",
+      "position": "ring",
+      "attributes": {
+        "all_attack_power_base": 90
+      }
+    },
+    {
+      "id": 16626,
+      "name": "镇渊石·暗器（根骨）",
+      "position": "tertiary_weapon",
+      "attributes": {
+        "spirit_base": 90
+      }
+    },
+    {
+      "id": 16627,
+      "name": "镇渊石·暗器（力道）",
+      "position": "tertiary_weapon",
+      "attributes": {
+        "strength_base": 90
+      }
+    },
+    {
+      "id": 16628,
+      "name": "镇渊石·暗器（元气）",
+      "position": "tertiary_weapon",
+      "attributes": {
+        "spunk_base": 90
+      }
+    },
+    {
+      "id": 16629,
+      "name": "镇渊石·暗器（身法）",
+      "position": "tertiary_weapon",
+      "attributes": {
+        "agility_base": 90
+      }
+    },
+    {
+      "id": 16630,
+      "name": "镇渊石·暗器（破防）",
+      "position": "tertiary_weapon",
+      "attributes": {
+        "all_overcome_base": 90
+      }
+    },
+    {
+      "id": 16631,
+      "name": "镇渊石·暗器（加速）",
+      "position": "tertiary_weapon",
+      "attributes": {
+        "haste_base": 90
+      }
+    },
+    {
+      "id": 16632,
+      "name": "铸世·息烽·项链（体质）",
+      "position": "necklace",
+      "attributes": {
+        "vitality_base": 126
+      }
+    },
+    {
+      "id": 16633,
+      "name": "铸世·息烽·项链（根骨）",
+      "position": "necklace",
+      "attributes": {
+        "spirit_base": 126
+      }
+    },
+    {
+      "id": 16634,
+      "name": "铸世·息烽·项链（力道）",
+      "position": "necklace",
+      "attributes": {
+        "strength_base": 126
+      }
+    },
+    {
+      "id": 16635,
+      "name": "铸世·息烽·项链（元气）",
+      "position": "necklace",
+      "attributes": {
+        "spunk_base": 126
+      }
+    },
+    {
+      "id": 16636,
+      "name": "铸世·息烽·项链（身法）",
+      "position": "necklace",
+      "attributes": {
+        "agility_base": 126
+      }
+    },
+    {
+      "id": 16637,
+      "name": "铸世·息烽·腰坠（体质）",
+      "position": "pendant",
+      "attributes": {
+        "vitality_base": 126
+      }
+    },
+    {
+      "id": 16638,
+      "name": "铸世·息烽·腰坠（会心）",
+      "position": "pendant",
+      "attributes": {
+        "all_critical_strike_base": 126
+      }
+    },
+    {
+      "id": 16639,
+      "name": "铸世·息烽·戒指（根骨）",
+      "position": "ring",
+      "attributes": {
+        "spirit_base": 126
+      }
+    },
+    {
+      "id": 16640,
+      "name": "铸世·息烽·戒指（力道）",
+      "position": "ring",
+      "attributes": {
+        "strength_base": 126
+      }
+    },
+    {
+      "id": 16641,
+      "name": "铸世·息烽·戒指（元气）",
+      "position": "ring",
+      "attributes": {
+        "spunk_base": 126
+      }
+    },
+    {
+      "id": 16642,
+      "name": "铸世·息烽·戒指（身法）",
+      "position": "ring",
+      "attributes": {
+        "agility_base": 126
+      }
+    },
+    {
+      "id": 16643,
+      "name": "铸世·息烽·戒指（攻击）",
+      "position": "ring",
+      "attributes": {
+        "all_attack_power_base": 126
+      }
+    },
+    {
+      "id": 16644,
+      "name": "铸世·息烽·暗器（根骨）",
+      "position": "tertiary_weapon",
+      "attributes": {
+        "spirit_base": 126
+      }
+    },
+    {
+      "id": 16645,
+      "name": "铸世·息烽·暗器（力道）",
+      "position": "tertiary_weapon",
+      "attributes": {
+        "strength_base": 126
+      }
+    },
+    {
+      "id": 16646,
+      "name": "铸世·息烽·暗器（元气）",
+      "position": "tertiary_weapon",
+      "attributes": {
+        "spunk_base": 126
+      }
+    },
+    {
+      "id": 16647,
+      "name": "铸世·息烽·暗器（身法）",
+      "position": "tertiary_weapon",
+      "attributes": {
+        "agility_base": 126
+      }
+    },
+    {
+      "id": 16648,
+      "name": "铸世·息烽·暗器（破防）",
+      "position": "tertiary_weapon",
+      "attributes": {
+        "all_overcome_base": 126
+      }
+    },
+    {
+      "id": 16649,
+      "name": "铸世·息烽·暗器（加速）",
+      "position": "tertiary_weapon",
+      "attributes": {
+        "haste_base": 126
+      }
+    },
+    {
+      "id": 16650,
+      "name": "铸世·归正·项链（体质）",
+      "position": "necklace",
+      "attributes": {
+        "vitality_base": 126
+      }
+    },
+    {
+      "id": 16651,
+      "name": "铸世·归正·项链（御劲）",
+      "position": "necklace",
+      "attributes": {
+        "toughness_base": 126
+      }
+    },
+    {
+      "id": 16652,
+      "name": "铸世·归正·腰坠（体质）",
+      "position": "pendant",
+      "attributes": {
+        "vitality_base": 126
+      }
+    },
+    {
+      "id": 16653,
+      "name": "铸世·归正·腰坠（化劲）",
+      "position": "pendant",
+      "attributes": {
+        "decritical_power_base": 126
+      }
+    },
+    {
+      "id": 16654,
+      "name": "铸世·归正·戒指（根骨）",
+      "position": "ring",
+      "attributes": {
+        "spirit_base": 126
+      }
+    },
+    {
+      "id": 16655,
+      "name": "铸世·归正·戒指（力道）",
+      "position": "ring",
+      "attributes": {
+        "strength_base": 126
+      }
+    },
+    {
+      "id": 16656,
+      "name": "铸世·归正·戒指（元气）",
+      "position": "ring",
+      "attributes": {
+        "spunk_base": 126
+      }
+    },
+    {
+      "id": 16657,
+      "name": "铸世·归正·戒指（身法）",
+      "position": "ring",
+      "attributes": {
+        "agility_base": 126
+      }
+    },
+    {
+      "id": 16658,
+      "name": "铸世·归正·戒指（攻击）",
+      "position": "ring",
+      "attributes": {
+        "all_attack_power_base": 126
+      }
+    },
+    {
+      "id": 16659,
+      "name": "铸世·归正·暗器（根骨）",
+      "position": "tertiary_weapon",
+      "attributes": {
+        "spirit_base": 126
+      }
+    },
+    {
+      "id": 16660,
+      "name": "铸世·归正·暗器（力道）",
+      "position": "tertiary_weapon",
+      "attributes": {
+        "strength_base": 126
+      }
+    },
+    {
+      "id": 16661,
+      "name": "铸世·归正·暗器（元气）",
+      "position": "tertiary_weapon",
+      "attributes": {
+        "spunk_base": 126
+      }
+    },
+    {
+      "id": 16662,
+      "name": "铸世·归正·暗器（身法）",
+      "position": "tertiary_weapon",
+      "attributes": {
+        "agility_base": 126
+      }
+    },
+    {
+      "id": 16663,
+      "name": "铸世·归正·暗器（破防）",
+      "position": "tertiary_weapon",
+      "attributes": {
+        "all_overcome_base": 126
+      }
+    },
+    {
+      "id": 16664,
+      "name": "铸世·归正·暗器（加速）",
+      "position": "tertiary_weapon",
+      "attributes": {
+        "haste_base": 126
       }
     }
   ],
@@ -13173,7 +12912,7 @@
       "level": 6,
       "attributes": {
         "vitality_base": 52,
-        "physical_shield_add": 104,
+        "physical_shield_base": 104,
         "max_life_add": 2077
       }
     },
@@ -13183,7 +12922,7 @@
       "level": 6,
       "attributes": {
         "vitality_base": 52,
-        "physical_shield_add": 104,
+        "physical_shield_base": 104,
         "parry_value_base": 1201
       }
     },
@@ -13193,7 +12932,7 @@
       "level": 6,
       "attributes": {
         "vitality_base": 52,
-        "physical_shield_add": 104,
+        "physical_shield_base": 104,
         "magical_shield_base": 208
       }
     },
@@ -13214,7 +12953,7 @@
       "attributes": {
         "vitality_base": 52,
         "parry_value_base": 601,
-        "physical_shield_add": 208
+        "physical_shield_base": 208
       }
     },
     {
@@ -13254,7 +12993,7 @@
       "attributes": {
         "vitality_base": 52,
         "dodge_base": 104,
-        "physical_shield_add": 208
+        "physical_shield_base": 208
       }
     },
     {
@@ -13294,7 +13033,7 @@
       "attributes": {
         "vitality_base": 52,
         "magical_shield_base": 104,
-        "physical_shield_add": 208
+        "physical_shield_base": 208
       }
     },
     {
@@ -13314,7 +13053,7 @@
       "attributes": {
         "vitality_base": 52,
         "max_life_add": 1039,
-        "physical_shield_add": 208
+        "physical_shield_base": 208
       }
     },
     {
@@ -13333,7 +13072,7 @@
       "level": 6,
       "attributes": {
         "spirit_base": 52,
-        "physical_shield_add": 104,
+        "physical_shield_base": 104,
         "max_life_add": 2077
       }
     },
@@ -13343,7 +13082,7 @@
       "level": 6,
       "attributes": {
         "spirit_base": 52,
-        "physical_shield_add": 104,
+        "physical_shield_base": 104,
         "parry_value_base": 1201
       }
     },
@@ -13353,7 +13092,7 @@
       "level": 6,
       "attributes": {
         "spirit_base": 52,
-        "physical_shield_add": 104,
+        "physical_shield_base": 104,
         "magical_shield_base": 208
       }
     },
@@ -13374,7 +13113,7 @@
       "attributes": {
         "spirit_base": 52,
         "parry_value_base": 601,
-        "physical_shield_add": 208
+        "physical_shield_base": 208
       }
     },
     {
@@ -13414,7 +13153,7 @@
       "attributes": {
         "spirit_base": 52,
         "dodge_base": 104,
-        "physical_shield_add": 208
+        "physical_shield_base": 208
       }
     },
     {
@@ -13454,7 +13193,7 @@
       "attributes": {
         "spirit_base": 52,
         "magical_shield_base": 104,
-        "physical_shield_add": 208
+        "physical_shield_base": 208
       }
     },
     {
@@ -13474,7 +13213,7 @@
       "attributes": {
         "spirit_base": 52,
         "max_life_add": 1039,
-        "physical_shield_add": 208
+        "physical_shield_base": 208
       }
     },
     {
@@ -13492,7 +13231,7 @@
       "name": "彩·守御·破势·血魂(陆)",
       "level": 6,
       "attributes": {
-        "physical_shield_add": 52,
+        "physical_shield_base": 52,
         "parry_value_base": 601,
         "max_life_add": 2077
       }
@@ -13502,7 +13241,7 @@
       "name": "彩·守御·破势·耐受(陆)",
       "level": 6,
       "attributes": {
-        "physical_shield_add": 52,
+        "physical_shield_base": 52,
         "parry_value_base": 601,
         "magical_shield_base": 208
       }
@@ -13512,7 +13251,7 @@
       "name": "彩·守御·灵动·血魂(陆)",
       "level": 6,
       "attributes": {
-        "physical_shield_add": 52,
+        "physical_shield_base": 52,
         "dodge_base": 104,
         "max_life_add": 2077
       }
@@ -13522,7 +13261,7 @@
       "name": "彩·守御·灵动·破势(陆)",
       "level": 6,
       "attributes": {
-        "physical_shield_add": 52,
+        "physical_shield_base": 52,
         "dodge_base": 104,
         "parry_value_base": 1201
       }
@@ -13532,7 +13271,7 @@
       "name": "彩·守御·灵动·耐受(陆)",
       "level": 6,
       "attributes": {
-        "physical_shield_add": 52,
+        "physical_shield_base": 52,
         "dodge_base": 104,
         "magical_shield_base": 208
       }
@@ -13542,7 +13281,7 @@
       "name": "彩·守御·耐受·血魂(陆)",
       "level": 6,
       "attributes": {
-        "physical_shield_add": 52,
+        "physical_shield_base": 52,
         "magical_shield_base": 104,
         "max_life_add": 2077
       }
@@ -13552,7 +13291,7 @@
       "name": "彩·守御·耐受·破势(陆)",
       "level": 6,
       "attributes": {
-        "physical_shield_add": 52,
+        "physical_shield_base": 52,
         "magical_shield_base": 104,
         "parry_value_base": 1201
       }
@@ -13562,7 +13301,7 @@
       "name": "彩·守御·血魂·破势(陆)",
       "level": 6,
       "attributes": {
-        "physical_shield_add": 52,
+        "physical_shield_base": 52,
         "max_life_add": 1039,
         "parry_value_base": 1201
       }
@@ -13572,7 +13311,7 @@
       "name": "彩·守御·血魂·耐受(陆)",
       "level": 6,
       "attributes": {
-        "physical_shield_add": 52,
+        "physical_shield_base": 52,
         "max_life_add": 1039,
         "magical_shield_base": 208
       }
@@ -13583,7 +13322,7 @@
       "level": 6,
       "attributes": {
         "parry_base": 52,
-        "physical_shield_add": 104,
+        "physical_shield_base": 104,
         "max_life_add": 2077
       }
     },
@@ -13593,7 +13332,7 @@
       "level": 6,
       "attributes": {
         "parry_base": 52,
-        "physical_shield_add": 104,
+        "physical_shield_base": 104,
         "parry_value_base": 1201
       }
     },
@@ -13603,7 +13342,7 @@
       "level": 6,
       "attributes": {
         "parry_base": 52,
-        "physical_shield_add": 104,
+        "physical_shield_base": 104,
         "magical_shield_base": 208
       }
     },
@@ -13624,7 +13363,7 @@
       "attributes": {
         "parry_base": 52,
         "parry_value_base": 601,
-        "physical_shield_add": 208
+        "physical_shield_base": 208
       }
     },
     {
@@ -13664,7 +13403,7 @@
       "attributes": {
         "parry_base": 52,
         "dodge_base": 104,
-        "physical_shield_add": 208
+        "physical_shield_base": 208
       }
     },
     {
@@ -13704,7 +13443,7 @@
       "attributes": {
         "parry_base": 52,
         "magical_shield_base": 104,
-        "physical_shield_add": 208
+        "physical_shield_base": 208
       }
     },
     {
@@ -13724,7 +13463,7 @@
       "attributes": {
         "parry_base": 52,
         "max_life_add": 1039,
-        "physical_shield_add": 208
+        "physical_shield_base": 208
       }
     },
     {
@@ -13743,7 +13482,7 @@
       "level": 6,
       "attributes": {
         "parry_value_base": 300,
-        "physical_shield_add": 104,
+        "physical_shield_base": 104,
         "max_life_add": 2077
       }
     },
@@ -13753,7 +13492,7 @@
       "level": 6,
       "attributes": {
         "parry_value_base": 300,
-        "physical_shield_add": 104,
+        "physical_shield_base": 104,
         "magical_shield_base": 208
       }
     },
@@ -13774,7 +13513,7 @@
       "attributes": {
         "parry_value_base": 300,
         "dodge_base": 104,
-        "physical_shield_add": 208
+        "physical_shield_base": 208
       }
     },
     {
@@ -13804,7 +13543,7 @@
       "attributes": {
         "parry_value_base": 300,
         "magical_shield_base": 104,
-        "physical_shield_add": 208
+        "physical_shield_base": 208
       }
     },
     {
@@ -13814,7 +13553,7 @@
       "attributes": {
         "parry_value_base": 300,
         "max_life_add": 1039,
-        "physical_shield_add": 208
+        "physical_shield_base": 208
       }
     },
     {
@@ -13833,7 +13572,7 @@
       "level": 6,
       "attributes": {
         "dodge_base": 52,
-        "physical_shield_add": 104,
+        "physical_shield_base": 104,
         "max_life_add": 2077
       }
     },
@@ -13843,7 +13582,7 @@
       "level": 6,
       "attributes": {
         "dodge_base": 52,
-        "physical_shield_add": 104,
+        "physical_shield_base": 104,
         "parry_value_base": 1201
       }
     },
@@ -13853,7 +13592,7 @@
       "level": 6,
       "attributes": {
         "dodge_base": 52,
-        "physical_shield_add": 104,
+        "physical_shield_base": 104,
         "magical_shield_base": 208
       }
     },
@@ -13874,7 +13613,7 @@
       "attributes": {
         "dodge_base": 52,
         "parry_value_base": 601,
-        "physical_shield_add": 208
+        "physical_shield_base": 208
       }
     },
     {
@@ -13914,7 +13653,7 @@
       "attributes": {
         "dodge_base": 52,
         "magical_shield_base": 104,
-        "physical_shield_add": 208
+        "physical_shield_base": 208
       }
     },
     {
@@ -13934,7 +13673,7 @@
       "attributes": {
         "dodge_base": 52,
         "max_life_add": 1039,
-        "physical_shield_add": 208
+        "physical_shield_base": 208
       }
     },
     {
@@ -13953,7 +13692,7 @@
       "level": 6,
       "attributes": {
         "magical_shield_base": 52,
-        "physical_shield_add": 104,
+        "physical_shield_base": 104,
         "max_life_add": 2077
       }
     },
@@ -13963,7 +13702,7 @@
       "level": 6,
       "attributes": {
         "magical_shield_base": 52,
-        "physical_shield_add": 104,
+        "physical_shield_base": 104,
         "parry_value_base": 1201
       }
     },
@@ -13984,7 +13723,7 @@
       "attributes": {
         "magical_shield_base": 52,
         "parry_value_base": 601,
-        "physical_shield_add": 208
+        "physical_shield_base": 208
       }
     },
     {
@@ -14014,7 +13753,7 @@
       "attributes": {
         "magical_shield_base": 52,
         "dodge_base": 104,
-        "physical_shield_add": 208
+        "physical_shield_base": 208
       }
     },
     {
@@ -14034,7 +13773,7 @@
       "attributes": {
         "magical_shield_base": 52,
         "max_life_add": 1039,
-        "physical_shield_add": 208
+        "physical_shield_base": 208
       }
     },
     {
@@ -14043,7 +13782,7 @@
       "level": 6,
       "attributes": {
         "max_life_add": 519,
-        "physical_shield_add": 104,
+        "physical_shield_base": 104,
         "parry_value_base": 1201
       }
     },
@@ -14053,7 +13792,7 @@
       "level": 6,
       "attributes": {
         "max_life_add": 519,
-        "physical_shield_add": 104,
+        "physical_shield_base": 104,
         "magical_shield_base": 208
       }
     },
@@ -14064,7 +13803,7 @@
       "attributes": {
         "max_life_add": 519,
         "parry_value_base": 601,
-        "physical_shield_add": 208
+        "physical_shield_base": 208
       }
     },
     {
@@ -14094,7 +13833,7 @@
       "attributes": {
         "max_life_add": 519,
         "dodge_base": 104,
-        "physical_shield_add": 208
+        "physical_shield_base": 208
       }
     },
     {
@@ -14124,7 +13863,7 @@
       "attributes": {
         "max_life_add": 519,
         "magical_shield_base": 104,
-        "physical_shield_add": 208
+        "physical_shield_base": 208
       }
     },
     {
@@ -14133,7 +13872,7 @@
       "level": 6,
       "attributes": {
         "atLifeReplenishExt": 41,
-        "physical_shield_add": 104,
+        "physical_shield_base": 104,
         "max_life_add": 2077
       }
     },
@@ -14143,7 +13882,7 @@
       "level": 6,
       "attributes": {
         "atLifeReplenishExt": 41,
-        "physical_shield_add": 104,
+        "physical_shield_base": 104,
         "parry_value_base": 1201
       }
     },
@@ -14153,7 +13892,7 @@
       "level": 6,
       "attributes": {
         "atLifeReplenishExt": 41,
-        "physical_shield_add": 104,
+        "physical_shield_base": 104,
         "magical_shield_base": 208
       }
     },
@@ -14174,7 +13913,7 @@
       "attributes": {
         "atLifeReplenishExt": 41,
         "parry_value_base": 601,
-        "physical_shield_add": 208
+        "physical_shield_base": 208
       }
     },
     {
@@ -14214,7 +13953,7 @@
       "attributes": {
         "atLifeReplenishExt": 41,
         "dodge_base": 104,
-        "physical_shield_add": 208
+        "physical_shield_base": 208
       }
     },
     {
@@ -14254,7 +13993,7 @@
       "attributes": {
         "atLifeReplenishExt": 41,
         "magical_shield_base": 104,
-        "physical_shield_add": 208
+        "physical_shield_base": 208
       }
     },
     {
@@ -14274,7 +14013,7 @@
       "attributes": {
         "atLifeReplenishExt": 41,
         "max_life_add": 1039,
-        "physical_shield_add": 208
+        "physical_shield_base": 208
       }
     },
     {
@@ -15693,7 +15432,7 @@
       "level": 6,
       "attributes": {
         "all_major_base": 46,
-        "atActiveThreatCoefficient": 20
+        "threat_gain": 20
       }
     },
     {
@@ -15857,7 +15596,7 @@
       "name": "彩·守御·大御·血魂(陆)",
       "level": 6,
       "attributes": {
-        "physical_shield_add": 52,
+        "physical_shield_base": 52,
         "toughness_base": 104,
         "max_life_add": 2077
       }
@@ -15869,7 +15608,7 @@
       "attributes": {
         "vitality_base": 52,
         "toughness_base": 104,
-        "physical_shield_add": 208
+        "physical_shield_base": 208
       }
     },
     {
@@ -21825,17 +21564,38 @@
   ],
   "threatSource": {
     "repository": "https://github.com/IcyTide/Generator",
-    "commit": "b7d609a4a87f92a7b3907efe9141bdfdfb8c3f9e"
-  },
-  "effectSource": {
-    "repository": "https://github.com/IcyTide/Generator",
-    "commit": "b7d609a4a87f92a7b3907efe9141bdfdfb8c3f9e",
+    "commit": "ee2c4c0f502c82a3ab615355cdc80073b6bf1713",
+    "importedAt": "2026-10-30T04:54:00.338Z",
     "files": [
       "assets/json/armors.json",
       "assets/json/trinkets.json",
       "assets/json/weapons.json"
+    ]
+  },
+  "effectSource": {
+    "repository": "https://github.com/IcyTide/Generator",
+    "commit": "ee2c4c0f502c82a3ab615355cdc80073b6bf1713",
+    "importedAt": "2026-10-30T04:54:00.338Z",
+    "files": [
+      "assets/json/armors.json",
+      "assets/json/trinkets.json",
+      "assets/json/weapons.json",
+      "assets/json/skills.json"
     ],
-    "itemCount": 65,
-    "effectCount": 65
+    "itemCount": 59,
+    "effectCount": 59
+  },
+  "source": {
+    "repository": "https://github.com/IcyTide/Generator",
+    "commit": "ee2c4c0f502c82a3ab615355cdc80073b6bf1713",
+    "importedAt": "2026-10-30T04:54:00.338Z"
+  },
+  "legacyAliases": {
+    "armors:112699": "armors:114853",
+    "armors:112700": "armors:114854",
+    "armors:112701": "armors:114855",
+    "armors:112705": "armors:114859",
+    "armors:112706": "armors:114860",
+    "armors:112707": "armors:114861"
   }
 }

@@ -15,6 +15,19 @@ const 八一 = 获取理论档位循环(0.8125).循环详情[0].技能详情
 const 设置 = { ...原始数据.settings, mingzunOrangeWeapon: true }
 const 计算 = (list = 七五, settings = 设置, full = true) =>
   计算明尊基础循环(原始数据.equipment, settings, list, 300, full)
+const 历史设置 = (settings) => ({
+  ...settings,
+  // 历史基准使用45%极本；当前55%（563）减102，恢复原来的461/1024。
+  gains: { ...settings.gains, all_shield_ignore: (settings.gains?.all_shield_ignore || 0) - 102 },
+})
+const 当前配装基准 = () => {
+  const { stats, specialEffects } = calculateLoadout(原始数据.slots, 原始数据.stone)
+  return 计算明尊基础循环(stats, {
+    ...设置,
+    gains: 获取明尊战斗增益(原始数据.gainData, true, stats, 原始数据.settings),
+    equipmentEffects: specialEffects,
+  }, 七五, 300)
+}
 const 总数 = (result, id) =>
   result.计算结果技能列表.filter((row) => row.技能ID === id).reduce((n, row) => n + row.技能数量, 0)
 
@@ -36,11 +49,13 @@ test('按当前装备ID识别各品级明尊橙武，精炼8的腰坠及洗髓�
   expect(isMingzunOrangeWeapon(undefined)).toBe(false)
 })
 
-test('0.75自适应橙武精确复现上一版50088.59，普通武器及快速评估保持同口径', () => {
+test('0.75橙武保留45%极本的历史基准，当前55%下完整与快速评估同口径', () => {
   const result = 计算()
-  expect(result.秒伤).toBeCloseTo(原始数据.expectedDps, 8)
+  const legacy = 计算(七五, 历史设置(设置))
+  expect(legacy.秒伤).toBeCloseTo(原始数据.expectedDps, 8)
+  expect(result.秒伤).toBeGreaterThan(legacy.秒伤)
   expect(计算(七五, 设置, false).总伤).toBe(result.总伤)
-  expect(计算(七五, 原始数据.settings).秒伤).toBeCloseTo(原始数据.normalDps, 8)
+  expect(计算(七五, 历史设置(原始数据.settings)).秒伤).toBeCloseTo(原始数据.normalDps, 8)
   expect(总数(result, '35065')).toBe(38)
   expect(总数(result, '25796')).toBe(((40 + 16) * 205) / 1024)
   expect(result.计算结果技能列表.reduce((n, row) => n + row.技能总输出, 0)).toBeCloseTo(
@@ -133,9 +148,10 @@ test('方案推荐保持排除橙武，但更换前的当前橙武分数仍包�
     allowHigherHaste: true,
   }
   const beforeStats = calculateLoadout(input.initial.slots, input.initial.stone).stats
-  expect(beforeStats).toEqual(原始数据.equipment)
+  expect(beforeStats.haste).toBe(原始数据.equipment.haste)
+  expect(beforeStats.vitality).toBeGreaterThan(原始数据.equipment.vitality)
   const result = 优化明尊方案(input)
-  expect(result.before.dps).toBeCloseTo(原始数据.expectedDps, 8)
+  expect(result.before.dps).toBeCloseTo(当前配装基准().秒伤, 8)
   expect(获取最高品级候选(input)).not.toContain('weapons:47882')
   if (result.plan) expect(result.plan.slots.primary_weapon.key).toBe(normal.key)
 })
@@ -235,5 +251,5 @@ test('只纳入所选品级橙武，不选时排除候选，但固定的当前�
     allowHigherHaste: true,
   })
   expect(result.plan.slots.primary_weapon.key).toBe('weapons:47882')
-  expect(result.before.dps).toBeCloseTo(原始数据.expectedDps, 8)
+  expect(result.before.dps).toBeCloseTo(当前配装基准().秒伤, 8)
 })

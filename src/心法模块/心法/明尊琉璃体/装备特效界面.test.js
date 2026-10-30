@@ -71,36 +71,36 @@ const yellowGear = (id) =>
 test('直伤装备显示按事件等级核对的基础伤害与冷却，明确基础值不等于最终伤害', () => {
   render(yellowGear(112483))
   const details = container.querySelector('[aria-label="黄字特效详细数值"]').textContent
-  expect(details).toContain('13683点／次（50级基础值）')
+  expect(details).toContain('39429点／次（50级基础值）')
   expect(details).toContain('内置冷却10秒')
   expect(details).toContain('自身气血≥75%')
   expect(details).toContain('实际伤害随目标等级和易伤变化')
   render(yellowGear(47978))
-  expect(container.textContent).toContain('3276点／次')
+  expect(container.textContent).toContain('39244点／次')
   expect(container.textContent).not.toContain('11979点／次')
 })
 
 test('加速DOT显示每跳伤害、跳数上限与共享冷却，明确原文与脚本持续时间的差异', () => {
   render(yellowGear(112488))
   const details = container.querySelector('[aria-label="黄字特效详细数值"]').textContent
-  expect(details).toContain('899点／跳')
+  expect(details).toContain('1375点／跳')
   expect(details).toContain('12～22跳，每1秒1跳')
   expect(details).toContain('加速等级≥2024，22跳')
-  expect(details).toContain('19778点（899×22）')
+  expect(details).toContain('30250点（1375×22）')
   expect(details).toContain('腰带与护腕同类效果共用40秒冷却')
   expect(details).toContain('原黄字写“持续10秒”')
 })
 
-test('戒指显示单件与双戴合计，项链保留每66点转换和28点上限的特殊档位', () => {
+test('戒指显示单件与双戴合计，项链与触发暗器展示最新转换比例和上限', () => {
   render(yellowGear(49931))
   expect(container.textContent).toContain('属性加成会心等级 +268')
   expect(container.textContent).toContain('同组双戴合计会心等级 +536（268×2）')
   expect(container.textContent).toContain('无内置冷却')
   render(yellowGear(51444))
-  expect(container.textContent).toContain('每66点基础破防等级 → 1点全攻击')
-  expect(container.textContent).toContain('加成上限全攻击 +28')
+  expect(container.textContent).toContain('每10点基础破防等级 → 2点全攻击')
+  expect(container.textContent).toContain('加成上限全攻击 +268')
   render(yellowGear(48038))
-  expect(container.textContent).toContain('全攻击 +537')
+  expect(container.textContent).toContain('全攻击 +189')
   expect(container.textContent).toContain('加速等级≥2024，持续11秒')
 })
 

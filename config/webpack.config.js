@@ -215,8 +215,8 @@ module.exports = function (webpackEnv) {
       path: paths.appBuild,
       // Add /* filename */ comments to generated require()s in the output.
       pathinfo: isEnvDevelopment,
-      libraryTarget: 'commonjs', // 将指定文件打包为 CommonJS
-      // libraryTarget: isEnvDevelopment ? undefined : 'commonjs', // 将指定文件打包为 CommonJS
+      // 网页入口不依赖 Node 的 exports；仅 GET_DPS 库构建输出 CommonJS。
+      libraryTarget: isGetDpsMoment ? 'commonjs' : undefined,
       // There will be one main bundle, and one file per asynchronous chunk.
       // In development, it does not produce real files.
       filename: (pathData) => {

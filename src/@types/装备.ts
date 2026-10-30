@@ -467,6 +467,7 @@ export enum 大附魔部位枚举 {
 }
 
 export interface 装备信息数据类型 {
+  明尊装备数据版本?: string
   明尊未计入效果?: string[]
   /**
    * @name 装备基础属性

@@ -2,6 +2,7 @@ import { calculateLoadout } from '../明尊琉璃体/装备'
 import { 计算洗髓循环, 计算洗髓面板, 获取洗髓计算设置 } from './计算'
 import { 获取洗髓GCD, 获取洗髓加速档位, 洗髓自适应循环, 获取洗髓档位对比循环 } from './循环'
 import 配装 from './测试配装.json'
+import 历史 from './循环历史面板.json'
 import 记录 from './循环记录.json'
 import { 明尊小药小吃, 明尊团队增益 } from '../明尊琉璃体/增益'
 
@@ -19,11 +20,11 @@ test.each([
 })
 
 test.each([
-  [3, 31517.896900130425],
-  [4, 32866.2055281157],
-  [5, 34566.12897214873],
-])('已记录%d档重新计伤与独立工具一致，统计分项之和等于总伤', (tier, expected) => {
-  const stats = { ...equipment.stats, haste: 记录[tier].加速 }
+  [3, 31507.09849175419],
+  [4, 32854.97255227075],
+  [5, 34554.29015095556],
+])('已记录%d档使用历史面板与96点禅语规则，统计分项之和等于总伤', (tier, expected) => {
+  const stats = { ...历史.equipmentStats, haste: 记录[tier].加速 }
   const detail = 洗髓自适应循环.循环详情.find((row) => row.循环加速等级 === tier)
   const result = 计算洗髓循环(stats, settings, detail.技能详情, 300)
   expect(result.秒伤).toBeCloseTo(expected, 6)

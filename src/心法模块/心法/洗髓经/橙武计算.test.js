@@ -5,6 +5,7 @@ import { 洗髓自适应循环 } from './循环'
 import { 适配洗髓橙武循环 } from './橙武循环'
 import 记录 from './橙武循环记录.json'
 import 配装 from './橙武测试配装.json'
+import 历史 from './橙武历史面板.json'
 import 神兵 from './橙武神兵.json'
 import 参考 from './参考数据.json'
 
@@ -16,8 +17,9 @@ test.each([
   [3, 928, 34970.152958920764, 87],
   [4, 1452, 36668.290934642166, 88],
   [5, 2327, 38895.82446151993, 96],
-])('洗髓橙武%d档自动适配后与独立工具逐事件总伤一致', (tier, haste, dps, casts) => {
-  const stats = { ...equipped.stats, haste }
+])('洗髓橙武%d档使用历史面板时与独立工具逐事件总伤一致', (tier, haste, dps, casts) => {
+  // 独立工具的基准来自10月27日；装备源库更新不应改变这份历史面板。
+  const stats = { ...历史.equipmentStats, haste }
   const before = JSON.stringify(detail(tier))
   const result = 计算洗髓循环(stats, settings, detail(tier), 300)
   expect(result.秒伤).toBeCloseTo(dps, 6)

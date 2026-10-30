@@ -9,18 +9,24 @@ import {
   DEFAULT_SETTINGS,
   EMPTY_EQUIPMENT,
   SKILLS,
+  TALENTS,
   calculateAttributes,
   calculateSkill,
 } from './计算'
 
 const selection = (name) => ({ 阵眼: name, 小吃: [], 团队增益: [] })
-const panel = (name, stance = 'mainTank', extra = {}) =>
+const panel = (
+  name,
+  stance = 'mainTank',
+  extra = {},
+  gains = 获取明尊增益属性(selection(name), true),
+) =>
   calculateAttributes(
     { ...EMPTY_EQUIPMENT, ...fixture.equipment, ...extra },
-    { ...DEFAULT_SETTINGS, stance, gains: 获取明尊增益属性(selection(name), true) },
+    { ...DEFAULT_SETTINGS, stance, gains },
   )
 
-test('阵眼仅提供指定八种普通成员选项，清空、未知值及关闭增益均不生效', () => {
+test('阵眼提供指定九种普通成员选项，清空、未知值及关闭增益均不生效', () => {
   expect(明尊阵眼.map((row) => row.阵眼名称)).toEqual([
     '冰心阵',
     '田螺阵',
@@ -29,6 +35,7 @@ test('阵眼仅提供指定八种普通成员选项，清空、未知值及关�
     '万灵阵',
     '气纯阵',
     '莫问阵',
+    '段氏阵',
     'T阵',
   ])
   expect(archive.commit).toBe(reference.commit)
@@ -39,6 +46,33 @@ test('阵眼仅提供指定八种普通成员选项，清空、未知值及关�
     expect(获取明尊增益属性(selection(row.阵眼名称), false)).toEqual({})
     expect(获取明尊增益属性(selection(row.阵眼名称), true)).toEqual(row.考拉属性)
   }
+})
+
+test('段氏阵临时增伤按90%覆盖，常驻属性完整计入且内功会心不扩展到外功', () => {
+  const formation = 明尊阵眼.find((row) => row.阵眼名称 === '段氏阵')
+  expect(formation.覆盖率).toBe(90)
+  expect(formation.阵眼全名).toBe('含章挺秀阵')
+  expect(获取明尊阵眼属性('段氏阵')).toEqual({
+    magical_attack_power_gain: 51,
+    strain_rate: 20,
+    lunar_critical_strike_rate: 500,
+    solar_critical_strike_rate: 500,
+    neutral_critical_strike_rate: 500,
+    poison_critical_strike_rate: 500,
+    all_damage_gain: expect.closeTo(55.8, 12),
+  })
+  const before = panel('')
+  const after = panel('段氏阵')
+  expect(after.attack).toBeGreaterThan(before.attack)
+  expect(after.critical - before.critical).toBeCloseTo(0.05, 12)
+  expect(after.strain - before.strain).toBeCloseTo(20 / 1024, 12)
+  expect(
+    after.variables.magical_damage_addition - before.variables.magical_damage_addition,
+  ).toBeCloseTo((62 * 0.9) / 1024, 12)
+  expect(
+    after.variables.physical_damage_addition - before.variables.physical_damage_addition,
+  ).toBeCloseTo((62 * 0.9) / 1024, 12)
+  expect(after.variables.physical_critical_strike).toBe(before.variables.physical_critical_strike)
 })
 
 test('T阵只有基础体质3%，与已有体质百分比加算，并重新计算心法转换', () => {
@@ -53,11 +87,11 @@ test('T阵只有基础体质3%，与已有体质百分比加算，并重新计�
   expect(after.baseOvercomeRating).toBe(before.baseOvercomeRating)
 })
 
-test('按效果折算覆盖率及满层，阵眼自身专属收益不进入成员属性', () => {
+test('按效果折算覆盖率及指定层数，阵眼自身专属收益不进入成员属性', () => {
   expect(获取明尊阵眼属性('冰心阵').magical_attack_power_gain).toBe(101)
   expect(获取明尊阵眼属性('冰心阵').lunar_overcome_gain).toBeUndefined()
   expect(获取明尊阵眼属性('冰心阵').lunar_critical_strike_rate).toBe(300)
-  expect(获取明尊阵眼属性('气纯阵').lunar_critical_strike_rate).toBe(800)
+  expect(获取明尊阵眼属性('气纯阵').lunar_critical_strike_rate).toBe(600)
   expect(获取明尊阵眼属性('气纯阵').magical_attack_power_gain).toBeUndefined()
   expect(获取明尊阵眼属性('毒经阵').lunar_overcome_gain).toBe(51)
   expect(获取明尊阵眼属性('毒经阵').magical_attack_power_gain).toBe(51)
@@ -69,6 +103,18 @@ test('按效果折算覆盖率及满层，阵眼自身专属收益不进入成�
   expect(获取明尊阵眼属性('莫问阵').lunar_critical_power_rate).toBeUndefined()
   expect(获取明尊阵眼属性('莫问阵').lunar_overcome_gain).toBeUndefined()
 })
+
+test.each(['mainTank', 'offTank'])(
+  '气纯阵按3层计入，%s获得6%内功会心且常驻收益完整保留',
+  (stance) => {
+    const before = panel('', stance)
+    const after = panel('气纯阵', stance)
+    expect(after.critical - before.critical).toBeCloseTo(0.06, 12)
+    expect(after.criticalPower - before.criticalPower).toBeCloseTo(154 / 1024, 12)
+    expect(after.strain - before.strain).toBeCloseTo(20 / 1024, 12)
+    expect(after.variables.physical_critical_strike).toBe(before.variables.physical_critical_strike)
+  },
+)
 
 test.each(['mainTank', 'offTank'])('毒经阵只放大基础破防，%s气劲额外破防不吃倍率', (stance) => {
   const before = panel('', stance)
@@ -107,8 +153,19 @@ test('内功会心会效与全会心会效严格区分；莫问五阵严格按�
   expect(panel('莫问阵').toughnessPower).toBe(before.toughnessPower)
 })
 
-test.each(fixture.cases)('阵眼与考拉原Python数值一致：$stance / $formation', (item) => {
-  const result = panel(item.formation, item.stance)
+test.each(fixture.cases)('按存档输入校验考拉原Python数值：$stance / $formation', (item) => {
+  const gains = 获取明尊增益属性(selection(item.formation), true)
+  // 原Python存档仍使用旧版45%无视，明确恢复原输入以校验历史公式。
+  gains.all_shield_ignore =
+    (gains.all_shield_ignore || 0) +
+    reference.belongs['26717'].attributes.all_shield_ignore -
+    TALENTS.find((talent) => talent.id === '26717').attributes.all_shield_ignore
+  if (item.formation === '气纯阵') {
+    // 原Python存档是5层样本，补回两层以保留独立公式校验；当前3层规则由上方用例验证。
+    for (const [key, value] of Object.entries(archive.buffs['347']['943']['1'].attributes))
+      gains[key] += value * 2
+  }
+  const result = panel(item.formation, item.stance, {}, gains)
   for (const [key, expected] of Object.entries(item.panel))
     expect(result[key]).toBeCloseTo(expected, 12)
   for (const [key, expected] of Object.entries(item.skills)) {

@@ -24,12 +24,17 @@ import type { EquippedSpecialEffect } from '@/心法模块/心法/明尊琉璃�
 import { matchMajorEnchant } from '@/心法模块/心法/明尊琉璃体/大附魔'
 import { 获取明尊增益属性, 获取明尊战斗增益 } from '@/心法模块/心法/明尊琉璃体/增益'
 
-export const 规范明尊奇穴 = (名称: string[] = []) =>
-  normalizeTalents(
-    TALENTS.filter((奇穴) => 名称.includes(奇穴.name) || 名称.includes(奇穴.id)).map(
+const 迁移明尊奇穴选择 = (名称: string[]) =>
+  名称.map((项) => (项 === '斩火' ? '月尽天明' : 项 === '6766' ? '6000' : 项))
+
+export const 规范明尊奇穴 = (名称: string[] = []) => {
+  const 已迁移 = 迁移明尊奇穴选择(名称)
+  return normalizeTalents(
+    TALENTS.filter((奇穴) => 已迁移.includes(奇穴.name) || 已迁移.includes(奇穴.id)).map(
       (奇穴) => 奇穴.id,
     ),
   ).map((id) => TALENTS.find((奇穴) => 奇穴.id === id)!.name)
+}
 
 export function 规范明尊秘籍(秘籍: 选中秘籍信息 = {}): 选中秘籍信息 {
   const 已选 = new Set(Object.values(秘籍 || {}).flat())
@@ -53,8 +58,11 @@ export function 获取明尊计算设置(
   装备属性?: EquipmentStats,
 ): Settings {
   const 已选秘籍 = new Set(Object.values(规范明尊秘籍(秘籍)).flat())
+  const 已迁移奇穴 = 迁移明尊奇穴选择(奇穴)
   const 奇穴ID = normalizeTalents(
-    TALENTS.filter((项) => 奇穴.includes(项.name) || 奇穴.includes(项.id)).map((项) => 项.id),
+    TALENTS.filter((项) => 已迁移奇穴.includes(项.name) || 已迁移奇穴.includes(项.id)).map(
+      (项) => 项.id,
+    ),
   )
   const 设置: Settings = {
     ...DEFAULT_SETTINGS,

@@ -24,8 +24,8 @@ const selection = (item, overrides = {}) => ({
 })
 const slot = (item) => (item.position === 'ring' ? 'ring1' : item.position)
 
-test('无修去重、水风特效及两心法橙武入库后133件装备，精炼和镶嵌均产生有效属性', () => {
-  expect(GEAR_ITEMS).toHaveLength(133)
+test('无修去重、水风特效及两心法橙武入库后134件装备，精炼和镶嵌均产生有效属性', () => {
+  expect(GEAR_ITEMS).toHaveLength(134)
   expect(new Set(GEAR_ITEMS.map((item) => item.key)).size).toBe(GEAR_ITEMS.length)
   for (const item of GEAR_ITEMS) {
     const result = calculateLoadout({
@@ -40,17 +40,17 @@ test('无修去重、水风特效及两心法橙武入库后133件装备，精�
   }
 })
 
-test('27条完全重复无修合并，旧键和旧ID保留精炼、孔位、附魔及黄字计算', () => {
+test('21条完全重复无观合并，旧键和旧ID保留精炼、孔位、附魔及黄字计算', () => {
   const aliases = 装备数据库.items.filter((row) => {
     const canonical = findGearItem(row.key)
     return canonical && canonical.key !== row.key
   })
-  expect(aliases).toHaveLength(27)
+  expect(aliases).toHaveLength(21)
   for (const raw of aliases) {
     const canonical = findGearItem(raw.key)
     const { key: oldKey, id: oldId, ...oldAttributes } = raw
     const { key: newKey, id: newId, ...newAttributes } = canonical
-    expect(raw.name).toMatch(/^无修/)
+    expect(raw.name).toMatch(/^无观/)
     expect(oldAttributes).toEqual(newAttributes)
     expect(Object.entries(raw.embed)).toEqual(Object.entries(canonical.embed))
     expect(findGearItem(raw.id, raw.position)).toBe(canonical)
@@ -69,16 +69,25 @@ test('27条完全重复无修合并，旧键和旧ID保留精炼、孔位、附�
   }
 })
 
-test('同名无修的不同词条、孔位和黄字版本仍各自保留', () => {
-  expect(GEAR_ITEMS.filter((row) => row.id === 112699)).toHaveLength(1)
-  expect(findGearItem(112783, 'hat').id).toBe(112699)
-  // 相同基础属性但无黄字的测试版本，不与有黄字版本混为同件装备。
+test('正式黄字与无黄字版本分别保留，移除的测试ID兼容到同词条正式版本', () => {
+  expect(GEAR_ITEMS.some((row) => row.id === 112699)).toBe(false)
+  expect(findGearItem(112783, 'hat').id).toBe(112783)
   expect(findGearItem(114853, 'hat').id).toBe(114853)
   expect(findGearItem(114853, 'hat').specialEffects).toBeUndefined()
-  expect(findGearItem(112699, 'hat').specialEffects.length).toBeGreaterThan(0)
+  expect(findGearItem(112783, 'hat').specialEffects.length).toBeGreaterThan(0)
   expect([112699, 112700, 112701].map((id) => findGearItem(id, 'hat').id)).toEqual([
-    112699, 112700, 112701,
+    114853, 114854, 114855,
   ])
+  for (const [oldKey, target] of Object.entries(装备数据库.legacyAliases)) {
+    const item = findGearItem(target)
+    expect(findGearItem(oldKey)).toBe(item)
+    expect(findGearItem(Number(oldKey.split(':')[1]), item.position)).toBe(item)
+    const saved = { [slot(item)]: { key: oldKey, strength: 6, embeds: [8, 7], enchantId: 0 } }
+    const normalized = normalizeLoadout(saved)
+    expect(normalized.slots[slot(item)].key).toBe(target)
+    expect(normalized.slots[slot(item)].embeds).toEqual([8, 7])
+    expect(calculateLoadout(saved)).toEqual(calculateLoadout(normalized.slots))
+  }
 })
 
 test.each([
@@ -90,13 +99,13 @@ test.each([
   (id, level, vitality, shield, haste, toughness, strain, weaponMin, weaponMax) => {
     const item = GEAR_ITEMS.find((row) => row.id === id)
     expect(item).toMatchObject({
-      name: '圣辉月雪_测试用',
+      name: '望明',
       level,
       usage: 'ALL',
       maxStrength: 8,
       orangeWeapon: true,
     })
-    expect(item.embed).toEqual({ vitality_base: 225, physical_shield_base: 225, dodge_base: 225 })
+    expect(item.embed).toEqual({ vitality_base: 304, physical_shield_base: 304, dodge_base: 304 })
     const result = calculateLoadout({ primary_weapon: selection(item) })
     expect(result.stats).toMatchObject({
       vitality,
@@ -118,13 +127,13 @@ test('1240品圣辉月雪精炼8和三孔8级正确汇总，武伤不随精炼�
     primary_weapon: selection(item, { strength: 8, embeds: [8, 8, 8] }),
   })
   expect(result.stats).toMatchObject({
-    vitality: 1634,
-    physicalShield: 2106,
+    vitality: 1644,
+    physicalShield: 2116,
     magicalShield: 2078,
     haste: 692,
     toughness: 346,
     strain: 1227,
-    dodge: 28,
+    dodge: 38,
     weaponMin: 134,
     weaponMax: 223,
   })
@@ -150,10 +159,10 @@ test('精简内功防具、首饰和暗器加入装备库并正确汇总攻击�
     tertiary_weapon: selection(ranged),
   })
   expect(result.selectedCount).toBe(3)
-  expect(result.stats.vitality).toBe(1173)
-  expect(result.stats.attack).toBe(1330)
-  expect(result.stats.critical).toBe(365)
-  expect(result.stats.strain).toBe(2419)
+  expect(result.stats.vitality).toBe(1156)
+  expect(result.stats.attack).toBe(1181)
+  expect(result.stats.critical).toBe(279)
+  expect(result.stats.strain).toBe(2452)
   expect(result.stats.physicalShield).toBe(21)
   expect(result.stats.magicalShield).toBe(26)
 })
@@ -163,7 +172,7 @@ test('仅带无双孔的装备移出装备库，旧配装清理该装备并保�
   const hat = GEAR_ITEMS.find((row) => row.position === 'hat')
   const saved = { belt: selection(belt), wrist: selection(wrist), hat: selection(hat) }
   for (const item of [belt, wrist]) {
-    expect(item.embed.strain_base).toBe(225)
+    expect(item.embed.strain_base).toBe(304)
     expect(GEAR_ITEMS.some((row) => row.id === item.id)).toBe(false)
     expect(() => calculateLoadout({ [slot(item)]: selection(item) })).toThrow('装备')
   }
@@ -182,7 +191,7 @@ test('精炼只增加magic属性，镶嵌按Generator压缩系数单独向下取
   expect(bare.magicalShield).toBe(450)
   expect(strengthCoefficient(6)).toBeCloseTo(0.075)
   const refined = calculateLoadout({ wrist: selection(item, { strength: 6, embeds: [8] }) }).stats
-  expect(refined.vitality).toBe(652 + 49 + Math.trunc(225 * embedCoefficient(8)))
+  expect(refined.vitality).toBe(652 + 49 + Math.trunc(304 * embedCoefficient(8)))
   expect(refined.physicalShield).toBe(37 + 286 + 21)
   expect(refined.magicalShield).toBe(37 + 413 + 31)
 })
@@ -360,9 +369,9 @@ test('普通装备保留1110品边界，橙武719品除外，清理无加速防�
   expect(() => calculateLoadout({ tertiary_weapon: saved.tertiary_weapon })).toThrow('附魔')
 })
 
-test('读取考拉31件装备的威胁词条及20个威胁孔，精炼和镶嵌按原始系数分别取整', () => {
+test('读取考拉31件装备的威胁词条及21个威胁孔，精炼和镶嵌按原始系数分别取整', () => {
   expect(GEAR_ITEMS.filter((row) => 'threat_gain' in row.magic)).toHaveLength(31)
-  expect(GEAR_ITEMS.filter((row) => 'threat_gain' in row.embed)).toHaveLength(20)
+  expect(GEAR_ITEMS.filter((row) => 'threat_gain' in row.embed)).toHaveLength(21)
   const item = GEAR_ITEMS.find((row) => row.id === 112319)
   expect(Object.keys(item.embed)).toEqual(['vitality_base', 'threat_gain'])
   const bare = calculateLoadout({ hat: selection(item) })
@@ -370,8 +379,8 @@ test('读取考拉31件装备的威胁词条及20个威胁孔，精炼和镶嵌�
   const both = calculateLoadout({ hat: selection(item, { strength: 6, embeds: [8, 8] }) })
   expect(bare.stats.threat).toBe(205)
   expect(first.stats.threat).toBe(220)
-  expect(both.stats.threat).toBe(222)
-  expect(both.stats).toEqual({ ...first.stats, threat: 222 })
+  expect(both.stats.threat).toBe(223)
+  expect(both.stats).toEqual({ ...first.stats, threat: 223 })
   expect(both.warnings).not.toContain('招式产生威胁')
   const wrist = GEAR_ITEMS.find((row) => row.id === 112560)
   expect(
@@ -379,7 +388,7 @@ test('读取考拉31件装备的威胁词条及20个威胁孔，精炼和镶嵌�
       hat: selection(item, { strength: 6, embeds: [8, 8] }),
       wrist: selection(wrist, { strength: 6, embeds: [8, 8] }),
     }).stats.threat,
-  ).toBe(448)
+  ).toBe(450)
 })
 
 test('威胁归一字段与旧字段同时出现时只统计一次，不进入DPS乘区', () => {
@@ -410,7 +419,7 @@ test('恢复前置仇恨孔时迁移旧镶嵌到原属性孔，刷新后不再�
   expect(saved[itemSlot].embeds).toEqual([8])
   const plain = calculateLoadout({ [itemSlot]: selection(item) }).stats
   const equipped = calculateLoadout(migrated.slots).stats
-  expect(equipped.physicalShield - plain.physicalShield).toBe(Math.trunc(225 * embedCoefficient(8)))
+  expect(equipped.physicalShield - plain.physicalShield).toBe(Math.trunc(304 * embedCoefficient(8)))
 })
 
 test('补齐通用内功和阴阳五彩石，重复来源合并显示且攻击、破防、双会正确计入', () => {

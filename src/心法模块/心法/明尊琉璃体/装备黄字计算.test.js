@@ -100,14 +100,14 @@ test('双梦冷星总计536会心，不能按每件536重复计算；换下时�
 
 test('帽子择高与项链进战转换按等级取整、封顶，不使用临时戒指或鞋子反算快照', () => {
   const ratings = { critical: 2500, physicalCritical: 0, overcome: 2500, physicalOvercome: 0 }
-  expect(permanentEquipmentGains(effects(112699), ratings)).toEqual({ all_overcome_base: 75 })
-  expect(permanentEquipmentGains(effects(51444), ratings)).toEqual({ all_attack_power_base: 28 })
+  expect(permanentEquipmentGains(effects(112783), ratings)).toEqual({ all_overcome_base: 563 })
+  expect(permanentEquipmentGains(effects(51444), ratings)).toEqual({ all_attack_power_base: 268 })
   expect(permanentEquipmentGains(effects(51438), ratings)).toEqual({ all_attack_power_base: 256 })
   expect(permanentEquipmentGains(effects(51445), ratings)).toEqual({ all_attack_power_base: 268 })
   expect(permanentEquipmentGains(effects(51437), ratings)).toEqual({ strain_base: 448 })
   expect(permanentEquipmentGains(effects(51443), ratings)).toEqual({ strain_base: 470 })
   expect(
-    permanentEquipmentGains(effects(51437, 49931, 112706), { ...ratings, critical: 19 }),
+    permanentEquipmentGains(effects(51437, 49931, 112790), { ...ratings, critical: 19 }),
   ).toEqual({ strain_base: 2 })
   expect(permanentEquipmentGains(effects(112452, 51437), { ...ratings, critical: 19 })).toEqual({
     all_critical_strike_base: 188,
@@ -117,32 +117,32 @@ test('帽子择高与项链进战转换按等级取整、封顶，不使用临�
 })
 
 test('鞋子与暗器同步触发按真实重叠窗口分段，300秒中分别50%和55%覆盖', () => {
-  const states = equipmentProcStates(effects(112706, 48038), 2370, 300, 400)
+  const states = equipmentProcStates(effects(112790, 48038), 2370, 300, 400)
   expect(states).toHaveLength(3)
   expect(states.reduce((sum, state) => sum + state.weight, 0)).toBeCloseTo(1, 12)
-  expect(states.find((state) => state.gains.all_critical_strike_base === 130).weight).toBeCloseTo(
+  expect(states.find((state) => state.gains.all_critical_strike_base === 974).weight).toBeCloseTo(
     0.5,
     12,
   )
   expect(
     states
-      .filter((state) => state.gains.all_attack_power_base === 537)
+      .filter((state) => state.gains.all_attack_power_base === 189)
       .reduce((sum, state) => sum + state.weight, 0),
   ).toBeCloseTo(0.55, 12)
   // 5秒短战斗中，两项都全覆盖，不能直接套用稳态均值。
-  expect(equipmentProcStates(effects(112706, 48038), 2370, 5, 10)).toEqual([
-    { weight: 1, gains: { all_critical_strike_base: 130, all_attack_power_base: 537 } },
+  expect(equipmentProcStates(effects(112790, 48038), 2370, 5, 10)).toEqual([
+    { weight: 1, gains: { all_critical_strike_base: 974, all_attack_power_base: 189 } },
   ])
 })
 
 test.each([
-  [112483, '巽', 10946],
-  [112484, '巽', 12770],
-  [112487, '巽', 13355],
-  [47972, '无修·荒', 9583],
-  [47974, '无修·荒', 8214],
-  [47978, '无修·荒', 2620],
-  [47980, '无修·荒', 9382],
+  [112483, '巽', 31543],
+  [112484, '巽', 36800],
+  [112487, '巽', 36800],
+  [47972, '无观·荒', 9583],
+  [47974, '无观·荒', 8214],
+  [47978, '无观·荒', 31395],
+  [47980, '无观·荒', 26910],
 ])('装备%s在54级目标、无易伤下的每次%s伤害为%s', (id, name, hit) => {
   const panel = calculateAttributes(equipment, settings)
   const row = equipmentDamageRows(effects(id), panel, 300, 400)[0]
@@ -159,7 +159,7 @@ test('加速DOT按每秒一跳、共享40秒冷却和战斗结束截断，同类
   const one = equipmentDamageRows(effects(112458), panel, 300, 400)
   const two = equipmentDamageRows(effects(112458, 112488), panel, 300, 400)
   expect(two).toEqual(one)
-  expect(one[0]).toMatchObject({ 技能数量: 173, 技能总输出: 173 * 719 })
+  expect(one[0]).toMatchObject({ 技能数量: 173, 技能总输出: 173 * 1100 })
   expect(equipmentDamageRows(effects(112458), panel, 1, 10)).toEqual([])
   expect(equipmentDamageRows(effects(112458), panel, 1.01, 10)[0].技能数量).toBe(1)
   expect(equipmentDamageRows(effects(112458, 47972), panel, 300, 0)).toEqual([])
@@ -197,7 +197,7 @@ test.each([false, true])(
     const list = theory
       ? cycles.find((row) => row.名称 === '自适应光明心循环').循环详情[0].技能详情
       : normal
-    const input = { ...settings, equipmentEffects: effects(112458, 112483, 47972, 112706) }
+    const input = { ...settings, equipmentEffects: effects(112458, 112483, 47972, 112790) }
     const result = 计算明尊基础循环(equipment, input, list, 300)
     const quick = 计算明尊基础循环(equipment, input, list, 300, false)
     expect(quick.总伤).toBe(result.总伤)
@@ -207,14 +207,14 @@ test.each([false, true])(
       7,
     )
     const rows = 获取技能统计数据(result, true)
-    for (const name of ['巽', '无修·荒', '速·震（加速DOT）'])
+    for (const name of ['巽', '无观·荒', '速·震（加速DOT）'])
       expect(rows.find((row) => row.统计名称 === name)).toBeDefined()
   },
 )
 
 test('手动次数循环按属性状态结算，命中与会心分项之和等于总伤；无命中时无触发', () => {
   const key = SKILLS.find((row) => row.id === '40088').key
-  const input = { ...settings, equipmentEffects: effects(112706, 48038, 47972) }
+  const input = { ...settings, equipmentEffects: effects(112790, 48038, 47972) }
   const result = calculateCycle(equipment, input, { [key]: 100 }, 300)
   expect(result.total).toBeCloseTo(
     result.rows.reduce((sum, row) => sum + row.hitTotal + row.criticalTotal, 0) +
@@ -230,7 +230,7 @@ test('手动次数循环按属性状态结算，命中与会心分项之和等�
     skill,
     calculateAttributes(equipment, {
       ...settings,
-      gains: { all_critical_strike_base: 130, all_attack_power_base: 537, solar_damage_cof: 21 },
+      gains: { all_critical_strike_base: 974, all_attack_power_base: 189, solar_damage_cof: 21 },
     }),
   )
   expect(short.rows.find((row) => row.key === key).total).toBe(active.expected)
@@ -270,7 +270,7 @@ test('智能对比使用当前替换后的装备ID，旧方案无需重存；换
   expect(after.计算结果技能列表.map((row) => row.技能名称)).toContain('速·震（加速DOT）')
 })
 
-test('方案推荐计入黄字并与应用后的主计算器评分一致，相同基础属性优先选择带收益的版本', () => {
+test('方案推荐计入黄字并与应用后的主计算器评分一致，比较正式装备的属性与黄字综合收益', () => {
   const slots = Object.fromEntries(
     SLOTS.map(([slot]) => {
       const item =
@@ -311,12 +311,12 @@ test('方案推荐计入黄字并与应用后的主计算器评分一致，相�
     minToughness: 0,
     includeMowen: false,
     gearScope: 'includeStreamlined',
-    gearKeys: [...Object.values(slots).map((row) => row.key), gear(112699).key],
+    gearKeys: [...Object.values(slots).map((row) => row.key), gear(112783).key],
     slots: ['hat'],
     defaultEmbedLevel: 8,
   })
   expect(result.plan).toBeDefined()
-  expect(result.plan.slots.hat.key).toBe(gear(112699).key)
+  expect(result.plan.slots.hat.key).toBe(gear(112783).key)
   const plan = result.plan
   const equipped = 转换明尊配装(plan.slots, plan.stone)
   const applied = 明尊秒伤计算({

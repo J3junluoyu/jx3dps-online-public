@@ -30,7 +30,13 @@ test('主界面和智能对比入口按每次传入武器重新检测橙武，�
   } }
   const dispatch = jest.fn()
   const result = 秒伤计算({ 是否更新显示计算结果: true })(dispatch, () => state)
-  expect(result.秒伤).toBeCloseTo(38895.82446151993, 6)
+  const current = calculateLoadout(配装.slots, 配装.stone)
+  const activeExpected = 计算洗髓循环(current.stats, {
+    ...获取洗髓计算设置(state.data.增益数据, false, 54),
+    xisuiOrangeWeapon: true,
+    equipmentEffects: current.specialEffects,
+  }, 洗髓自适应循环.循环详情[2].技能详情, 300)
+  expect(result.秒伤).toBe(activeExpected.秒伤)
   expect(result.计算结果技能列表.some((row) => row.技能ID === '25794')).toBe(true)
   expect(dispatch).toHaveBeenCalledWith({ type: 'test/result', payload: result })
 

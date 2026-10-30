@@ -16,7 +16,7 @@ import {
 test('六层默认方案包含三个固定奇穴，混池单独选择', () => {
   expect(DEFAULT_TALENTS).toEqual(['14678', '25355', '26717', '25166', '6895', '6760'])
   expect(TALENT_LAYOUT.map((tier) => tier.ids.length)).toEqual([1, 1, 1, 2, 2, 3])
-  expect(POOL_TALENT_IDS).toEqual(['18279', '5974', '14698', '44569', '6000', '6766'])
+  expect(POOL_TALENT_IDS).toEqual(['18279', '5974', '14698', '44569', '6000'])
   expect(() => validateSettings(DEFAULT_SETTINGS)).not.toThrow()
 })
 test('第四至六层互斥切换，前三层不能移除或选其他奇穴', () => {
@@ -53,7 +53,22 @@ test('旧记录迁移保留有效层选和混池，不保留不允许的奇穴�
   expect(migrated).toEqual(['14678', '25355', '26717', '18296', '6895', '21835', '18279'])
   expect(() => validateSettings({ ...DEFAULT_SETTINGS, talents: migrated })).not.toThrow()
 })
+
+test('斩火不再出现在奇穴设置，旧选择迁移为月尽天明且不占第四个混池', () => {
+  const 奇穴设置 = require('./奇穴').default
+  expect(奇穴设置.flatMap((层) => 层.奇穴列表).map((项) => 项.奇穴名称)).not.toContain('斩火')
+  const 迁移 = normalizeTalents([...DEFAULT_TALENTS, '5974', '14698', '6766'])
+  expect(迁移.slice(6)).toEqual(['5974', '14698', '6000'])
+  const { 规范明尊奇穴 } = require('@/计算模块/职业特殊处理/明尊')
+  expect(规范明尊奇穴(['血泪成悦', '驱夷逐法', '斩火'])).toEqual(
+    expect.arrayContaining(['血泪成悦', '驱夷逐法', '月尽天明']),
+  )
+  expect(规范明尊奇穴(['血泪成悦', '驱夷逐法', '斩火'])).not.toContain('斩火')
+})
 test('固定极本溯源自动同步主副T的7级气劲，常态不额外转会心', () => {
+  const talent = require('./计算').TALENTS.find((item) => item.id === '26717')
+  expect(talent.desc).toContain('无视目标55%防御等级')
+  expect(talent.attributes.all_shield_ignore).toBe(563)
   const equipment = { ...EMPTY_EQUIPMENT, vitality: 1006 }
   const plain = calculateAttributes(equipment, DEFAULT_SETTINGS)
   const off = calculateAttributes(equipment, { ...DEFAULT_SETTINGS, stance: 'offTank' })

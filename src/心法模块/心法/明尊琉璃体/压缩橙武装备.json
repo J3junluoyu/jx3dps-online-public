@@ -1,9 +1,10 @@
 {
   "source": {
     "repository": "https://github.com/IcyTide/Generator",
-    "commit": "b7d609a4a87f92a7b3907efe9141bdfdfb8c3f9e",
+    "commit": "ee2c4c0f502c82a3ab615355cdc80073b6bf1713",
     "file": "assets/json/weapons.json",
-    "description": "130级42500品橙武压缩到50级后的719品版本，保留原装备ID和属性。"
+    "description": "130级42500品橙武压缩到50级后的719品版本，保留原装备ID和属性。",
+    "importedAt": "2026-10-30T04:54:00.338Z"
   },
   "items": [
     {
@@ -32,9 +33,9 @@
         "event": "gain_19_1 | gain_25796_1"
       },
       "embed": {
-        "vitality_base": 225,
-        "physical_shield_base": 225,
-        "dodge_base": 225
+        "vitality_base": 304,
+        "physical_shield_base": 304,
+        "dodge_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -65,9 +66,9 @@
         "event": "gain_19_1 | gain_25794_1"
       },
       "embed": {
-        "vitality_base": 225,
-        "physical_shield_base": 225,
-        "magical_shield_base": 225
+        "vitality_base": 304,
+        "physical_shield_base": 304,
+        "magical_shield_base": 304
       },
       "setId": 0,
       "sets": {}

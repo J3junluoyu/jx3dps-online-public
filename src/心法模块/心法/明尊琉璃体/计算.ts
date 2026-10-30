@@ -3,6 +3,7 @@ import 驱夜秘籍 from './驱夜断愁秘籍.json'
 import 橙武公式 from './橙武伤害公式.json'
 import { evaluateExpression } from './表达式'
 import { 计入循环戒火 } from './戒火斩'
+import { 获取体质增益层数 } from './体质层数'
 import type { EquippedSpecialEffect } from './装备特效'
 import { isMajorEnchant, majorEnchantContext } from './大附魔'
 import {
@@ -133,17 +134,19 @@ export const TALENT_LAYOUT: { label: string; ids: string[]; fixed: boolean }[] =
   { label: '第五层', ids: ['6895', '46492'], fixed: false },
   { label: '第六层', ids: ['6760', '6771', '21835'], fixed: false },
 ]
-export const POOL_TALENT_IDS = ['18279', '5974', '14698', '44569', '6000', '6766']
+export const POOL_TALENT_IDS = ['18279', '5974', '14698', '44569', '6000']
 export const MAX_POOL_TALENTS = 3
 export const DEFAULT_TALENTS = TALENT_LAYOUT.map((tier) => tier.ids[0])
 
 /** Migrate old flat selections while preserving valid tier and pool choices. */
 export function normalizeTalents(selected: readonly string[] = []): string[] {
+  // 已移除的斩火选择迁移到月尽天明，避免旧方案保留不可见的回灵奇穴。
+  const migrated = selected.map((id) => (id === '6766' ? '6000' : id))
   return [
     ...TALENT_LAYOUT.map((tier) =>
-      tier.fixed ? tier.ids[0] : tier.ids.find((id) => selected.includes(id)) || tier.ids[0],
+      tier.fixed ? tier.ids[0] : tier.ids.find((id) => migrated.includes(id)) || tier.ids[0],
     ),
-    ...POOL_TALENT_IDS.filter((id) => selected.includes(id)).slice(0, MAX_POOL_TALENTS),
+    ...POOL_TALENT_IDS.filter((id) => migrated.includes(id)).slice(0, MAX_POOL_TALENTS),
   ]
 }
 export function selectTierTalent(selected: readonly string[], tierIndex: number, id: string) {
@@ -177,7 +180,15 @@ interface BelongRecord {
   attributes?: Attributes
   recipes?: string[]
 }
-const belongs = reference.belongs as Record<string, BelongRecord>
+// 2026-10-29：按用户确认的技改将极本溯源更新为55%；保留原始导出供历史公式校验。
+const belongs = {
+  ...reference.belongs,
+  '26717': {
+    ...reference.belongs['26717'],
+    attributes: { ...reference.belongs['26717'].attributes, all_shield_ignore: 563 },
+    desc: '招式无视目标55%防御等级，“明尊”气劲每1点体质额外提高0.09点内功会心等级。',
+  },
+} as Record<string, BelongRecord>
 const skillGroups = reference.skills as Record<string, Record<string, Record<string, SkillRecord>>>
 export const SOURCE = {
   repository: reference.repository,
@@ -341,7 +352,7 @@ export function calculateAttributePanel(
   const threatReductionStacks =
     settings.stance === 'none' ? 0 : Math.min(100, Math.floor(vitality / 10000))
   const threatRate = 1.5 + (equipment.threat - threatReductionStacks * 102) / 1024
-  const pilgrimageStacks = Math.min(100, Math.max(0, Math.floor(baseVitality / 95)))
+  const pilgrimageStacks = 获取体质增益层数(baseVitality)
   const baseMagicalAttack =
     equipment.attack +
     gain('all_attack_power_base') +

@@ -40,10 +40,12 @@ const panel = (data, enabled = true) =>
 test('圣浴常驻由朝圣十分之一向下取整，上限10层', () => {
   for (const [vitality, stacks] of [
     [18, 0],
-    [949, 0],
-    [950, 1],
-    [9499, 9],
-    [9500, 10],
+    [950, 0],
+    [959, 0],
+    [960, 1],
+    [9500, 9],
+    [9599, 9],
+    [9600, 10],
     [19000, 10],
   ])
     expect(获取圣浴常驻层数(vitality)).toBe(stacks)
@@ -60,7 +62,7 @@ test('圣浴常驻实际计算按当前基础体质更新，忽略旧缓存层�
   const settings = (equipment, enabled = true) =>
     获取明尊计算设置([], data, {}, 53, enabled, equipment)
   const low = { ...EMPTY_EQUIPMENT, vitality: 930 } // 基础948，常驻0层。
-  const high = { ...EMPTY_EQUIPMENT, vitality: 9300 } // 基础9318，朝圣98，常驻9层。
+  const high = { ...EMPTY_EQUIPMENT, vitality: 9300 } // 基础9318，朝圣97，常驻9层。
   expect(settings(low).gains.strain_base).toBe(0)
   expect(settings(high).gains.strain_base).toBe(369)
   expect(settings(high, false).gains).toEqual({ strain_base: 369 })

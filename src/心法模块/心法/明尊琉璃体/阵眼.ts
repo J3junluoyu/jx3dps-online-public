@@ -10,12 +10,18 @@ interface Formation extends 阵眼数据类型 {
   考拉属性: Attributes
 }
 const buffs = reference.buffs as Record<string, Record<string, Record<string, BuffRecord>>>
-const 效果 = (group: string, id: string, coverage = 1, excluded: string[] = []): Attributes => {
+const 效果 = (
+  group: string,
+  id: string,
+  coverage = 1,
+  excluded: string[] = [],
+  stacks?: number,
+): Attributes => {
   const record = Object.values(buffs[group][id])[0]
   return Object.fromEntries(
     Object.entries(record.attributes)
       .filter(([key]) => !excluded.includes(key))
-      .map(([key, value]) => [key, value * record.max_stack * coverage]),
+      .map(([key, value]) => [key, value * (stacks ?? record.max_stack) * coverage]),
   )
 }
 const 阵法 = (
@@ -38,7 +44,7 @@ const 阵法 = (
   }
 }
 
-// 覆盖率只折算对应触发效果；常驻效果不随之降低。叠层效果均取满层。
+// 覆盖率只折算对应触发效果；常驻效果不随之降低。叠层默认满层，可单独指定计算层数。
 export const 明尊阵眼: Formation[] = [
   阵法(
     '冰心阵',
@@ -84,9 +90,9 @@ export const 明尊阵眼: Formation[] = [
     '气纯阵',
     '九宫八卦阵',
     1797,
-    '内功会心＋3%、内功会效约15%、额外无双约2个百分点；临时内功会心每层＋1%，满5层、100%覆盖。',
+    '内功会心＋3%、内功会效约15%、额外无双约2个百分点；临时内功会心每层＋1%，按3层、100%覆盖计算。',
     效果('347', '938'),
-    效果('347', '943'),
+    效果('347', '943', 1, [], 3),
   ),
   阵法(
     '莫问阵',
@@ -97,6 +103,17 @@ export const 明尊阵眼: Formation[] = [
     效果('16151', '9485'),
     效果('16151', '9492'),
   ),
+  {
+    ...阵法(
+      '段氏阵',
+      '含章挺秀阵',
+      23441,
+      '内功基础攻击约5%、内功会心＋5%、额外无双约2个百分点；临时全伤害约6%，按90%覆盖。仅普通成员收益。',
+      效果('38566', '29481'),
+      效果('38566', '29482', 0.9),
+    ),
+    覆盖率: 90,
+  },
   {
     阵眼名称: 'T阵',
     阵眼全名: 'T阵',

@@ -50,15 +50,29 @@ jest.mock('antd', () => {
         children,
       ),
     Button: ({ children, onClick }) => element('button', { onClick }, children),
+    Select: ({ value, onChange, options, id, 'aria-label': label }) =>
+      element(
+        'select',
+        {
+          id,
+          'aria-label': label,
+          value,
+          onChange: (event) => onChange(event.target.value),
+        },
+        options.map((option) =>
+          element('option', { key: option.value, value: option.value }, option.label),
+        ),
+      ),
     Dropdown: ({ children }) => children,
     Menu: () => null,
+    Modal: ({ open, children }) => (open ? children : null),
   }
 })
 
 import React, { act } from 'react'
 import { createRoot } from 'react-dom/client'
 import { fireEvent, getByRole, getAllByRole } from '@testing-library/dom'
-import 面板信息 from '@/功能模块/基础设置/面板信息'
+import 面板信息, { 获取面板显示数据数值 } from '@/功能模块/基础设置/面板信息'
 import 增益设置 from '@/功能模块/基础设置/增益面板'
 import { 秒伤计算 } from '@/计算模块/计算函数'
 import useCycle from '@/hooks/use-cycle'
@@ -136,6 +150,18 @@ afterEach(() => {
   act(() => root.unmount())
   container.remove()
   jest.useRealTimers()
+})
+
+test.each(['明尊面板', '洗髓面板'])('%s的满层差值与溢出按9600点基础体质显示', (key) => {
+  for (const [baseVitality, expected] of [
+    [9500, '距离100层还需100点基础体质。'],
+    [9600, '已达100层，溢出0点基础体质。'],
+    [9612, '已达100层，溢出12点基础体质。'],
+  ]) {
+    act(() => root.render(获取面板显示数据数值('体质', { [key]: { baseVitality } })))
+    expect(container.textContent).toMatch(/每(?:满)?96点基础体质/)
+    expect(container.textContent).toContain(expected)
+  }
 })
 
 test('只保留角色属性旁的一个启用增益入口，一次点击同时更新面板、实际伤害和自适应GCD', () => {

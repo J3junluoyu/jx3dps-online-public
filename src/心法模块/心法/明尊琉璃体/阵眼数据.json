@@ -43,12 +43,45 @@
       "desc": "需至少一名队友在身边，结阵。",
       "belong_key": "belong_36318"
     },
+    "38566": {
+      "name": "含章挺秀阵",
+      "desc": "需至少一名队友在身边，结阵。",
+      "belong_key": "belong_38566"
+    },
     "102268": {
       "name": "江湖行侠阵",
       "belong_key": "belong_102268"
     }
   },
   "buffs": {
+    "38566": {
+      "29481": {
+        "6": {
+          "interval": 128,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "magical_attack_power_gain": 51,
+            "strain_rate": 20,
+            "lunar_critical_strike_rate": 500,
+            "solar_critical_strike_rate": 500,
+            "neutral_critical_strike_rate": 500,
+            "poison_critical_strike_rate": 500
+          }
+        }
+      },
+      "29482": {
+        "1": {
+          "name": "含章挺秀阵四重",
+          "interval": 160,
+          "max_stack": 1,
+          "max_tick": 1,
+          "attributes": {
+            "all_damage_gain": 62
+          }
+        }
+      }
+    },
     "347": {
       "938": {
         "6": {

@@ -46,8 +46,10 @@ const database = data as unknown as {
   items: GearItem[]
   enchants: Enchant[]
   stones: Stone[]
+  legacyAliases?: Record<string, string>
 }
 export const MIN_GEAR_LEVEL = 1110
+export const EQUIPMENT_DATA_VERSION = database.commit
 const eligibleGear = [
   ...database.items,
   ...(waterWindData.items as unknown as GearItem[]),
@@ -62,7 +64,7 @@ const eligibleGear = [
       row.specialEffects?.some((effect) => effect.key === 'gain_4877_89')) &&
     (Number(row.base.strain_base) > 0 || Number(row.magic.strain_base) > 0),
 )
-// 只合并无修的完全重复记录；孔位顺序、黄字、套装、品级及精炼上限都参与比较。
+// 无修更名为无观后仍只合并完全重复记录；孔位顺序、黄字、套装及精炼上限均参与比较。
 const stableGearValue = (value: unknown): unknown => {
   if (Array.isArray(value)) return value.map(stableGearValue)
   if (value && typeof value === 'object')
@@ -77,7 +79,7 @@ const canonicalWuxiu = new Map<string, GearItem>()
 const gearAliases = new Map<string, GearItem>()
 for (const row of [...eligibleGear].sort((a, b) => a.id - b.id)) {
   let canonical = row
-  if (row.name.startsWith('无修')) {
+  if (/^无(?:修|观)/.test(row.name)) {
     const { key, id, ...attributes } = row
     const signature = JSON.stringify(
       stableGearValue({ ...attributes, embed: Object.entries(row.embed) }),
@@ -88,6 +90,10 @@ for (const row of [...eligibleGear].sort((a, b) => a.id - b.id)) {
   gearAliases.set(row.key, canonical)
 }
 export const GEAR_ITEMS = eligibleGear.filter((row) => gearAliases.get(row.key) === row)
+for (const [oldKey, targetKey] of Object.entries(database.legacyAliases || {})) {
+  const target = gearAliases.get(targetKey)
+  if (target) gearAliases.set(oldKey, target)
+}
 /** 同时接受旧装备键和旧ID，返回合并后的可选装备；部位校验防止ID跨表冲突。 */
 export function findGearItem(identifier: string | number, position?: string): GearItem | undefined {
   const raw =
@@ -96,7 +102,13 @@ export function findGearItem(identifier: string | number, position?: string): Ge
           (row) => row.id === identifier && (!position || row.position === position),
         )
       : undefined
-  const canonical = gearAliases.get(typeof identifier === 'string' ? identifier : raw?.key || '')
+  const retiredKey =
+    typeof identifier === 'number' && !raw
+      ? Object.keys(database.legacyAliases || {}).find((key) => Number(key.split(':')[1]) === identifier)
+      : undefined
+  const canonical = gearAliases.get(
+    typeof identifier === 'string' ? identifier : raw?.key || retiredKey || '',
+  )
   return canonical && (!position || canonical.position === position) ? canonical : undefined
 }
 

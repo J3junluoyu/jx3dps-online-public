@@ -42,13 +42,13 @@ test.each([
     const converted = 转换明尊配装({ primary_weapon: loadout })
     expect(获取明尊配装(converted).slots.primary_weapon).toEqual(loadout)
     expect(converted.装备基础属性.明尊属性).toMatchObject({
-      vitality: 919,
-      physicalShield: 1233,
-      magicalShield: id === 45302 ? 1233 : 1205,
+      vitality: 929,
+      physicalShield: 1243,
+      magicalShield: id === 45302 ? 1243 : 1205,
       haste: 401,
       toughness: 201,
       strain: 542,
-      dodge: id === 45319 ? 28 : 0,
+      dodge: id === 45319 ? 38 : 0,
       weaponMin,
       weaponMax,
     })

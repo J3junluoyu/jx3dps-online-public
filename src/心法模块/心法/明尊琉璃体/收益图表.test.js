@@ -110,14 +110,15 @@ const 收益原始属性 = {
   ...EMPTY_EQUIPMENT,
   vitality: 5000,
   attack: 1000,
-  physicalAttack: 400,
+  physicalAttack: 500,
   overcome: 500,
   physicalOvercome: 300,
   critical: 300,
   magicalCritical: 200,
   criticalPower: 150,
-  weaponMin: 100,
-  weaponMax: 150,
+  // 留出整数伤害的取整空间，避免小额武伤加72破防后恰好显示相同整数。
+  weaponMin: 1000,
+  weaponMax: 1500,
 }
 
 test('附魔图表按六种属性各72点重算，并纳入体质与会效收益', () => {

@@ -8,11 +8,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks'
 import { message, Popover, Radio } from 'antd'
 import { 秒伤计算 } from '@/计算模块/计算函数'
 import { 找到收益下降点, 收益增益属性计算, 获取当前各属性最大附魔 } from './工具'
-import {
-  会心收益下降点收益信息,
-  渲染会心收益下降点折线图,
-  获取会心收益下降点图表数据,
-} from './渲染函数/收益下降点'
+import { 渲染会心收益下降点折线图, 获取会心收益下降点图表数据 } from './渲染函数/收益下降点'
 import {
   // 攻击破招收益信息,
   渲染攻击破招折线图,
@@ -20,19 +16,13 @@ import {
   获取攻击破招最大值,
 } from './渲染函数/攻击破招'
 import { 渲染属性收益柱状图, 获取属性收益柱状图数据, 附魔单点收益信息 } from './渲染函数/属性收益'
-import 属性置换收益, { 附魔属性置换收益信息 } from './自定义图表/属性置换'
+import 属性置换收益 from './自定义图表/属性置换'
 import { 获取角色需要展示的面板数据 } from '@/功能模块/基础设置/面板信息/工具'
 import './index.css'
-import { QuestionCircleFilled } from '@ant-design/icons'
 
 const 收益列表 = 获取当前各属性最大附魔()
 
-const checkTypeList = [
-  ...附魔单点收益信息,
-  ...附魔属性置换收益信息,
-  ...会心收益下降点收益信息,
-  // ...攻击破招收益信息,
-]
+const checkTypeList = 附魔单点收益信息.filter((item) => item.label === '附魔')
 
 function 收益图表(_, ref) {
   const 增益面板显示状态 = useAppSelector((state) => state?.system?.增益面板显示状态)
@@ -214,23 +204,6 @@ function 收益图表(_, ref) {
             )
           })}
         </Radio.Group>
-        <Popover
-          content={
-            <div>
-              <p>由于本图表采用的收益策略为：额外获得一个紫色附魔对应属性后的秒伤变化</p>
-              <p>
-                存在部分情况添加该附魔后。导致某装备特效的判定阈值发生变化，进而导致在一个附魔提升量情况下的收益变为负数
-              </p>
-              <p>如：无双在90%临界值附近因附魔的影响导致特效裤子从无双增益变为会心</p>
-              <p>对本收益计算策略而言属于正常情况，特此说明</p>
-            </div>
-          }
-        >
-          <div className='income-type-select-button' onClick={() => handleChangeType('属性置换')}>
-            <QuestionCircleFilled style={{ marginRight: 8 }} />
-            为什么会出现负数收益
-          </div>
-        </Popover>
       </div>
     </div>
   )

@@ -1,49 +1,129 @@
 {
   "source": {
-    "date": "2026-10-24",
+    "date": "2026-10-30",
     "client": "JX3_EXP，读取 scripts/Include/NewSkill.lh、装备脚本及 settings/skill/buff.tab",
-    "formulas": "本地考拉 assets_raw_skills.py 的 SKILLS[0]；伤害常数与当前客户端逐项一致",
-    "environment": "持续命中木桩，自身满血，目标满足戒指触发条件，不承受使鞋子特效提前消失的伤害"
+    "formulas": "assets/json/skills.json，严格核对固定伤害公式；属性数值来自同一提交的装备黄字。",
+    "environment": "持续命中木桩，自身满血，目标满足戒指触发条件，不承受使鞋子特效提前消失的伤害",
+    "repository": "https://github.com/IcyTide/Generator",
+    "commit": "ee2c4c0f502c82a3ab615355cdc80073b6bf1713",
+    "importedAt": "2026-10-30T04:54:00.338Z"
   },
   "damage": {
-    "gain_40788_4": { "id": "40789", "name": "巽", "base": 13683, "cooldown": 10 },
-    "gain_40788_5": { "id": "40789", "name": "巽", "base": 16694, "cooldown": 10 },
-    "gain_40788_6": { "id": "40789", "name": "巽", "base": 15963, "cooldown": 10 },
-    "gain_38950_9": { "id": "38966", "name": "无修·荒", "base": 10268, "cooldown": 10 },
-    "gain_38950_10": { "id": "38966", "name": "无修·荒", "base": 11979, "cooldown": 10 },
-    "gain_38950_13": { "id": "38966", "name": "无修·荒", "base": 11728, "cooldown": 10 },
-    "gain_38950_14": { "id": "38966", "name": "无修·荒", "base": 3276, "cooldown": 10 },
+    "gain_40788_4": {
+      "id": "40789",
+      "name": "巽",
+      "base": 39429,
+      "cooldown": 10
+    },
+    "gain_40788_5": {
+      "id": "40789",
+      "name": "巽",
+      "base": 46000,
+      "cooldown": 10
+    },
+    "gain_40788_6": {
+      "id": "40789",
+      "name": "巽",
+      "base": 46000,
+      "cooldown": 10
+    },
+    "gain_38950_9": {
+      "id": "38966",
+      "name": "无观·荒",
+      "base": 10268,
+      "cooldown": 10
+    },
+    "gain_38950_10": {
+      "id": "38966",
+      "name": "无观·荒",
+      "base": 11979,
+      "cooldown": 10
+    },
+    "gain_38950_13": {
+      "id": "38966",
+      "name": "无观·荒",
+      "base": 33638,
+      "cooldown": 10
+    },
+    "gain_38950_14": {
+      "id": "38966",
+      "name": "无观·荒",
+      "base": 39244,
+      "cooldown": 10
+    },
     "gain_42767_3": {
       "id": "42837",
       "name": "速·震（加速DOT）",
-      "base": 899,
+      "base": 1375,
       "cooldown": 40,
       "interval": 1,
       "shared": "31954"
+    },
+    "gain_40788_7": {
+      "id": "40789",
+      "name": "巽",
+      "base": 62429,
+      "cooldown": 10
     }
   },
   "attributeKeys": [
-    "gain_4877_89",
     "gain_38578_36",
-    "gain_40790_4",
-    "gain_40790_5",
-    "gain_40790_6",
     "gain_38934_10",
     "gain_38939_10",
     "gain_38944_10",
-    "gain_40802_4",
-    "gain_40802_5",
-    "gain_40803_4",
-    "gain_40803_5",
-    "gain_38945_9",
     "gain_38945_10",
-    "gain_38946_9",
+    "gain_38945_9",
     "gain_38946_10",
+    "gain_38946_11",
     "gain_38946_12",
     "gain_38946_13",
+    "gain_38946_14",
+    "gain_38946_9",
+    "gain_40790_4",
+    "gain_40790_5",
+    "gain_40790_6",
+    "gain_40791_4",
+    "gain_40802_4",
+    "gain_40802_5",
+    "gain_40802_6",
+    "gain_40803_4",
+    "gain_40803_5",
+    "gain_40803_6",
+    "gain_41065_4",
     "gain_46727_1",
-    "gain_46727_2"
+    "gain_46727_2",
+    "gain_4877_89"
   ],
-  "attackDuration": { "haste": [0, 445, 928, 1452, 2024], "frames": [96, 120, 136, 160, 176] },
-  "dotTicks": { "haste": [0, 444, 928, 1451, 2024], "counts": [12, 15, 17, 20, 22] }
+  "attackDuration": {
+    "haste": [
+      0,
+      445,
+      928,
+      1452,
+      2024
+    ],
+    "frames": [
+      96,
+      120,
+      136,
+      160,
+      176
+    ]
+  },
+  "dotTicks": {
+    "haste": [
+      0,
+      444,
+      928,
+      1451,
+      2024
+    ],
+    "counts": [
+      12,
+      15,
+      17,
+      20,
+      22
+    ]
+  }
 }

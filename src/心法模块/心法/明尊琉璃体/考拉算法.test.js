@@ -5,11 +5,21 @@ import {
   DEFAULT_SETTINGS,
   EMPTY_EQUIPMENT,
   SKILLS,
+  TALENTS,
   calculateAttributes,
   calculateSkill,
   normalizeTalents,
 } from './计算'
 import { 计算明尊基础循环 } from '@/计算模块/职业特殊处理/明尊/基础循环'
+
+// 历史样本按原导出45%无视校验，不将技改55%的结果与旧样本混比。
+const archivedShieldIgnoreCorrection =
+  reference.belongs['26717'].attributes.all_shield_ignore -
+  TALENTS.find((talent) => talent.id === '26717').attributes.all_shield_ignore
+const archivedGains = (gains = {}) => ({
+  ...gains,
+  all_shield_ignore: (gains.all_shield_ignore || 0) + archivedShieldIgnoreCorrection,
+})
 
 test('武伤及大漠公式与考拉桌面端原始公式一致', () => {
   expect(fixture.commit).toBe(reference.commit)
@@ -32,7 +42,7 @@ test('考拉原始驱夜武伤使用与日破完全相同的200%公式', () => {
 test.each(fixture.cases)('与考拉原Python算法逐项一致：$name', (item) => {
   const panel = calculateAttributes(
     { ...EMPTY_EQUIPMENT, ...item.equipment },
-    { ...DEFAULT_SETTINGS, stance: 'offTank', gains: item.gains },
+    { ...DEFAULT_SETTINGS, stance: 'offTank', gains: archivedGains(item.gains) },
   )
   for (const [key, expected] of Object.entries(item.panel))
     expect(key in panel.variables ? panel.variables[key] : panel[key]).toBeCloseTo(expected, 12)
@@ -62,6 +72,7 @@ test.each([
       stance: 'offTank',
       talents: normalizeTalents(enhanced ? ['46492'] : []),
       recipes: enhanced ? ['recipe_1051_1', 'recipe_1056_1'] : [],
+      gains: archivedGains(),
     }
     const panel = calculateAttributes(equipment, settings)
     if (enhanced) panel.variables.magical_damage_addition += 102 / 1024
