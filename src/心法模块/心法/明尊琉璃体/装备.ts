@@ -104,7 +104,9 @@ export function findGearItem(identifier: string | number, position?: string): Ge
       : undefined
   const retiredKey =
     typeof identifier === 'number' && !raw
-      ? Object.keys(database.legacyAliases || {}).find((key) => Number(key.split(':')[1]) === identifier)
+      ? Object.keys(database.legacyAliases || {}).find(
+          (key) => Number(key.split(':')[1]) === identifier,
+        )
       : undefined
   const canonical = gearAliases.get(
     typeof identifier === 'string' ? identifier : raw?.key || retiredKey || '',
@@ -185,9 +187,30 @@ export const isAllowedStone = (row: { name: string; attributes: Attributes }) =>
           key,
         ),
     ))
+const mainAttributeEnchantPrefixes: Record<string, string> = {
+  bottoms: '峡金铸·裤',
+  wrist: '蜀锦绣·腕',
+}
+const mainAttributeEnchantKeys = new Set([
+  'spunk_base',
+  'spirit_base',
+  'strength_base',
+  'agility_base',
+])
+const is72MainAttributeEnchant = (row: Enchant) => {
+  const prefix = mainAttributeEnchantPrefixes[row.position]
+  const attributes = Object.entries(row.attributes).filter(([, value]) => value !== 0)
+  return (
+    !!prefix &&
+    row.name.startsWith(`${prefix}（`) &&
+    attributes.length === 1 &&
+    mainAttributeEnchantKeys.has(attributes[0][0]) &&
+    attributes[0][1] === 72
+  )
+}
 export const ENCHANTS = database.enchants.filter(
   (row) =>
-    isAllowedAugment(row) &&
+    (isAllowedAugment(row) || is72MainAttributeEnchant(row)) &&
     !/归正|武伤|武器伤害/.test(row.name) &&
     !('weapon_damage_base' in row.attributes),
 )
@@ -425,11 +448,12 @@ export function calculateLoadout(loadout: Loadout, stoneId = 0) {
           String(value)
             .split(/\s*\|\s*/)
             .filter(Boolean)
-            .every((event) =>
-              (xisuiOrange && ['gain_1855_8', 'gain_1855_9', 'gain_25794_1'].includes(event)) ||
-              specialEffects.some(
-                ({ effect }) => effect.key === event && equipmentEffectSupported(effect),
-              ),
+            .every(
+              (event) =>
+                (xisuiOrange && ['gain_1855_8', 'gain_1855_9', 'gain_25794_1'].includes(event)) ||
+                specialEffects.some(
+                  ({ effect }) => effect.key === event && equipmentEffectSupported(effect),
+                ),
             )
         if (value && !supported) warnings.add(unsupportedLabels[key])
         continue

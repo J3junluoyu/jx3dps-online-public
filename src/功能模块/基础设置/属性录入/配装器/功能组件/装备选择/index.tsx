@@ -20,6 +20,7 @@ import {
 } from '@/@types/装备'
 import 获取当前数据 from '@/数据/数据工具/获取当前数据'
 import { 获取最大精炼等级 } from '../../工具函数/获取最大精炼等级'
+import { 五十级附魔可见, 附魔数值降序 } from '../../工具函数/附魔显示'
 import './index.css'
 
 interface 装备选择入参 {
@@ -138,10 +139,11 @@ function 装备选择(props: 装备选择入参, ref) {
   }, [value?.id])
 
   const 当前装备支持附魔列表 = useMemo(() => {
-    return (附魔 || []).filter((item) => {
-      return item?.附魔支持部位?.some((a) => a === 部位)
+    const 列表 = (附魔 || []).filter((item) => {
+      return item?.附魔支持部位?.some((a) => a === 部位) && (!明尊模式 || 五十级附魔可见(item))
     })
-  }, [部位, 附魔])
+    return 明尊模式 ? 列表.sort(附魔数值降序) : 列表
+  }, [部位, 附魔, 明尊模式])
 
   useImperativeHandle(ref, () => ({
     选择最佳装备: selectRef?.current?.选择最佳装备,

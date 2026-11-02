@@ -1,5 +1,6 @@
 import { DEFAULT_SETTINGS, EMPTY_EQUIPMENT, calculateAttributes } from './index'
 import 装备数据库 from './装备数据.json'
+import { 获取同档附魔 } from './方案优化'
 import {
   GEAR_ITEMS,
   findGearItem,
@@ -299,20 +300,44 @@ test('五彩石保留内功和阴阳内功攻击，移除防御、御劲及其�
   ).toBe(false)
 })
 
-test('移除的附魔和整颗五彩石均不能继续参与配装计算', () => {
-  expect(ENCHANTS).toHaveLength(77)
+test('72档新增四主属性附魔后，其余被排除的附魔和整颗五彩石仍不能参与配装计算', () => {
+  expect(ENCHANTS).toHaveLength(85)
   expect(STONES).toHaveLength(66)
   expect(STONES.every((row) => row.level === 6)).toBe(true)
   const wrist = GEAR_ITEMS.find((row) => row.position === 'wrist')
   const weapon = GEAR_ITEMS.find((row) => row.position === 'primary_weapon')
-  expect(
-    ENCHANTS.some((row) => /仇恨|减仇|化劲|治疗|疗伤|元气|力道|根骨|身法/.test(row.name)),
-  ).toBe(false)
+  expect(ENCHANTS.some((row) => /仇恨|减仇|化劲|治疗|疗伤/.test(row.name))).toBe(false)
+  const mainEnchants = ENCHANTS.filter((row) => /元气|根骨|力道|身法/.test(row.name))
+  expect(mainEnchants.map((row) => row.id)).toEqual([
+    16490, 16491, 16492, 16493, 16540, 16541, 16542, 16543,
+  ])
   expect(() => calculateLoadout({ wrist: selection(wrist, { enchantId: 16558 }) })).toThrow('附魔')
   // 434 contains vitality and physical attack: exclude the entire stone, including vitality.
   expect(() => calculateLoadout({ primary_weapon: selection(weapon) }, 434)).toThrow('五彩石')
   expect(() => calculateLoadout({ primary_weapon: selection(weapon) }, 4016)).toThrow('五彩石')
   expect(() => calculateLoadout({ primary_weapon: selection(weapon) }, 4034)).toThrow('五彩石')
+})
+
+test.each([
+  ['元气', 'spunk', 16491, 16541],
+  ['根骨', 'spirit', 16493, 16543],
+  ['力道', 'strength', 16492, 16542],
+  ['身法', 'agility', 16490, 16540],
+])('72档%s附魔在下装和护腕可保存、汇总并参与同档推荐', (name, attribute, bottomsId, wristId) => {
+  for (const [position, id, prefix] of [
+    ['bottoms', bottomsId, '峡金铸·裤'],
+    ['wrist', wristId, '蜀锦绣·腕'],
+  ]) {
+    const item = GEAR_ITEMS.find((row) => row.position === position)
+    const before = { [position]: selection(item) }
+    const after = { [position]: selection(item, { enchantId: id }) }
+    expect(ENCHANTS.find((row) => row.id === id).name).toBe(`${prefix}（${name}）`)
+    expect(
+      calculateLoadout(after).stats[attribute] - calculateLoadout(before).stats[attribute],
+    ).toBe(72)
+    expect(normalizeLoadout(after).slots[position].enchantId).toBe(id)
+    expect(获取同档附魔(id, position)).toContain(id)
+  }
 })
 
 test('旧配装仅清除被移除的附魔和五彩石，保留装备、精炼、镶嵌及有效选项', () => {
