@@ -45,7 +45,6 @@ const eligible = (row) => {
     (tank || simplified) &&
     ['PVE', 'ALL'].includes(row.usage) &&
     row.level >= 1110 &&
-    (!tank || row.magic.some((entry) => entry.attr_type === 'haste_base' && entry.value > 0)) &&
     (row.position !== 'primary_weapon' || row.school === '明教')
   )
 }

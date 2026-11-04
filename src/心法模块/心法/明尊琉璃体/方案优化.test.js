@@ -12,11 +12,14 @@ import { 圣浴常驻名称 } from './增益'
 
 jest.setTimeout(120000)
 
-const 初始方案 = () => ({
+const 初始方案 = (只选加速装 = false) => ({
   slots: Object.fromEntries(
     SLOTS.map(([slot]) => {
       const item = GEAR_ITEMS.filter(
-        (row) => row.position === slotPosition(slot) && row.kind === '防御',
+        (row) =>
+          row.position === slotPosition(slot) &&
+          row.kind === '防御' &&
+          (!只选加速装 || Number(row.magic.haste_base) > 0),
       ).sort((a, b) => b.level - a.level)[0]
       const enchant = ENCHANTS.find(
         (row) => row.position === item.position && Object.values(row.attributes)[0] === 72,
@@ -293,6 +296,8 @@ test.each([
   '初始增强药品%s与食品%s未配对时，重新搜索同属性组合并保留真实对比基准',
   (medicineKey, foodKey) => {
     const input = 输入()
+    // 本用例固定装备，只测试药食配对，起始面板需先满足0.75或0.81的循环档位。
+    input.initial = 初始方案(true)
     input.slots = []
     input.minToughness = 0
     const medicine = 明尊小药小吃.find(
@@ -337,6 +342,7 @@ test('取消莫问阵后仍可搜索其他阵眼并满足GCD与御劲约束', ()
 
 test('当前莫问阵满足条件而其他阵眼御劲不足时，禁用莫问不能用初始方案顶替结果', () => {
   const input = 输入()
+  input.initial = 初始方案(true)
   input.slots = []
   input.initial.formation = '莫问阵'
   const wine = 明尊小药小吃

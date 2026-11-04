@@ -4,6 +4,7 @@ import { 获取同档附魔 } from './方案优化'
 import {
   GEAR_ITEMS,
   findGearItem,
+  gearAttributeSuffix,
   ENCHANTS,
   STONES,
   calculateLoadout,
@@ -25,8 +26,8 @@ const selection = (item, overrides = {}) => ({
 })
 const slot = (item) => (item.position === 'ring' ? 'ring1' : item.position)
 
-test('无修去重、水风特效及两心法橙武入库后134件装备，精炼和镶嵌均产生有效属性', () => {
-  expect(GEAR_ITEMS).toHaveLength(134)
+test('恢复单防无加速装备后189件可选装备，精炼和镶嵌均产生有效属性', () => {
+  expect(GEAR_ITEMS).toHaveLength(189)
   expect(new Set(GEAR_ITEMS.map((item) => item.key)).size).toBe(GEAR_ITEMS.length)
   for (const item of GEAR_ITEMS) {
     const result = calculateLoadout({
@@ -196,18 +197,27 @@ test('精炼只增加magic属性，镶嵌按Generator压缩系数单独向下取
   expect(refined.physicalShield).toBe(37 + 286 + 21)
   expect(refined.magicalShield).toBe(37 + 413 + 31)
 })
-test('套装2件属性只加一次，现有3件加速套装不触发4件效果', () => {
-  const selected = []
-  for (const item of GEAR_ITEMS.filter((row) => row.setId === 7019))
-    if (!selected.some((row) => row.position === item.position)) selected.push(item)
-  expect(selected).toHaveLength(3)
-  const singles = selected.map((item) => calculateLoadout({ [slot(item)]: selection(item) }).stats)
-  const three = calculateLoadout(
-    Object.fromEntries(selected.map((item) => [slot(item), selection(item)])),
-  )
-  expect(three.activeSets.map((set) => set.threshold)).toEqual([2])
-  expect(three.stats.strain).toBe(singles.reduce((sum, stats) => sum + stats.strain, 0) + 112)
-  expect(three.stats.haste).toBe(singles.reduce((sum, stats) => sum + stats.haste, 0))
+test('3件加速套装只触发2件效果，恢复单防后4件和6件套正确追加一次112加速', () => {
+  const setItems = GEAR_ITEMS.filter((row) => row.setId === 7019)
+  expect(setItems).toHaveLength(6)
+  expect(new Set(setItems.map((item) => item.position)).size).toBe(6)
+  const hasteItems = setItems.filter((row) => Number(row.magic.haste_base) > 0)
+  expect(hasteItems).toHaveLength(3)
+  for (const selected of [hasteItems, setItems.slice(0, 4), setItems]) {
+    const singles = selected.map(
+      (item) => calculateLoadout({ [slot(item)]: selection(item) }).stats,
+    )
+    const combined = calculateLoadout(
+      Object.fromEntries(selected.map((item) => [slot(item), selection(item)])),
+    )
+    expect(combined.activeSets.map((set) => set.threshold)).toEqual(
+      selected.length >= 4 ? [2, 4] : [2],
+    )
+    expect(combined.stats.strain).toBe(singles.reduce((sum, stats) => sum + stats.strain, 0) + 112)
+    expect(combined.stats.haste).toBe(
+      singles.reduce((sum, stats) => sum + stats.haste, 0) + (selected.length >= 4 ? 112 : 0),
+    )
+  }
 })
 test('两个戒指槽独立汇总', () => {
   const item = GEAR_ITEMS.find((row) => row.position === 'ring' && row.setId === 0)
@@ -362,14 +372,16 @@ test('旧配装仅清除被移除的附魔和五彩石，保留装备、精炼�
   expect(normalizeLoadout(result.slots, 5790).stone).toBe(5754)
 })
 
-test('普通装备保留1110品边界，橙武719品除外，清理无加速防御装和归正附魔', () => {
+test('普通装备保留1110品边界，橙武719品除外，无加速防御装可以保留在配装中', () => {
   expect(GEAR_ITEMS.find((row) => row.key === 'armors:111949').level).toBe(1110)
   expect(GEAR_ITEMS.some((row) => row.level < 1110 && !row.orangeWeapon)).toBe(false)
-  expect(
-    GEAR_ITEMS.filter((row) => row.kind === '防御' && !(row.magic.haste_base > 0))
-      .map((row) => row.id)
-      .sort(),
-  ).toEqual([46708, 46725])
+  const noHaste = GEAR_ITEMS.filter((row) => row.kind === '防御' && !(row.magic.haste_base > 0))
+  expect(noHaste).toHaveLength(57)
+  expect(noHaste.map((row) => row.id)).toEqual(
+    expect.arrayContaining([112584, 112395, 46708, 46725]),
+  )
+  expect(gearAttributeSuffix(findGearItem(112584))).toBe('内')
+  expect(gearAttributeSuffix(findGearItem(112395))).toBe('外')
   expect(ENCHANTS.some((row) => row.name.includes('归正'))).toBe(false)
   expect(ENCHANTS.some((row) => 'weapon_damage_base' in row.attributes)).toBe(false)
   const wrist = GEAR_ITEMS.find((row) => row.key === 'armors:112560')
@@ -382,21 +394,21 @@ test('普通装备保留1110品边界，橙武719品除外，清理无加速防�
   }
   const result = normalizeLoadout(saved, 5754)
   const empty = { key: '', strength: 0, embeds: [], enchantId: 0 }
-  expect(result.slots.hat).toEqual(empty)
+  expect(result.slots.hat).toEqual(saved.hat)
   expect(result.slots.primary_weapon).toEqual(empty)
   expect(result.slots.wrist).toEqual(saved.wrist)
   expect(result.slots.tertiary_weapon).toEqual({ ...saved.tertiary_weapon, enchantId: 0 })
   expect(result.stone).toBe(0)
   expect(saved.tertiary_weapon.enchantId).toBe(16664)
-  expect(calculateLoadout(result.slots, result.stone).selectedCount).toBe(2)
-  expect(() => calculateLoadout({ hat: saved.hat })).toThrow('装备')
+  expect(calculateLoadout(result.slots, result.stone).selectedCount).toBe(3)
+  expect(calculateLoadout({ hat: saved.hat }).selectedCount).toBe(1)
   expect(() => calculateLoadout({ primary_weapon: saved.primary_weapon })).toThrow('装备')
   expect(() => calculateLoadout({ tertiary_weapon: saved.tertiary_weapon })).toThrow('附魔')
 })
 
-test('读取考拉31件装备的威胁词条及21个威胁孔，精炼和镶嵌按原始系数分别取整', () => {
-  expect(GEAR_ITEMS.filter((row) => 'threat_gain' in row.magic)).toHaveLength(31)
-  expect(GEAR_ITEMS.filter((row) => 'threat_gain' in row.embed)).toHaveLength(21)
+test('读取恢复后的66件装备威胁词条及39个威胁孔，精炼和镶嵌按原始系数分别取整', () => {
+  expect(GEAR_ITEMS.filter((row) => 'threat_gain' in row.magic)).toHaveLength(66)
+  expect(GEAR_ITEMS.filter((row) => 'threat_gain' in row.embed)).toHaveLength(39)
   const item = GEAR_ITEMS.find((row) => row.id === 112319)
   expect(Object.keys(item.embed)).toEqual(['vitality_base', 'threat_gain'])
   const bare = calculateLoadout({ hat: selection(item) })

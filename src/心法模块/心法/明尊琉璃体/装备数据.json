@@ -2,6 +2,38 @@
   "commit": "ee2c4c0f502c82a3ab615355cdc80073b6bf1713",
   "items": [
     {
+      "key": "armors:111943",
+      "id": 111943,
+      "name": "寻踪觅宝·闻古袖",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "wrist",
+      "level": 1110,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 32,
+        "magical_shield_base": 32
+      },
+      "magic": {
+        "vitality_base": 550,
+        "magical_shield_base": 706,
+        "toughness_base": 109,
+        "strain_base": 364,
+        "threat_gain": 178
+      },
+      "embed": {
+        "vitality_base": 304,
+        "threat_gain": 29
+      },
+      "setId": 6981,
+      "sets": {
+        "2": {},
+        "3": {},
+        "4": {}
+      }
+    },
+    {
       "key": "armors:111949",
       "id": 111949,
       "name": "寻踪觅宝·闻古腰带",
@@ -27,6 +59,38 @@
       "embed": {
         "magical_shield_base": 304,
         "physical_shield_base": 304
+      },
+      "setId": 6981,
+      "sets": {
+        "2": {},
+        "3": {},
+        "4": {}
+      }
+    },
+    {
+      "key": "armors:111955",
+      "id": 111955,
+      "name": "寻踪觅宝·闻古靴",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "shoes",
+      "level": 1110,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 23,
+        "magical_shield_base": 23
+      },
+      "magic": {
+        "vitality_base": 550,
+        "physical_shield_base": 706,
+        "toughness_base": 109,
+        "strain_base": 364,
+        "threat_gain": 178
+      },
+      "embed": {
+        "dodge_base": 304,
+        "threat_gain": 29
       },
       "setId": 6981,
       "sets": {
@@ -67,6 +131,108 @@
         "2": {},
         "3": {},
         "4": {}
+      }
+    },
+    {
+      "key": "armors:111967",
+      "id": 111967,
+      "name": "寻踪觅宝·闻古衣",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "jacket",
+      "level": 1110,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 45,
+        "magical_shield_base": 45
+      },
+      "magic": {
+        "vitality_base": 785,
+        "physical_shield_base": 1008,
+        "toughness_base": 155,
+        "strain_base": 520,
+        "threat_gain": 178
+      },
+      "embed": {
+        "threat_gain": 29,
+        "vitality_base": 304
+      },
+      "setId": 6981,
+      "sets": {
+        "2": {},
+        "3": {},
+        "4": {}
+      }
+    },
+    {
+      "key": "armors:111985",
+      "id": 111985,
+      "name": "苍黎·照世护腕",
+      "school": "明教",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "wrist",
+      "level": 1110,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 32,
+        "magical_shield_base": 32
+      },
+      "magic": {
+        "vitality_base": 550,
+        "physical_shield_base": 706,
+        "toughness_base": 109,
+        "strain_base": 364,
+        "threat_gain": 178
+      },
+      "embed": {
+        "dodge_base": 304,
+        "physical_shield_base": 304
+      },
+      "setId": 6999,
+      "sets": {
+        "2": {
+          "event": "gain_1322_12"
+        },
+        "4": {
+          "recipe": "recipe_1974_1 | recipe_17250_1"
+        }
+      }
+    },
+    {
+      "key": "armors:112017",
+      "id": 112017,
+      "name": "苍黎·照世腰带",
+      "school": "明教",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "belt",
+      "level": 1110,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 23,
+        "magical_shield_base": 23
+      },
+      "magic": {
+        "vitality_base": 550,
+        "physical_shield_base": 706,
+        "toughness_base": 109,
+        "strain_base": 364,
+        "threat_gain": 178
+      },
+      "embed": {
+        "vitality_base": 304,
+        "threat_gain": 29
+      },
+      "setId": 6999,
+      "sets": {
+        "2": {
+          "event": "gain_1322_12"
+        },
+        "4": {
+          "recipe": "recipe_1974_1 | recipe_17250_1"
+        }
       }
     },
     {
@@ -132,6 +298,41 @@
       "embed": {
         "vitality_base": 304,
         "threat_gain": 29
+      },
+      "setId": 6999,
+      "sets": {
+        "2": {
+          "event": "gain_1322_12"
+        },
+        "4": {
+          "recipe": "recipe_1974_1 | recipe_17250_1"
+        }
+      }
+    },
+    {
+      "key": "armors:112113",
+      "id": 112113,
+      "name": "苍黎·照世衣",
+      "school": "明教",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "jacket",
+      "level": 1110,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 45,
+        "magical_shield_base": 45
+      },
+      "magic": {
+        "vitality_base": 785,
+        "magical_shield_base": 1008,
+        "toughness_base": 155,
+        "strain_base": 520,
+        "threat_gain": 178
+      },
+      "embed": {
+        "threat_gain": 29,
+        "magical_shield_base": 304
       },
       "setId": 6999,
       "sets": {
@@ -234,6 +435,90 @@
       "sets": {}
     },
     {
+      "key": "armors:112151",
+      "id": 112151,
+      "name": "隐寥下裳",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "bottoms",
+      "level": 1110,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 41,
+        "magical_shield_base": 41
+      },
+      "magic": {
+        "vitality_base": 785,
+        "physical_shield_base": 1008,
+        "toughness_base": 155,
+        "strain_base": 520,
+        "threat_gain": 178
+      },
+      "embed": {
+        "dodge_base": 304,
+        "physical_shield_base": 304
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
+      "key": "armors:112157",
+      "id": 112157,
+      "name": "隐寥冠",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "hat",
+      "level": 1110,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 36,
+        "magical_shield_base": 36
+      },
+      "magic": {
+        "vitality_base": 707,
+        "physical_shield_base": 907,
+        "toughness_base": 140,
+        "strain_base": 468,
+        "threat_gain": 178
+      },
+      "embed": {
+        "vitality_base": 304,
+        "physical_shield_base": 304
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
+      "key": "armors:112163",
+      "id": 112163,
+      "name": "隐寥衫",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "jacket",
+      "level": 1110,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 45,
+        "magical_shield_base": 45
+      },
+      "magic": {
+        "vitality_base": 785,
+        "physical_shield_base": 1008,
+        "toughness_base": 155,
+        "strain_base": 520,
+        "threat_gain": 178
+      },
+      "embed": {
+        "threat_gain": 29,
+        "vitality_base": 304
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
       "key": "armors:112169",
       "id": 112169,
       "name": "运制护手",
@@ -289,6 +574,62 @@
       "embed": {
         "physical_shield_base": 304,
         "vitality_base": 304
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
+      "key": "armors:112181",
+      "id": 112181,
+      "name": "运制靴",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "shoes",
+      "level": 1110,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 23,
+        "magical_shield_base": 23
+      },
+      "magic": {
+        "vitality_base": 550,
+        "magical_shield_base": 706,
+        "toughness_base": 109,
+        "strain_base": 364,
+        "threat_gain": 178
+      },
+      "embed": {
+        "vitality_base": 304,
+        "physical_shield_base": 304
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
+      "key": "armors:112187",
+      "id": 112187,
+      "name": "运制裤",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "bottoms",
+      "level": 1110,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 41,
+        "magical_shield_base": 41
+      },
+      "magic": {
+        "vitality_base": 785,
+        "magical_shield_base": 1008,
+        "toughness_base": 155,
+        "strain_base": 520,
+        "threat_gain": 178
+      },
+      "embed": {
+        "physical_shield_base": 304,
+        "threat_gain": 29
       },
       "setId": 0,
       "sets": {}
@@ -384,6 +725,76 @@
       "sets": {}
     },
     {
+      "key": "armors:112223",
+      "id": 112223,
+      "name": "元元·燃夜护腕",
+      "school": "明教",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "wrist",
+      "level": 1280,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 37,
+        "magical_shield_base": 37
+      },
+      "magic": {
+        "vitality_base": 641,
+        "physical_shield_base": 814,
+        "toughness_base": 125,
+        "strain_base": 451,
+        "threat_gain": 205
+      },
+      "embed": {
+        "dodge_base": 304,
+        "physical_shield_base": 304
+      },
+      "setId": 6999,
+      "sets": {
+        "2": {
+          "event": "gain_1322_12"
+        },
+        "4": {
+          "recipe": "recipe_1974_1 | recipe_17250_1"
+        }
+      }
+    },
+    {
+      "key": "armors:112255",
+      "id": 112255,
+      "name": "元元·燃夜腰带",
+      "school": "明教",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "belt",
+      "level": 1280,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 26,
+        "magical_shield_base": 26
+      },
+      "magic": {
+        "vitality_base": 641,
+        "physical_shield_base": 814,
+        "toughness_base": 125,
+        "strain_base": 451,
+        "threat_gain": 205
+      },
+      "embed": {
+        "vitality_base": 304,
+        "threat_gain": 29
+      },
+      "setId": 6999,
+      "sets": {
+        "2": {
+          "event": "gain_1322_12"
+        },
+        "4": {
+          "recipe": "recipe_1974_1 | recipe_17250_1"
+        }
+      }
+    },
+    {
       "key": "armors:112287",
       "id": 112287,
       "name": "元元·燃夜鞋",
@@ -446,6 +857,41 @@
       "embed": {
         "vitality_base": 304,
         "threat_gain": 29
+      },
+      "setId": 6999,
+      "sets": {
+        "2": {
+          "event": "gain_1322_12"
+        },
+        "4": {
+          "recipe": "recipe_1974_1 | recipe_17250_1"
+        }
+      }
+    },
+    {
+      "key": "armors:112351",
+      "id": 112351,
+      "name": "元元·燃夜衣",
+      "school": "明教",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "jacket",
+      "level": 1280,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 52,
+        "magical_shield_base": 52
+      },
+      "magic": {
+        "vitality_base": 916,
+        "magical_shield_base": 1163,
+        "toughness_base": 179,
+        "strain_base": 644,
+        "threat_gain": 205
+      },
+      "embed": {
+        "threat_gain": 29,
+        "magical_shield_base": 304
       },
       "setId": 6999,
       "sets": {
@@ -548,6 +994,90 @@
       "sets": {}
     },
     {
+      "key": "armors:112389",
+      "id": 112389,
+      "name": "抱火裤",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "bottoms",
+      "level": 1280,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 47,
+        "magical_shield_base": 47
+      },
+      "magic": {
+        "vitality_base": 916,
+        "physical_shield_base": 1163,
+        "toughness_base": 179,
+        "strain_base": 644,
+        "threat_gain": 205
+      },
+      "embed": {
+        "dodge_base": 304,
+        "physical_shield_base": 304
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
+      "key": "armors:112395",
+      "id": 112395,
+      "name": "抱火冠",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "hat",
+      "level": 1280,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 42,
+        "magical_shield_base": 42
+      },
+      "magic": {
+        "vitality_base": 824,
+        "physical_shield_base": 1046,
+        "toughness_base": 161,
+        "strain_base": 580,
+        "threat_gain": 205
+      },
+      "embed": {
+        "vitality_base": 304,
+        "physical_shield_base": 304
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
+      "key": "armors:112401",
+      "id": 112401,
+      "name": "抱火衣",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "jacket",
+      "level": 1280,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 52,
+        "magical_shield_base": 52
+      },
+      "magic": {
+        "vitality_base": 916,
+        "physical_shield_base": 1163,
+        "toughness_base": 179,
+        "strain_base": 644,
+        "threat_gain": 205
+      },
+      "embed": {
+        "threat_gain": 29,
+        "vitality_base": 304
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
       "key": "armors:112407",
       "id": 112407,
       "name": "朴磐袖",
@@ -603,6 +1133,62 @@
       "embed": {
         "physical_shield_base": 304,
         "vitality_base": 304
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
+      "key": "armors:112419",
+      "id": 112419,
+      "name": "朴磐鞋",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "shoes",
+      "level": 1280,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 26,
+        "magical_shield_base": 26
+      },
+      "magic": {
+        "vitality_base": 641,
+        "magical_shield_base": 814,
+        "toughness_base": 125,
+        "strain_base": 451,
+        "threat_gain": 205
+      },
+      "embed": {
+        "vitality_base": 304,
+        "physical_shield_base": 304
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
+      "key": "armors:112425",
+      "id": 112425,
+      "name": "朴磐裤",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "bottoms",
+      "level": 1280,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 47,
+        "magical_shield_base": 47
+      },
+      "magic": {
+        "vitality_base": 916,
+        "magical_shield_base": 1163,
+        "toughness_base": 179,
+        "strain_base": 644,
+        "threat_gain": 205
+      },
+      "embed": {
+        "physical_shield_base": 304,
+        "threat_gain": 29
       },
       "setId": 0,
       "sets": {}
@@ -922,10 +1508,7 @@
             "trigger": "hit",
             "cooldownSeconds": 20,
             "durationSeconds": 20,
-            "chooseLowest": [
-              "overcome",
-              "critical"
-            ],
+            "chooseLowest": ["overcome", "critical"],
             "amount": 595
           }
         }
@@ -1068,10 +1651,7 @@
             "trigger": "hit",
             "cooldownSeconds": 20,
             "durationSeconds": 20,
-            "chooseLowest": [
-              "overcome",
-              "critical"
-            ],
+            "chooseLowest": ["overcome", "critical"],
             "amount": 595
           }
         }
@@ -1805,6 +2385,76 @@
       }
     },
     {
+      "key": "armors:112566",
+      "id": 112566,
+      "name": "玄元星平护腰",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "belt",
+      "level": 1300,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 27,
+        "magical_shield_base": 27
+      },
+      "magic": {
+        "vitality_base": 652,
+        "magical_shield_base": 827,
+        "toughness_base": 127,
+        "strain_base": 461,
+        "threat_gain": 208
+      },
+      "embed": {
+        "physical_shield_base": 304,
+        "vitality_base": 304
+      },
+      "setId": 7019,
+      "sets": {
+        "2": {
+          "strain_base": 112
+        },
+        "4": {
+          "haste_base": 112
+        }
+      }
+    },
+    {
+      "key": "armors:112572",
+      "id": 112572,
+      "name": "玄元星平鞋",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "shoes",
+      "level": 1300,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 27,
+        "magical_shield_base": 27
+      },
+      "magic": {
+        "vitality_base": 652,
+        "physical_shield_base": 827,
+        "toughness_base": 127,
+        "strain_base": 461,
+        "threat_gain": 208
+      },
+      "embed": {
+        "dodge_base": 304,
+        "threat_gain": 29
+      },
+      "setId": 7019,
+      "sets": {
+        "2": {
+          "strain_base": 112
+        },
+        "4": {
+          "haste_base": 112
+        }
+      }
+    },
+    {
       "key": "armors:112578",
       "id": 112578,
       "name": "玄元星平裤",
@@ -1830,6 +2480,41 @@
       "embed": {
         "physical_shield_base": 304,
         "threat_gain": 29
+      },
+      "setId": 7019,
+      "sets": {
+        "2": {
+          "strain_base": 112
+        },
+        "4": {
+          "haste_base": 112
+        }
+      }
+    },
+    {
+      "key": "armors:112584",
+      "id": 112584,
+      "name": "玄元星平帽",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "hat",
+      "level": 1300,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 43,
+        "magical_shield_base": 43
+      },
+      "magic": {
+        "vitality_base": 838,
+        "magical_shield_base": 1063,
+        "toughness_base": 164,
+        "strain_base": 593,
+        "threat_gain": 208
+      },
+      "embed": {
+        "vitality_base": 304,
+        "magical_shield_base": 304
       },
       "setId": 7019,
       "sets": {
@@ -1879,6 +2564,34 @@
       }
     },
     {
+      "key": "armors:112596",
+      "id": 112596,
+      "name": "隐寥护手",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "wrist",
+      "level": 1110,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 32,
+        "magical_shield_base": 32
+      },
+      "magic": {
+        "vitality_base": 550,
+        "physical_shield_base": 706,
+        "toughness_base": 109,
+        "strain_base": 364,
+        "threat_gain": 178
+      },
+      "embed": {
+        "dodge_base": 304,
+        "physical_shield_base": 304
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
       "key": "armors:112602",
       "id": 112602,
       "name": "隐寥下裳",
@@ -1909,6 +2622,62 @@
       "sets": {}
     },
     {
+      "key": "armors:112608",
+      "id": 112608,
+      "name": "隐寥冠",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "hat",
+      "level": 1110,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 36,
+        "magical_shield_base": 36
+      },
+      "magic": {
+        "vitality_base": 707,
+        "magical_shield_base": 907,
+        "toughness_base": 140,
+        "strain_base": 468,
+        "threat_gain": 178
+      },
+      "embed": {
+        "vitality_base": 304,
+        "magical_shield_base": 304
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
+      "key": "armors:112614",
+      "id": 112614,
+      "name": "抱火袖",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "wrist",
+      "level": 1280,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 37,
+        "magical_shield_base": 37
+      },
+      "magic": {
+        "vitality_base": 641,
+        "physical_shield_base": 814,
+        "toughness_base": 125,
+        "strain_base": 451,
+        "threat_gain": 205
+      },
+      "embed": {
+        "dodge_base": 304,
+        "physical_shield_base": 304
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
       "key": "armors:112620",
       "id": 112620,
       "name": "抱火裤",
@@ -1934,6 +2703,34 @@
       "embed": {
         "physical_shield_base": 304,
         "threat_gain": 29
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
+      "key": "armors:112626",
+      "id": 112626,
+      "name": "抱火冠",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "hat",
+      "level": 1280,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 42,
+        "magical_shield_base": 42
+      },
+      "magic": {
+        "vitality_base": 824,
+        "magical_shield_base": 1046,
+        "toughness_base": 161,
+        "strain_base": 580,
+        "threat_gain": 205
+      },
+      "embed": {
+        "vitality_base": 304,
+        "magical_shield_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -1978,10 +2775,7 @@
           "rules": {
             "disabledInArena": true,
             "trigger": "combat",
-            "chooseHighest": [
-              "overcome",
-              "critical"
-            ],
+            "chooseHighest": ["overcome", "critical"],
             "amount": 563
           }
         }
@@ -2027,10 +2821,7 @@
           "rules": {
             "disabledInArena": true,
             "trigger": "combat",
-            "chooseHighest": [
-              "overcome",
-              "critical"
-            ],
+            "chooseHighest": ["overcome", "critical"],
             "amount": 563
           }
         }
@@ -2077,10 +2868,7 @@
           "rules": {
             "disabledInArena": true,
             "trigger": "combat",
-            "chooseHighest": [
-              "overcome",
-              "critical"
-            ],
+            "chooseHighest": ["overcome", "critical"],
             "amount": 563
           }
         }
@@ -2238,6 +3026,90 @@
       ]
     },
     {
+      "key": "armors:112800",
+      "id": 112800,
+      "name": "宸心护手",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "wrist",
+      "level": 1280,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 37,
+        "magical_shield_base": 37
+      },
+      "magic": {
+        "vitality_base": 641,
+        "magical_shield_base": 814,
+        "toughness_base": 125,
+        "strain_base": 451,
+        "threat_gain": 112
+      },
+      "embed": {
+        "vitality_base": 304,
+        "threat_gain": 29
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
+      "key": "armors:112806",
+      "id": 112806,
+      "name": "宸心护腰",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "belt",
+      "level": 1280,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 26,
+        "magical_shield_base": 26
+      },
+      "magic": {
+        "vitality_base": 641,
+        "magical_shield_base": 814,
+        "toughness_base": 125,
+        "strain_base": 451,
+        "threat_gain": 112
+      },
+      "embed": {
+        "physical_shield_base": 304,
+        "vitality_base": 304
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
+      "key": "armors:112812",
+      "id": 112812,
+      "name": "宸心鞋",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "shoes",
+      "level": 1280,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 26,
+        "magical_shield_base": 26
+      },
+      "magic": {
+        "vitality_base": 641,
+        "physical_shield_base": 814,
+        "toughness_base": 125,
+        "strain_base": 451,
+        "threat_gain": 112
+      },
+      "embed": {
+        "dodge_base": 304,
+        "threat_gain": 29
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
       "key": "armors:112818",
       "id": 112818,
       "name": "宸心下裳",
@@ -2292,6 +3164,118 @@
       },
       "embed": {
         "vitality_base": 304,
+        "threat_gain": 29
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
+      "key": "armors:112830",
+      "id": 112830,
+      "name": "宸心衫",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "jacket",
+      "level": 1280,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 52,
+        "magical_shield_base": 52
+      },
+      "magic": {
+        "vitality_base": 916,
+        "magical_shield_base": 1163,
+        "toughness_base": 179,
+        "strain_base": 644,
+        "threat_gain": 112
+      },
+      "embed": {
+        "threat_gain": 29,
+        "magical_shield_base": 304
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
+      "key": "armors:114396",
+      "id": 114396,
+      "name": "冥关孤渡·封障护手",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "wrist",
+      "level": 1110,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 32,
+        "magical_shield_base": 32
+      },
+      "magic": {
+        "vitality_base": 550,
+        "magical_shield_base": 706,
+        "toughness_base": 109,
+        "strain_base": 364,
+        "threat_gain": 178
+      },
+      "embed": {
+        "vitality_base": 304,
+        "threat_gain": 29
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
+      "key": "armors:114402",
+      "id": 114402,
+      "name": "冥关孤渡·封障护腰",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "belt",
+      "level": 1110,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 23,
+        "magical_shield_base": 23
+      },
+      "magic": {
+        "vitality_base": 550,
+        "magical_shield_base": 706,
+        "toughness_base": 109,
+        "strain_base": 364,
+        "threat_gain": 178
+      },
+      "embed": {
+        "physical_shield_base": 304,
+        "vitality_base": 304
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
+      "key": "armors:114408",
+      "id": 114408,
+      "name": "冥关孤渡·封障靴",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "shoes",
+      "level": 1110,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 23,
+        "magical_shield_base": 23
+      },
+      "magic": {
+        "vitality_base": 550,
+        "physical_shield_base": 706,
+        "toughness_base": 109,
+        "strain_base": 364,
+        "threat_gain": 178
+      },
+      "embed": {
+        "dodge_base": 304,
         "threat_gain": 29
       },
       "setId": 0,
@@ -2353,6 +3337,62 @@
       "embed": {
         "vitality_base": 304,
         "threat_gain": 29
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
+      "key": "armors:114426",
+      "id": 114426,
+      "name": "冥关孤渡·封障衫",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "jacket",
+      "level": 1110,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 45,
+        "magical_shield_base": 45
+      },
+      "magic": {
+        "vitality_base": 785,
+        "magical_shield_base": 1008,
+        "toughness_base": 155,
+        "strain_base": 520,
+        "threat_gain": 178
+      },
+      "embed": {
+        "threat_gain": 29,
+        "magical_shield_base": 304
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
+      "key": "armors:114828",
+      "id": 114828,
+      "name": "护昴裤",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "bottoms",
+      "level": 1200,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 44,
+        "magical_shield_base": 44
+      },
+      "magic": {
+        "vitality_base": 854,
+        "physical_shield_base": 1090,
+        "toughness_base": 168,
+        "strain_base": 585,
+        "threat_gain": 192
+      },
+      "embed": {
+        "dodge_base": 304,
+        "physical_shield_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -2522,6 +3562,73 @@
       "sets": {}
     },
     {
+      "key": "trinkets:49825",
+      "id": 49825,
+      "name": "隐寥链",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "necklace",
+      "level": 1110,
+      "maxStrength": 6,
+      "base": {},
+      "magic": {
+        "vitality_base": 393,
+        "magical_shield_base": 504,
+        "toughness_base": 78,
+        "strain_base": 260
+      },
+      "embed": {
+        "physical_shield_base": 304
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
+      "key": "trinkets:49831",
+      "id": 49831,
+      "name": "隐寥坠",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "pendant",
+      "level": 1110,
+      "maxStrength": 6,
+      "base": {},
+      "magic": {
+        "vitality_base": 393,
+        "magical_shield_base": 504,
+        "toughness_base": 78,
+        "strain_base": 260
+      },
+      "embed": {
+        "magical_shield_base": 304
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
+      "key": "trinkets:49837",
+      "id": 49837,
+      "name": "隐寥戒指",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "ring",
+      "level": 1110,
+      "maxStrength": 6,
+      "base": {},
+      "magic": {
+        "vitality_base": 393,
+        "magical_shield_base": 504,
+        "toughness_base": 78,
+        "strain_base": 260
+      },
+      "embed": {},
+      "setId": 0,
+      "sets": {}
+    },
+    {
       "key": "trinkets:49843",
       "id": 49843,
       "name": "运制项饰",
@@ -2572,6 +3679,50 @@
       "sets": {}
     },
     {
+      "key": "trinkets:49855",
+      "id": 49855,
+      "name": "运制戒",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "ring",
+      "level": 1110,
+      "maxStrength": 6,
+      "base": {},
+      "magic": {
+        "vitality_base": 393,
+        "physical_shield_base": 504,
+        "toughness_base": 78,
+        "strain_base": 260
+      },
+      "embed": {},
+      "setId": 0,
+      "sets": {}
+    },
+    {
+      "key": "trinkets:49861",
+      "id": 49861,
+      "name": "除芒项饰",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "necklace",
+      "level": 1110,
+      "maxStrength": 6,
+      "base": {},
+      "magic": {
+        "vitality_base": 393,
+        "physical_shield_base": 504,
+        "toughness_base": 78,
+        "strain_base": 260
+      },
+      "embed": {
+        "physical_shield_base": 304
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
       "key": "trinkets:49867",
       "id": 49867,
       "name": "除芒戒",
@@ -2589,6 +3740,73 @@
         "haste_base": 78,
         "toughness_base": 78,
         "strain_base": 260
+      },
+      "embed": {},
+      "setId": 0,
+      "sets": {}
+    },
+    {
+      "key": "trinkets:49873",
+      "id": 49873,
+      "name": "抱火链",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "necklace",
+      "level": 1280,
+      "maxStrength": 6,
+      "base": {},
+      "magic": {
+        "vitality_base": 458,
+        "magical_shield_base": 581,
+        "toughness_base": 89,
+        "strain_base": 322
+      },
+      "embed": {
+        "physical_shield_base": 304
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
+      "key": "trinkets:49879",
+      "id": 49879,
+      "name": "抱火佩",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "pendant",
+      "level": 1280,
+      "maxStrength": 6,
+      "base": {},
+      "magic": {
+        "vitality_base": 458,
+        "magical_shield_base": 581,
+        "toughness_base": 89,
+        "strain_base": 322
+      },
+      "embed": {
+        "magical_shield_base": 304
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
+      "key": "trinkets:49885",
+      "id": 49885,
+      "name": "抱火指环",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "ring",
+      "level": 1280,
+      "maxStrength": 6,
+      "base": {},
+      "magic": {
+        "vitality_base": 458,
+        "magical_shield_base": 581,
+        "toughness_base": 89,
+        "strain_base": 322
       },
       "embed": {},
       "setId": 0,
@@ -2645,6 +3863,50 @@
       "sets": {}
     },
     {
+      "key": "trinkets:49903",
+      "id": 49903,
+      "name": "朴磐指环",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "ring",
+      "level": 1280,
+      "maxStrength": 6,
+      "base": {},
+      "magic": {
+        "vitality_base": 458,
+        "physical_shield_base": 581,
+        "toughness_base": 89,
+        "strain_base": 322
+      },
+      "embed": {},
+      "setId": 0,
+      "sets": {}
+    },
+    {
+      "key": "trinkets:49909",
+      "id": 49909,
+      "name": "天曜链",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "necklace",
+      "level": 1280,
+      "maxStrength": 6,
+      "base": {},
+      "magic": {
+        "vitality_base": 458,
+        "physical_shield_base": 581,
+        "toughness_base": 89,
+        "strain_base": 322
+      },
+      "embed": {
+        "physical_shield_base": 304
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
       "key": "trinkets:49915",
       "id": 49915,
       "name": "天曜指环",
@@ -2664,6 +3926,29 @@
         "strain_base": 322
       },
       "embed": {},
+      "setId": 0,
+      "sets": {}
+    },
+    {
+      "key": "trinkets:49921",
+      "id": 49921,
+      "name": "荒镇八疆",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "pendant",
+      "level": 1280,
+      "maxStrength": 6,
+      "base": {},
+      "magic": {
+        "vitality_base": 458,
+        "physical_shield_base": 581,
+        "toughness_base": 89,
+        "strain_base": 322
+      },
+      "embed": {
+        "dodge_base": 304
+      },
       "setId": 0,
       "sets": {}
     },
@@ -3216,6 +4501,29 @@
       "sets": {}
     },
     {
+      "key": "trinkets:51352",
+      "id": 51352,
+      "name": "抱火佩",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "pendant",
+      "level": 1170,
+      "maxStrength": 8,
+      "base": {},
+      "magic": {
+        "vitality_base": 462,
+        "magical_shield_base": 590,
+        "toughness_base": 91,
+        "strain_base": 313
+      },
+      "embed": {
+        "magical_shield_base": 304
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
       "key": "trinkets:51358",
       "id": 51358,
       "name": "朴磐佩",
@@ -3236,6 +4544,29 @@
       },
       "embed": {
         "vitality_base": 304
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
+      "key": "trinkets:51364",
+      "id": 51364,
+      "name": "荒镇八疆",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "pendant",
+      "level": 1170,
+      "maxStrength": 8,
+      "base": {},
+      "magic": {
+        "vitality_base": 462,
+        "physical_shield_base": 590,
+        "toughness_base": 91,
+        "strain_base": 313
+      },
+      "embed": {
+        "dodge_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -3262,6 +4593,27 @@
       "embed": {
         "magical_shield_base": 304
       },
+      "setId": 0,
+      "sets": {}
+    },
+    {
+      "key": "trinkets:51388",
+      "id": 51388,
+      "name": "护昴指环",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "ring",
+      "level": 1200,
+      "maxStrength": 6,
+      "base": {},
+      "magic": {
+        "vitality_base": 427,
+        "magical_shield_base": 545,
+        "toughness_base": 84,
+        "strain_base": 292
+      },
+      "embed": {},
       "setId": 0,
       "sets": {}
     },
@@ -4287,6 +5639,29 @@
       "sets": {}
     },
     {
+      "key": "weapons:46590",
+      "id": 46590,
+      "name": "运制囊",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "tertiary_weapon",
+      "level": 1110,
+      "maxStrength": 6,
+      "base": {},
+      "magic": {
+        "vitality_base": 471,
+        "physical_shield_base": 605,
+        "toughness_base": 93,
+        "strain_base": 312
+      },
+      "embed": {
+        "dodge_base": 304
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
       "key": "weapons:46609",
       "id": 46609,
       "name": "突薪双刀",
@@ -4372,6 +5747,29 @@
       "sets": {}
     },
     {
+      "key": "weapons:46671",
+      "id": 46671,
+      "name": "朴磐囊",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "tertiary_weapon",
+      "level": 1280,
+      "maxStrength": 6,
+      "base": {},
+      "magic": {
+        "vitality_base": 550,
+        "physical_shield_base": 698,
+        "toughness_base": 107,
+        "strain_base": 386
+      },
+      "embed": {
+        "dodge_base": 304
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
       "key": "weapons:46690",
       "id": 46690,
       "name": "烈霄双刀",
@@ -4397,6 +5795,35 @@
         "vitality_base": 304,
         "physical_shield_base": 304,
         "magical_shield_base": 304
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
+      "key": "weapons:46725",
+      "id": 46725,
+      "name": "幻身归寂",
+      "school": "明教",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "primary_weapon",
+      "level": 1280,
+      "maxStrength": 6,
+      "base": {
+        "weapon_damage_base": 126,
+        "weapon_damage_rand": 84
+      },
+      "magic": {
+        "vitality_base": 1099,
+        "physical_shield_base": 1801,
+        "toughness_base": 277,
+        "strain_base": 997,
+        "event": "gain_4877_89"
+      },
+      "embed": {
+        "vitality_base": 304,
+        "dodge_base": 304,
+        "physical_shield_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -4457,6 +5884,57 @@
       "sets": {}
     },
     {
+      "key": "weapons:46784",
+      "id": 46784,
+      "name": "宸心囊",
+      "school": "通用",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "tertiary_weapon",
+      "level": 1280,
+      "maxStrength": 6,
+      "base": {},
+      "magic": {
+        "vitality_base": 550,
+        "magical_shield_base": 698,
+        "toughness_base": 107,
+        "strain_base": 386
+      },
+      "embed": {
+        "vitality_base": 304
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
+      "key": "weapons:46803",
+      "id": 46803,
+      "name": "灭相归真",
+      "school": "明教",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "primary_weapon",
+      "level": 1280,
+      "maxStrength": 6,
+      "base": {
+        "weapon_damage_base": 126,
+        "weapon_damage_rand": 84
+      },
+      "magic": {
+        "vitality_base": 1099,
+        "physical_shield_base": 1801,
+        "toughness_base": 277,
+        "strain_base": 997
+      },
+      "embed": {
+        "vitality_base": 304,
+        "dodge_base": 304,
+        "physical_shield_base": 304
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
       "key": "weapons:47516",
       "id": 47516,
       "name": "冥关孤渡·封障囊",
@@ -4477,6 +5955,34 @@
       },
       "embed": {
         "threat_gain": 29
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
+      "key": "weapons:47535",
+      "id": 47535,
+      "name": "冥关孤渡·渡灼双刀",
+      "school": "明教",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "primary_weapon",
+      "level": 1110,
+      "maxStrength": 6,
+      "base": {
+        "weapon_damage_base": 104,
+        "weapon_damage_rand": 69
+      },
+      "magic": {
+        "vitality_base": 942,
+        "physical_shield_base": 1562,
+        "toughness_base": 240,
+        "strain_base": 806
+      },
+      "embed": {
+        "vitality_base": 304,
+        "dodge_base": 304,
+        "physical_shield_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -4601,6 +6107,34 @@
       },
       "embed": {
         "threat_gain": 29
+      },
+      "setId": 0,
+      "sets": {}
+    },
+    {
+      "key": "weapons:47921",
+      "id": 47921,
+      "name": "幽昴双刀",
+      "school": "明教",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "primary_weapon",
+      "level": 1200,
+      "maxStrength": 6,
+      "base": {
+        "weapon_damage_base": 115,
+        "weapon_damage_rand": 77
+      },
+      "magic": {
+        "vitality_base": 1025,
+        "physical_shield_base": 1688,
+        "toughness_base": 260,
+        "strain_base": 905
+      },
+      "embed": {
+        "vitality_base": 304,
+        "dodge_base": 304,
+        "physical_shield_base": 304
       },
       "setId": 0,
       "sets": {}
@@ -5301,10 +6835,7 @@
             "attributes": {
               "all_attack_power_base": 181
             },
-            "durationRangeSeconds": [
-              6,
-              11
-            ],
+            "durationRangeSeconds": [6, 11],
             "hasteForMaxDuration": 2024
           }
         }
@@ -5351,10 +6882,7 @@
             "attributes": {
               "all_attack_power_base": 189
             },
-            "durationRangeSeconds": [
-              6,
-              11
-            ],
+            "durationRangeSeconds": [6, 11],
             "hasteForMaxDuration": 2024
           }
         }
@@ -5424,10 +6952,7 @@
             "attributes": {
               "all_attack_power_base": 181
             },
-            "durationRangeSeconds": [
-              6,
-              11
-            ],
+            "durationRangeSeconds": [6, 11],
             "hasteForMaxDuration": 2024
           }
         }
@@ -5474,10 +6999,7 @@
             "attributes": {
               "all_attack_power_base": 189
             },
-            "durationRangeSeconds": [
-              6,
-              11
-            ],
+            "durationRangeSeconds": [6, 11],
             "hasteForMaxDuration": 2024
           }
         }
@@ -21566,11 +23088,7 @@
     "repository": "https://github.com/IcyTide/Generator",
     "commit": "ee2c4c0f502c82a3ab615355cdc80073b6bf1713",
     "importedAt": "2026-10-30T04:54:00.338Z",
-    "files": [
-      "assets/json/armors.json",
-      "assets/json/trinkets.json",
-      "assets/json/weapons.json"
-    ]
+    "files": ["assets/json/armors.json", "assets/json/trinkets.json", "assets/json/weapons.json"]
   },
   "effectSource": {
     "repository": "https://github.com/IcyTide/Generator",

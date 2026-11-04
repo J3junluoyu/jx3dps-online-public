@@ -59,9 +59,6 @@ const eligibleGear = [
   (row) =>
     (row.level >= MIN_GEAR_LEVEL ||
       (row.orangeWeapon && row.level === 719 && row.position === 'primary_weapon')) &&
-    (row.kind !== '防御' ||
-      Number(row.magic.haste_base) > 0 ||
-      row.specialEffects?.some((effect) => effect.key === 'gain_4877_89')) &&
     (Number(row.base.strain_base) > 0 || Number(row.magic.strain_base) > 0),
 )
 // 无修更名为无观后仍只合并完全重复记录；孔位顺序、黄字、套装及精炼上限均参与比较。

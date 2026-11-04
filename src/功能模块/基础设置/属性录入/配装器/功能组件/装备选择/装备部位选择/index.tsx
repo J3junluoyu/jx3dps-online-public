@@ -389,6 +389,8 @@ function 装备部位选择(props: 装备部位选择入参, ref) {
                         'zhuangbei-miaoshu-label',
                         a === '精简' ? 'zhuangbei-miaoshu-label-jingjian' : '',
                         a === '体' ? 'zhuangbei-miaoshu-label-tizhi' : '',
+                        a === '内' ? 'zhuangbei-miaoshu-label-neifang' : '',
+                        a === '外' ? 'zhuangbei-miaoshu-label-waifang' : '',
                         a === '特效' ? 'zhuangbei-miaoshu-label-texiao' : '',
                         a === 'PVX' ? 'zhuangbei-miaoshu-label-pvx' : '',
                       )
@@ -403,6 +405,11 @@ function 装备部位选择(props: 装备部位选择入参, ref) {
                               className='zhuangbei-miaoshu-label-texiao-text'
                               text={a}
                             />
+                          ) : a === '内外' ? (
+                            <>
+                              <span className='zhuangbei-miaoshu-label-neifang'>内</span>
+                              <span className='zhuangbei-miaoshu-label-waifang'>外</span>
+                            </>
                           ) : (
                             a
                           )}
@@ -464,6 +471,16 @@ export const 获取装备数据描述 = (data: 装备属性信息模型, 携带�
     }
   }
   if (携带增益) {
+    if (使用五十级装备(获取当前数据().名称)) {
+      const 防御词条数值 = (属性: 属性类型) =>
+        装备增益.reduce(
+          (合计, item) => 合计 + (item.属性 === 属性 && !item.不参与精炼 ? item.值 : 0),
+          0,
+        )
+      const 外防 = 防御词条数值(属性类型.外功基础防御)
+      const 内防 = 防御词条数值(属性类型.内功基础防御)
+      if (外防 > 0 || 内防 > 0) strList.push(外防 > 内防 ? '外' : 内防 > 外防 ? '内' : '内外')
+    }
     装备增益.forEach((item) => {
       switch (item.属性) {
         case 属性类型.全会心等级:

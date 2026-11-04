@@ -199,7 +199,10 @@ test('方案推荐换装及应用保留大附魔，推荐评分与主计算一�
   const slots = Object.fromEntries(
     SLOTS.map(([slot]) => {
       const item = GEAR_ITEMS.filter(
-        (row) => row.position === slotPosition(slot) && row.kind === '防御',
+        (row) =>
+          row.position === slotPosition(slot) &&
+          row.kind === '防御' &&
+          Number(row.magic.haste_base) > 0,
       ).sort((a, b) => b.level - a.level)[0]
       return [
         slot,

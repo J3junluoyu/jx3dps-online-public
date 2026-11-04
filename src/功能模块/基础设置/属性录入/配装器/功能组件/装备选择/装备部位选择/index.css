@@ -60,6 +60,14 @@
   font-weight: 600;
 }
 
+.zhuangbei-miaoshu-label-neifang {
+  color: #d4b106;
+}
+
+.zhuangbei-miaoshu-label-waifang {
+  color: #389e0d;
+}
+
 .zhuangbei-miaoshu-label-texiao {
   color: transparent;
   display: inline-flex;
