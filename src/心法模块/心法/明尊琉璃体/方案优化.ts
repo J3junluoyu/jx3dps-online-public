@@ -13,6 +13,7 @@ import {
   isXisuiOrangeWeapon,
   MINGZUN_ORANGE_WEAPON_LEVELS,
   XISUI_ORANGE_WEAPON_LEVELS,
+  is72MainAttributeEnchant,
 } from './装备'
 import type { GearItem, Loadout } from './装备'
 import { 明尊小药小吃, 获取明尊战斗增益 } from './增益'
@@ -36,7 +37,10 @@ export interface 优化指标 {
   gcd: number
   simulatedGcd?: number
   toughness: number
+  physicalShield: number
+  magicalShield: number
 }
+export type 防御倾向 = 'physicalShield' | 'magicalShield'
 export interface 方案优化输入 {
   kungfu?: 'xsj' | 'mzllt'
   /** 推荐以该档为加速下限，保留更高加速装备，技能次数仍使用所选模板。 */
@@ -49,6 +53,8 @@ export interface 方案优化输入 {
   minToughness: number
   includeMowen?: boolean
   includeHasteConsumables?: boolean
+  enchantTier?: 72 | 90
+  defensePreference?: 防御倾向
   /** 0或未选时排除橙武候选；选择品级后固定装备该心法的对应橙武。 */
   orangeWeaponLevel?: number
   gearScope?: 'defensive' | 'includeStreamlined'
@@ -71,21 +77,34 @@ export interface 方案优化进度 {
 }
 type 候选结果 = { plan: 优化方案; metrics: 优化指标; violation: number; key: string; grade: number }
 type 选择组 = { label: string; slot?: string; apply: ((plan: 优化方案) => 优化方案)[] }
-type 约束指标 = Pick<优化指标, 'haste' | 'toughness'>
+type 防御点数 = Pick<优化指标, 'physicalShield' | 'magicalShield'>
+type 约束指标 = Pick<优化指标, 'haste' | 'toughness'> & 防御点数
+
+export const 比较推荐指标 = (前: 优化指标, 后: 优化指标, 倾向?: 防御倾向) =>
+  后.dps - 前.dps || (倾向 ? 后[倾向] - 前[倾向] : 0)
+
+const 防御减伤常数 = ratingScale('shield')
+const 对侧防御 = { physicalShield: 'magicalShield', magicalShield: 'physicalShield' } as const
+const 面板防御百分比 = (点数: number) =>
+  Number(((点数 / (点数 + 防御减伤常数)) * 100).toFixed(2))
+export const 满足面板防御倾向 = (metrics: 防御点数, 倾向?: 防御倾向) =>
+  !倾向 ||
+  面板防御百分比(metrics[倾向]) > 面板防御百分比(metrics[对侧防御[倾向]])
 
 export const 获取优化GCD = (加速: number, 基础帧数 = 16) =>
   Math.floor(
     (1024 * 基础帧数) / (1024 + Math.min(256, Math.floor((1024 * 加速) / ratingScale('haste')))),
   ) / 16
 
-export function 获取同档附魔(enchantId: number, position: string) {
+export function 获取同档附魔(enchantId: number, position: string, 指定档位?: 72 | 90) {
   const 当前 = ENCHANTS.find((item) => item.id === enchantId && item.position === position)
-  if (!当前) return [0]
-  const 档位 = Object.values(当前.attributes).sort().join(',')
+  const 档位 = 指定档位 ? String(指定档位) : 当前 && Object.values(当前.attributes).sort().join(',')
+  if (!档位) return [0]
   const candidates = ENCHANTS.filter(
     (item) =>
       item.position === position &&
       Object.values(item.attributes).sort().join(',') === 档位 &&
+      (!指定档位 || !is72MainAttributeEnchant(item)) &&
       !/御劲/.test(item.name) &&
       !Object.keys(item.attributes).some((key) => /^toughness(_|$)/.test(key)),
   ).map((item) => item.id)
@@ -232,6 +251,9 @@ function 搜索推荐方案(
   const started = Date.now()
   if (input.gearScope && !['defensive', 'includeStreamlined'].includes(input.gearScope))
     throw new Error('装备范围无效')
+  const { defensePreference } = input
+  const 防御差 = (metrics: 防御点数) =>
+    defensePreference ? metrics[defensePreference] - metrics[对侧防御[defensePreference]] : 0
   // 普通装备沿用配装器范围；选择橙武品级后，武器仅允许该心法的对应橙武。
   const allowed = new Set(
     GEAR_ITEMS.filter((item) => 允许装备候选(input, item)).map((item) => item.key),
@@ -264,7 +286,7 @@ function 搜索推荐方案(
       throw new Error(
         `${label}在当前${input.gearScope === 'defensive' ? '防御' : ''}装备筛选范围内没有候选装备`,
       )
-    const enchants = 获取同档附魔(current?.enchantId || 0, slotPosition(slot))
+    const enchants = 获取同档附魔(current?.enchantId || 0, slotPosition(slot), input.enchantTier)
     validEnchants.set(slot, enchants)
     groups.push({
       label: `${label}与附魔`,
@@ -373,7 +395,8 @@ function 搜索推荐方案(
     (input.allowHigherHaste
       ? metrics.haste >= minHaste
       : 获取优化GCD(metrics.haste, baseFrames) === gcd) &&
-    metrics.toughness + 1e-10 >= input.minToughness
+    metrics.toughness + 1e-10 >= input.minToughness &&
+    满足面板防御倾向(metrics, defensePreference)
   const panelFor = (plan: 优化方案, cacheStats = true) => {
     const gearKey = JSON.stringify([SLOTS.map(([slot]) => plan.slots[slot]), plan.stone])
     let equipped = statsCache.get(gearKey)
@@ -407,10 +430,13 @@ function 搜索推荐方案(
     const panel = xisui ? 计算洗髓面板(stats, settings) : calculateAttributes(stats, settings)
     return { stats, settings, panel }
   }
-  const constraintsFor = (plan: 优化方案): 约束指标 => {
-    const { panel } = panelFor(plan, false)
-    return { haste: panel.hasteRating, toughness: panel.toughness * 100 }
-  }
+  const panelConstraints = (panel: ReturnType<typeof calculateAttributes>): 约束指标 => ({
+    haste: panel.hasteRating,
+    toughness: panel.toughness * 100,
+    physicalShield: panel.physicalShield,
+    magicalShield: panel.magicalShield,
+  })
+  const constraintsFor = (plan: 优化方案) => panelConstraints(panelFor(plan, false).panel)
   const evaluate = (plan: 优化方案): 候选结果 => {
     const key = 方案键(plan)
     const cached = cache.get(key)
@@ -424,25 +450,26 @@ function 搜索推荐方案(
         detail.战斗时间,
         false,
       ).秒伤,
-      haste: panel.hasteRating,
+      ...panelConstraints(panel),
       gcd: 获取优化GCD(panel.hasteRating, baseFrames),
       ...(input.allowHigherHaste ? { simulatedGcd: gcd } : {}),
-      toughness: panel.toughness * 100,
     }
     const violation =
       (Math.max(0, minHaste - metrics.haste) +
         (metrics.haste >= maxHaste ? metrics.haste - maxHaste + 1 : 0)) /
         888 +
-      Math.max(0, input.minToughness - metrics.toughness) / Math.max(1, input.minToughness)
+      Math.max(0, input.minToughness - metrics.toughness) / Math.max(1, input.minToughness) +
+      Math.max(0, -防御差(metrics)) / 1000
     const grade = SLOTS.reduce((sum, [slot]) => sum + (装备品级.get(plan.slots[slot]?.key) || 0), 0)
     const result = { plan, metrics, violation, key, grade }
     cache.set(key, result)
+    const 排名差 = best ? 比较推荐指标(metrics, best.metrics, input.defensePreference) : -1
     if (
       meetsRequirements(metrics) &&
       inScope(plan) &&
       (!best ||
-        metrics.dps > best.metrics.dps ||
-        (metrics.dps === best.metrics.dps &&
+        排名差 < 0 ||
+        (排名差 === 0 &&
           (grade > best.grade || (grade === best.grade && wineValue(plan) < wineValue(best.plan)))))
     )
       best = result
@@ -489,7 +516,7 @@ function 搜索推荐方案(
       : input.initial.consumables.filter((name) => !enhancementNames.has(name)),
   })
   const extraSeeds = startingPlans.filter(inScope).map(evaluate)
-  // 可行性核查不按伤害裁剪：同一加速和套装状态只需保留御劲最高的组合。
+  // 可行性核查按加速和套装分组，保留御劲与所选防御差值各有优势的组合。
   // 先检查当前装备搭配不同增益，再检查换装，避免把加速药食路径提前丢弃。
   if (!best) {
     const gearByKey = new Map(GEAR_ITEMS.map((item) => [item.key, item]))
@@ -510,7 +537,10 @@ function 搜索推荐方案(
         Object.entries(item.sets).some(
           ([pieces, bonus]) =>
             Number(pieces) <= maxPieces &&
-            (Number(bonus.haste_base) || Number(bonus.toughness_base)),
+            (Number(bonus.haste_base) ||
+              Number(bonus.toughness_base) ||
+              (defensePreference &&
+                Object.keys(bonus).some((key) => /shield|vitality|all_major/.test(key)))),
         )
       )
         coupledSets.add(item.setId)
@@ -526,25 +556,29 @@ function 搜索推荐方案(
       return JSON.stringify([metrics.haste, [...coupledSets].map((id) => counts.get(id) || 0)])
     }
     type 可行性状态 = { plan: 优化方案; metrics: 约束指标 }
+    const 占优 = (a: 约束指标, b: 约束指标) =>
+      a.toughness >= b.toughness && 防御差(a) >= 防御差(b)
+    const 需要重算面板 = coupledSets.size > 0 || !!defensePreference
     let states: 可行性状态[] = [{ plan: seed.plan, metrics: seed.metrics }]
     const orderedGroups = [
       ...groups.filter((group) => !group.slot),
       ...groups.filter((group) => group.slot),
     ]
-    onProgress?.({ percent: 0, stage: '核查GCD与御劲可行性', evaluations: evaluations() })
+    onProgress?.({ percent: 0, stage: '核查推荐条件可行性', evaluations: evaluations() })
     feasibility: for (let i = 0; i < orderedGroups.length; i++) {
       const group = orderedGroups[i]
       const choices = group.apply.map((apply) => ({
         apply,
         metrics: constraintsFor(apply(seed.plan)),
       }))
-      const next = new Map<string, 可行性状态>()
+      const next = new Map<string, 可行性状态[]>()
       for (const state of states) {
         for (const choice of choices) {
           const plan = choice.apply(state.plan)
-          const metrics = coupledSets.size
+          const metrics = 需要重算面板
             ? constraintsFor(plan)
             : {
+                ...state.metrics,
                 haste: state.metrics.haste + choice.metrics.haste - seed.metrics.haste,
                 toughness:
                   state.metrics.toughness + choice.metrics.toughness - seed.metrics.toughness,
@@ -555,12 +589,12 @@ function 搜索推荐方案(
             if (best) break feasibility
           }
           const key = stateKey(plan, metrics)
-          if (!next.has(key) || next.get(key)!.metrics.toughness < metrics.toughness) {
-            next.set(key, { plan, metrics })
-          }
+          const peers = next.get(key) || []
+          if (peers.some((peer) => 占优(peer.metrics, metrics))) continue
+          next.set(key, [...peers.filter((peer) => !占优(metrics, peer.metrics)), { plan, metrics }])
         }
       }
-      states = [...next.values()]
+      states = [...next.values()].flat()
       onProgress?.({
         percent: Math.round(((i + 1) / orderedGroups.length) * 30),
         stage: `核查可行性：${group.label}`,
@@ -578,11 +612,10 @@ function 搜索推荐方案(
     const selected = new Map<string, 候选结果>()
     // 不同惩罚强度保留越过节点后仍可由后续部位修复的高收益组合。
     for (const weight of [32, 8, 2, 0.5]) {
+      const score = (row: 候选结果) =>
+        Math.log(Math.max(1, row.metrics.dps)) - weight * row.violation
       const ranked = [...unique].sort(
-        (a, b) =>
-          Math.log(Math.max(1, b.metrics.dps)) -
-          weight * b.violation -
-          (Math.log(Math.max(1, a.metrics.dps)) - weight * a.violation),
+        (a, b) => score(b) - score(a) || 比较推荐指标(a.metrics, b.metrics, input.defensePreference),
       )
       for (const candidate of ranked.slice(0, 4)) selected.set(candidate.key, candidate)
     }
@@ -663,7 +696,7 @@ function 搜索推荐方案(
           const { panel } = panelFor(withWine)
           constraintEvaluations++
           if (
-            !meetsRequirements({ haste: panel.hasteRating, toughness: panel.toughness * 100 }) ||
+            !meetsRequirements(panelConstraints(panel)) ||
             !inScope(withWine)
           )
             continue

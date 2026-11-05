@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { EQUIPMENT_EFFECT_ASSUMPTION } from '@/心法模块/心法/明尊琉璃体/装备特效计算'
 import {
   Alert,
   Button,
@@ -30,12 +29,13 @@ import {
 import { 明尊小药小吃, 圣浴常驻名称 } from '@/心法模块/心法/明尊琉璃体/增益'
 import 循环列表 from '@/心法模块/心法/明尊琉璃体/计算循环'
 import type {
+  防御倾向,
   优化方案,
   方案优化输入,
   方案优化结果,
   方案优化进度,
 } from '@/心法模块/心法/明尊琉璃体/方案优化'
-import { 是橙色腰坠, 使用橙武推荐模型 } from '@/心法模块/心法/明尊琉璃体/方案优化'
+import { 是橙色腰坠, 比较推荐指标 } from '@/心法模块/心法/明尊琉璃体/方案优化'
 import { 获取档位对比循环 } from '@/心法模块/心法/明尊琉璃体/方案档位对比'
 import {
   规范理论循环名称,
@@ -52,6 +52,9 @@ import { 获取洗髓档位对比循环, 洗髓循环名称 } from '@/心法模�
 import { 获取洗髓计算设置 } from '@/心法模块/心法/洗髓经/计算'
 
 const 洗髓模式 = 获取当前数据().名称 === '洗髓经'
+const 推荐部位 = SLOTS.map(([key]) => key)
+const 防御名称 = { physicalShield: '外防', magicalShield: '内防' }
+const 防御点数格式 = new Intl.NumberFormat('zh-CN', { maximumFractionDigits: 2 })
 
 interface 方案优化入参 {
   循环待补充?: boolean
@@ -79,9 +82,10 @@ function 方案优化(props: 方案优化入参) {
   const [minToughness, setMinToughness] = useState(8)
   const [includeMowen, setIncludeMowen] = useState(false)
   const [includeHasteConsumables, setIncludeHasteConsumables] = useState(false)
+  const [enchantTier, setEnchantTier] = useState<72 | 90>(72)
+  const [defensePreference, setDefensePreference] = useState<防御倾向>('physicalShield')
   const [orangeWeaponLevel, setOrangeWeaponLevel] = useState(0)
   const [gearScope, setGearScope] = useState<方案优化输入['gearScope']>('includeStreamlined')
-  const [slots, setSlots] = useState<string[]>(SLOTS.map(([key]) => key))
   const [running, setRunning] = useState(false)
   const [progress, setProgress] = useState<方案优化进度>()
   const [singleResult, setResult] = useState<方案优化结果>()
@@ -95,18 +99,9 @@ function 方案优化(props: 方案优化入参) {
   const 奇穴 = useAppSelector((state) => state.data.当前奇穴信息)
   const 秘籍 = useAppSelector((state) => state.data.当前秘籍信息)
   const 目标名称 = useAppSelector((state) => state.data.当前输出计算目标名称)
-  const 圣浴常驻独立开启 =
-    !洗髓模式 && 增益数据?.团队增益?.some((item) => item.增益名称 === 圣浴常驻名称 && item.启用)
   const compareGcd = 洗髓模式 || mode === 'compare'
-  const orangeModel =
-    !洗髓模式 &&
-    (orangeWeaponLevel > 0 ||
-      (initial &&
-        使用橙武推荐模型({
-          initial,
-          slots,
-          orangeWeaponLevel,
-        })))
+  const 防御条件 = defensePreference === 'magicalShield' ? '内防高于外防' : '外防高于内防'
+  const orangeModel = !洗髓模式 && orangeWeaponLevel > 0
   const cycles = props.循环待补充
     ? []
     : 洗髓模式
@@ -126,7 +121,7 @@ function 方案优化(props: 方案优化入参) {
   )
   const other = comparison?.entries
     .filter((entry) => entry !== recommended && entry.result?.after)
-    .sort((a, b) => b.result!.after!.dps - a.result!.after!.dps)[0]
+    .sort((a, b) => 比较推荐指标(a.result!.after!, b.result!.after!, defensePreference))[0]
   const hasPlan = comparison
     ? comparison.entries.some((entry) => entry.result?.plan)
     : !!result?.plan
@@ -134,14 +129,18 @@ function 方案优化(props: 方案优化入参) {
     recommended?.result?.after && other?.result?.after
       ? recommended.result.after.dps - other.result.after.dps
       : undefined
+  const defenseDifference =
+    recommended?.result?.after && other?.result?.after
+      ? recommended.result.after[defensePreference] - other.result.after[defensePreference]
+      : 0
   const comparisonSummary = !recommended
-    ? 洗髓模式
-      ? `三个档位均未找到满足最低${minToughness}%御劲的可行方案，请调整装备范围或御劲要求。`
-      : '两个档位均未找到可行方案，请调整装备范围或御劲要求。'
+    ? `${洗髓模式 ? '三个档位' : '两个档位'}均未找到可行方案。需同时满足加速、最低御劲和${防御条件}。`
     : difference === undefined
       ? `推荐${recommended.cycleName}；${洗髓模式 ? '其余档位' : '另一档'}未找到可行方案。`
       : difference === 0
-        ? `可行方案秒伤相同，优先保留${recommended.cycleName}。`
+        ? defenseDifference > 0
+          ? `可行方案秒伤相同，推荐${recommended.cycleName}，比${other!.cycleName}高${防御点数格式.format(defenseDifference)}点${防御名称[defensePreference]}。`
+          : `可行方案秒伤相同，优先保留${recommended.cycleName}。`
         : `推荐${recommended.cycleName}，比${other!.cycleName}高${difference.toFixed(2)}秒伤${
             other!.result!.after!.dps > 0
               ? `（${((difference / other!.result!.after!.dps) * 100).toFixed(2)}%）`
@@ -195,12 +194,7 @@ function 方案优化(props: 方案优化入参) {
             true,
           )
       setInitial(before)
-      const requestCycle = 使用橙武推荐模型({
-        kungfu: 洗髓模式 ? 'xsj' : 'mzllt',
-        initial: before,
-        slots,
-        orangeWeaponLevel,
-      })
+      const requestCycle = orangeModel
         ? 获取理论档位循环(Number(cycle.循环详情[0].循环加速等级) === 4 ? 0.75 : 0.8125)
         : cycle
       worker.current = 创建优化Worker()
@@ -220,7 +214,7 @@ function 方案优化(props: 方案优化入参) {
       worker.current.onerror = () => {
         if (currentRun !== runId.current) return
         停止计算()
-        message.error('方案推荐计算中断，请刷新页面后重试')
+        message.error('配装方案推荐计算中断，请刷新页面后重试')
       }
       worker.current.postMessage({
         kungfu: 洗髓模式 ? 'xsj' : 'mzllt',
@@ -232,6 +226,8 @@ function 方案优化(props: 方案优化入参) {
         minToughness,
         includeMowen,
         includeHasteConsumables,
+        enchantTier,
+        defensePreference,
         orangeWeaponLevel,
         gearScope,
         compareGcd,
@@ -239,7 +235,7 @@ function 方案优化(props: 方案优化入参) {
           .filter((item) => !洗髓模式 && item.增益名称 === 圣浴常驻名称)
           .map((item) => ({ ...item })),
         gearKeys: props.获取候选装备键(),
-        slots,
+        slots: 推荐部位,
         defaultEmbedLevel: props.默认镶嵌宝石等级,
       })
     } catch (error) {
@@ -321,10 +317,10 @@ function 方案优化(props: 方案优化入参) {
           setOpen(true)
         }}
       >
-        方案推荐
+        配装方案推荐
       </Button>
       <Modal
-        title='配装与常规增益推荐'
+        title='配装方案推荐'
         open={open}
         width={1080}
         centered
@@ -336,7 +332,7 @@ function 方案优化(props: 方案优化入参) {
             <span>
               {props.循环待补充
                 ? '循环模板待补充，暂不计算推荐方案'
-                : '采用本次搜索找到的最佳可行方案'}
+                : `成装需满足${防御条件}，符合条件的方案按秒伤推荐`}
             </span>
             <div>
               {running ? (
@@ -416,14 +412,7 @@ function 方案优化(props: 方案优化入参) {
                   aria-label='橙武品级'
                   disabled={running}
                   value={orangeWeaponLevel}
-                  onChange={(value) =>
-                    设置条件(() => {
-                      const level = Number(value)
-                      setOrangeWeaponLevel(level)
-                      if (level && !slots.includes('primary_weapon'))
-                        setSlots([...slots, 'primary_weapon'])
-                    })
-                  }
+                  onChange={(value) => 设置条件(() => setOrangeWeaponLevel(Number(value)))}
                   options={[
                     { label: '不选择橙武', value: 0 },
                     ...(洗髓模式 ? XISUI_ORANGE_WEAPON_LEVELS : MINGZUN_ORANGE_WEAPON_LEVELS).map(
@@ -448,6 +437,32 @@ function 方案优化(props: 方案优化入参) {
                 onChange={(value) => 设置条件(() => setMinToughness(value ?? 0))}
               />
             </label>
+            <label>
+              附魔档位{' '}
+              <Select
+                aria-label='附魔档位'
+                disabled={running}
+                value={enchantTier}
+                onChange={(value) => 设置条件(() => setEnchantTier(value))}
+                options={[
+                  { label: '72档', value: 72 },
+                  { label: '90档', value: 90 },
+                ]}
+              />
+            </label>
+            <label>
+              防御倾向{' '}
+              <Select
+                aria-label='防御倾向'
+                disabled={running}
+                value={defensePreference}
+                onChange={(value) => 设置条件(() => setDefensePreference(value))}
+                options={[
+                  { label: '外防', value: 'physicalShield' },
+                  { label: '内防', value: 'magicalShield' },
+                ]}
+              />
+            </label>
           </div>
           <div className={styles.toggleFields}>
             <Checkbox
@@ -462,43 +477,10 @@ function 方案优化(props: 方案优化入参) {
               checked={includeHasteConsumables}
               onChange={(e) => 设置条件(() => setIncludeHasteConsumables(e.target.checked))}
             >
-              加速增益
+              计算加速小吃小药
             </Checkbox>
           </div>
         </div>
-        <div className={styles.slots}>
-          <span>参与优化的装备及附魔部位</span>
-          <Checkbox.Group
-            disabled={running}
-            value={slots}
-            options={SLOTS.map(([value, label]) => ({
-              value,
-              label,
-              disabled: !!orangeWeaponLevel && value === 'primary_weapon',
-            }))}
-            onChange={(value) =>
-              设置条件(() => {
-                const next = value as string[]
-                setSlots(next)
-              })
-            }
-          />
-        </div>
-        <Alert
-          type='info'
-          showIcon
-          message={
-            props.循环待补充
-              ? '洗髓经循环模板待补充。装备、附魔、增益及参与部位沿用本界面设置，补充循环后再接入推荐计算。'
-              : `装备沿用配装器筛选范围，${gearScope === 'defensive' ? '参与优化的部位仅选择防御装备' : '可选择防御装备和精简/特效内功装备'}，${orangeWeaponLevel ? `固定装备${orangeWeaponLevel}品${洗髓模式 ? '洗髓' : '明尊'}橙武，不会更换其他武器，不受普通装备品级筛选限制` : '排除橙武候选'}；其他品级以配装器筛选范围为准，全部候选按伤害收益比较，同伤害优先高品级。装备加速达到模拟档位或更高即可参与，不为压低加速而降品。未参与的部位保持当前装备${洗髓模式 ? '' : '，已装备的橙武照常计入特效，不因候选排除而中断'}。附魔沿用各部位当前数值档位，排除御劲附魔，未选附魔保持空置。药品增强与食品增强须选择同属性组合。药食酒与阵眼参与优化，五彩石固定；同伤害下酒品优先低数值档位。${includeHasteConsumables ? '加速药品与食品参与优化。' : '加速药品与食品不参与优化，家园酒品仍参与。'}团队增益不计入。${圣浴常驻独立开启 ? '圣浴常驻按自身开关独立计入。' : ''}${
-                  compareGcd
-                    ? `分别使用${cycles
-                        .map((cycle) => 格式化明尊GCD(cycle.名称))
-                        .join('、')}，在相同御劲、装备范围和增益条件下独立寻优。`
-                    : `使用${格式化明尊GCD(cycleName)}寻优。`
-                }大附魔保留各部位已选档位，随候选装备匹配伤/御类别，属性、随机增伤与附加伤害均参与比较。随机大附魔按概率和冷却估算期望收益。${EQUIPMENT_EFFECT_ASSUMPTION}`
-          }
-        />
         {initial && (
           <p className={styles.stone}>
             五彩石：{STONES.find((item) => item.id === initial.stone)?.name || '未选择'}
@@ -553,6 +535,13 @@ function 方案优化(props: 方案优化入参) {
                       : '—',
                 },
                 {
+                  title: '外防 / 内防',
+                  render: (_, entry) =>
+                    entry.result?.after
+                      ? `${防御点数格式.format(entry.result.after.physicalShield)} / ${防御点数格式.format(entry.result.after.magicalShield)}`
+                      : '—',
+                },
+                {
                   title: '结果',
                   render: (_, entry) =>
                     entry.error ||
@@ -592,7 +581,7 @@ function 方案优化(props: 方案优化入参) {
           <Alert
             type='warning'
             showIcon
-            message='本次搜索未找到同时满足GCD和御劲要求的方案，请调整参与部位、装备筛选范围或御劲要求。'
+            message={`本次搜索未找到同时满足加速、最低御劲及${防御条件}的方案。`}
           />
         )}
         {result?.after && (
@@ -624,6 +613,16 @@ function 方案优化(props: 方案优化入参) {
                   key: 'toughness',
                   label: '御劲',
                   children: `${result.after.toughness.toFixed(2)}%`,
+                },
+                {
+                  key: 'physicalShield',
+                  label: '外防',
+                  children: `${防御点数格式.format(result.before.physicalShield)} → ${防御点数格式.format(result.after.physicalShield)} 点`,
+                },
+                {
+                  key: 'magicalShield',
+                  label: '内防',
+                  children: `${防御点数格式.format(result.before.magicalShield)} → ${防御点数格式.format(result.after.magicalShield)} 点`,
                 },
               ]}
             />

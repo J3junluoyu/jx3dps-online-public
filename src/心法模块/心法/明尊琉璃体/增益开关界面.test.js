@@ -164,6 +164,12 @@ test.each(['明尊面板', '洗髓面板'])('%s的满层差值与溢出按9600�
   }
 })
 
+test.each(['明尊面板', '洗髓面板'])('%s的内外防悬浮提示分别显示当前防御点数', (key) => {
+  const 属性 = { [key]: { physicalShield: 554, magicalShield: 901 } }
+  expect(获取面板显示数据数值('外防', 属性)).toBe('当前外功防御：554 点')
+  expect(获取面板显示数据数值('内防', 属性)).toBe('当前内功防御：901 点')
+})
+
 test('只保留角色属性旁的一个启用增益入口，一次点击同时更新面板、实际伤害和自适应GCD', () => {
   const gains = JSON.stringify(mockState.data.增益数据)
   const before = mockDispatch(秒伤计算())

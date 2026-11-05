@@ -1,4 +1,4 @@
-import { 优化明尊方案, 获取同档附魔, 获取优化GCD } from './方案优化'
+import { 优化明尊方案, 获取同档附魔, 获取优化GCD, 满足面板防御倾向 } from './方案优化'
 import { GEAR_ITEMS, ENCHANTS, STONES, SLOTS, slotPosition, calculateLoadout } from './装备'
 import { DEFAULT_SETTINGS, calculateAttributes } from './计算'
 import { 获取明尊增益属性, 明尊小药小吃 } from './增益'
@@ -87,6 +87,44 @@ test('御劲附魔不参与候选，当前使用御劲附魔时仍可改选同�
   }
 })
 
+test.each([72, 90])('指定%s档时，空附魔和其他档位全部参与且推荐方案可以还原', (enchantTier) => {
+  const initial = 初始方案(true)
+  initial.slots.hat.enchantId = 0
+  initial.slots.necklace.enchantId = 16632
+  expect(获取同档附魔(0, 'hat', enchantTier)).toEqual(
+    enchantTier === 72 ? [16498, 16500] : [16516, 16518],
+  )
+  expect(获取同档附魔(0, 'wrist', 72)).toEqual([16545, 16546, 16547])
+  const minToughness = calculateAttributes(
+    calculateLoadout(initial.slots, initial.stone).stats,
+    DEFAULT_SETTINGS,
+  ).toughness * 100 + 0.1
+  const result = 优化明尊方案({
+    ...输入(循环列表.find((item) => item.循环详情[0].循环加速等级 === 3)),
+    initial,
+    enchantTier,
+    gearKeys: Object.values(initial.slots).map(({ key }) => key),
+    allowHigherHaste: true,
+    includeMowen: false,
+    includeHasteConsumables: false,
+    minToughness,
+  })
+  expect(result.plan).toBeDefined()
+  expect(result.plan.consumables.some((name) => name.startsWith('玉露酒'))).toBe(true)
+  for (const [slot, choice] of Object.entries(result.plan.slots)) {
+    const enchant = ENCHANTS.find(({ id }) => id === choice.enchantId)
+    expect(enchant.position).toBe(slotPosition(slot))
+    expect(Object.values(enchant.attributes)).toEqual([enchantTier])
+    expect(enchant.name).not.toMatch(/御劲|元气|力道|根骨|身法/)
+  }
+  expect(获取明尊配装(转换明尊配装(result.plan.slots, result.plan.stone))).toEqual({
+    slots: result.plan.slots,
+    stone: result.plan.stone,
+  })
+  expect(initial.slots.hat.enchantId).toBe(0)
+  expect(initial.slots.necklace.enchantId).toBe(16632)
+})
+
 test('优化使用的快速计算与技能详情计算总伤和秒伤完全相同', () => {
   const plan = 初始方案()
   const stats = calculateLoadout(plan.slots, plan.stone).stats
@@ -98,6 +136,37 @@ test('优化使用的快速计算与技能详情计算总伤和秒伤完全相�
     expect(fast.秒伤).toBe(full.秒伤)
     expect(fast.计算结果技能列表).toEqual([])
   }
+})
+
+test('外防和内防倾向要求成装面板对应防御更高，无可行方案时不返回反向装备', () => {
+  const input = {
+    ...输入(循环列表.find((item) => item.循环详情[0].循环加速等级 === 3)),
+    initial: 初始方案(true),
+    slots: ['hat'],
+    gearKeys: ['armors:112395', 'armors:112626'],
+    allowHigherHaste: true,
+    minToughness: 5,
+  }
+  const 外防 = 优化明尊方案({ ...input, defensePreference: 'physicalShield' })
+  const 内防 = 优化明尊方案({ ...input, defensePreference: 'magicalShield' })
+  expect(外防.plan.slots.hat.key).toBe('armors:112395')
+  expect(内防.plan.slots.hat.key).toBe('armors:112626')
+  expect(外防.after.physicalShield).toBeGreaterThan(外防.after.magicalShield)
+  expect(内防.after.magicalShield).toBeGreaterThan(内防.after.physicalShield)
+  for (const result of [外防, 内防]) {
+    expect(result.after.gcd).toBeLessThanOrEqual(0.8125)
+    expect(result.after.toughness).toBeGreaterThanOrEqual(input.minToughness)
+  }
+  expect(
+    优化明尊方案({
+      ...input,
+      gearKeys: ['armors:112395'],
+      defensePreference: 'magicalShield',
+    }).plan,
+  ).toBeUndefined()
+  expect(
+    满足面板防御倾向({ physicalShield: 15000, magicalShield: 15001 }, 'magicalShield'),
+  ).toBe(false)
 })
 
 test.each(循环列表)(

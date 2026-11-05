@@ -352,6 +352,10 @@ export const 获取面板显示数据数值 = (
     )
   }
   switch (key) {
+    case '外防':
+      return 面板 ? `当前外功防御：${面板.physicalShield} 点` : undefined
+    case '内防':
+      return 面板 ? `当前内功防御：${面板.magicalShield} 点` : undefined
     case '招式产生威胁':
       return '计算装备，精炼及镶嵌等的威胁加成，并扣除T气劲减仇'
     case '装分':

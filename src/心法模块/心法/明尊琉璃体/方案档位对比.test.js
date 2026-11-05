@@ -141,6 +141,29 @@ test('自适应理论两档秒伤相同时优先当前实际GCD，避免默认�
   expect(对比明尊加速档位(input).recommendedCycleName).toBe('0.8125理论循环')
 })
 
+test('跨档先筛选符合防御倾向的方案，再比秒伤，同秒伤时比较所选防御', () => {
+  const input = { ...输入(), cycle: 循环列表.find((cycle) => cycle.名称 === '自适应光明心循环') }
+  let 同秒伤 = false
+  jest.spyOn(优化模块, '优化明尊方案').mockImplementation((request) => {
+    const 高速档 = request.cycle.名称 === '0.75理论循环'
+    const result = 返回方案(request, 高速档 && !同秒伤 ? 1100 : 1000)
+    return {
+      ...result,
+      after: {
+        ...result.after,
+        physicalShield: 高速档 ? 4700 : 4800,
+        magicalShield: 高速档 ? 5100 : 4900,
+      },
+    }
+  })
+  const 推荐档位 = (defensePreference) =>
+    对比明尊加速档位({ ...input, defensePreference }).recommendedCycleName
+  expect(推荐档位('magicalShield')).toBe('0.75理论循环')
+  同秒伤 = true
+  expect(推荐档位('magicalShield')).toBe('0.75理论循环')
+  expect(推荐档位('physicalShield')).toBeUndefined()
+})
+
 test.each(['未找到方案', '优化报错'])('第一档%s时仍完成第二档，保留有效结果', (scenario) => {
   const input = 输入()
   jest

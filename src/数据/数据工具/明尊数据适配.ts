@@ -92,6 +92,7 @@ for (const 装备 of 明尊装备列表) {
     id: 装备.id,
     uid: 装备.key,
     装备名称: 装备.name.replace(/_[^（(]*/, ''),
+    图标ID: 装备.iconId,
     装备品级: 装备.level,
     装备主属性: '通用',
     装备类型: 装备.orangeWeapon

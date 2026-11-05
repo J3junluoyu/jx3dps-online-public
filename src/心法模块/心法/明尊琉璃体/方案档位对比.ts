@@ -1,7 +1,7 @@
 import type { 循环数据 } from '@/@types/循环'
 import 循环列表 from './计算循环'
 import { 获取理论档位循环, 规范理论循环名称, 自适应理论循环名称 } from './计算循环/理论循环'
-import { 优化明尊方案, 使用橙武推荐模型 } from './方案优化'
+import { 优化明尊方案, 使用橙武推荐模型, 比较推荐指标, 满足面板防御倾向 } from './方案优化'
 import type { 方案优化输入, 方案优化结果, 方案优化进度 } from './方案优化'
 import { 获取洗髓档位对比循环 } from '../洗髓经/循环'
 
@@ -29,7 +29,7 @@ export function 获取档位对比循环(cycleName: string): 循环数据[] {
   })
 }
 
-/** 每档从同一份配装与条件独立寻优，再比较可行方案的秒伤。 */
+/** 每档从同一份配装与条件独立寻优，先比秒伤，同秒伤时比较所选防御。 */
 export function 对比明尊加速档位(
   input: 方案优化输入,
   onProgress?: (progress: 方案优化进度) => void,
@@ -66,6 +66,10 @@ export function 对比明尊加速档位(
         entry.result = undefined
         throw new Error('推荐方案未满足加速或最低御劲要求')
       }
+      if (entry.result.after && !满足面板防御倾向(entry.result.after, input.defensePreference)) {
+        entry.result = undefined
+        throw new Error('推荐方案未满足所选防御倾向')
+      }
       evaluations += entry.result.evaluations
     } catch (error) {
       entry.error = error instanceof Error ? error.message : '该档位优化失败'
@@ -75,10 +79,12 @@ export function 对比明尊加速档位(
   let best: 档位优化结果 | undefined
   for (const entry of entries) {
     if (!entry.result?.plan || !entry.result.after) continue
+    const 排名差 = best
+      ? 比较推荐指标(entry.result.after, best.result!.after!, input.defensePreference)
+      : -1
     if (
-      !best ||
-      entry.result.after.dps > best.result!.after!.dps ||
-      (entry.result.after.dps === best.result!.after!.dps &&
+      排名差 < 0 ||
+      (排名差 === 0 &&
         (entry.cycleName === input.cycle.名称 ||
           (规范理论循环名称(input.cycle.名称) === 自适应理论循环名称 &&
             entry.gcd === entry.result.before.gcd)))

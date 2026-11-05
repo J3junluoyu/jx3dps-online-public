@@ -17,7 +17,7 @@ self.onmessage = (event) => {
   } catch (error) {
     self.postMessage({
       type: 'error',
-      error: error instanceof Error ? error.message : '方案推荐失败',
+      error: error instanceof Error ? error.message : '配装方案推荐失败',
     })
   }
 }

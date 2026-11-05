@@ -15,6 +15,7 @@ export interface GearItem {
   key: string
   id: number
   name: string
+  iconId: number
   school: string
   kind: string
   usage: string
@@ -77,7 +78,7 @@ const gearAliases = new Map<string, GearItem>()
 for (const row of [...eligibleGear].sort((a, b) => a.id - b.id)) {
   let canonical = row
   if (/^无(?:修|观)/.test(row.name)) {
-    const { key, id, ...attributes } = row
+    const { key, id, iconId, ...attributes } = row
     const signature = JSON.stringify(
       stableGearValue({ ...attributes, embed: Object.entries(row.embed) }),
     )
@@ -194,7 +195,7 @@ const mainAttributeEnchantKeys = new Set([
   'strength_base',
   'agility_base',
 ])
-const is72MainAttributeEnchant = (row: Enchant) => {
+export const is72MainAttributeEnchant = (row: Enchant) => {
   const prefix = mainAttributeEnchantPrefixes[row.position]
   const attributes = Object.entries(row.attributes).filter(([, value]) => value !== 0)
   return (

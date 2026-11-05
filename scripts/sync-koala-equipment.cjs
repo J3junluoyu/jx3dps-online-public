@@ -18,6 +18,7 @@ const convert = (category, row) => ({
   key: `${category}:${row.id}`,
   id: row.id,
   name: row.name,
+  iconId: row.icon_id,
   school: row.school,
   kind: row.kind,
   usage: row.usage,
