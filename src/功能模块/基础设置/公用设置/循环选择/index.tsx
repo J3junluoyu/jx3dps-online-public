@@ -11,7 +11,9 @@ import { 装备部位枚举 } from '@/@types/枚举'
 import { 装备位置部位枚举, 装备特效枚举 } from '@/@types/装备'
 import classNames from 'classnames'
 import { 格式化明尊GCD } from '@/心法模块/心法/明尊琉璃体/GCD显示'
-import { 自适应理论循环名称 } from '@/心法模块/心法/明尊琉璃体/计算循环/理论循环'
+import {
+  自适应光明心循环名称,
+} from '@/心法模块/心法/明尊琉璃体/计算循环/循环联动'
 import './index.css'
 
 const { 名称, 装备数据 } = 获取当前数据()
@@ -97,7 +99,7 @@ function 循环选择(props) {
     const 目标循环数据 = 全部循环?.find((item) => item?.名称 === val)
     dispatch(更新方案数据({ 属性: '当前计算循环名称', 数据: val }))
     if (!目标循环数据?.保留当前奇穴) {
-      dispatch(更新方案数据({ 属性: '当前奇穴信息', 数据: 目标循环数据?.奇穴 }))
+      dispatch(更新方案数据({ 属性: '当前奇穴信息', 数据: 目标循环数据?.奇穴, 不联动循环: true }))
     }
     const 实际计算循环秘籍信息 = 获取实际计算循环秘籍信息(val)
 
@@ -168,7 +170,9 @@ function 循环选择(props) {
               )
 
               const 快照计算列表 = 根据循环判断快照计算列表(item?.循环详情?.[0]?.技能详情 || [])
-              const 仅显示备注 = 名称 === '明尊琉璃体' && item.名称 === 自适应理论循环名称
+              const 仅显示备注 =
+                名称 === '明尊琉璃体' &&
+                item.名称 === 自适应光明心循环名称
               return (
                 <Select.Option
                   value={item?.名称}

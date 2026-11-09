@@ -1,6 +1,11 @@
 import type { 循环数据 } from '@/@types/循环'
 import 循环列表 from './计算循环'
-import { 获取理论档位循环, 规范理论循环名称, 自适应理论循环名称 } from './计算循环/理论循环'
+import {
+  获取理论档位循环,
+  规范理论循环名称,
+  自适应理论循环名称,
+  获取明尊自适应循环名称,
+} from './计算循环/理论循环'
 import { 优化明尊方案, 使用橙武推荐模型, 比较推荐指标, 满足面板防御倾向 } from './方案优化'
 import type { 方案优化输入, 方案优化结果, 方案优化进度 } from './方案优化'
 import { 获取洗髓档位对比循环 } from '../洗髓经/循环'
@@ -19,8 +24,8 @@ export interface 档位对比结果 {
 }
 
 /** 两档使用同一类循环；理论循环仅在用户主动选择时参与。 */
-export function 获取档位对比循环(cycleName: string): 循环数据[] {
-  if (规范理论循环名称(cycleName) === 自适应理论循环名称)
+export function 获取档位对比循环(cycleName: string, talents: readonly string[] = []): 循环数据[] {
+  if (规范理论循环名称(cycleName, talents) === 自适应理论循环名称)
     return [获取理论档位循环(0.75), 获取理论档位循环(0.8125)]
   return ['0.75', '0.8125'].map((gcd) => {
     const cycle = 循环列表.find((item) => item.名称 === `${gcd}GCD循环`)
@@ -29,7 +34,7 @@ export function 获取档位对比循环(cycleName: string): 循环数据[] {
   })
 }
 
-/** 每档从同一份配装与条件独立寻优，先比秒伤，同秒伤时比较所选防御。 */
+/** 每档独立寻优，跨档优先常规附魔方案，再比较秒伤和所选防御。 */
 export function 对比明尊加速档位(
   input: 方案优化输入,
   onProgress?: (progress: 方案优化进度) => void,
@@ -38,7 +43,10 @@ export function 对比明尊加速档位(
   const xisui = input.kungfu === 'xsj'
   const cycles = xisui
     ? 获取洗髓档位对比循环()
-    : 获取档位对比循环(使用橙武推荐模型(input) ? 自适应理论循环名称 : input.cycle.名称)
+    : 获取档位对比循环(
+        使用橙武推荐模型(input) ? 获取明尊自适应循环名称(input.settings.talents) : input.cycle.名称,
+        input.settings.talents,
+      )
   const entries: 档位优化结果[] = []
   let evaluations = 0
   for (const [index, cycle] of cycles.entries()) {
@@ -80,13 +88,15 @@ export function 对比明尊加速档位(
   for (const entry of entries) {
     if (!entry.result?.plan || !entry.result.after) continue
     const 排名差 = best
-      ? 比较推荐指标(entry.result.after, best.result!.after!, input.defensePreference)
+      ? Number(!!entry.result.usedToughnessEnchantFallback) -
+          Number(!!best.result!.usedToughnessEnchantFallback) ||
+        比较推荐指标(entry.result.after, best.result!.after!, input.defensePreference)
       : -1
     if (
       排名差 < 0 ||
       (排名差 === 0 &&
         (entry.cycleName === input.cycle.名称 ||
-          (规范理论循环名称(input.cycle.名称) === 自适应理论循环名称 &&
+          (规范理论循环名称(input.cycle.名称, input.settings.talents) === 自适应理论循环名称 &&
             entry.gcd === entry.result.before.gcd)))
     )
       best = entry

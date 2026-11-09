@@ -41,6 +41,7 @@ import {
   规范理论循环名称,
   自适应理论循环名称,
   获取理论档位循环,
+  获取明尊自适应循环名称,
 } from '@/心法模块/心法/明尊琉璃体/计算循环/理论循环'
 import type { 档位对比结果 } from '@/心法模块/心法/明尊琉璃体/方案档位对比'
 import { 格式化明尊GCD } from '@/心法模块/心法/明尊琉璃体/GCD显示'
@@ -106,7 +107,10 @@ function 方案优化(props: 方案优化入参) {
     ? []
     : 洗髓模式
       ? 获取洗髓档位对比循环()
-      : 获取档位对比循环(orangeModel ? 自适应理论循环名称 : props.循环名称 || 自适应理论循环名称)
+      : 获取档位对比循环(
+          orangeModel ? 获取明尊自适应循环名称(奇穴 || []) : props.循环名称 || 自适应理论循环名称,
+          奇穴 || [],
+        )
   const cycle =
     cycles.find((item) =>
       compareGcd ? item.名称 === props.循环名称 : item.名称.startsWith(`${mode}`),
@@ -137,6 +141,8 @@ function 方案优化(props: 方案优化入参) {
     ? `${洗髓模式 ? '三个档位' : '两个档位'}均未找到可行方案。需同时满足加速、最低御劲和${防御条件}。`
     : difference === undefined
       ? `推荐${recommended.cycleName}；${洗髓模式 ? '其余档位' : '另一档'}未找到可行方案。`
+      : other?.result?.usedToughnessEnchantFallback && !recommended.result?.usedToughnessEnchantFallback
+        ? `推荐${recommended.cycleName}，无需御劲附魔即可达标。${other.cycleName}使用御劲附魔补足。`
       : difference === 0
         ? defenseDifference > 0
           ? `可行方案秒伤相同，推荐${recommended.cycleName}，比${other!.cycleName}高${防御点数格式.format(defenseDifference)}点${防御名称[defensePreference]}。`
@@ -543,13 +549,12 @@ function 方案优化(props: 方案优化入参) {
                 },
                 {
                   title: '结果',
-                  render: (_, entry) =>
-                    entry.error ||
-                    (entry.result?.plan
-                      ? entry.cycleName === comparison.recommendedCycleName
-                        ? '推荐'
-                        : '可行'
-                      : '未找到满足条件的方案'),
+                  render: (_, entry) => {
+                    if (entry.error) return entry.error
+                    if (!entry.result?.plan) return '未找到满足条件的方案'
+                    const 状态 = entry.cycleName === comparison.recommendedCycleName ? '推荐' : '可行'
+                    return entry.result.usedToughnessEnchantFallback ? `${状态}（御劲附魔）` : 状态
+                  },
                 },
                 {
                   title: '操作',
@@ -612,7 +617,7 @@ function 方案优化(props: 方案优化入参) {
                 {
                   key: 'toughness',
                   label: '御劲',
-                  children: `${result.after.toughness.toFixed(2)}%`,
+                  children: `${result.after.toughness.toFixed(2)}%${result.usedToughnessEnchantFallback ? '（附魔补足）' : ''}`,
                 },
                 {
                   key: 'physicalShield',

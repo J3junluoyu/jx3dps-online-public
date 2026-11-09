@@ -23,7 +23,10 @@ import { matchMajorEnchant } from './大附魔'
 import { 计算洗髓面板, 计算洗髓循环, 获取洗髓增益属性 } from '../洗髓经/计算'
 import { 洗髓自适应循环 } from '../洗髓经/循环'
 import 明尊循环列表 from './计算循环'
-import { 获取理论档位循环 } from './计算循环/理论循环'
+import {
+  获取理论档位循环,
+  规范理论循环名称,
+} from './计算循环/理论循环'
 
 export interface 优化方案 {
   slots: Loadout
@@ -67,6 +70,7 @@ export interface 方案优化结果 {
   plan?: 优化方案
   before: 优化指标
   after?: 优化指标
+  usedToughnessEnchantFallback?: boolean
   evaluations: number
   elapsed: number
 }
@@ -96,7 +100,20 @@ export const 获取优化GCD = (加速: number, 基础帧数 = 16) =>
     (1024 * 基础帧数) / (1024 + Math.min(256, Math.floor((1024 * 加速) / ratingScale('haste')))),
   ) / 16
 
-export function 获取同档附魔(enchantId: number, position: string, 指定档位?: 72 | 90) {
+const 御劲附魔ID = new Set(
+  ENCHANTS.filter(
+    (item) =>
+      /御劲/.test(item.name) ||
+      Object.keys(item.attributes).some((key) => /^toughness(_|$)/.test(key)),
+  ).map((item) => item.id),
+)
+
+export function 获取同档附魔(
+  enchantId: number,
+  position: string,
+  指定档位?: 72 | 90,
+  允许御劲附魔 = false,
+) {
   const 当前 = ENCHANTS.find((item) => item.id === enchantId && item.position === position)
   const 档位 = 指定档位 ? String(指定档位) : 当前 && Object.values(当前.attributes).sort().join(',')
   if (!档位) return [0]
@@ -105,8 +122,7 @@ export function 获取同档附魔(enchantId: number, position: string, 指定�
       item.position === position &&
       Object.values(item.attributes).sort().join(',') === 档位 &&
       (!指定档位 || !is72MainAttributeEnchant(item)) &&
-      !/御劲/.test(item.name) &&
-      !Object.keys(item.attributes).some((key) => /^toughness(_|$)/.test(key)),
+      (允许御劲附魔 || !御劲附魔ID.has(item.id)),
   ).map((item) => item.id)
   return candidates.length ? candidates : [0]
 }
@@ -145,18 +161,73 @@ export function 优化明尊方案(
   if (使用橙武推荐模型(input)) {
     const tier = Number(input.cycle.循环详情[0]?.循环加速等级)
     if (tier === 3 || tier === 4)
-      input = { ...input, cycle: 获取理论档位循环(tier === 4 ? 0.75 : 0.8125) }
+      input = {
+        ...input,
+        cycle: 获取理论档位循环(tier === 4 ? 0.75 : 0.8125),
+      }
   }
+  const 可尝试御劲附魔 =
+    input.minToughness > 0 &&
+    input.slots.some((slot) =>
+      获取同档附魔(
+        input.initial.slots[slot]?.enchantId || 0,
+        slotPosition(slot),
+        input.enchantTier,
+        true,
+      ).some((id) => 御劲附魔ID.has(id)),
+    )
+  if (!可尝试御劲附魔) return 搜索完整装备范围(input, onProgress)
+
+  const started = Date.now()
+  const 常规 = 搜索完整装备范围(input, (progress) =>
+    onProgress?.({ ...progress, percent: Math.floor(progress.percent * 0.65) }),
+  )
+  if (常规.plan) {
+    onProgress?.({ percent: 100, stage: '计算完成', evaluations: 常规.evaluations })
+    return 常规
+  }
+
+  onProgress?.({ percent: 65, stage: '尝试御劲附魔', evaluations: 常规.evaluations })
+  const 备用 = 搜索完整装备范围(
+    input,
+    (progress) =>
+      onProgress?.({
+        ...progress,
+        percent: 65 + Math.floor(progress.percent * 0.35),
+        stage: `御劲附魔补足：${progress.stage}`,
+        evaluations: 常规.evaluations + progress.evaluations,
+      }),
+    true,
+  )
+  return {
+    ...备用,
+    usedToughnessEnchantFallback: input.slots.some((slot) =>
+      御劲附魔ID.has(备用.plan?.slots[slot]?.enchantId ?? 0),
+    ),
+    evaluations: 常规.evaluations + 备用.evaluations,
+    elapsed: Date.now() - started,
+  }
+}
+
+function 搜索完整装备范围(
+  input: 方案优化输入,
+  onProgress?: (progress: 方案优化进度) => void,
+  允许御劲附魔 = false,
+): 方案优化结果 {
   if (!input.exploreHighLevelCandidates || !input.slots.length)
-    return 搜索推荐方案(input, onProgress)
+    return 搜索推荐方案(input, onProgress, [], 允许御劲附魔)
   const started = Date.now()
   const highKeys = 获取最高品级候选(input)
-  const high = 搜索推荐方案({ ...input, gearKeys: highKeys }, (progress) =>
-    onProgress?.({
-      ...progress,
-      percent: Math.floor(progress.percent / 2),
-      stage: `补充高品级起点：${progress.stage}`,
-    }),
+  const high = 搜索推荐方案(
+    { ...input, gearKeys: highKeys },
+    (progress) =>
+      onProgress?.({
+        ...progress,
+        percent: Math.floor(progress.percent / 2),
+        stage: `补充高品级起点：${progress.stage}`,
+      }),
+    [],
+    允许御劲附魔,
   )
   // 高品级可行方案只是额外起点；始终再搜索用户范围内的全部装备，包括较低品级特效。
   const result = 搜索推荐方案(
@@ -169,6 +240,7 @@ export function 优化明尊方案(
         evaluations: high.evaluations + progress.evaluations,
       }),
     high.plan ? [high.plan] : [],
+    允许御劲附魔,
   )
   return {
     ...result,
@@ -219,6 +291,7 @@ function 搜索推荐方案(
   input: 方案优化输入,
   onProgress?: (progress: 方案优化进度) => void,
   startingPlans: 优化方案[] = [],
+  允许御劲附魔 = false,
 ): 方案优化结果 {
   if (!Number.isFinite(input.minToughness) || input.minToughness < 0 || input.minToughness > 100)
     throw new Error('御劲要求须为0到100之间的百分比')
@@ -286,7 +359,12 @@ function 搜索推荐方案(
       throw new Error(
         `${label}在当前${input.gearScope === 'defensive' ? '防御' : ''}装备筛选范围内没有候选装备`,
       )
-    const enchants = 获取同档附魔(current?.enchantId || 0, slotPosition(slot), input.enchantTier)
+    const enchants = 获取同档附魔(
+      current?.enchantId || 0,
+      slotPosition(slot),
+      input.enchantTier,
+      允许御劲附魔,
+    )
     validEnchants.set(slot, enchants)
     groups.push({
       label: `${label}与附魔`,
@@ -484,7 +562,8 @@ function 搜索推荐方案(
         ? [洗髓自适应循环]
         : 明尊循环列表.filter((cycle) =>
             cycle.循环详情.some(
-              (row) => row.技能详情.some((skill) => !!skill.明尊技能状态) === theoretical,
+              (row) =>
+                row.技能详情.some((skill) => !!skill.明尊技能状态) === theoretical,
             ),
           )
     )

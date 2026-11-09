@@ -74,9 +74,11 @@ test('附魔只使用当前部位同数值档，不提升档位且空附魔不�
   expect(获取同档附魔(16498, 'wrist')).toEqual([0])
 })
 
-test('御劲附魔不参与候选，当前使用御劲附魔时仍可改选同档体质', () => {
+test('常规候选排除御劲附魔，兜底时按部位及档位开放', () => {
   expect(获取同档附魔(16603, 'necklace')).toEqual([16602])
   expect(获取同档附魔(16618, 'necklace')).toEqual([16617])
+  expect(获取同档附魔(0, 'necklace', 72, true)).toEqual([16602, 16603])
+  expect(获取同档附魔(0, 'necklace', 90, true)).toEqual([16617, 16618])
   for (const enchant of ENCHANTS) {
     const candidates = 获取同档附魔(enchant.id, enchant.position)
     for (const id of candidates.filter(Boolean)) {
@@ -85,6 +87,55 @@ test('御劲附魔不参与候选，当前使用御劲附魔时仍可改选同�
       expect(Object.keys(item.attributes).some((key) => key.startsWith('toughness'))).toBe(false)
     }
   }
+})
+
+test.each([
+  [72, 16602, 16603],
+  [90, 16617, 16618],
+])('%s档御劲附魔仅在其他来源无法达标时补足', (enchantTier, 常规附魔, 御劲附魔) => {
+  const initial = 初始方案(true)
+  initial.slots.necklace.enchantId = 0
+  const 酒 = 明尊小药小吃.filter((item) => item.考拉属性.toughness_base > 0).sort(
+    (a, b) => b.考拉属性.toughness_base - a.考拉属性.toughness_base,
+  )[0].小吃名称
+  const 计算最高御劲 = (enchantId) => {
+    const slots = { ...initial.slots, necklace: { ...initial.slots.necklace, enchantId } }
+    const stats = calculateLoadout(slots, initial.stone).stats
+    return Math.max(
+      ...['', ...明尊阵眼.map((item) => item.阵眼名称)]
+        .filter((name) => name !== '莫问阵')
+        .map((name) =>
+          calculateAttributes(stats, {
+            ...DEFAULT_SETTINGS,
+            gains: 获取明尊增益属性({ 阵眼: name, 小吃: [酒], 团队增益: [] }, true),
+          }).toughness * 100,
+        ),
+    )
+  }
+  const 常规上限 = 计算最高御劲(常规附魔)
+  const input = {
+    ...输入(循环列表.find((item) => item.循环详情[0].循环加速等级 === 3)),
+    initial,
+    slots: ['necklace'],
+    gearKeys: [initial.slots.necklace.key],
+    enchantTier,
+    allowHigherHaste: true,
+    includeMowen: false,
+    includeHasteConsumables: false,
+    exploreHighLevelCandidates: true,
+    minToughness: 常规上限,
+  }
+  const 常规 = 优化明尊方案(input)
+  expect(常规.plan.slots.necklace.enchantId).toBe(常规附魔)
+  expect(常规.plan.consumables).toContain(酒)
+  expect(常规.usedToughnessEnchantFallback).toBeFalsy()
+
+  const minToughness = (常规上限 + 计算最高御劲(御劲附魔)) / 2
+  expect(minToughness).toBeGreaterThan(常规上限)
+  const 备用 = 优化明尊方案({ ...input, minToughness })
+  expect(备用.plan.slots.necklace.enchantId).toBe(御劲附魔)
+  expect(备用.after.toughness).toBeGreaterThanOrEqual(minToughness)
+  expect(备用.usedToughnessEnchantFallback).toBe(true)
 })
 
 test.each([72, 90])('指定%s档时，空附魔和其他档位全部参与且推荐方案可以还原', (enchantTier) => {

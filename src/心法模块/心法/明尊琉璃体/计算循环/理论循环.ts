@@ -1,16 +1,11 @@
 import type { 循环数据 } from '@/@types/循环'
 import 零点七五技能 from './0.75理论循环数据.json'
 import 零点八一二五技能 from './0.8125理论循环数据.json'
+import { 自适应光明心循环名称 } from './循环联动'
+export * from './循环联动'
 
-export const 自适应理论循环名称 = '自适应光明心循环'
-export const 旧理论循环名称 = ['自适应理论循环', '0.75理论循环', '0.8125理论循环', '0.81理论循环']
-export function 规范理论循环名称(名称: string) {
-  return [...旧理论循环名称, '0.75GCD循环', '0.8125GCD循环'].includes(名称)
-    ? 自适应理论循环名称
-    : 名称
-}
 const 光明心循环: 循环数据 = {
-  名称: 自适应理论循环名称,
+  名称: 自适应光明心循环名称,
   类型: '默认',
   提供者: '模拟',
   自动选择: false,

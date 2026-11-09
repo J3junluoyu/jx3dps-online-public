@@ -68,8 +68,14 @@
   width: calc(33% - 4px);
 }
 
+.mingzun-cycle-settings {
+  gap: 8px;
+}
+
 .mingzun-cycle-settings > .ant-btn {
-  width: 100%;
+  flex: 1;
+  min-width: 0;
+  width: auto;
 }
 
 .character-config-actions {
