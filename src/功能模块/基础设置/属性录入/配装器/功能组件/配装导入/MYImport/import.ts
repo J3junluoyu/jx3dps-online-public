@@ -1,7 +1,10 @@
 import { 使用五十级装备 } from '@/心法模块/模块工具/心法模式'
 import 获取当前数据 from '@/数据/数据工具/获取当前数据'
-import { 获取明尊装备条目 } from '@/数据/数据工具/明尊数据适配'
+import { 明尊附魔数据, 获取明尊装备条目 } from '@/数据/数据工具/明尊数据适配'
 import { 大附魔ID } from '@/数据/常量/装备常量'
+import { 装备部位枚举 } from '@/@types/枚举'
+import { findGearItem } from '@/心法模块/心法/明尊琉璃体/装备'
+import { matchMajorEnchant } from '@/心法模块/心法/明尊琉璃体/大附魔'
 import 五彩石映射 from '@/数据/常量/五彩石映射.json'
 import 附魔映射 from '@/数据/常量/附魔映射'
 import DecompressLUAData from './util'
@@ -22,6 +25,7 @@ export const getEquipData = (data) => {
   const decompressData = DecompressLUAData(data) || {}
 
   const { 装备数据, 五彩石, 功法, 名称 } = 获取当前数据()
+  const 五十级模式 = 使用五十级装备(名称)
 
   const 全部五彩石数据 = 五彩石?.[6]
 
@@ -39,11 +43,6 @@ export const getEquipData = (data) => {
     const 镶嵌孔列表 = item?.aDiamondEnchant
     const 识别大附魔ID = item?.dwTemporaryEnchantID
     const 五彩石ID = item?.dwItemFEAEnchantID
-    const 实际附魔 = 附魔映射?.[附魔ID] || ''
-    if (item?.dwPermanentEnchantID && !实际附魔 && +item?.dwPermanentEnchantID !== 420) {
-      未内置附魔列表.push(item?.dwPermanentEnchantID)
-    }
-
     let 装备部位 = JCLEquipPositionMap?.[部位ID]
     const 镶嵌孔数据 = 镶嵌孔列表?.map((item) => 五行石映射?.[item] || 8)
 
@@ -52,8 +51,17 @@ export const getEquipData = (data) => {
     if (装备部位 === '戒指_2') {
       装备部位 = '戒指'
     }
+    const 实际附魔 = 五十级模式
+      ? 明尊附魔数据.find(
+          (附魔) =>
+            附魔.id === +附魔ID && 附魔.附魔支持部位.includes(装备部位枚举[装备部位]),
+        )?.附魔名称
+      : 附魔映射?.[附魔ID]
+    if (附魔ID && !实际附魔 && +附魔ID !== 420) {
+      未内置附魔列表.push(附魔ID)
+    }
     if (装备部位) {
-      const 装备原始数据 = 使用五十级装备(名称)
+      const 装备原始数据 = 五十级模式
         ? 获取明尊装备条目(装备部位, +装备ID)
         : 装备数据[装备部位]?.find((data) => +(data.id || 0) === +装备ID)
 
@@ -73,7 +81,12 @@ export const getEquipData = (data) => {
         识别装备列表.push(装备原始数据)
 
         // 判断大附魔
-        if (DaFuMoMap[装备部位]) {
+        if (五十级模式 && DaFuMoMap[装备部位]) {
+          const 原始装备 = findGearItem(装备原始数据.uid || '')
+          const 大附魔 = 原始装备 && matchMajorEnchant(+识别大附魔ID, 原始装备.position, 原始装备.kind)
+          equip[装备位置映射].大附魔 = 大附魔?.id || 0
+          if (大附魔) 识别大附魔列表.push(大附魔.name)
+        } else if (DaFuMoMap[装备部位]) {
           // 先判断ID
           if (识别大附魔ID) {
             if (大附魔ID?.英雄?.some((a) => +识别大附魔ID === +a)) {

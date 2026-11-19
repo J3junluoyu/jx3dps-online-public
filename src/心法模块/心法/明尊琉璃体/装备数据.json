@@ -1,5 +1,7 @@
 {
   "commit": "ee2c4c0f502c82a3ab615355cdc80073b6bf1713",
+  "clientSocketUpdate": {"version":"1.6.0.10083","date":"2026-11-12","attributeId":116262,"previousValue":29,"value":389},
+  "clientStrainUpdate": {"version":"1.6.0.10090","date":"2026-11-19","hotfixDate":"2026-11-16"},
   "items": [
     {
       "key": "armors:111943",
@@ -25,7 +27,7 @@
       },
       "embed": {
         "vitality_base": 304,
-        "threat_gain": 29
+        "threat_gain": 389
       },
       "setId": 6981,
       "sets": {
@@ -93,7 +95,7 @@
       },
       "embed": {
         "dodge_base": 304,
-        "threat_gain": 29
+        "threat_gain": 389
       },
       "setId": 6981,
       "sets": {
@@ -128,7 +130,7 @@
       },
       "embed": {
         "vitality_base": 304,
-        "threat_gain": 29
+        "threat_gain": 389
       },
       "setId": 6981,
       "sets": {
@@ -160,7 +162,7 @@
         "threat_gain": 178
       },
       "embed": {
-        "threat_gain": 29,
+        "threat_gain": 389,
         "vitality_base": 304
       },
       "setId": 6981,
@@ -230,7 +232,7 @@
       },
       "embed": {
         "vitality_base": 304,
-        "threat_gain": 29
+        "threat_gain": 389
       },
       "setId": 6999,
       "sets": {
@@ -306,7 +308,7 @@
       },
       "embed": {
         "vitality_base": 304,
-        "threat_gain": 29
+        "threat_gain": 389
       },
       "setId": 6999,
       "sets": {
@@ -341,7 +343,7 @@
         "threat_gain": 178
       },
       "embed": {
-        "threat_gain": 29,
+        "threat_gain": 389,
         "magical_shield_base": 304
       },
       "setId": 6999,
@@ -380,7 +382,7 @@
       },
       "embed": {
         "vitality_base": 304,
-        "threat_gain": 29
+        "threat_gain": 389
       },
       "setId": 0,
       "sets": {}
@@ -441,7 +443,7 @@
         "threat_gain": 178
       },
       "embed": {
-        "threat_gain": 29,
+        "threat_gain": 389,
         "physical_shield_base": 304
       },
       "setId": 0,
@@ -528,7 +530,7 @@
         "threat_gain": 178
       },
       "embed": {
-        "threat_gain": 29,
+        "threat_gain": 389,
         "vitality_base": 304
       },
       "setId": 0,
@@ -649,7 +651,7 @@
       },
       "embed": {
         "physical_shield_base": 304,
-        "threat_gain": 29
+        "threat_gain": 389
       },
       "setId": 0,
       "sets": {}
@@ -710,7 +712,7 @@
         "threat_gain": 178
       },
       "embed": {
-        "threat_gain": 29,
+        "threat_gain": 389,
         "magical_shield_base": 304
       },
       "setId": 0,
@@ -807,7 +809,7 @@
       },
       "embed": {
         "vitality_base": 304,
-        "threat_gain": 29
+        "threat_gain": 389
       },
       "setId": 6999,
       "sets": {
@@ -883,7 +885,7 @@
       },
       "embed": {
         "vitality_base": 304,
-        "threat_gain": 29
+        "threat_gain": 389
       },
       "setId": 6999,
       "sets": {
@@ -918,7 +920,7 @@
         "threat_gain": 205
       },
       "embed": {
-        "threat_gain": 29,
+        "threat_gain": 389,
         "magical_shield_base": 304
       },
       "setId": 6999,
@@ -957,7 +959,7 @@
       },
       "embed": {
         "vitality_base": 304,
-        "threat_gain": 29
+        "threat_gain": 389
       },
       "setId": 0,
       "sets": {}
@@ -1018,7 +1020,7 @@
         "threat_gain": 205
       },
       "embed": {
-        "threat_gain": 29,
+        "threat_gain": 389,
         "physical_shield_base": 304
       },
       "setId": 0,
@@ -1105,7 +1107,7 @@
         "threat_gain": 205
       },
       "embed": {
-        "threat_gain": 29,
+        "threat_gain": 389,
         "vitality_base": 304
       },
       "setId": 0,
@@ -1226,7 +1228,7 @@
       },
       "embed": {
         "physical_shield_base": 304,
-        "threat_gain": 29
+        "threat_gain": 389
       },
       "setId": 0,
       "sets": {}
@@ -1287,7 +1289,7 @@
         "threat_gain": 205
       },
       "embed": {
-        "threat_gain": 29,
+        "threat_gain": 389,
         "magical_shield_base": 304
       },
       "setId": 0,
@@ -2443,7 +2445,7 @@
       },
       "embed": {
         "vitality_base": 304,
-        "threat_gain": 29
+        "threat_gain": 389
       },
       "setId": 7019,
       "sets": {
@@ -2515,7 +2517,7 @@
       },
       "embed": {
         "dodge_base": 304,
-        "threat_gain": 29
+        "threat_gain": 389
       },
       "setId": 7019,
       "sets": {
@@ -2553,7 +2555,7 @@
       },
       "embed": {
         "physical_shield_base": 304,
-        "threat_gain": 29
+        "threat_gain": 389
       },
       "setId": 7019,
       "sets": {
@@ -2694,7 +2696,7 @@
       },
       "embed": {
         "physical_shield_base": 304,
-        "threat_gain": 29
+        "threat_gain": 389
       },
       "setId": 0,
       "sets": {}
@@ -2783,7 +2785,7 @@
       },
       "embed": {
         "physical_shield_base": 304,
-        "threat_gain": 29
+        "threat_gain": 389
       },
       "setId": 0,
       "sets": {}
@@ -3137,7 +3139,7 @@
       },
       "embed": {
         "vitality_base": 304,
-        "threat_gain": 29
+        "threat_gain": 389
       },
       "setId": 0,
       "sets": {}
@@ -3195,7 +3197,7 @@
       },
       "embed": {
         "dodge_base": 304,
-        "threat_gain": 29
+        "threat_gain": 389
       },
       "setId": 0,
       "sets": {}
@@ -3226,7 +3228,7 @@
       },
       "embed": {
         "physical_shield_base": 304,
-        "threat_gain": 29
+        "threat_gain": 389
       },
       "setId": 0,
       "sets": {}
@@ -3257,7 +3259,7 @@
       },
       "embed": {
         "vitality_base": 304,
-        "threat_gain": 29
+        "threat_gain": 389
       },
       "setId": 0,
       "sets": {}
@@ -3285,7 +3287,7 @@
         "threat_gain": 112
       },
       "embed": {
-        "threat_gain": 29,
+        "threat_gain": 389,
         "magical_shield_base": 304
       },
       "setId": 0,
@@ -3315,7 +3317,7 @@
       },
       "embed": {
         "vitality_base": 304,
-        "threat_gain": 29
+        "threat_gain": 389
       },
       "setId": 0,
       "sets": {}
@@ -3373,7 +3375,7 @@
       },
       "embed": {
         "dodge_base": 304,
-        "threat_gain": 29
+        "threat_gain": 389
       },
       "setId": 0,
       "sets": {}
@@ -3404,7 +3406,7 @@
       },
       "embed": {
         "physical_shield_base": 304,
-        "threat_gain": 29
+        "threat_gain": 389
       },
       "setId": 0,
       "sets": {}
@@ -3435,7 +3437,7 @@
       },
       "embed": {
         "vitality_base": 304,
-        "threat_gain": 29
+        "threat_gain": 389
       },
       "setId": 0,
       "sets": {}
@@ -3463,7 +3465,7 @@
         "threat_gain": 178
       },
       "embed": {
-        "threat_gain": 29,
+        "threat_gain": 389,
         "magical_shield_base": 304
       },
       "setId": 0,
@@ -4658,7 +4660,7 @@
         "vitality_base": 462,
         "magical_shield_base": 590,
         "toughness_base": 91,
-        "strain_base": 313
+        "strain_base": 366
       },
       "embed": {
         "magical_shield_base": 304
@@ -4684,7 +4686,7 @@
         "magical_shield_base": 204,
         "haste_base": 91,
         "toughness_base": 91,
-        "strain_base": 313
+        "strain_base": 366
       },
       "embed": {
         "vitality_base": 304
@@ -4708,7 +4710,7 @@
         "vitality_base": 462,
         "physical_shield_base": 590,
         "toughness_base": 91,
-        "strain_base": 313
+        "strain_base": 366
       },
       "embed": {
         "dodge_base": 304
@@ -4734,7 +4736,7 @@
         "magical_shield_base": 300,
         "haste_base": 92,
         "toughness_base": 92,
-        "strain_base": 321
+        "strain_base": 376
       },
       "embed": {
         "magical_shield_base": 304
@@ -6030,7 +6032,7 @@
         "strain_base": 386
       },
       "embed": {
-        "threat_gain": 29
+        "threat_gain": 389
       },
       "setId": 0,
       "sets": {}
@@ -6140,7 +6142,7 @@
         "strain_base": 312
       },
       "embed": {
-        "threat_gain": 29
+        "threat_gain": 389
       },
       "setId": 0,
       "sets": {}
@@ -6297,7 +6299,7 @@
         "strain_base": 351
       },
       "embed": {
-        "threat_gain": 29
+        "threat_gain": 389
       },
       "setId": 0,
       "sets": {}
@@ -7242,10 +7244,1114 @@
         "strain_base": 312
       },
       "embed": {
-        "threat_gain": 29
+        "threat_gain": 389
       },
       "setId": 0,
       "sets": {}
+    },
+    {
+      "key": "armors:111969",
+      "id": 111969,
+      "name": "苍黎·佑心护腕",
+      "iconId": 28531,
+      "school": "少林",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "wrist",
+      "level": 1110,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 32,
+        "magical_shield_base": 32
+      },
+      "magic": {
+        "vitality_base": 550,
+        "magical_shield_base": 706,
+        "toughness_base": 109,
+        "strain_base": 364,
+        "threat_gain": 178
+      },
+      "embed": {
+        "vitality_base": 304,
+        "threat_gain": 389
+      },
+      "setId": 6983,
+      "sets": {
+        "2": {
+          "event": "gain_1322_11"
+        },
+        "4": {
+          "recipe": "recipe_1975_1 | recipe_17250_1"
+        }
+      }
+    },
+    {
+      "key": "armors:111973",
+      "id": 111973,
+      "name": "苍黎·明悬护腕",
+      "iconId": 28543,
+      "school": "天策",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "wrist",
+      "level": 1110,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 32,
+        "magical_shield_base": 32
+      },
+      "magic": {
+        "vitality_base": 550,
+        "physical_shield_base": 706,
+        "toughness_base": 109,
+        "strain_base": 364,
+        "threat_gain": 178
+      },
+      "embed": {
+        "dodge_base": 304,
+        "physical_shield_base": 304
+      },
+      "setId": 6987,
+      "sets": {
+        "2": {
+          "event": "gain_1322_10"
+        },
+        "4": {
+          "recipe": "recipe_1973_1 | recipe_17250_1"
+        }
+      }
+    },
+    {
+      "key": "armors:111987",
+      "id": 111987,
+      "name": "苍黎·孤川护腕",
+      "iconId": 28465,
+      "school": "苍云",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "wrist",
+      "level": 1110,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 32,
+        "magical_shield_base": 32
+      },
+      "magic": {
+        "vitality_base": 550,
+        "physical_shield_base": 706,
+        "toughness_base": 109,
+        "strain_base": 364,
+        "threat_gain": 178
+      },
+      "embed": {
+        "dodge_base": 304,
+        "physical_shield_base": 304
+      },
+      "setId": 7001,
+      "sets": {
+        "2": {
+          "event": "gain_1322_13"
+        },
+        "4": {
+          "recipe": "recipe_1976_1 | recipe_17250_1"
+        }
+      }
+    },
+    {
+      "key": "armors:112001",
+      "id": 112001,
+      "name": "苍黎·佑心腰带",
+      "iconId": 28535,
+      "school": "少林",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "belt",
+      "level": 1110,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 23,
+        "magical_shield_base": 23
+      },
+      "magic": {
+        "vitality_base": 550,
+        "magical_shield_base": 706,
+        "toughness_base": 109,
+        "strain_base": 364,
+        "threat_gain": 178
+      },
+      "embed": {
+        "physical_shield_base": 304,
+        "vitality_base": 304
+      },
+      "setId": 6983,
+      "sets": {
+        "2": {
+          "event": "gain_1322_11"
+        },
+        "4": {
+          "recipe": "recipe_1975_1 | recipe_17250_1"
+        }
+      }
+    },
+    {
+      "key": "armors:112005",
+      "id": 112005,
+      "name": "苍黎·明悬腰带",
+      "iconId": 28547,
+      "school": "天策",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "belt",
+      "level": 1110,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 23,
+        "magical_shield_base": 23
+      },
+      "magic": {
+        "vitality_base": 550,
+        "physical_shield_base": 706,
+        "toughness_base": 109,
+        "strain_base": 364,
+        "threat_gain": 178
+      },
+      "embed": {
+        "vitality_base": 304,
+        "threat_gain": 389
+      },
+      "setId": 6987,
+      "sets": {
+        "2": {
+          "event": "gain_1322_10"
+        },
+        "4": {
+          "recipe": "recipe_1973_1 | recipe_17250_1"
+        }
+      }
+    },
+    {
+      "key": "armors:112019",
+      "id": 112019,
+      "name": "苍黎·孤川腰带",
+      "iconId": 28469,
+      "school": "苍云",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "belt",
+      "level": 1110,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 23,
+        "magical_shield_base": 23
+      },
+      "magic": {
+        "vitality_base": 550,
+        "physical_shield_base": 706,
+        "toughness_base": 109,
+        "strain_base": 364,
+        "threat_gain": 178
+      },
+      "embed": {
+        "vitality_base": 304,
+        "threat_gain": 389
+      },
+      "setId": 7001,
+      "sets": {
+        "2": {
+          "event": "gain_1322_13"
+        },
+        "4": {
+          "recipe": "recipe_1976_1 | recipe_17250_1"
+        }
+      }
+    },
+    {
+      "key": "armors:112033",
+      "id": 112033,
+      "name": "苍黎·佑心鞋",
+      "iconId": 28534,
+      "school": "少林",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "shoes",
+      "level": 1110,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 23,
+        "magical_shield_base": 23
+      },
+      "magic": {
+        "vitality_base": 550,
+        "physical_shield_base": 244,
+        "magical_shield_base": 353,
+        "haste_base": 109,
+        "toughness_base": 109,
+        "strain_base": 364,
+        "threat_gain": 178
+      },
+      "embed": {
+        "vitality_base": 304,
+        "physical_shield_base": 304
+      },
+      "setId": 6983,
+      "sets": {
+        "2": {
+          "event": "gain_1322_11"
+        },
+        "4": {
+          "recipe": "recipe_1975_1 | recipe_17250_1"
+        }
+      }
+    },
+    {
+      "key": "armors:112037",
+      "id": 112037,
+      "name": "苍黎·明悬鞋",
+      "iconId": 28546,
+      "school": "天策",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "shoes",
+      "level": 1110,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 23,
+        "magical_shield_base": 23
+      },
+      "magic": {
+        "vitality_base": 550,
+        "physical_shield_base": 244,
+        "magical_shield_base": 353,
+        "haste_base": 109,
+        "toughness_base": 109,
+        "strain_base": 364,
+        "threat_gain": 178
+      },
+      "embed": {
+        "vitality_base": 304,
+        "physical_shield_base": 304
+      },
+      "setId": 6987,
+      "sets": {
+        "2": {
+          "event": "gain_1322_10"
+        },
+        "4": {
+          "recipe": "recipe_1973_1 | recipe_17250_1"
+        }
+      }
+    },
+    {
+      "key": "armors:112051",
+      "id": 112051,
+      "name": "苍黎·孤川鞋",
+      "iconId": 28468,
+      "school": "苍云",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "shoes",
+      "level": 1110,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 23,
+        "magical_shield_base": 23
+      },
+      "magic": {
+        "vitality_base": 550,
+        "physical_shield_base": 244,
+        "magical_shield_base": 353,
+        "haste_base": 109,
+        "toughness_base": 109,
+        "strain_base": 364,
+        "threat_gain": 178
+      },
+      "embed": {
+        "vitality_base": 304,
+        "physical_shield_base": 304
+      },
+      "setId": 7001,
+      "sets": {
+        "2": {
+          "event": "gain_1322_13"
+        },
+        "4": {
+          "recipe": "recipe_1976_1 | recipe_17250_1"
+        }
+      }
+    },
+    {
+      "key": "armors:112065",
+      "id": 112065,
+      "name": "苍黎·佑心冠",
+      "iconId": 28532,
+      "school": "少林",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "hat",
+      "level": 1110,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 36,
+        "magical_shield_base": 36
+      },
+      "magic": {
+        "vitality_base": 707,
+        "physical_shield_base": 454,
+        "magical_shield_base": 314,
+        "haste_base": 140,
+        "toughness_base": 140,
+        "strain_base": 468,
+        "threat_gain": 178
+      },
+      "embed": {
+        "vitality_base": 304,
+        "threat_gain": 389
+      },
+      "setId": 6983,
+      "sets": {
+        "2": {
+          "event": "gain_1322_11"
+        },
+        "4": {
+          "recipe": "recipe_1975_1 | recipe_17250_1"
+        }
+      }
+    },
+    {
+      "key": "armors:112069",
+      "id": 112069,
+      "name": "苍黎·明悬冠",
+      "iconId": 28544,
+      "school": "天策",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "hat",
+      "level": 1110,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 36,
+        "magical_shield_base": 36
+      },
+      "magic": {
+        "vitality_base": 707,
+        "physical_shield_base": 454,
+        "magical_shield_base": 314,
+        "haste_base": 140,
+        "toughness_base": 140,
+        "strain_base": 468,
+        "threat_gain": 178
+      },
+      "embed": {
+        "vitality_base": 304,
+        "threat_gain": 389
+      },
+      "setId": 6987,
+      "sets": {
+        "2": {
+          "event": "gain_1322_10"
+        },
+        "4": {
+          "recipe": "recipe_1973_1 | recipe_17250_1"
+        }
+      }
+    },
+    {
+      "key": "armors:112083",
+      "id": 112083,
+      "name": "苍黎·孤川冠",
+      "iconId": 28466,
+      "school": "苍云",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "hat",
+      "level": 1110,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 36,
+        "magical_shield_base": 36
+      },
+      "magic": {
+        "vitality_base": 707,
+        "physical_shield_base": 454,
+        "magical_shield_base": 314,
+        "haste_base": 140,
+        "toughness_base": 140,
+        "strain_base": 468,
+        "threat_gain": 178
+      },
+      "embed": {
+        "vitality_base": 304,
+        "threat_gain": 389
+      },
+      "setId": 7001,
+      "sets": {
+        "2": {
+          "event": "gain_1322_13"
+        },
+        "4": {
+          "recipe": "recipe_1976_1 | recipe_17250_1"
+        }
+      }
+    },
+    {
+      "key": "armors:112097",
+      "id": 112097,
+      "name": "苍黎·佑心衣",
+      "iconId": 28530,
+      "school": "少林",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "jacket",
+      "level": 1110,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 45,
+        "magical_shield_base": 45
+      },
+      "magic": {
+        "vitality_base": 785,
+        "magical_shield_base": 1008,
+        "toughness_base": 155,
+        "strain_base": 520,
+        "threat_gain": 178
+      },
+      "embed": {
+        "threat_gain": 389,
+        "magical_shield_base": 304
+      },
+      "setId": 6983,
+      "sets": {
+        "2": {
+          "event": "gain_1322_11"
+        },
+        "4": {
+          "recipe": "recipe_1975_1 | recipe_17250_1"
+        }
+      }
+    },
+    {
+      "key": "armors:112101",
+      "id": 112101,
+      "name": "苍黎·明悬衣",
+      "iconId": 28542,
+      "school": "天策",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "jacket",
+      "level": 1110,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 45,
+        "magical_shield_base": 45
+      },
+      "magic": {
+        "vitality_base": 785,
+        "physical_shield_base": 1008,
+        "toughness_base": 155,
+        "strain_base": 520,
+        "threat_gain": 178
+      },
+      "embed": {
+        "threat_gain": 389,
+        "vitality_base": 304
+      },
+      "setId": 6987,
+      "sets": {
+        "2": {
+          "event": "gain_1322_10"
+        },
+        "4": {
+          "recipe": "recipe_1973_1 | recipe_17250_1"
+        }
+      }
+    },
+    {
+      "key": "armors:112115",
+      "id": 112115,
+      "name": "苍黎·孤川衣",
+      "iconId": 28464,
+      "school": "苍云",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "jacket",
+      "level": 1110,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 45,
+        "magical_shield_base": 45
+      },
+      "magic": {
+        "vitality_base": 785,
+        "magical_shield_base": 1008,
+        "toughness_base": 155,
+        "strain_base": 520,
+        "threat_gain": 178
+      },
+      "embed": {
+        "threat_gain": 389,
+        "magical_shield_base": 304
+      },
+      "setId": 7001,
+      "sets": {
+        "2": {
+          "event": "gain_1322_13"
+        },
+        "4": {
+          "recipe": "recipe_1976_1 | recipe_17250_1"
+        }
+      }
+    },
+    {
+      "key": "armors:112207",
+      "id": 112207,
+      "name": "元元·祈心护腕",
+      "iconId": 28531,
+      "school": "少林",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "wrist",
+      "level": 1280,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 37,
+        "magical_shield_base": 37
+      },
+      "magic": {
+        "vitality_base": 641,
+        "magical_shield_base": 814,
+        "toughness_base": 125,
+        "strain_base": 451,
+        "threat_gain": 205
+      },
+      "embed": {
+        "vitality_base": 304,
+        "threat_gain": 389
+      },
+      "setId": 6983,
+      "sets": {
+        "2": {
+          "event": "gain_1322_11"
+        },
+        "4": {
+          "recipe": "recipe_1975_1 | recipe_17250_1"
+        }
+      }
+    },
+    {
+      "key": "armors:112211",
+      "id": 112211,
+      "name": "元元·定远护腕",
+      "iconId": 28543,
+      "school": "天策",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "wrist",
+      "level": 1280,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 37,
+        "magical_shield_base": 37
+      },
+      "magic": {
+        "vitality_base": 641,
+        "physical_shield_base": 814,
+        "toughness_base": 125,
+        "strain_base": 451,
+        "threat_gain": 205
+      },
+      "embed": {
+        "dodge_base": 304,
+        "physical_shield_base": 304
+      },
+      "setId": 6987,
+      "sets": {
+        "2": {
+          "event": "gain_1322_10"
+        },
+        "4": {
+          "recipe": "recipe_1973_1 | recipe_17250_1"
+        }
+      }
+    },
+    {
+      "key": "armors:112225",
+      "id": 112225,
+      "name": "元元·镇朔护腕",
+      "iconId": 28465,
+      "school": "苍云",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "wrist",
+      "level": 1280,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 37,
+        "magical_shield_base": 37
+      },
+      "magic": {
+        "vitality_base": 641,
+        "physical_shield_base": 814,
+        "toughness_base": 125,
+        "strain_base": 451,
+        "threat_gain": 205
+      },
+      "embed": {
+        "dodge_base": 304,
+        "physical_shield_base": 304
+      },
+      "setId": 7001,
+      "sets": {
+        "2": {
+          "event": "gain_1322_13"
+        },
+        "4": {
+          "recipe": "recipe_1976_1 | recipe_17250_1"
+        }
+      }
+    },
+    {
+      "key": "armors:112239",
+      "id": 112239,
+      "name": "元元·祈心腰带",
+      "iconId": 28535,
+      "school": "少林",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "belt",
+      "level": 1280,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 26,
+        "magical_shield_base": 26
+      },
+      "magic": {
+        "vitality_base": 641,
+        "magical_shield_base": 814,
+        "toughness_base": 125,
+        "strain_base": 451,
+        "threat_gain": 205
+      },
+      "embed": {
+        "physical_shield_base": 304,
+        "vitality_base": 304
+      },
+      "setId": 6983,
+      "sets": {
+        "2": {
+          "event": "gain_1322_11"
+        },
+        "4": {
+          "recipe": "recipe_1975_1 | recipe_17250_1"
+        }
+      }
+    },
+    {
+      "key": "armors:112243",
+      "id": 112243,
+      "name": "元元·定远腰带",
+      "iconId": 28547,
+      "school": "天策",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "belt",
+      "level": 1280,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 26,
+        "magical_shield_base": 26
+      },
+      "magic": {
+        "vitality_base": 641,
+        "physical_shield_base": 814,
+        "toughness_base": 125,
+        "strain_base": 451,
+        "threat_gain": 205
+      },
+      "embed": {
+        "vitality_base": 304,
+        "threat_gain": 389
+      },
+      "setId": 6987,
+      "sets": {
+        "2": {
+          "event": "gain_1322_10"
+        },
+        "4": {
+          "recipe": "recipe_1973_1 | recipe_17250_1"
+        }
+      }
+    },
+    {
+      "key": "armors:112257",
+      "id": 112257,
+      "name": "元元·镇朔腰带",
+      "iconId": 28469,
+      "school": "苍云",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "belt",
+      "level": 1280,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 26,
+        "magical_shield_base": 26
+      },
+      "magic": {
+        "vitality_base": 641,
+        "physical_shield_base": 814,
+        "toughness_base": 125,
+        "strain_base": 451,
+        "threat_gain": 205
+      },
+      "embed": {
+        "vitality_base": 304,
+        "threat_gain": 389
+      },
+      "setId": 7001,
+      "sets": {
+        "2": {
+          "event": "gain_1322_13"
+        },
+        "4": {
+          "recipe": "recipe_1976_1 | recipe_17250_1"
+        }
+      }
+    },
+    {
+      "key": "armors:112271",
+      "id": 112271,
+      "name": "元元·祈心鞋",
+      "iconId": 28534,
+      "school": "少林",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "shoes",
+      "level": 1280,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 26,
+        "magical_shield_base": 26
+      },
+      "magic": {
+        "vitality_base": 641,
+        "physical_shield_base": 282,
+        "magical_shield_base": 407,
+        "haste_base": 125,
+        "toughness_base": 125,
+        "strain_base": 451,
+        "threat_gain": 205
+      },
+      "embed": {
+        "vitality_base": 304,
+        "physical_shield_base": 304
+      },
+      "setId": 6983,
+      "sets": {
+        "2": {
+          "event": "gain_1322_11"
+        },
+        "4": {
+          "recipe": "recipe_1975_1 | recipe_17250_1"
+        }
+      }
+    },
+    {
+      "key": "armors:112275",
+      "id": 112275,
+      "name": "元元·定远鞋",
+      "iconId": 28546,
+      "school": "天策",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "shoes",
+      "level": 1280,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 26,
+        "magical_shield_base": 26
+      },
+      "magic": {
+        "vitality_base": 641,
+        "physical_shield_base": 282,
+        "magical_shield_base": 407,
+        "haste_base": 125,
+        "toughness_base": 125,
+        "strain_base": 451,
+        "threat_gain": 205
+      },
+      "embed": {
+        "vitality_base": 304,
+        "physical_shield_base": 304
+      },
+      "setId": 6987,
+      "sets": {
+        "2": {
+          "event": "gain_1322_10"
+        },
+        "4": {
+          "recipe": "recipe_1973_1 | recipe_17250_1"
+        }
+      }
+    },
+    {
+      "key": "armors:112289",
+      "id": 112289,
+      "name": "元元·镇朔鞋",
+      "iconId": 28468,
+      "school": "苍云",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "shoes",
+      "level": 1280,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 26,
+        "magical_shield_base": 26
+      },
+      "magic": {
+        "vitality_base": 641,
+        "physical_shield_base": 282,
+        "magical_shield_base": 407,
+        "haste_base": 125,
+        "toughness_base": 125,
+        "strain_base": 451,
+        "threat_gain": 205
+      },
+      "embed": {
+        "vitality_base": 304,
+        "physical_shield_base": 304
+      },
+      "setId": 7001,
+      "sets": {
+        "2": {
+          "event": "gain_1322_13"
+        },
+        "4": {
+          "recipe": "recipe_1976_1 | recipe_17250_1"
+        }
+      }
+    },
+    {
+      "key": "armors:112303",
+      "id": 112303,
+      "name": "元元·祈心冠",
+      "iconId": 28532,
+      "school": "少林",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "hat",
+      "level": 1280,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 42,
+        "magical_shield_base": 42
+      },
+      "magic": {
+        "vitality_base": 824,
+        "physical_shield_base": 523,
+        "magical_shield_base": 362,
+        "haste_base": 161,
+        "toughness_base": 161,
+        "strain_base": 580,
+        "threat_gain": 205
+      },
+      "embed": {
+        "vitality_base": 304,
+        "threat_gain": 389
+      },
+      "setId": 6983,
+      "sets": {
+        "2": {
+          "event": "gain_1322_11"
+        },
+        "4": {
+          "recipe": "recipe_1975_1 | recipe_17250_1"
+        }
+      }
+    },
+    {
+      "key": "armors:112307",
+      "id": 112307,
+      "name": "元元·定远冠",
+      "iconId": 28544,
+      "school": "天策",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "hat",
+      "level": 1280,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 42,
+        "magical_shield_base": 42
+      },
+      "magic": {
+        "vitality_base": 824,
+        "physical_shield_base": 523,
+        "magical_shield_base": 362,
+        "haste_base": 161,
+        "toughness_base": 161,
+        "strain_base": 580,
+        "threat_gain": 205
+      },
+      "embed": {
+        "vitality_base": 304,
+        "threat_gain": 389
+      },
+      "setId": 6987,
+      "sets": {
+        "2": {
+          "event": "gain_1322_10"
+        },
+        "4": {
+          "recipe": "recipe_1973_1 | recipe_17250_1"
+        }
+      }
+    },
+    {
+      "key": "armors:112321",
+      "id": 112321,
+      "name": "元元·镇朔冠",
+      "iconId": 28466,
+      "school": "苍云",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "hat",
+      "level": 1280,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 42,
+        "magical_shield_base": 42
+      },
+      "magic": {
+        "vitality_base": 824,
+        "physical_shield_base": 523,
+        "magical_shield_base": 362,
+        "haste_base": 161,
+        "toughness_base": 161,
+        "strain_base": 580,
+        "threat_gain": 205
+      },
+      "embed": {
+        "vitality_base": 304,
+        "threat_gain": 389
+      },
+      "setId": 7001,
+      "sets": {
+        "2": {
+          "event": "gain_1322_13"
+        },
+        "4": {
+          "recipe": "recipe_1976_1 | recipe_17250_1"
+        }
+      }
+    },
+    {
+      "key": "armors:112335",
+      "id": 112335,
+      "name": "元元·祈心衣",
+      "iconId": 28530,
+      "school": "少林",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "jacket",
+      "level": 1280,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 52,
+        "magical_shield_base": 52
+      },
+      "magic": {
+        "vitality_base": 916,
+        "magical_shield_base": 1163,
+        "toughness_base": 179,
+        "strain_base": 644,
+        "threat_gain": 205
+      },
+      "embed": {
+        "threat_gain": 389,
+        "magical_shield_base": 304
+      },
+      "setId": 6983,
+      "sets": {
+        "2": {
+          "event": "gain_1322_11"
+        },
+        "4": {
+          "recipe": "recipe_1975_1 | recipe_17250_1"
+        }
+      }
+    },
+    {
+      "key": "armors:112339",
+      "id": 112339,
+      "name": "元元·定远衣",
+      "iconId": 28542,
+      "school": "天策",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "jacket",
+      "level": 1280,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 52,
+        "magical_shield_base": 52
+      },
+      "magic": {
+        "vitality_base": 916,
+        "physical_shield_base": 1163,
+        "toughness_base": 179,
+        "strain_base": 644,
+        "threat_gain": 205
+      },
+      "embed": {
+        "threat_gain": 389,
+        "vitality_base": 304
+      },
+      "setId": 6987,
+      "sets": {
+        "2": {
+          "event": "gain_1322_10"
+        },
+        "4": {
+          "recipe": "recipe_1973_1 | recipe_17250_1"
+        }
+      }
+    },
+    {
+      "key": "armors:112353",
+      "id": 112353,
+      "name": "元元·镇朔衣",
+      "iconId": 28464,
+      "school": "苍云",
+      "kind": "防御",
+      "usage": "PVE",
+      "position": "jacket",
+      "level": 1280,
+      "maxStrength": 6,
+      "base": {
+        "physical_shield_base": 52,
+        "magical_shield_base": 52
+      },
+      "magic": {
+        "vitality_base": 916,
+        "magical_shield_base": 1163,
+        "toughness_base": 179,
+        "strain_base": 644,
+        "threat_gain": 205
+      },
+      "embed": {
+        "threat_gain": 389,
+        "magical_shield_base": 304
+      },
+      "setId": 7001,
+      "sets": {
+        "2": {
+          "event": "gain_1322_13"
+        },
+        "4": {
+          "recipe": "recipe_1976_1 | recipe_17250_1"
+        }
+      }
     }
   ],
   "enchants": [

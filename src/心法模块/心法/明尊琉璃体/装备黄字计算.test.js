@@ -17,7 +17,7 @@ import {
 } from './装备特效计算'
 import { 计算明尊基础循环 } from '@/计算模块/职业特殊处理/明尊/基础循环'
 import { 明尊秒伤计算, 获取明尊已选装备特效 } from '@/计算模块/职业特殊处理/明尊'
-import { 转换明尊配装, 转换明尊基础属性 } from '@/数据/数据工具/明尊数据适配'
+import { 转换明尊配装, 转换明尊基础属性, 获取五十级装备数据 } from '@/数据/数据工具/明尊数据适配'
 import { 获取技能统计数据 } from '@/功能模块/计算结果/结果统计/util'
 import { 优化明尊方案, 获取优化GCD } from './方案优化'
 import { 获取明尊战斗增益, 明尊小药小吃 } from './增益'
@@ -50,12 +50,12 @@ const normal = [
   { 技能名称: '武伤', 技能数量: 0 },
 ]
 
-test('当前38件、28种黄字全部有对应结算，未知效果仍明确保留未计入', () => {
+test('当前40件、29种黄字全部有对应结算，未知效果仍明确保留未计入', () => {
   const selected = GEAR_ITEMS.filter((row) => row.specialEffects?.length)
-  expect(selected).toHaveLength(38)
+  expect(selected).toHaveLength(40)
   expect(
     new Set(selected.flatMap((row) => row.specialEffects.map((effect) => effect.key))).size,
-  ).toBe(28)
+  ).toBe(29)
   expect(selected.flatMap((row) => row.specialEffects).every(equipmentEffectSupported)).toBe(true)
   expect(equipmentEffectSupported({ key: 'gain_999_1' })).toBe(false)
   expect(
@@ -136,11 +136,13 @@ test('鞋子与暗器同步触发按真实重叠窗口分段，300秒中分别50
 })
 
 test.each([
+  [112482, '巽', 49943],
   [112483, '巽', 31543],
   [112484, '巽', 36800],
+  [112486, '巽', 49943],
   [112487, '巽', 36800],
-  [47972, '无观·荒', 9583],
-  [47974, '无观·荒', 8214],
+  [47972, '无观·荒', 29310],
+  [47974, '无观·荒', 25123],
   [47978, '无观·荒', 31395],
   [47980, '无观·荒', 26910],
 ])('装备%s在54级目标、无易伤下的每次%s伤害为%s', (id, name, hit) => {
@@ -152,6 +154,38 @@ test.each([
   expect(row.技能总输出).toBe(hit * 30)
   expect(row.会心几率).toBe(0)
   if (row.技能ID === '40789') expect(row.技能等级).toBe('1')
+})
+
+test.each([
+  [112482, '清尘雨', { critical: 438, overcome: 0 }],
+  [112486, '青云起', { critical: 0, overcome: 438 }],
+])('%s %s可从两心法的配装器选择，正确计算宝石与巽', (id, name, ratings) => {
+  for (const 心法 of ['明尊琉璃体', '洗髓经']) {
+    const 条目 = 获取五十级装备数据(心法).护腕.find((item) => item.id === id)
+    expect(条目).toMatchObject({
+      装备名称: name,
+      装备品级: 1280,
+      装备黄字特效: [{ 标识: 'gain_40788_7', 已计入计算: true }],
+    })
+  }
+  const 配装 = { wrist: { key: `armors:${id}`, strength: 0, embeds: [], enchantId: 0 } }
+  expect(calculateLoadout(配装).stats).toMatchObject({ attack: 438, strain: 0, ...ratings })
+  配装.wrist.embeds = [0, 8]
+  const 装备信息 = 转换明尊配装(配装, 0)
+  expect(装备信息.装备基础属性.无双等级).toBe(38)
+  const 结果 = 明尊秒伤计算({
+    装备信息,
+    奇穴: settings.talents,
+    增益数据: {},
+    秘籍: {},
+    目标等级: 54,
+    技能列表: normal,
+    战斗时间: 300,
+  })
+  expect(结果.计算结果技能列表.find((row) => row.技能名称 === '巽')).toMatchObject({
+    技能数量: 30,
+    技能总输出: 50967 * 30,
+  })
 })
 
 test('加速DOT按每秒一跳、共享40秒冷却和战斗结束截断，同类装备不会叠成双份', () => {
@@ -188,7 +222,7 @@ test('附加伤害只应用等级压制与当前易伤，不额外乘五明、�
     300,
     400,
   )[0]
-  expect(enabled.技能总输出).toBe(Math.trunc(9583 * (1 + 21 / 1024)) * 30)
+  expect(enabled.技能总输出).toBe(Math.trunc(base.技能最终详情.命中.最小值 * (1 + 21 / 1024)) * 30)
 })
 
 test.each([false, true])(
@@ -221,6 +255,8 @@ test('手动次数循环按属性状态结算，命中与会心分项之和等�
       result.equipmentRows.reduce((sum, row) => sum + row.技能总输出, 0),
     7,
   )
+  const 仅秒伤 = calculateCycle(equipment, input, { [key]: 100 }, 300, false)
+  expect(仅秒伤).toEqual({ ...result, rows: [], equipmentRows: [] })
   const resultWithoutHits = calculateCycle(equipment, input, {}, 300)
   expect(resultWithoutHits.total).toBe(0)
   expect(resultWithoutHits.equipmentRows).toEqual([])

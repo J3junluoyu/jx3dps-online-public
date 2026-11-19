@@ -2,11 +2,13 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Button, Divider } from 'antd'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import 获取当前数据 from '@/数据/数据工具/获取当前数据'
-import { 延迟设定 } from '@/数据/常量'
+import { 延迟设定, 自身属性系数 } from '@/数据/常量'
 import { 计算记录类型 } from '@/@types/计算'
 import { 数据埋点 } from '@/工具函数/tools/log'
 import { 秒伤计算 } from '@/计算模块/计算函数'
 import { 更新增益面板显示状态 } from '@/store/system'
+import { 获取实际帧数 } from '@/工具函数/data'
+import { 格式化明尊GCD } from '@/心法模块/心法/明尊琉璃体/GCD显示'
 
 import 结果统计 from './结果统计'
 import 收益图表 from './收益图表'
@@ -14,7 +16,7 @@ import 技能统计图表 from './技能统计图表'
 import './index.css'
 import useCycle from '@/hooks/use-cycle'
 
-const { 系统配置, 缓存映射, 名称 } = 获取当前数据()
+const { 系统配置, 缓存映射, 名称, 基础GCD = 1.5 } = 获取当前数据()
 
 type 循环要求 = {
   加速?: string
@@ -30,7 +32,9 @@ function 计算结果({ 标题操作, 未计算内容 }: 计算结果入参) {
   const 增益面板显示状态 = useAppSelector((state) => state?.system?.增益面板显示状态)
   const 增益启用 = useAppSelector((state) => state?.data?.增益启用)
   const 已保存计算结果 = useAppSelector((state) => state?.data?.当前计算结果)
-  const 当前计算结果 = 未计算内容 ? undefined : 已保存计算结果
+  const { 当前循环信息, 当前加速值, 加速不符合循环要求 } = useCycle()
+  const 明尊循环加速不匹配 = 名称 === '明尊琉璃体' && 加速不符合循环要求
+  const 当前计算结果 = 未计算内容 || 明尊循环加速不匹配 ? undefined : 已保存计算结果
   const 当前计算循环名称 = useAppSelector((state) => state?.data?.当前计算循环名称)
   const [技能统计弹窗, 打开技能统计弹窗] = useState<boolean>(false)
   const [初始化, 设置初始化] = useState<boolean>(false)
@@ -46,8 +50,6 @@ function 计算结果({ 标题操作, 未计算内容 }: 计算结果入参) {
       dispatch(更新增益面板显示状态(false))
     }
   }
-
-  const { 当前循环信息 } = useCycle()
 
   useEffect(() => {
     dispatch(秒伤计算({ 是否更新显示计算结果: true }))
@@ -87,6 +89,22 @@ function 计算结果({ 标题操作, 未计算内容 }: 计算结果入参) {
     })
     return 要求列表
   }, [当前循环信息, 当前计算结果])
+
+  const 明尊循环支持范围 = 明尊循环加速不匹配
+    ? [...new Set(
+        [...当前循环信息.循环详情]
+          .sort((左, 右) => Number(左.循环加速等级 ?? 0) - Number(右.循环加速等级 ?? 0))
+          .flatMap(({ 循环加速等级, 循环加速值范围 }) => {
+            if (循环加速值范围?.length) {
+              const [最低, 最高] = 循环加速值范围
+              return [`${最低} 至 ${最高} 点加速（不含上限）`]
+            }
+            return 循环加速等级 === undefined
+              ? []
+              : [`${格式化明尊GCD(基础GCD - Number(循环加速等级) / 16)} 秒`]
+          }),
+      )]
+    : []
 
   const 更新计算记录 = () => {
     if (!当前计算结果?.秒伤) return
@@ -160,6 +178,30 @@ function 计算结果({ 标题操作, 未计算内容 }: 计算结果入参) {
                   <b style={{ textDecorationLine: 'underline' }}>开启增益</b>。
                 </div>
               ) : null}
+            </div>
+          ) : 明尊循环加速不匹配 ? (
+            <div className='dps-number-count-no-result'>
+              <h1>加速档位不匹配</h1>
+              <p>
+                当前加速是{' '}
+                <strong>
+                  {(Math.min(当前加速值 / 自身属性系数.急速, 0.25) * 100).toFixed(2)}%
+                  （{格式化明尊GCD(获取实际帧数(基础GCD * 16, 当前加速值) / 16)} 秒 GCD）
+                </strong>
+                {明尊循环支持范围.length > 0 && (
+                  <>
+                    ，而「{当前循环信息.标题 || 当前循环信息.名称}」只支持{' '}
+                    <strong>{new Intl.ListFormat('zh-CN').format(明尊循环支持范围)}</strong>
+                  </>
+                )}
+                。
+              </p>
+              <p>当前档位没有匹配的循环，点击「计算」无法得到伤害结果。</p>
+            </div>
+          ) : 当前计算结果?.计算错误 ? (
+            <div className='dps-number-count-no-result'>
+              <h1>无法计算当前循环</h1>
+              <p>{当前计算结果.计算错误}</p>
             </div>
           ) : 名称 === '明尊琉璃体' ? (
             <div className='dps-number-count-no-result'>

@@ -41,6 +41,13 @@
     },
     "15072": {
       "33210": {
+        "1": {
+          "name": "寒啸千军",
+          "interval": 240,
+          "max_stack": 100,
+          "max_tick": 1,
+          "attributes": { "strain_base": 3 }
+        },
         "2": {
           "name": "寒啸千军",
           "interval": 240,

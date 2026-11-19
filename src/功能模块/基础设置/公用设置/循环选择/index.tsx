@@ -11,9 +11,7 @@ import { 装备部位枚举 } from '@/@types/枚举'
 import { 装备位置部位枚举, 装备特效枚举 } from '@/@types/装备'
 import classNames from 'classnames'
 import { 格式化明尊GCD } from '@/心法模块/心法/明尊琉璃体/GCD显示'
-import {
-  自适应光明心循环名称,
-} from '@/心法模块/心法/明尊琉璃体/计算循环/循环联动'
+import { 自适应光明心循环名称 } from '@/心法模块/心法/明尊琉璃体/计算循环/循环联动'
 import './index.css'
 
 const { 名称, 装备数据 } = 获取当前数据()
@@ -143,6 +141,10 @@ function 循环选择(props) {
             }
           }}
           optionFilterProp='label'
+          labelRender={({ value, label }) => {
+            const 循环 = 全部循环.find((项) => 项.名称 === value)
+            return 循环?.明尊逐招配置 ? 循环.标题 : label
+          }}
           popupMatchSelectWidth={300}
           dropdownRender={(menu) => (
             <>
@@ -177,7 +179,7 @@ function 循环选择(props) {
                 <Select.Option
                   value={item?.名称}
                   key={item.名称}
-                  label={显示循环(item.名称)}
+                  label={item.明尊逐招配置 ? item.标题 : 显示循环(item.名称)}
                   disabled={
                     item.自动选择 === false &&
                     当前加速等级 !== undefined &&
@@ -234,7 +236,11 @@ function 循环选择(props) {
                     }
                   >
                     <div className='cycle-select-item'>
-                      <div dangerouslySetInnerHTML={{ __html: 显示循环(item.标题 || item.名称) }} />
+                      {item.明尊逐招配置 ? (
+                        <div>{item.标题}</div>
+                      ) : (
+                        <div dangerouslySetInnerHTML={{ __html: 显示循环(item.标题 || item.名称) }} />
+                      )}
                       <div>
                         {item.提供者 ? (
                           <span className='cycle-select-provider'>{item.提供者}</span>

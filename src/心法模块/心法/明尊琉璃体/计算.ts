@@ -605,14 +605,16 @@ export function calculateSkill(skill: Skill, panel: ReturnType<typeof calculateA
         ]
       : [skill.level, skill.record]
   const critical = Math.min(1, Math.max(0, evaluateExpression(record.critical_strike, variables)))
-  const damage = (isCritical: number) =>
-    record.damages.reduce((total, part) => {
+  const damage = (isCritical: number) => {
+    variables.is_critical = isCritical
+    return record.damages.reduce((total, part) => {
       // 与考拉桌面端一样直接计算导出的公式；source_attribute只记录导出元数据。
       return (
         total +
-        Math.max(0, evaluateExpression(part.damage, { ...variables, is_critical: isCritical }))
+        Math.max(0, evaluateExpression(part.damage, variables))
       )
     }, 0)
+  }
   const hit = damage(0)
   const criticalHit = damage(1)
   return {
@@ -630,6 +632,7 @@ export function calculateCycle(
   settings: Settings,
   counts: Record<string, number>,
   duration: number,
+  includeDetails = true,
 ) {
   if (!Number.isFinite(duration) || duration <= 0) throw new Error('循环时长必须大于零')
   const panel = calculateAttributes(equipment, settings)
@@ -650,12 +653,22 @@ export function calculateCycle(
     ...state,
     panel: calculateAttributes(equipment, { ...cycleSettings, equipmentProcGains: state.gains }),
   }))
-  const rows = SKILLS.map((skill) => {
+  let skillTotal = 0
+  const rows = SKILLS.flatMap((skill) => {
     const count = counts[skill.key] ?? 0
     if (!Number.isFinite(count) || count < 0 || !Number.isInteger(count))
       throw new Error('技能命中次数必须为非负整数')
     if (count > 0 && !skillAvailable(skill, settings))
       throw new Error(`请先选择${belongs[skill.group]?.name || ''}奇穴`)
+    if (!includeDetails) {
+      if (count)
+        skillTotal +=
+          panels.reduce(
+            (sum, state) => sum + calculateSkill(skill, state.panel).expected * state.weight,
+            0,
+          ) * count
+      return []
+    }
     const parts = panels.map((state) => ({
       ...calculateSkill(skill, state.panel),
       weight: state.weight,
@@ -675,11 +688,13 @@ export function calculateCycle(
       critical: parts.reduce((sum, part) => sum + part.critical * part.weight, 0),
       expected: parts.reduce((sum, part) => sum + part.expected * part.weight, 0),
     }
+    const total = result.expected * count
+    skillTotal += total
     return {
       ...skill,
       ...result,
       count,
-      total: result.expected * count,
+      total,
       hitTotal:
         parts.reduce((sum, part) => sum + part.hit * (1 - part.critical) * part.weight, 0) * count,
       criticalTotal:
@@ -700,10 +715,8 @@ export function calculateCycle(
     hits,
     majorContext,
   )
-  const total =
-    rows.reduce((sum, row) => sum + row.total, 0) +
-    equipmentRows.reduce((sum, row) => sum + row.技能总输出, 0)
-  return { panel, rows, equipmentRows, total, dps: total / duration }
+  const total = skillTotal + equipmentRows.reduce((sum, row) => sum + row.技能总输出, 0)
+  return { panel, rows, equipmentRows: includeDetails ? equipmentRows : [], total, dps: total / duration }
 }
 export function skillAvailable(skill: Skill, settings: Settings) {
   if (['4941', '25796'].includes(skill.group)) return settings.mingzunOrangeWeapon === true

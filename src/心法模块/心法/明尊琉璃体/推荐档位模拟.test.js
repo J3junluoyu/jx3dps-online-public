@@ -145,20 +145,19 @@ test('明尊实际0.75配装能直接以0.81模板模拟，不为压加速换低
 
 test('同一品级范围内的低品级装备不因先达标就获胜，1280高收益装备继续参与比较', () => {
   const cycle = { ...洗髓自适应循环, 循环详情: [洗髓自适应循环.循环详情[0]] }
-  // 使用库中该部位真实的最低品级防御装备，不依赖原始导出顺序。
-  const low = GEAR_ITEMS.filter((row) => row.position === 'hat' && row.kind === '防御').sort(
-    (a, b) => a.level - b.level,
-  )[0]
+  // 洗髓比较同门派的两顶防御套装帽，符合当前门派筛选。
+  const low = GEAR_ITEMS.find((row) => row.key === 'armors:112065')
+  const high = GEAR_ITEMS.find((row) => row.key === 'armors:112303')
   const input = {
     ...common,
     kungfu: 'xsj',
     cycle,
     settings: 获取洗髓计算设置({ 洗髓设置: { stance: 'mainTank' } }, false, 54),
     slots: ['hat'],
-    gearKeys: ['armors:112319', low.key],
+    gearKeys: [high.key, low.key],
   }
   const lowOnly = 优化明尊方案({ ...input, gearKeys: [low.key], exploreHighLevelCandidates: false })
   const result = 优化明尊方案(input)
   expect(result.after.dps).toBeGreaterThan(lowOnly.after.dps)
-  expect(result.plan.slots.hat.key).toBe('armors:112319')
+  expect(result.plan.slots.hat.key).toBe(high.key)
 })

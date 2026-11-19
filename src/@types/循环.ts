@@ -1,7 +1,9 @@
 import { 快照类型 } from './技能'
 import { 选中秘籍信息 } from './秘籍'
+import type { 明尊逐招循环配置 } from '@/心法模块/心法/明尊琉璃体/逐招模拟'
 
 export interface 循环数据 {
+  明尊逐招配置?: 明尊逐招循环配置
   /**
    * @name 名称
    * 循环名称，唯一KEY

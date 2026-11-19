@@ -8,6 +8,12 @@ import { 触发秒伤计算 } from '@/计算模块/计算函数'
 import { 更新方案数据, 更新团队增益轴 } from '@/store/data'
 import { 获取团队增益禁用原因 } from '@/数据/数据工具/团队增益限制'
 import { 明尊一键团队增益 } from '@/心法模块/心法/明尊琉璃体/团队增益预设'
+import {
+  获取已勾选循环增益,
+  获取循环覆盖的团队增益,
+  统一明尊循环增益名称,
+} from '@/心法模块/心法/明尊琉璃体/逐招时间轴'
+import 明尊逐招图标 from '@/心法模块/心法/明尊琉璃体/逐招技能图标.json'
 import { 使用五十级装备 } from '@/心法模块/模块工具/心法模式'
 
 import 团队增益设置弹窗 from './团队增益设置弹窗'
@@ -17,11 +23,29 @@ import 团队增益收益弹窗 from './团队增益收益弹窗'
 import './index.css'
 
 const { 名称, 团队增益 = [] } = 获取当前数据()
+const 覆盖数字 = new Intl.NumberFormat('zh-CN', { maximumFractionDigits: 1 })
 
 function 团队增益选择({ 保存数据并计算 }) {
   const 增益数据 = useAppSelector((state) => state.data.增益数据)
   const 增益启用 = useAppSelector((state) => state.data.增益启用)
   const 当前奇穴信息 = useAppSelector((state) => state.data.当前奇穴信息)
+  const 当前循环 = useAppSelector((state) => state.data.当前计算循环名称)
+  const 逐招配置 = useAppSelector(
+    (state) => state.data.自定义循环列表?.find((项) => 项.名称 === state.data.当前计算循环名称)?.明尊逐招配置,
+  )
+  const 上次循环增益 = useAppSelector((state) => state.data.当前计算结果?.循环内增益)
+  const 循环覆盖的团队增益 = useMemo(
+    () => (逐招配置 ? 获取循环覆盖的团队增益(逐招配置.序列) : undefined),
+    [逐招配置],
+  )
+  const 已勾选循环增益 = useMemo(
+    () => 获取已勾选循环增益(增益数据?.团队增益),
+    [增益数据?.团队增益],
+  )
+  const 循环增益覆盖 =
+    增益启用 && 逐招配置 && 上次循环增益?.循环名称 === 当前循环
+      ? 上次循环增益?.覆盖.filter(({ 名称 }) => 已勾选循环增益.has(名称))
+      : undefined
   const 新手引导流程状态 = useAppSelector((state) => state.system.新手引导流程状态)
 
   const [设置增益弹窗展示, 更新设置增益弹窗展示] = useState<boolean>(false)
@@ -33,14 +57,19 @@ function 团队增益选择({ 保存数据并计算 }) {
 
   const onChangeZengyi = (e: boolean | null, 增益: 团队增益数据类型, 层数?, 覆盖率?) => {
     if (获取团队增益禁用原因(增益, 当前奇穴信息)) return
-    const exist = 增益数据?.团队增益?.some((item) => item.增益名称 === 增益?.增益名称)
+    const 使用循环设置 = 循环覆盖的团队增益?.has(增益.增益名称)
+    const 匹配增益 = (名称: string) =>
+      使用循环设置
+        ? 统一明尊循环增益名称(名称) === 统一明尊循环增益名称(增益.增益名称)
+        : 名称 === 增益.增益名称
+    const exist = 增益数据?.团队增益?.some((item) => 匹配增益(item.增益名称))
     const newData: 增益选项数据类型 = {
       ...增益数据,
       团队增益: [...(增益数据?.团队增益 || [])],
     }
     if (exist) {
       newData.团队增益 = 增益数据?.团队增益?.map((item) => {
-        if (item.增益名称 === 增益?.增益名称) {
+        if (匹配增益(item.增益名称)) {
           return {
             ...item,
             启用: e === null ? item?.启用 : e,
@@ -105,6 +134,9 @@ function 团队增益选择({ 保存数据并计算 }) {
         }) || []
     )
   }, [团队增益, 增益数据, 当前奇穴信息])
+  const 面板团队增益 = 显示团队增益.filter(
+    (项) => !增益启用 || !循环覆盖的团队增益?.has(项.增益名称),
+  )
 
   const 一键增益预设 = useMemo(
     () =>
@@ -210,12 +242,27 @@ function 团队增益选择({ 保存数据并计算 }) {
         </Button>
       </div>
       <div className={cls}>
-        {显示团队增益?.length ? (
-          <Space size={[12, 12]} wrap>
-            {显示团队增益.map((item) => {
-              return <团队增益图标 data={item} key={item?.增益名称} 当前数据={item?.当前数据} />
-            })}
-          </Space>
+        {面板团队增益.length || 循环增益覆盖?.length ? (
+          <>
+            {!!面板团队增益.length && (
+              <Space size={[12, 12]} wrap>
+                {面板团队增益.map((item) => (
+                  <团队增益图标 data={item} key={item.增益名称} 当前数据={item.当前数据} />
+                ))}
+              </Space>
+            )}
+            {!!循环增益覆盖?.length && (
+              <div className='tuandui-cycle-gains' role='group' aria-label='循环内增益'>
+                <span>循环内增益</span>
+                {循环增益覆盖.map(({ 名称, 覆盖率 }) => (
+                  <span className='tuandui-cycle-gain' key={名称} title='实际覆盖率'>
+                    <img src={`https://icon.jx3box.com/icon/${明尊逐招图标[名称].icon}.png`} alt='' />
+                    {名称} <strong>{覆盖数字.format(覆盖率)}%</strong>
+                  </span>
+                ))}
+              </div>
+            )}
+          </>
         ) : (
           <p className={'tuandui-empty'}>当前无团队增益</p>
         )}
@@ -225,6 +272,8 @@ function 团队增益选择({ 保存数据并计算 }) {
         onCancel={() => 更新设置增益弹窗展示(false)}
         onChangeZengyi={onChangeZengyi}
         快捷设置团队增益={快捷设置团队增益}
+        循环覆盖的团队增益={循环覆盖的团队增益}
+        已勾选循环增益={已勾选循环增益}
       />
       <团队增益轴设置弹窗
         open={设置增益轴弹窗展示}

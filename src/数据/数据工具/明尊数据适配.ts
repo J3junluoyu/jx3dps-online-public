@@ -15,6 +15,7 @@ import {
   calculateLoadout,
   normalizeLoadout,
   findGearItem,
+  gearAvailableForSchool,
 } from '@/心法模块/心法/明尊琉璃体/装备'
 import type { EquipmentStats, Settings } from '@/心法模块/心法/明尊琉璃体/计算'
 import {
@@ -128,18 +129,16 @@ export function 获取明尊装备条目(部位: string, id?: number) {
   return 明尊装备数据[部位]?.find((项) => 项.uid === 装备?.key)
 }
 
-/** 橙武和水特效武器按心法显示，其余装备共用。 */
+/** 装备下拉只列通用装备和当前门派可选装备。 */
 export function 获取五十级装备数据(心法名称: string) {
   const 门派 = 心法名称 === '洗髓经' ? '少林' : '明教'
+  const 可选装备 = new Set(
+    GEAR_ITEMS.filter((项) => gearAvailableForSchool(项, 门派)).map((项) => 项.key),
+  )
   return Object.fromEntries(
     Object.entries(明尊装备数据).map(([部位, 列表]) => [
       部位,
-      列表.filter(
-        (项) =>
-          (项.装备类型 !== 装备类型枚举.橙武 &&
-            !项.装备黄字特效?.some((效果) => 效果.标识 === 'gain_4877_89')) ||
-          项.所属门派 === 门派,
-      ),
+      列表.filter((项) => 可选装备.has(String(项.uid))),
     ]),
   )
 }
@@ -186,6 +185,7 @@ function 规范明尊装备列表(装备信息: 装备信息数据类型) {
   return 已更新 ? 列表 : 装备信息.装备列表
 }
 export const 明尊附魔数据 = ENCHANTS.map((附魔) => ({
+  id: 附魔.id,
   附魔名称: `${附魔.name}（${describeAttributes(附魔.attributes)}）`,
   附魔装分: 0,
   附魔颜色: '紫' as const,

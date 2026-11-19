@@ -1,6 +1,7 @@
 import { 使用五十级装备 } from '@/心法模块/模块工具/心法模式'
 import React, { useContext } from 'react'
 import 获取当前数据 from '@/数据/数据工具/获取当前数据'
+import { 获取明尊装备条目 } from '@/数据/数据工具/明尊数据适配'
 import { 装备位置部位枚举, 装备增益类型, 装备属性信息模型, 装备类型枚举 } from '@/@types/装备'
 import 图标 from '@/数据/静态数据/图标.json'
 import styles from './index.module.less'
@@ -12,7 +13,8 @@ import ImageComponent from '@/组件/图片展示'
 import { 格式化附魔名称 } from '../../../工具函数/附魔显示'
 import { findMajorEnchant } from '@/心法模块/心法/明尊琉璃体/大附魔'
 
-const { 装备数据, 五彩石 } = 获取当前数据()
+const { 装备数据, 五彩石, 名称 } = 获取当前数据()
+const 五十级装备模式 = 使用五十级装备(名称)
 
 const 装备区 = () => {
   const { 当前装备信息 } = useContext(ExportContext)
@@ -28,7 +30,9 @@ const 装备区 = () => {
     <div className={styles.equipWrap}>
       {当前装备信息?.装备列表?.map((当前装备, index) => {
         const 装备: 装备属性信息模型 =
-          装备数据?.[当前装备?.装备部位]?.find((a) => a?.id === 当前装备?.id) || ({} as any)
+          (五十级装备模式
+            ? 获取明尊装备条目(当前装备?.装备部位, 当前装备?.id)
+            : 装备数据?.[当前装备?.装备部位]?.find((a) => a?.id === 当前装备?.id)) || ({} as any)
         const 装备图标 = `https://icon.jx3box.com/icon/${装备?.图标ID}.png`
         const 装备背景 =
           装备?.装备类型 === 装备类型枚举?.橙武 ? 图标?.橙色装备边框 : 图标?.紫色装备边框
@@ -36,7 +40,7 @@ const 装备区 = () => {
         const 最大精炼等级 = 装备?.装备类型 === 装备类型枚举?.橙武 ? 8 : 6
         const 装备特征描述 = 获取装备数据描述(装备, true, false)
         const 装备结果描述 = 获取装备数据描述(装备, false, true)
-        const 明尊大附魔 = 使用五十级装备(获取当前数据().名称) && findMajorEnchant(当前装备.大附魔)
+        const 明尊大附魔 = 五十级装备模式 && findMajorEnchant(当前装备.大附魔)
         const 是否有大附魔 =
           明尊大附魔 || 判断是否存在大附魔(当前装备?.装备部位, 当前装备信息?.装备增益)
 

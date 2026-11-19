@@ -15,6 +15,7 @@ import { useAppSelector } from '@/hooks'
 import 获取当前数据 from '@/数据/数据工具/获取当前数据'
 import { 团队增益类型 } from '@/@types/团队增益'
 import { 获取团队增益禁用原因 } from '@/数据/数据工具/团队增益限制'
+import { 统一明尊循环增益名称 } from '@/心法模块/心法/明尊琉璃体/逐招时间轴'
 import 团队增益图标 from '../团队增益图标'
 
 const { 默认数据 = {}, 团队增益 } = 获取当前数据()
@@ -37,7 +38,14 @@ const 一键设置坦克增益列表 = [
 const 一键设置奶妈增益列表 = ['飘黄', '仙王蛊鼎', '左旋右转', '秋肃', '庄周梦']
 const 可支持快捷设置层数 = [80, 85, 90, 95, 100]
 
-function 团队增益设置弹窗({ open, onCancel, onChangeZengyi, 快捷设置团队增益 }) {
+function 团队增益设置弹窗({
+  open,
+  onCancel,
+  onChangeZengyi,
+  快捷设置团队增益,
+  循环覆盖的团队增益,
+  已勾选循环增益,
+}) {
   const 增益数据 = useAppSelector((state) => state.data.增益数据)
   const 当前奇穴信息 = useAppSelector((state) => state.data.当前奇穴信息)
 
@@ -177,30 +185,44 @@ function 团队增益设置弹窗({ open, onCancel, onChangeZengyi, 快捷设置
               {团队增益
                 .filter((item) => item.团队增益类型 === key)
                 .map((item) => {
+                  const 使用循环设置 = 循环覆盖的团队增益?.has(item.增益名称)
+                  const 显示名称 = 使用循环设置
+                    ? 统一明尊循环增益名称(item.增益名称)
+                    : item.增益名称
                   const 当前增益选项 = (增益数据?.团队增益 || []).find(
                     (a) => item?.增益名称 === a?.增益名称,
                   )
-                  const 当前是否存在冲突增益 = (增益数据?.团队增益 || []).find(
-                    (a) => item?.冲突增益?.includes(a?.增益名称) && a?.启用,
+                  const 当前是否存在冲突增益 = !使用循环设置 && (增益数据?.团队增益 || []).find(
+                    (a) =>
+                      item?.冲突增益?.includes(a?.增益名称) &&
+                      a?.启用 &&
+                      !循环覆盖的团队增益?.has(a.增益名称),
                   )
                   const 奇穴禁用原因 = 获取团队增益禁用原因(item, 当前奇穴信息)
                   const 禁用 = !!奇穴禁用原因 || !!当前是否存在冲突增益
+                  const 已启用 = 使用循环设置
+                    ? 已勾选循环增益.has(显示名称)
+                    : 当前增益选项?.启用
                   return (
                     <div className={`tuandui-zengyi-detail-item`} key={item.增益名称}>
                       <Checkbox
-                        checked={!奇穴禁用原因 && !!当前增益选项?.启用}
+                        checked={!奇穴禁用原因 && !!已启用}
                         className='tuandui-zengyi-checkbox'
                         onChange={(e) => onChangeZengyi(e?.target?.checked, item)}
                         disabled={禁用}
                       >
                         <div className='tuandui-zengyi-checkbox-item'>
-                          <团队增益图标 data={item} 当前数据={当前增益选项} disabled={禁用} />
+                          <团队增益图标
+                            data={使用循环设置 ? { ...item, 增益名称: 显示名称, 增益描述: '按循环设置的时段与层数结算。' } : item}
+                            当前数据={使用循环设置 ? undefined : 当前增益选项}
+                            disabled={禁用}
+                          />
                           <h1
                             className={`tuandui-zengyi-detail-title ${
                               禁用 ? 'tuandui-zengyi-detail-title-disabled' : ''
                             }`}
                           >
-                            {item.增益名称}
+                            {显示名称}
                           </h1>
                           {item?.增益心法端 === '无界' ? (
                             <Tag className={`tuandui-zengyi-detail-wujie-tag`} color='purple'>
@@ -209,13 +231,15 @@ function 团队增益设置弹窗({ open, onCancel, onChangeZengyi, 快捷设置
                           ) : null}
                           {禁用 ? (
                             <span className={`tuandui-zengyi-detail-title-disabled-tip`}>
-                              {奇穴禁用原因 || `增益和【${当前是否存在冲突增益?.增益名称}】冲突`}
+                              {奇穴禁用原因 || (当前是否存在冲突增益 && `增益和【${当前是否存在冲突增益.增益名称}】冲突`)}
                             </span>
                           ) : null}
                         </div>
                       </Checkbox>
-                      <>
-                        <Divider className='tuandui-zengyi-detail-divider' />
+                      <Divider className='tuandui-zengyi-detail-divider' />
+                      {使用循环设置 ? (
+                        <span className='tuandui-zengyi-detail-content'>按循环设置</span>
+                      ) : (
                         <div className='tuandui-zengyi-detail-content'>
                           <div className={'tuandui-zengyi-content-item'}>
                             <span className='tuandui-zengyi-content-item-title'>覆盖率</span>
@@ -262,7 +286,7 @@ function 团队增益设置弹窗({ open, onCancel, onChangeZengyi, 快捷设置
                             </div>
                           ) : null}
                         </div>
-                      </>
+                      )}
                     </div>
                   )
                 })}

@@ -101,6 +101,10 @@ test('自适应理论循环在启用加速药跨档及关闭药品降档时切�
 })
 
 test('理论循环未达到对应档位时不回退到该循环的首项次数', () => {
-  const result = 选择(1451, { 当前计算循环名称: '0.75理论循环' })
+  const 覆盖数据 = { 当前计算循环名称: '0.75理论循环' }
+  const result = 选择(1451, 覆盖数据)
   expect(result.计算循环详情).toBeUndefined()
+  expect(result.当前加速值).toBe(1451)
+  expect(result.加速不符合循环要求).toBe(true)
+  expect(选择(1452, 覆盖数据).加速不符合循环要求).toBe(false)
 })

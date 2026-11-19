@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import { Select } from 'antd'
+import { shallowEqual } from 'react-redux'
 import { useAppSelector } from '@/hooks'
 import {
   朝圣言循环选项,
@@ -12,44 +13,38 @@ import {
   规范理论循环名称,
 } from '@/心法模块/心法/明尊琉璃体/计算循环/循环联动'
 
-function 朝圣言冷却模拟() {
-  const 数据 = useAppSelector((state) => state.data)
+function 朝圣言冷却模拟({ 显示 }: { 显示: boolean }) {
+  const 当前计算循环名称 = useAppSelector((state) => state.data.当前计算循环名称)
+  const 输入 = useAppSelector(
+    ({ data }) => ({
+      装备信息: data.装备信息,
+      当前奇穴信息: data.当前奇穴信息,
+      当前秘籍信息: data.当前秘籍信息,
+      增益数据: data.增益数据,
+      增益启用: data.增益启用,
+      当前输出计算目标名称: data.当前输出计算目标名称,
+    }),
+    shallowEqual,
+  )
   const [循环名称, 设置循环名称] = useState(() => {
-    const 当前 = 规范理论循环名称(数据.当前计算循环名称, 数据.当前奇穴信息)
+    const 当前 = 规范理论循环名称(当前计算循环名称, 输入.当前奇穴信息)
     return 朝圣言循环选项.some((项) => 项.value === 当前)
       ? 当前
-      : 获取明尊自适应循环名称(数据.当前奇穴信息 || [])
+      : 获取明尊自适应循环名称(输入.当前奇穴信息 || [])
   })
-  const 输入 = useMemo(
-    () => ({
-      装备信息: 数据.装备信息,
-      当前奇穴信息: 数据.当前奇穴信息,
-      当前秘籍信息: 数据.当前秘籍信息,
-      增益数据: 数据.增益数据,
-      增益启用: 数据.增益启用,
-      当前输出计算目标名称: 数据.当前输出计算目标名称,
-    }),
-    [
-      数据.装备信息,
-      数据.当前奇穴信息,
-      数据.当前秘籍信息,
-      数据.增益数据,
-      数据.增益启用,
-      数据.当前输出计算目标名称,
-    ],
-  )
   const 流沙度 = 循环名称 === 流沙度循环名称
   const 独立 = 循环名称 === 独立月系循环名称 || 流沙度
   const { 结果, 错误 } = useMemo<{
     结果?: ReturnType<typeof 模拟朝圣言冷却>
     错误?: string
   }>(() => {
+    if (!显示) return {}
     try {
       return { 结果: 模拟朝圣言冷却(输入, 循环名称) }
     } catch (error) {
       return { 错误: error instanceof Error ? error.message : '模拟失败，请检查配装或循环设置' }
     }
-  }, [输入, 循环名称])
+  }, [显示, 输入, 循环名称])
   return (
     <section className='mingzun-chaosheng' aria-label='朝圣言冷却模拟'>
       <h2>朝圣言冷却模拟</h2>

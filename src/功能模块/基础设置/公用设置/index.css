@@ -61,6 +61,13 @@
   overflow: hidden;
 }
 
+.mingzun-rotation-entry.ant-btn {
+  display: block;
+  width: calc(100% - 40px);
+  margin: 0 0 8px 40px;
+  color: var(--ant-primary-color);
+}
+
 .mingzun-stance-switch {
   display: flex;
   align-items: center;

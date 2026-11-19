@@ -75,9 +75,12 @@ test('直伤装备显示按事件等级核对的基础伤害与冷却，明确�
   expect(details).toContain('内置冷却10秒')
   expect(details).toContain('自身气血≥75%')
   expect(details).toContain('实际伤害随目标等级和易伤变化')
+  render(yellowGear(47972))
+  expect(container.textContent).toContain('36638点／次')
+  render(yellowGear(47974))
+  expect(container.textContent).toContain('31404点／次')
   render(yellowGear(47978))
   expect(container.textContent).toContain('39244点／次')
-  expect(container.textContent).not.toContain('11979点／次')
 })
 
 test('加速DOT显示每跳伤害、跳数上限与共享冷却，明确原文与脚本持续时间的差异', () => {
@@ -108,7 +111,7 @@ test('当前全部可选黄字都有数值说明，外部说明仍按纯文本�
   const gear = Object.values(明尊装备数据)
     .flat()
     .filter((item) => item.装备黄字特效?.length)
-  expect(gear).toHaveLength(38)
+  expect(gear).toHaveLength(40)
   expect(
     gear.every((item) => item.装备黄字特效.every((effect) => effect.详细数值.length > 0)),
   ).toBe(true)

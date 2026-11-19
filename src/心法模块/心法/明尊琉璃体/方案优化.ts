@@ -5,6 +5,7 @@ import type { Settings } from './计算'
 import { calculateAttributes, ratingScale } from './计算'
 import {
   GEAR_ITEMS,
+  gearAvailableForSchool,
   ENCHANTS,
   SLOTS,
   calculateLoadout,
@@ -23,10 +24,7 @@ import { matchMajorEnchant } from './大附魔'
 import { 计算洗髓面板, 计算洗髓循环, 获取洗髓增益属性 } from '../洗髓经/计算'
 import { 洗髓自适应循环 } from '../洗髓经/循环'
 import 明尊循环列表 from './计算循环'
-import {
-  获取理论档位循环,
-  规范理论循环名称,
-} from './计算循环/理论循环'
+import { 获取理论档位循环 } from './计算循环/理论循环'
 
 export interface 优化方案 {
   slots: Loadout
@@ -266,6 +264,7 @@ const 是当前心法橙武 = (input: Pick<方案优化输入, 'kungfu'>, item: 
   item.school === (input.kungfu === 'xsj' ? '少林' : '明教')
 
 const 允许装备候选 = (input: 方案优化输入, item: GearItem) =>
+  gearAvailableForSchool(item, input.kungfu === 'xsj' ? '少林' : '明教') &&
   (!input.orangeWeaponLevel || item.position !== 'primary_weapon' || item.orangeWeapon === true) &&
   (item.orangeWeapon
     ? item.level === input.orangeWeaponLevel && 是当前心法橙武(input, item)

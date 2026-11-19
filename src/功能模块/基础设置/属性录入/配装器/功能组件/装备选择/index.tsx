@@ -14,11 +14,13 @@ import { 装备部位枚举 } from '@/@types/枚举'
 import type { 循环数据 } from '@/@types/循环'
 import {
   装备位置部位枚举,
+  装备信息数据类型,
   装备属性信息模型,
   装备选择范围类型,
   选择装备数据类型,
 } from '@/@types/装备'
 import 获取当前数据 from '@/数据/数据工具/获取当前数据'
+import { 获取明尊装备条目 } from '@/数据/数据工具/明尊数据适配'
 import { 获取最大精炼等级 } from '../../工具函数/获取最大精炼等级'
 import { 五十级附魔可见, 附魔数值降序 } from '../../工具函数/附魔显示'
 import './index.css'
@@ -27,6 +29,8 @@ interface 装备选择入参 {
   value?: 选择装备数据类型
   onChange?: (e: 选择装备数据类型) => void
   form: any
+  配装器已打开?: boolean
+  当前表单配装?: 装备信息数据类型
   部位: 装备部位枚举
   部位索引: string
   排序索引: number
@@ -50,6 +54,8 @@ function 装备选择(props: 装备选择入参, ref) {
     部位索引,
     排序索引,
     form,
+    配装器已打开,
+    当前表单配装,
     开启装备智能对比,
     对比显示百分比,
     装备选择范围,
@@ -131,12 +137,14 @@ function 装备选择(props: 装备选择入参, ref) {
   }
 
   const 当前选择装备数据: 装备属性信息模型 = useMemo(() => {
-    const obj = list.find((item) => item.id === value?.id)
+    const obj =
+      list.find((item) => item.id === value?.id) ||
+      (明尊模式 ? 获取明尊装备条目(部位, value?.id) : undefined)
     return {
       ...obj,
       最大精炼等级: obj ? 获取最大精炼等级(obj) || 0 : undefined,
     } as any
-  }, [value?.id])
+  }, [list, 部位, value?.id, 明尊模式])
 
   const 当前装备支持附魔列表 = useMemo(() => {
     const 列表 = (附魔 || []).filter((item) => {
@@ -158,7 +166,10 @@ function 装备选择(props: 装备选择入参, ref) {
           allValue={value}
           onChange={选择装备}
           form={form}
+          配装器已打开={配装器已打开}
+          当前表单配装={当前表单配装}
           装备数据列表={list}
+          当前装备数据={当前选择装备数据}
           部位={部位}
           部位索引={部位索引}
           排序索引={排序索引}

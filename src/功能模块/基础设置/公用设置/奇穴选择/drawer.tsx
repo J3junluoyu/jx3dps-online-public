@@ -13,11 +13,12 @@ const { 奇穴数据 = [], 名称 } = 获取当前数据()
 const 兜底图片 = 'https://icon.jx3box.com/icon/13.png'
 
 const 奇穴选择抽屉: React.FC<any> = (props?: any) => {
-  const { value, onChange, open, onClose, ...rest } = props || {}
+  const { value, onChange, open, onClose, formName, 标题 = '奇穴设置', 提示 = '部分循环请勿切换核心奇穴', ...rest } = props || {}
   const [form] = Form.useForm()
 
   const dispatch = useAppDispatch()
-  const 当前奇穴信息 = value ? value : useAppSelector((state) => state?.data?.当前奇穴信息)
+  const 配装奇穴 = useAppSelector((state) => state?.data?.当前奇穴信息)
+  const 当前奇穴信息 = value ?? 配装奇穴
 
   const handleChangeQixue = (_, values) => {
     const 特殊奇穴索引 = 奇穴数据.findIndex((item) => item.是否为特殊奇穴)
@@ -92,8 +93,8 @@ const 奇穴选择抽屉: React.FC<any> = (props?: any) => {
       title={
         <div className={'qixue-set-drawer-title-wrap'}>
           <div>
-            <span>奇穴设置</span>
-            <span className={'qixue-set-drawer-title-tip'}>部分循环请勿切换核心奇穴</span>
+            <span>{标题}</span>
+            <span className={'qixue-set-drawer-title-tip'}>{提示}</span>
           </div>
           <Button danger size='small' onClick={清空奇穴}>
             清空奇穴
@@ -108,6 +109,7 @@ const 奇穴选择抽屉: React.FC<any> = (props?: any) => {
       {...rest}
     >
       <Form
+        name={formName}
         onValuesChange={handleChangeQixue}
         form={form}
         className={`qixue-set-drawer-wrap ${

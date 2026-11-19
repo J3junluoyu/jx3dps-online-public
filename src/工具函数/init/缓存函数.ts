@@ -8,6 +8,7 @@ import { 规范明尊奇穴 } from '@/计算模块/职业特殊处理/明尊'
 import { 获取明尊固定秘籍 } from '@/心法模块/心法/明尊琉璃体/秘籍'
 import { 更新明尊装备威胁, 更新五十级装备数据, 规范洗髓橙武 } from '@/数据/数据工具/明尊数据适配'
 import 明尊默认奇穴 from '@/心法模块/心法/明尊琉璃体/默认奇穴'
+import { 旧明尊逐招循环键, 迁移旧明尊自定义逐招循环 } from '@/心法模块/心法/明尊琉璃体/自定义逐招循环'
 import { 规范洗髓秘籍, 获取洗髓固定秘籍 } from '@/心法模块/心法/洗髓经/秘籍'
 import { 获取洗髓固定奇穴 } from '@/心法模块/心法/洗髓经/奇穴'
 import {
@@ -140,12 +141,20 @@ export const 加载缓存团队增益轴 = () => {
 // 获取自定义循环
 export const 加载缓存自定义循环数据 = () => {
   const 循环枚举 = JSON.parse(localStorage.getItem(缓存映射.自定义循环) || '{}') || {}
-  if (Object.keys(循环枚举)?.length) {
-    return Object.keys(循环枚举).map((key) => {
-      return 循环枚举[key]
-    })
-  } else {
-    return []
+  const 循环列表 = Object.values(循环枚举) as import('@/@types/循环').循环数据[]
+  if (获取当前数据().名称 !== '明尊琉璃体') return 循环列表
+  try {
+    const 旧数据 = localStorage.getItem(旧明尊逐招循环键)
+    if (!旧数据) return 循环列表
+    const 已迁移循环 = 迁移旧明尊自定义逐招循环(循环列表, 旧数据)
+    localStorage.setItem(
+      缓存映射.自定义循环,
+      JSON.stringify(Object.fromEntries(已迁移循环.map((项) => [项.名称, 项]))),
+    )
+    localStorage.removeItem(旧明尊逐招循环键)
+    return 已迁移循环
+  } catch {
+    return 循环列表
   }
 }
 

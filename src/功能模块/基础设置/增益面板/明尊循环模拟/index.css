@@ -1,0 +1,766 @@
+.mingzun-rotation-sim {
+  --rotation-border: #e8dfd4;
+  --rotation-surface: #faf7f2;
+  --rotation-text: #483827;
+  --rotation-subtle: #746555;
+  --rotation-sun: #a14d24;
+  --rotation-moon: #4b637f;
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+}
+
+.mingzun-rotation-sim h3 {
+  margin: 0;
+  font-size: 14px;
+  color: var(--rotation-text);
+}
+
+.mingzun-rotation-toolbar,
+.mingzun-rotation-stage-header,
+.mingzun-rotation-summary,
+.mingzun-rotation-fields,
+.mingzun-rotation-tools,
+.mingzun-rotation-opening,
+.mingzun-rotation-step-controls,
+.mingzun-rotation-step-detail,
+.mingzun-rotation-shortcuts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+}
+
+.mingzun-rotation-toolbar,
+.mingzun-rotation-stage-header {
+  justify-content: space-between;
+}
+
+.mingzun-rotation-toolbar .ant-btn {
+  display: inline-flex;
+  align-items: center;
+}
+
+.mingzun-rotation-chevron {
+  margin-left: 6px;
+  font-size: 10px;
+  transition: transform 150ms ease;
+}
+
+.mingzun-rotation-chevron.is-expanded {
+  transform: rotate(180deg);
+}
+
+.mingzun-rotation-settings,
+.mingzun-rotation-opening,
+.mingzun-rotation-palette,
+.mingzun-rotation-summary {
+  padding: 12px 14px;
+  border: 1px solid var(--rotation-border);
+  border-radius: 8px;
+  background: var(--rotation-surface);
+}
+
+.mingzun-rotation-fields {
+  align-items: flex-end;
+  gap: 12px 16px;
+}
+
+.mingzun-rotation-fields > div {
+  flex: 0 1 172px;
+  min-width: 120px;
+}
+
+.mingzun-rotation-fields .ant-input-number,
+.mingzun-rotation-fields .ant-select {
+  width: 100%;
+}
+
+.mingzun-rotation-fields label {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--rotation-subtle);
+  font-size: 13px;
+}
+
+.mingzun-rotation-talent-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mingzun-rotation-save-label {
+  display: block;
+  margin: 14px 0 10px;
+  color: var(--ant-primary-color, #ae7946);
+  font-weight: 600;
+}
+
+.mingzun-rotation-opening {
+  gap: 9px 13px;
+  padding: 8px 11px;
+  background: #fff;
+}
+
+.mingzun-rotation-buff-palette,
+.mingzun-rotation-start-buff,
+.mingzun-rotation-start-inputs,
+.mingzun-rotation-display-options {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+}
+
+.mingzun-rotation-buff-palette {
+  padding: 5px;
+  border: 1px solid var(--rotation-border);
+  border-radius: 5px;
+  background: var(--rotation-surface);
+}
+
+.mingzun-rotation-buff-palette button {
+  position: relative;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.mingzun-rotation-buff-palette button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mingzun-rotation-buff-palette button .mingzun-rotation-icon {
+  width: 33px;
+  height: 33px;
+}
+
+.mingzun-rotation-buff-duration {
+  position: absolute;
+  left: 1px;
+  bottom: 1px;
+  padding: 0 2px;
+  border-radius: 2px;
+  background: #21190ed9;
+  color: #fff;
+  font-size: 10px;
+  line-height: 1.3;
+}
+
+.mingzun-rotation-start-inputs .ant-input-number {
+  width: 64px;
+}
+
+.mingzun-rotation-start-buff span:first-child,
+.mingzun-rotation-start-inputs label {
+  font-weight: 600;
+}
+
+.mingzun-rotation-display-options .ant-checkbox-wrapper {
+  white-space: nowrap;
+}
+
+.mingzun-rotation-state {
+  display: grid;
+  grid-template-columns: minmax(185px, 312px) minmax(0, 1fr) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px 26px;
+  min-height: 108px;
+  padding: 14px 18px;
+  border: 1px solid var(--rotation-border);
+  border-radius: 7px;
+  background: #fff;
+}
+
+.mingzun-rotation-energy {
+  position: relative;
+  display: grid;
+  gap: 8px;
+  width: 100%;
+  max-width: 300px;
+  padding: 10px 12px;
+  border: 1px solid var(--rotation-border);
+  border-radius: 8px;
+  background: var(--rotation-surface, #faf6f0);
+}
+
+.mingzun-rotation-energy-row {
+  display: grid;
+  grid-template-columns: 2.5em minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  min-height: 18px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.mingzun-rotation-sim .is-sun {
+  color: var(--rotation-sun);
+}
+
+.mingzun-rotation-sim .is-moon {
+  color: var(--rotation-moon);
+}
+
+.mingzun-rotation-energy .is-sun {
+  --rotation-energy: #b87823;
+}
+
+.mingzun-rotation-energy .is-moon {
+  --rotation-energy: #416c9b;
+}
+
+.mingzun-rotation-energy-track {
+  position: relative;
+  height: 18px;
+}
+
+.mingzun-rotation-energy-track progress {
+  display: block;
+  width: 100%;
+  height: 100%;
+  appearance: none;
+  border: 0;
+  overflow: hidden;
+  border-radius: 4px;
+  background: #53483c;
+}
+
+.mingzun-rotation-energy-track progress::-webkit-progress-bar {
+  background: #53483c;
+}
+
+.mingzun-rotation-energy-track progress::-webkit-progress-value {
+  background: linear-gradient(
+    0deg,
+    var(--rotation-energy),
+    color-mix(in srgb, var(--rotation-energy), white 24%)
+  );
+}
+
+.mingzun-rotation-energy-track progress::-moz-progress-bar {
+  background: var(--rotation-energy);
+}
+
+.mingzun-rotation-energy-track span {
+  display: grid;
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  place-items: center;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 1px 2px #000, 0 0 2px #000;
+  pointer-events: none;
+}
+
+.mingzun-rotation-energy-track:has(progress[value='100']) {
+  border-radius: 4px;
+  box-shadow: 0 0 5px var(--rotation-energy);
+}
+
+.mingzun-rotation-state-buffs {
+  display: grid;
+  align-self: start;
+  gap: 7px;
+  color: var(--rotation-subtle);
+}
+
+.mingzun-rotation-state-buffs h3 {
+  font-weight: 500;
+}
+
+.mingzun-rotation-state-buffs ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mingzun-rotation-state-buffs li {
+  display: grid;
+  justify-items: center;
+  gap: 7px;
+  color: var(--rotation-text);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.mingzun-rotation-buff-icon {
+  position: relative;
+}
+
+.mingzun-rotation-buff-icon img {
+  display: block;
+  width: 36px;
+  height: 36px;
+  border-radius: 2px;
+}
+
+.mingzun-rotation-buff-stack {
+  position: absolute;
+  right: -4px;
+  bottom: -5px;
+  min-width: 18px;
+  padding: 0 3px;
+  border: 1px solid #fff;
+  border-radius: 999px;
+  background: #d78132;
+  color: #fff;
+  line-height: 16px;
+  text-align: center;
+}
+
+.mingzun-rotation-live-metrics {
+  display: flex;
+  align-items: center;
+  justify-self: end;
+  gap: 14px;
+  color: #e63c40;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.mingzun-rotation-live-dps {
+  font-size: clamp(24px, 3vw, 32px);
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.mingzun-rotation-live-duration {
+  display: grid;
+  gap: 2px;
+  padding-left: 14px;
+  border-left: 1px solid var(--rotation-border);
+}
+
+.mingzun-rotation-live-duration label {
+  color: var(--rotation-text);
+}
+
+.mingzun-rotation-wait .ant-input-number {
+  width: 66px;
+}
+
+@media (max-width: 860px) {
+  .mingzun-rotation-state {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .mingzun-rotation-live-metrics {
+    grid-column: 2;
+    grid-row: 1;
+  }
+}
+
+@media (max-width: 540px) {
+  .mingzun-rotation-energy,
+  .mingzun-rotation-live-metrics {
+    grid-column: 1 / -1;
+  }
+
+  .mingzun-rotation-live-metrics {
+    grid-row: auto;
+    justify-self: start;
+  }
+}
+
+.mingzun-rotation-workspace {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--rotation-border);
+  border-radius: 8px;
+}
+
+.mingzun-rotation-stage-header {
+  min-height: 46px;
+  padding: 8px 13px;
+  border-bottom: 1px solid var(--rotation-border);
+  background: #fcfaf6;
+}
+
+.mingzun-rotation-stage-header h3 span,
+.mingzun-rotation-step-controls > span {
+  margin-left: 4px;
+  color: var(--rotation-subtle);
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.mingzun-rotation-step-controls {
+  gap: 4px;
+}
+
+.mingzun-rotation-board {
+  display: grid;
+  align-content: start;
+  min-height: clamp(176px, 27vh, 260px);
+  max-height: max(215px, min(340px, 43vh));
+  overflow-y: auto;
+  padding: 12px;
+  background: #fff;
+}
+
+.mingzun-rotation-empty {
+  padding: 6px 4px;
+  color: var(--rotation-subtle);
+  font-size: 17px;
+}
+
+.mingzun-rotation-sequence {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mingzun-rotation-card {
+  position: relative;
+  flex: 0 0 62px;
+}
+
+.mingzun-rotation-card-button {
+  display: grid;
+  width: 100%;
+  min-height: 58px;
+  align-content: start;
+  justify-items: center;
+  gap: 5px;
+  padding: 5px 4px 3px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--rotation-text);
+  cursor: grab;
+}
+
+.mingzun-rotation-card-button:hover {
+  background: #faf3e9;
+}
+
+.mingzun-rotation-card-button[aria-pressed='true'] {
+  border-color: var(--ant-primary-color, #ae7946);
+  background: #fff0df;
+}
+
+.mingzun-rotation-card-button[data-light='true'] {
+  background: #ffe1c5;
+  box-shadow: inset 0 -3px 0 #e38548;
+}
+
+.mingzun-rotation-card-button[aria-invalid='true'] {
+  border-color: #c96860;
+  background: #fff4f2;
+}
+
+.mingzun-rotation-card-button .mingzun-rotation-icon {
+  width: 47px;
+  height: 47px;
+}
+
+.mingzun-rotation-card-button .mingzun-rotation-icon-badge {
+  right: -2px;
+  bottom: -2px;
+  min-width: 14px;
+  border-radius: 2px;
+  background: #ce7a29;
+  color: #fff;
+  text-align: center;
+}
+
+.mingzun-rotation-card-button .mingzun-rotation-icon-badge.is-moon {
+  background: #347dc8;
+}
+
+.mingzun-rotation-card-delete {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  display: grid;
+  width: 20px;
+  height: 20px;
+  place-items: center;
+  padding: 0;
+  border: 1px solid #fff;
+  border-radius: 50%;
+  background: #ec4851;
+  color: #fff;
+  font-size: 10px;
+  opacity: 0;
+  pointer-events: none;
+  cursor: pointer;
+}
+
+.mingzun-rotation-card:hover .mingzun-rotation-card-delete,
+.mingzun-rotation-card:focus-within .mingzun-rotation-card-delete,
+.mingzun-rotation-card-button[aria-pressed='true'] + .mingzun-rotation-card-delete {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mingzun-rotation-card-delete:hover {
+  background: #c92331;
+}
+
+@media (hover: none) {
+  .mingzun-rotation-card-delete {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+.mingzun-rotation-edit-warning {
+  margin: 0;
+  padding: 8px 13px;
+  border-top: 1px solid #f0d9d3;
+  background: #fff5f2;
+  color: #a53a33;
+  font-size: 13px;
+}
+
+.mingzun-rotation-card-ghost {
+  opacity: 0.36;
+}
+
+.mingzun-rotation-resources,
+.mingzun-rotation-card-note {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  color: var(--rotation-subtle);
+  font-size: 11px;
+  line-height: 14px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.mingzun-rotation-resources {
+  font-weight: 600;
+}
+
+.mingzun-rotation-resources .is-sun {
+  color: #aa561c;
+}
+
+.mingzun-rotation-resources .is-moon {
+  color: #246bc3;
+}
+
+.mingzun-rotation-step-detail {
+  min-height: 40px;
+  padding: 6px 13px;
+  border-top: 1px solid var(--rotation-border);
+  background: #fcfaf6;
+  color: var(--rotation-subtle);
+  font-size: 13px;
+}
+
+.mingzun-rotation-step-detail strong {
+  color: var(--rotation-text);
+}
+
+.mingzun-rotation-wait {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mingzun-rotation-palette {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 1px 0 5px;
+  border: 0;
+  background: #fff;
+}
+
+.mingzun-rotation-skill-group {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 4px;
+}
+
+.mingzun-rotation-skill-group h3 {
+  padding: 4px 2px;
+  border-radius: 4px;
+  background: #397b80;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+}
+
+.mingzun-rotation-skill-buttons {
+  display: flex;
+  gap: 2px;
+}
+
+.mingzun-rotation-skill-button {
+  display: grid;
+  width: 78px;
+  justify-items: center;
+  gap: 4px;
+  padding: 5px 2px 4px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--rotation-text);
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.mingzun-rotation-skill-button .mingzun-rotation-icon {
+  width: 45px;
+  height: 45px;
+}
+
+.mingzun-rotation-skill-button:not(:disabled):not([aria-disabled='true']):hover {
+  border-color: var(--rotation-border);
+  background: #fff;
+}
+
+.mingzun-rotation-skill-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.mingzun-rotation-skill-button[aria-disabled='true'] {
+  cursor: not-allowed;
+}
+
+.mingzun-rotation-skill-button[data-blocked='true'] .mingzun-rotation-icon {
+  filter: grayscale(1) brightness(0.79);
+}
+
+.mingzun-rotation-skill-button[data-blocked='true'] {
+  color: var(--rotation-subtle);
+}
+
+.mingzun-rotation-skill-art {
+  position: relative;
+}
+
+.mingzun-rotation-cooldown {
+  position: absolute;
+  top: -5px;
+  right: -9px;
+  z-index: 1;
+  min-width: 21px;
+  padding: 1px 5px;
+  border: 1px solid #fff;
+  border-radius: 999px;
+  background: #e8454b;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 15px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.mingzun-rotation-cooldown[data-recharging='true'] {
+  background: #76552f;
+}
+
+.mingzun-rotation-charge {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  padding: 0 4px;
+  border-radius: 4px;
+  background: #362518e8;
+  color: #fff;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.mingzun-rotation-card-button:focus-visible,
+.mingzun-rotation-card-delete:focus-visible,
+.mingzun-rotation-skill-button:focus-visible,
+.mingzun-rotation-buff-palette button:focus-visible {
+  outline: 2px solid var(--ant-primary-color, #ae7946);
+  outline-offset: 1px;
+}
+
+.mingzun-rotation-icon {
+  position: relative;
+  display: grid;
+  width: 35px;
+  height: 35px;
+  place-items: center;
+  border: 1px solid #b49a7b;
+  border-radius: 5px;
+  background: #513d2d;
+  color: #ffedcd;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.mingzun-rotation-icon img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  pointer-events: none;
+  user-select: none;
+}
+
+.mingzun-rotation-icon-wait {
+  border-color: #d4c3af;
+  background: #eee4d8;
+  color: #735e47;
+}
+
+.mingzun-rotation-icon-badge {
+  position: absolute;
+  right: -4px;
+  bottom: -3px;
+  padding: 1px 3px;
+  border: 1px solid #fff;
+  border-radius: 4px;
+  background: #fcf3e7;
+  font-size: 10px;
+  line-height: 1.1;
+}
+
+.mingzun-rotation-icon-badge.is-moon {
+  background: #eef3f9;
+}
+
+.mingzun-rotation-shortcuts {
+  color: var(--rotation-subtle);
+  font-size: 12px;
+}
+
+.mingzun-rotation-feedback {
+  min-width: 0;
+}
+
+.mingzun-rotation-summary {
+  gap: 12px 24px;
+  margin-bottom: 8px;
+}
+
+.mingzun-rotation-summary strong {
+  margin-left: 4px;
+  color: var(--ant-primary-color);
+  font-size: 17px;
+  font-variant-numeric: tabular-nums;
+}

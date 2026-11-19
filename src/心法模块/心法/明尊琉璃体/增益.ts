@@ -187,8 +187,6 @@ const team = (
   }
 }
 const 同袍属性 = { toughness_base: 10 }
-// 考拉buff记录的15点为施法者自身效果，团队效果按技能说明每层3点。
-const 寒啸团队属性 = { strain_base: 3 }
 export const 圣浴常驻名称 = '圣浴明心（常驻）'
 export const 获取圣浴常驻层数 = (baseVitality: number) =>
   Math.floor(获取体质增益层数(baseVitality) / 10)
@@ -223,12 +221,10 @@ export const 明尊团队增益: TeamGain[] = [
     冲突增益: ['圣浴明心'],
   },
   {
-    ...team('15072', '33210', '2', '坦克Buff增益'),
+    ...team('15072', '33210', '1', '坦克Buff增益'),
     覆盖率: 50,
     增益描述: '每层无双+3，持续15秒；仅计团队效果，施法者自身每层15点不计入。',
-    增益来源: '考拉 assets/json/belongs.json：寒啸千军团队效果',
-    增益集合: 属性集合(寒啸团队属性),
-    考拉属性: 寒啸团队属性,
+    增益来源: '客户端 buff.tab：33210:1',
   },
   {
     ...team(

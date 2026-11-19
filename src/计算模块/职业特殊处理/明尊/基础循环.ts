@@ -23,11 +23,15 @@ type 计算行 = Pick<
   技能数量: number
 }
 
+const 技能键索引 = new Map(SKILLS.map((技能) => [技能.key, 技能]))
+const 追加戒火技能 = SKILLS.find((技能) => 技能.id === '44567')!
+
 function 获取理论循环行(列表: 循环技能详情[], 设置: Settings): 计算行[] {
   const 结果: 计算行[] = []
+  const 炽炎镇恶 = 设置.talents.includes('44569')
   for (const 行 of 列表) {
     const 状态 = 行.明尊技能状态
-    const 技能 = SKILLS.find((项) => 项.key === 状态?.技能键)
+    const 技能 = 状态 && 技能键索引.get(状态.技能键)
     if (!状态 || !技能) throw new Error(`未知理论循环技能：${行.技能名称}`)
     if (
       !Number.isSafeInteger(行.技能数量) ||
@@ -46,10 +50,10 @@ function 获取理论循环行(列表: 循环技能详情[], 设置: Settings): 
       // 日月斩神兵按施展机会的205/1024期望触发；附伤不触发炽炎镇恶，不另计武伤。
       命中倍率: 技能.id === '25796' ? 205 / 1024 : 1,
     })
-    if (设置.talents.includes('44569') && 炽炎镇恶触发技能.has(技能.id) && 状态.施放次数) {
+    if (炽炎镇恶 && 炽炎镇恶触发技能.has(技能.id) && 状态.施放次数) {
       结果.push({
         技能名称: '戒火斩',
-        技能: SKILLS.find((项) => 项.id === '44567')!,
+        技能: 追加戒火技能,
         技能数量: 状态.施放次数,
         命中倍率: 1,
         驱夷: false,
@@ -83,9 +87,9 @@ export function 获取基础循环武伤分配(列表: 循环技能详情[]) {
   if (总次数 === 0) return []
   if (总次数 < 日破次数 + 驱夜次数 + 五明普通武伤)
     throw new Error('武伤总次数不能少于日破、光明相月破段数与驱夜断愁次数之和；填0可不计武伤。')
-  const 普通武伤 = SKILLS.find((项) => 项.key === '3962:19055:1')!
+  const 普通武伤 = 技能键索引.get('3962:19055:1')!
   // 考拉19055/9驱夜武伤与19055/5日破武伤公式相同，均为200%武器伤害。
-  const 日破武伤 = SKILLS.find((项) => 项.key === '3967:19055:5')!
+  const 日破武伤 = 技能键索引.get('3967:19055:5')!
   return [
     { 技能: 日破武伤, 次数: 日破次数 - 五明日破, 五明: false },
     { 技能: 日破武伤, 次数: 五明日破 + 驱夜次数, 五明: true },
@@ -173,12 +177,8 @@ export function 计算明尊基础循环(
   ) => {
     const 面板 = 获取面板(状态, 装备状态索引)
     const 结果 = calculateSkill(技能, 面板)
-    const 最小 = 计算技能详情
-      ? calculateSkill(技能, { ...面板, variables: { ...面板.variables, rand: 0 } })
-      : 结果
-    const 最大 = 计算技能详情
-      ? calculateSkill(技能, { ...面板, variables: { ...面板.variables, rand: 1 } })
-      : 结果
+    const 最小 = calculateSkill(技能, { ...面板, variables: { ...面板.variables, rand: 0 } })
+    const 最大 = calculateSkill(技能, { ...面板, variables: { ...面板.variables, rand: 1 } })
     return { ...结果, 数量, 最小, 最大, 总伤: 结果.expected * 数量 }
   }
   const 结果列表: 计算结果技能列表类型[] = []
@@ -194,11 +194,21 @@ export function 计算明尊基础循环(
             状态: { 驱夷: false, 光明相: false, 五明: 项.五明 },
           }))
         : [{ 技能: 行.技能, 数量: 技能数量 * 行.命中倍率, 状态: 行 }]
+    if (!计算技能详情) {
+      let 本行总伤 = 0
+      for (const 项 of 原分项)
+        for (const [索引, 状态] of 装备状态.entries()) {
+          const { expected } = calculateSkill(项.技能, 获取面板(项.状态, 索引))
+          本行总伤 += expected * (项.数量 * 状态.weight)
+        }
+      总伤 += 本行总伤
+      continue
+    }
     const 分项 = 原分项.flatMap((项) =>
       装备状态.map((状态, 索引) => 计算分项(项.技能, 项.数量 * 状态.weight, 项.状态, 索引)),
     )
-    总伤 += 分项.reduce((合计, 项) => 合计 + 项.总伤, 0)
-    if (!计算技能详情) continue
+    const 本行总伤 = 分项.reduce((合计, 项) => 合计 + 项.总伤, 0)
+    总伤 += 本行总伤
     const 数量 = 原分项.reduce((总数, 项) => 总数 + 项.数量, 0)
     const 本项结果: 计算结果技能列表类型 = {
       ...获取明尊技能显示信息(行.技能.id),
@@ -206,7 +216,7 @@ export function 计算明尊基础循环(
       技能名称: 行.技能名称,
       技能等级: 分项[0].level,
       技能数量: 数量,
-      技能总输出: 分项.reduce((总伤, 项) => 总伤 + 项.总伤, 0),
+      技能总输出: 本行总伤,
       会心几率: 分项.reduce((总数, 项) => 总数 + 项.critical * 项.数量, 0) / 数量,
       技能最终详情: {
         命中: {

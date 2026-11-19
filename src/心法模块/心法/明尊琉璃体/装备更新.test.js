@@ -42,7 +42,7 @@ test('没有装备ID的手动面板不被源库刷新覆盖', () => {
   expect(更新五十级装备数据(manual)).toBe(manual)
 })
 
-test('10月30日装备属性、品级、镶嵌和特效使用同一公开提交', () => {
+test('保留10月30日装备来源并同步11月12日正式服威胁孔', () => {
   expect(data.commit).toBe('ee2c4c0f502c82a3ab615355cdc80073b6bf1713')
   expect(data.threatSource.commit).toBe(data.commit)
   expect(data.effectSource.commit).toBe(data.commit)
@@ -50,8 +50,10 @@ test('10月30日装备属性、品级、镶嵌和特效使用同一公开提交'
   expect(findGearItem(48492)).toMatchObject({
     name: '虚白生',
     level: 1110,
-    embed: { threat_gain: 29 },
+    embed: { threat_gain: 389 },
   })
+  expect(data.clientSocketUpdate.version).toBe('1.6.0.10083')
+  expect(EQUIPMENT_DATA_VERSION).toBe(`${data.commit}:1.6.0.10090`)
   expect(findGearItem(51437).level).toBe(1195)
   expect(findGearItem(112560).embed.vitality_base).toBe(304)
   expect(Math.trunc(304 * embedCoefficient(8))).toBe(38)
@@ -59,4 +61,21 @@ test('10月30日装备属性、品级、镶嵌和特效使用同一公开提交'
   expect(damage.damage.gain_40788_4.base).toBe(39429)
   expect(damage.damage.gain_38950_13.base).toBe(33638)
   expect(damage.damage.gain_42767_3.base).toBe(1375)
+})
+
+test.each([
+  [51352, 313, 366],
+  [51358, 313, 366],
+  [51364, 313, 366],
+  [51370, 321, 376],
+])('已保存的橙色腰坠%s从旧无双%s刷新到%s', (id, oldStrain, newStrain) => {
+  const slots = { pendant: { key: `trinkets:${id}`, strength: 0, embeds: [0], enchantId: 0 } }
+  const old = 转换明尊配装(slots, 0)
+  old.明尊装备数据版本 = `${data.commit}:1.6.0.10083`
+  old.装备基础属性.明尊属性.strain = oldStrain
+
+  const updated = 更新五十级装备数据(old)
+  expect(updated.明尊装备数据版本).toBe(EQUIPMENT_DATA_VERSION)
+  expect(updated.装备基础属性.明尊属性.strain).toBe(newStrain)
+  expect(获取明尊配装(updated).slots.pendant).toMatchObject(slots.pendant)
 })

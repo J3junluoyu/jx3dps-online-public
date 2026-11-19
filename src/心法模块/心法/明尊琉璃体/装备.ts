@@ -48,9 +48,16 @@ const database = data as unknown as {
   enchants: Enchant[]
   stones: Stone[]
   legacyAliases?: Record<string, string>
+  clientSocketUpdate?: { version: string }
+  clientStrainUpdate?: { version: string }
 }
 export const MIN_GEAR_LEVEL = 1110
-export const EQUIPMENT_DATA_VERSION = database.commit
+const clientDataVersion = database.clientStrainUpdate?.version ?? database.clientSocketUpdate?.version
+export const EQUIPMENT_DATA_VERSION = clientDataVersion
+  ? `${database.commit}:${clientDataVersion}`
+  : database.commit
+// 清尘雨、青云起的无双来自镶嵌孔，按指定装备加入可选范围。
+const 可选无本体无双装备 = new Set(['armors:112482', 'armors:112486'])
 const eligibleGear = [
   ...database.items,
   ...(waterWindData.items as unknown as GearItem[]),
@@ -60,7 +67,9 @@ const eligibleGear = [
   (row) =>
     (row.level >= MIN_GEAR_LEVEL ||
       (row.orangeWeapon && row.level === 719 && row.position === 'primary_weapon')) &&
-    (Number(row.base.strain_base) > 0 || Number(row.magic.strain_base) > 0),
+    (Number(row.base.strain_base) > 0 ||
+      Number(row.magic.strain_base) > 0 ||
+      可选无本体无双装备.has(row.key)),
 )
 // 无修更名为无观后仍只合并完全重复记录；孔位顺序、黄字、套装及精炼上限均参与比较。
 const stableGearValue = (value: unknown): unknown => {
@@ -92,7 +101,14 @@ for (const [oldKey, targetKey] of Object.entries(database.legacyAliases || {})) 
   const target = gearAliases.get(targetKey)
   if (target) gearAliases.set(oldKey, target)
 }
-/** 同时接受旧装备键和旧ID，返回合并后的可选装备；部位校验防止ID跨表冲突。 */
+/** 下拉和推荐共用门派规则；已装备项仍可按原ID读取。 */
+export function gearAvailableForSchool(item: GearItem, school: string) {
+  if (item.school === school) return true
+  if (item.setId && !['通用', '精简'].includes(item.school)) return false
+  return !item.orangeWeapon && !item.specialEffects?.some((effect) => effect.key === 'gain_4877_89')
+}
+
+/** 同时接受旧装备键和旧ID；部位校验防止ID跨表冲突。 */
 export function findGearItem(identifier: string | number, position?: string): GearItem | undefined {
   const raw =
     typeof identifier === 'number'

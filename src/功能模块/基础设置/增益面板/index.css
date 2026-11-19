@@ -117,7 +117,8 @@
   color: var(--ant-primary-color);
 }
 
-.mingzun-chaosheng h2 {
+.mingzun-chaosheng h2,
+.mingzun-damage-taken h2 {
   margin: 0 0 8px;
   color: var(--ant-primary-color);
   font-size: 16px;
@@ -136,7 +137,8 @@
   min-width: 0;
 }
 
-.mingzun-chaosheng-controls label {
+.mingzun-chaosheng-controls label,
+.mingzun-damage-taken-controls label {
   display: block;
   margin-bottom: 6px;
   color: #595959;
@@ -147,7 +149,8 @@
   width: 100%;
 }
 
-.mingzun-chaosheng-result {
+.mingzun-chaosheng-result,
+.mingzun-damage-taken-result {
   padding: 20px;
   border: 1px solid #e8e0d6;
   border-radius: 8px;
@@ -156,7 +159,8 @@
   text-align: center;
 }
 
-.mingzun-chaosheng-result strong {
+.mingzun-chaosheng-result strong,
+.mingzun-damage-taken-result strong {
   display: block;
   margin-top: 6px;
   color: var(--ant-primary-color);
@@ -170,7 +174,8 @@
   font-size: 14px;
 }
 
-.mingzun-chaosheng-result p {
+.mingzun-chaosheng-result p,
+.mingzun-damage-taken-result p {
   margin: 2px 0 0;
   font-size: 13px;
 }
@@ -181,6 +186,25 @@
   margin: 10px 0;
   color: #595959;
   font-size: 13px;
+}
+
+.mingzun-damage-taken-mode {
+  margin-top: 16px;
+}
+
+.mingzun-damage-taken-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 12px 0 20px;
+}
+
+.mingzun-damage-taken-controls > div {
+  flex: 1 1 180px;
+}
+
+.mingzun-damage-taken-controls .ant-input-number-group-wrapper {
+  width: 100%;
 }
 
 .mingzun-tools-modal .mingzun-cycle-compare {

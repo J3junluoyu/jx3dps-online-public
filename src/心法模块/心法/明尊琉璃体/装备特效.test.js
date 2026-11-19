@@ -10,9 +10,9 @@ const {
 const item = (id) => GEAR_ITEMS.find((gear) => gear.id === id)
 const effect = (id) => item(id).specialEffects[0]
 
-test('去重后可选精简装备的34条黄字完整显示，并保留原始handler及等级，避免套用130级特效模板', () => {
+test('去重后可选精简装备的36条黄字完整显示，并保留原始handler及等级，避免套用130级特效模板', () => {
   const items = GEAR_ITEMS.filter((gear) => gear.school === '精简' && gear.specialEffects?.length)
-  expect(items).toHaveLength(34)
+  expect(items).toHaveLength(36)
   for (const gear of items) {
     const mapped = Object.values(明尊装备数据)
       .flat()

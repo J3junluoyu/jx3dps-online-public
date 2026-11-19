@@ -107,6 +107,47 @@ const row = (name) =>
   )
 const activeIcon = () => container.querySelector('.tuandui-list [data-testid="gain-icon-戒火斩"]')
 
+test('仅展示勾选的循环增益，清空后可在设置中按原循环重新启用', () => {
+  const 循环名称 = '测试逐招循环'
+  mockState.data.当前计算循环名称 = 循环名称
+  mockState.data.自定义循环列表 = [
+    { 名称: 循环名称, 明尊逐招配置: { 序列: [
+      { 增益: '号令三军', 层数: 100 },
+      { 增益: '朝圣言', 层数: 20 },
+    ] } },
+  ]
+  mockState.data.当前计算结果 = { 循环内增益: { 循环名称, 覆盖: [{ 名称: '号令三军', 覆盖率: 75 }] } }
+  mockState.data.增益数据.团队增益.push({ 增益名称: '号令三军', 启用: true, 层数: 30, 覆盖率: 20 })
+  mockState.data.增益启用 = true
+  saveChanges()
+  render()
+  expect(getByRole(container, 'group', { name: '循环内增益' }).textContent).toContain('号令三军 75%')
+  expect(container.querySelector('.tuandui-list [data-testid="gain-icon-号令三军"]')).toBeNull()
+
+  click('清空团队增益')
+  render()
+  expect(mockState.data.增益数据.团队增益).toEqual([])
+  expect(mockState.data.增益启用).toBe(true)
+  expect(container.querySelector('[aria-label="循环内增益"]')).toBeNull()
+  expect(container.querySelector('.tuandui-empty').textContent).toBe('当前无团队增益')
+
+  click('设置增益')
+  expect(row('朝圣言').textContent).toContain('按循环设置')
+  expect(row('朝圣言').querySelector('input[type="number"]')).toBeNull()
+  act(() => fireEvent.click(getByRole(row('朝圣言'), 'checkbox')))
+  render()
+  expect(mockState.data.增益数据.团队增益).toEqual([
+    expect.objectContaining({ 增益名称: '圣浴明心', 启用: true }),
+  ])
+  act(() => fireEvent.click(getByRole(row('号令三军'), 'checkbox')))
+  render()
+  expect(getByRole(container, 'group', { name: '循环内增益' }).textContent).toContain('号令三军 75%')
+
+  mockState.data.增益启用 = false
+  render()
+  expect(container.querySelector('[aria-label="循环内增益"]')).toBeNull()
+})
+
 beforeEach(() => {
   mockState = {
     data: {

@@ -28,7 +28,7 @@ if (
   !fs.existsSync(path.join(runtime, 'LICENSE.txt'))
 )
   throw new Error('需要 --runtime 指向包含 node.exe 与 LICENSE.txt 的 Windows 运行环境')
-const build = path.join(repo, 'build')
+const build = path.resolve(repo, process.env.BUILD_PATH || 'build')
 if (!fs.existsSync(path.join(build, 'index.html'))) throw new Error('请先运行本地模式生产构建')
 if (fs.existsSync(output)) throw new Error('输出目录已存在，请使用新的输出目录，避免覆盖旧版本')
 

@@ -40,7 +40,8 @@ const convert = (category, row) => ({
   ),
 })
 const eligible = (row) => {
-  const tank = row.kind === '防御' && ['明教', '通用'].includes(row.school)
+  const tankSet = row.set_id > 0 && ['少林', '天策', '苍云'].includes(row.school)
+  const tank = row.kind === '防御' && (['明教', '通用'].includes(row.school) || tankSet)
   const simplified = row.school === '精简' && row.kind === '内功'
   return (
     (tank || simplified) &&
@@ -61,11 +62,18 @@ const retirementReplacements = {
 /** 所有解析与校验通过后才由调用方写入，避免半途失败留下新旧混合的装备库。 */
 function buildUpdate(sources, previous, source) {
   const main = previous['装备数据.json']
+  const socketUpdate = main.clientSocketUpdate
   const previousItems = new Map(
     Object.values(previous).flatMap((data) => (data.items || []).map((item) => [item.key, item])),
   )
   const preserveEmbedOrder = (item) => {
     const old = previousItems.get(item.key)
+    if (
+      socketUpdate &&
+      old?.embed.threat_gain === socketUpdate.value &&
+      item.embed.threat_gain === socketUpdate.previousValue
+    )
+      item.embed.threat_gain = old.embed.threat_gain
     if (
       old &&
       Object.keys(old.embed).length === Object.keys(item.embed).length &&

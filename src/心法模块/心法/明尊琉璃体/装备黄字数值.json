@@ -6,7 +6,13 @@
     "environment": "持续命中木桩，自身满血，目标满足戒指触发条件，不承受使鞋子特效提前消失的伤害",
     "repository": "https://github.com/IcyTide/Generator",
     "commit": "ee2c4c0f502c82a3ab615355cdc80073b6bf1713",
-    "importedAt": "2026-10-30T04:54:00.338Z"
+    "importedAt": "2026-10-30T04:54:00.338Z",
+    "clientDamageUpdate": {
+      "version": "1.6.0.10090",
+      "date": "2026-11-19",
+      "hotfixDate": "2026-11-16",
+      "table": "scripts/Include/NewSkill.lh:tDPSJingJianAnQiData[9,10]"
+    }
   },
   "damage": {
     "gain_40788_4": {
@@ -30,13 +36,13 @@
     "gain_38950_9": {
       "id": "38966",
       "name": "无观·荒",
-      "base": 10268,
+      "base": 31404,
       "cooldown": 10
     },
     "gain_38950_10": {
       "id": "38966",
       "name": "无观·荒",
-      "base": 11979,
+      "base": 36638,
       "cooldown": 10
     },
     "gain_38950_13": {

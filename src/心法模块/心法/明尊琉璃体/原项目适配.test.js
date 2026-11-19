@@ -102,7 +102,7 @@ test('原配装器完整保留体质孔、仇恨孔、附魔及特例五彩石�
   expect(新装备.明尊未计入效果).toEqual(原结果.warnings)
   expect(明尊装备数据.帽子.find((项) => 项.id === 112319).镶嵌孔数组).toHaveLength(2)
   const 面板 = 获取明尊显示面板(新装备, 奇穴, 增益数据)
-  expect(面板.明尊招式威胁).toBe(222)
+  expect(面板.明尊招式威胁).toBe(253)
   expect(面板.明尊面板).toEqual(
     calculateCycle(原结果.stats, { ...DEFAULT_SETTINGS, stance: 'mainTank' }, {}, 60).panel,
   )
@@ -132,11 +132,11 @@ test('旧方案加载时按装备和原孔位更新威胁，保留其他属性�
   const 更新 = 更新明尊装备威胁(原方案)
   expect(更新.装备基础属性).toEqual({
     ...原方案.装备基础属性,
-    明尊属性: { ...原方案.装备基础属性.明尊属性, threat: 223 },
+    明尊属性: { ...原方案.装备基础属性.明尊属性, threat: 269 },
   })
   expect(更新.装备列表).toBe(原方案.装备列表)
   expect(原方案.装备基础属性.明尊属性.threat).toBe(0)
-  expect(获取明尊显示面板(更新, 奇穴, 增益数据).明尊招式威胁).toBe(223)
+  expect(获取明尊显示面板(更新, 奇穴, 增益数据).明尊招式威胁).toBe(269)
   const 手动 = { 装备列表: [], 装备基础属性: 原方案.装备基础属性 }
   expect(更新明尊装备威胁(手动)).toBe(手动)
 })

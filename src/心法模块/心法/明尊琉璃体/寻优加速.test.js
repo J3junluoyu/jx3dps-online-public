@@ -5,7 +5,12 @@ jest.mock('@/数据/数据工具/获取当前数据', () => ({
   default: () => ({ 名称: '明尊琉璃体', 基础GCD: 1 }),
 }))
 jest.mock('@/hooks', () => ({
-  useAppSelector: (select) => select(mockState),
+  useAppSelector: (select, equal = Object.is) => {
+    const result = select(mockState)
+    const previous = require('react').useRef(result)
+    if (!equal(previous.current, result)) previous.current = result
+    return previous.current
+  },
   useAppDispatch: () => mockDispatch,
 }))
 jest.mock('@/hooks/use-cycle', () => ({
@@ -53,10 +58,12 @@ jest.mock(
 )
 jest.mock('antd', () => {
   const React = require('react')
-  const Select = React.forwardRef(({ value, onChange }, _ref) =>
+  const Select = React.forwardRef(({ value, onChange, open, onDropdownVisibleChange }, _ref) =>
     React.createElement('button', {
       'data-value': value,
-      onClick: () => onChange?.('0.8125GCD循环'),
+      'aria-expanded': open,
+      onClick: () =>
+        onDropdownVisibleChange ? onDropdownVisibleChange(!open) : onChange?.('0.8125GCD循环'),
     }),
   )
   Select.Option = () => null
@@ -65,7 +72,7 @@ jest.mock('antd', () => {
     Button: () => null,
     Popover: ({ children }) => children,
     App: { useApp: () => ({ modal: {} }) },
-    message: { warning: jest.fn(), success: jest.fn() },
+    message: { warning: jest.fn(), success: jest.fn(), error: jest.fn() },
   }
 })
 
@@ -115,6 +122,8 @@ afterEach(() => {
     act(() => root.unmount())
     container.remove()
   }
+  jest.restoreAllMocks()
+  jest.useRealTimers()
 })
 
 beforeEach(() => {
@@ -151,13 +160,14 @@ test('增益开关控制是否计入药品加速，上下边界均按最终加�
 const 渲染装备选择 = (循环 = 零点八一二五, 列表 = mockGear) => {
   const ref = React.createRef()
   const onChange = jest.fn()
-  render(
+  const 配装 = { _1: { id: 1 } }
+  const container = render(
     React.createElement(装备部位选择, {
       ref,
       value: 1,
       allValue: { id: 1 },
       onChange,
-      form: { getFieldsValue: () => ({ _1: { id: 1 } }) },
+      form: { getFieldsValue: () => 配装 },
       装备数据列表: 列表,
       部位: '帽子',
       部位索引: '_1',
@@ -169,8 +179,45 @@ const 渲染装备选择 = (循环 = 零点八一二五, 列表 = mockGear) => {
       寻优循环: 循环,
     }),
   )
-  return { ref, onChange }
+  return { ref, onChange, 配装, 下拉: container.querySelector('button') }
 }
+
+test('智能对比先打开下拉，重开沿用缓存，换装后重新计算', () => {
+  jest.useFakeTimers()
+  const { 下拉, 配装 } = 渲染装备选择()
+  act(() => 下拉.click())
+  expect(下拉.getAttribute('aria-expanded')).toBe('true')
+  expect(秒伤计算).not.toHaveBeenCalled()
+  act(() => jest.runAllTimers())
+  expect(秒伤计算).toHaveBeenCalledTimes(1 + mockGear.length)
+
+  act(() => 下拉.click())
+  秒伤计算.mockClear()
+  act(() => 下拉.click())
+  act(() => jest.runAllTimers())
+  expect(秒伤计算).not.toHaveBeenCalled()
+
+  act(() => 下拉.click())
+  配装._1 = { id: 5 }
+  act(() => 下拉.click())
+  act(() => jest.runAllTimers())
+  expect(秒伤计算).toHaveBeenCalledTimes(1 + mockGear.length)
+  expect(秒伤计算.mock.calls[0][0].更新装备信息.装备基础属性.基础攻击).toBe(300)
+})
+
+test('达到每批时间预算后让出主线程，关闭下拉取消剩余对比', () => {
+  jest.useFakeTimers()
+  let 时间 = 0
+  jest.spyOn(performance, 'now').mockImplementation(() => (时间 += 9))
+  const { 下拉 } = 渲染装备选择()
+  act(() => 下拉.click())
+  act(() => jest.advanceTimersToNextTimer()) // 等待浏览器绘制
+  act(() => jest.advanceTimersToNextTimer()) // 基准配装及首件候选
+  expect(秒伤计算).toHaveBeenCalledTimes(2)
+  act(() => 下拉.click())
+  act(() => jest.runAllTimers())
+  expect(秒伤计算).toHaveBeenCalledTimes(2)
+})
 
 test('允许跨加速装备对比时，仍排除不足档及更快档的高伤候选，并固定计算循环', async () => {
   const { ref, onChange } = 渲染装备选择()

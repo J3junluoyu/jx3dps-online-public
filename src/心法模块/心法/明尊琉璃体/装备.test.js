@@ -26,8 +26,8 @@ const selection = (item, overrides = {}) => ({
 })
 const slot = (item) => (item.position === 'ring' ? 'ring1' : item.position)
 
-test('恢复单防无加速装备后189件可选装备，精炼和镶嵌均产生有效属性', () => {
-  expect(GEAR_ITEMS).toHaveLength(189)
+test('221件可识别装备的精炼和镶嵌均产生有效属性', () => {
+  expect(GEAR_ITEMS).toHaveLength(221)
   expect(new Set(GEAR_ITEMS.map((item) => item.key)).size).toBe(GEAR_ITEMS.length)
   for (const item of GEAR_ITEMS) {
     const result = calculateLoadout({
@@ -148,7 +148,7 @@ test('精简内功防具、首饰和暗器加入装备库并正确汇总攻击�
   const belt = GEAR_ITEMS.find((row) => row.key === 'armors:112444')
   const ring = GEAR_ITEMS.find((row) => row.key === 'trinkets:49922')
   const ranged = GEAR_ITEMS.find((row) => row.key === 'weapons:47966')
-  expect(GEAR_ITEMS.filter((row) => row.school === '精简')).toHaveLength(65)
+  expect(GEAR_ITEMS.filter((row) => row.school === '精简')).toHaveLength(67)
   for (const item of [belt, ring, ranged]) {
     expect(item.school).toBe('精简')
     expect(item.kind).toBe('内功')
@@ -168,19 +168,17 @@ test('精简内功防具、首饰和暗器加入装备库并正确汇总攻击�
   expect(result.stats.physicalShield).toBe(21)
   expect(result.stats.magicalShield).toBe(26)
 })
-test('仅带无双孔的装备移出装备库，旧配装清理该装备并保留其余部位', () => {
+test('未纳入的仅带无双孔装备仍从旧配装中清理，保留清尘雨和其余部位', () => {
   const belt = 装备数据库.items.find((row) => row.id === 112453)
-  const wrist = 装备数据库.items.find((row) => row.id === 112482)
+  const wrist = findGearItem(112482, 'wrist')
   const hat = GEAR_ITEMS.find((row) => row.position === 'hat')
   const saved = { belt: selection(belt), wrist: selection(wrist), hat: selection(hat) }
-  for (const item of [belt, wrist]) {
-    expect(item.embed.strain_base).toBe(304)
-    expect(GEAR_ITEMS.some((row) => row.id === item.id)).toBe(false)
-    expect(() => calculateLoadout({ [slot(item)]: selection(item) })).toThrow('装备')
-  }
+  expect(belt.embed.strain_base).toBe(304)
+  expect(findGearItem(belt.key)).toBeUndefined()
+  expect(() => calculateLoadout({ belt: saved.belt })).toThrow('装备')
   const result = normalizeLoadout(saved)
   expect(result.slots.belt.key).toBe('')
-  expect(result.slots.wrist.key).toBe('')
+  expect(result.slots.wrist).toEqual(saved.wrist)
   expect(result.slots.hat).toEqual(saved.hat)
   expect(saved.belt.key).toBe(belt.key)
 })
@@ -376,7 +374,7 @@ test('普通装备保留1110品边界，橙武719品除外，无加速防御装�
   expect(GEAR_ITEMS.find((row) => row.key === 'armors:111949').level).toBe(1110)
   expect(GEAR_ITEMS.some((row) => row.level < 1110 && !row.orangeWeapon)).toBe(false)
   const noHaste = GEAR_ITEMS.filter((row) => row.kind === '防御' && !(row.magic.haste_base > 0))
-  expect(noHaste).toHaveLength(57)
+  expect(noHaste).toHaveLength(75)
   expect(noHaste.map((row) => row.id)).toEqual(
     expect.arrayContaining([112584, 112395, 46708, 46725]),
   )
@@ -406,9 +404,9 @@ test('普通装备保留1110品边界，橙武719品除外，无加速防御装�
   expect(() => calculateLoadout({ tertiary_weapon: saved.tertiary_weapon })).toThrow('附魔')
 })
 
-test('读取恢复后的66件装备威胁词条及39个威胁孔，精炼和镶嵌按原始系数分别取整', () => {
-  expect(GEAR_ITEMS.filter((row) => 'threat_gain' in row.magic)).toHaveLength(66)
-  expect(GEAR_ITEMS.filter((row) => 'threat_gain' in row.embed)).toHaveLength(39)
+test('读取96件装备威胁词条及57个新版威胁孔，精炼和镶嵌分别取整', () => {
+  expect(GEAR_ITEMS.filter((row) => 'threat_gain' in row.magic)).toHaveLength(96)
+  expect(GEAR_ITEMS.filter((row) => row.embed.threat_gain === 389)).toHaveLength(57)
   const item = GEAR_ITEMS.find((row) => row.id === 112319)
   expect(Object.keys(item.embed)).toEqual(['vitality_base', 'threat_gain'])
   const bare = calculateLoadout({ hat: selection(item) })
@@ -416,8 +414,8 @@ test('读取恢复后的66件装备威胁词条及39个威胁孔，精炼和镶�
   const both = calculateLoadout({ hat: selection(item, { strength: 6, embeds: [8, 8] }) })
   expect(bare.stats.threat).toBe(205)
   expect(first.stats.threat).toBe(220)
-  expect(both.stats.threat).toBe(223)
-  expect(both.stats).toEqual({ ...first.stats, threat: 223 })
+  expect(both.stats.threat).toBe(269)
+  expect(both.stats).toEqual({ ...first.stats, threat: 269 })
   expect(both.warnings).not.toContain('招式产生威胁')
   const wrist = GEAR_ITEMS.find((row) => row.id === 112560)
   expect(
@@ -425,7 +423,7 @@ test('读取恢复后的66件装备威胁词条及39个威胁孔，精炼和镶�
       hat: selection(item, { strength: 6, embeds: [8, 8] }),
       wrist: selection(wrist, { strength: 6, embeds: [8, 8] }),
     }).stats.threat,
-  ).toBe(450)
+  ).toBe(542)
 })
 
 test('威胁归一字段与旧字段同时出现时只统计一次，不进入DPS乘区', () => {
