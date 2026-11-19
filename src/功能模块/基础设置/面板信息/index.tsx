@@ -15,7 +15,7 @@ import DpsKernelOptimizer from '@/计算模块/dps-kernel-optimizer'
 import { 获取计算目标信息 } from '@/计算模块/统一工具函数/工具函数'
 import { 获取加速等级, 获取实际帧数 } from '@/工具函数/data'
 import { 格式化明尊GCD } from '@/心法模块/心法/明尊琉璃体/GCD显示'
-import { 每层基础体质, 满层基础体质 } from '@/心法模块/心法/明尊琉璃体/体质层数'
+import { 每层基础体质, 满层基础体质, 获取体质增益层数 } from '@/心法模块/心法/明尊琉璃体/体质层数'
 import { 数据埋点 } from '@/工具函数/tools/log'
 import { 判断团队增益轴快照计算 } from '@/数据/团队增益/tools'
 
@@ -213,7 +213,11 @@ function 面板信息() {
                       <>
                         <span>{显示数据.体质}</span>
                         <span className='character-pilgrimage-stacks'>
-                          朝圣{显示数据.明尊面板.pilgrimageStacks}层
+                          朝圣
+                          {获取体质增益层数(
+                            显示数据.明尊面板.朝圣基础体质 ?? 显示数据.明尊面板.baseVitality,
+                          )}
+                          层
                         </span>
                       </>
                     ) : item === '体质' && 显示数据.洗髓面板 ? (
@@ -334,10 +338,14 @@ export const 获取面板显示数据数值 = (
     return <加速说明 加速值={面板.hasteRating} />
   }
   if (key === '体质' && 面板) {
-    const 所需基础体质 = Math.max(0, Math.ceil(满层基础体质 - 面板.baseVitality))
+    const 基础体质 = 角色最终属性.明尊面板?.朝圣基础体质 ?? 面板.baseVitality
+    const 所需基础体质 = Math.max(0, Math.ceil(满层基础体质 - 基础体质))
     return (
       <div>
-        <p>基础体质：{面板.baseVitality}</p>
+        <p>
+          基础体质：{基础体质}
+          {基础体质 !== 面板.baseVitality ? '（已扣除水特效）' : ''}
+        </p>
         <p>
           {角色最终属性.洗髓面板
             ? `大狮子吼触发禅语时，每${每层基础体质}点基础体质提供1层，最多100层。`
@@ -346,7 +354,7 @@ export const 获取面板显示数据数值 = (
         <p>
           {所需基础体质 > 0
             ? `距离100层还需${所需基础体质}点基础体质。`
-            : `已达100层，溢出${面板.baseVitality - 满层基础体质}点基础体质。`}
+            : `已达100层，溢出${基础体质 - 满层基础体质}点基础体质。`}
         </p>
       </div>
     )

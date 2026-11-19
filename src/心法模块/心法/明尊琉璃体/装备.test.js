@@ -26,8 +26,8 @@ const selection = (item, overrides = {}) => ({
 })
 const slot = (item) => (item.position === 'ring' ? 'ring1' : item.position)
 
-test('221件可识别装备的精炼和镶嵌均产生有效属性', () => {
-  expect(GEAR_ITEMS).toHaveLength(221)
+test('230件可识别装备的精炼和镶嵌均产生有效属性', () => {
+  expect(GEAR_ITEMS).toHaveLength(230)
   expect(new Set(GEAR_ITEMS.map((item) => item.key)).size).toBe(GEAR_ITEMS.length)
   for (const item of GEAR_ITEMS) {
     const result = calculateLoadout({
@@ -374,7 +374,7 @@ test('普通装备保留1110品边界，橙武719品除外，无加速防御装�
   expect(GEAR_ITEMS.find((row) => row.key === 'armors:111949').level).toBe(1110)
   expect(GEAR_ITEMS.some((row) => row.level < 1110 && !row.orangeWeapon)).toBe(false)
   const noHaste = GEAR_ITEMS.filter((row) => row.kind === '防御' && !(row.magic.haste_base > 0))
-  expect(noHaste).toHaveLength(75)
+  expect(noHaste).toHaveLength(78)
   expect(noHaste.map((row) => row.id)).toEqual(
     expect.arrayContaining([112584, 112395, 46708, 46725]),
   )

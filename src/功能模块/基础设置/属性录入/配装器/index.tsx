@@ -10,7 +10,7 @@ import { 获取页面参数 } from '@/工具函数/help'
 import { 数据埋点 } from '@/工具函数/tools/log'
 import 获取当前数据 from '@/数据/数据工具/获取当前数据'
 import useCycle from '@/hooks/use-cycle'
-import { 转换明尊配装 } from '@/数据/数据工具/明尊数据适配'
+import { 转换明尊配装, 规范洗髓武器条目 } from '@/数据/数据工具/明尊数据适配'
 import type { 优化方案 } from '@/心法模块/心法/明尊琉璃体/方案优化'
 import { 格式化明尊GCD } from '@/心法模块/心法/明尊琉璃体/GCD显示'
 import { 圣浴常驻名称 } from '@/心法模块/心法/明尊琉璃体/增益'
@@ -161,6 +161,8 @@ function 配装器(props: ModalProps) {
   // 导入配装数据
   const 保存数据并计算 = (e) => {
     const values = { ...e }
+    if (获取当前数据().名称 === '洗髓经' && values._12)
+      values._12 = 规范洗髓武器条目(values._12)
     if (明尊模式) {
       for (const slot of Object.keys(装备位置部位枚举)) {
         if (values[slot]) values[slot] = { ...values[slot], 大附魔: values[slot].大附魔 || 0 }

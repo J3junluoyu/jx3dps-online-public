@@ -1,10 +1,10 @@
 import { 对比明尊加速档位 } from '../明尊琉璃体/方案档位对比'
 import * as 优化模块 from '../明尊琉璃体/方案优化'
 import { calculateLoadout } from '../明尊琉璃体/装备'
-import { 计算洗髓面板, 获取洗髓计算设置, 获取洗髓增益属性, 计算洗髓循环 } from './计算'
+import { 计算洗髓面板, 获取洗髓计算设置, 获取洗髓增益属性, 计算洗髓循环, 获取洗髓平衡内防 } from './计算'
 import { 洗髓自适应循环, 获取洗髓GCD } from './循环'
 import 配装 from './测试配装.json'
-import { GEAR_ITEMS, XISUI_ORANGE_WEAPON_LEVELS, isXisuiOrangeWeapon } from '../明尊琉璃体/装备'
+import { GEAR_ITEMS, XISUI_ORANGE_WEAPON_LEVELS, isXisuiOrangeWeapon, gearAvailableForSchool } from '../明尊琉璃体/装备'
 
 jest.setTimeout(120000)
 afterEach(() => jest.restoreAllMocks())
@@ -133,6 +133,11 @@ test('实际配装三档推荐按最终增益面板校验御劲与GCD，重新�
     const panel = 计算洗髓面板(equipment.stats, settings)
     expect(panel.toughness * 100 + 1e-10).toBeGreaterThanOrEqual(9.5)
     expect(获取洗髓GCD(panel.hasteRating)).toBe(entry.gcd)
+    expect(entry.result.after.magicalShield).toBe(panel.magicalShield)
+    const 心法额外内防 = 457 + Math.trunc(panel.vitality * 164 / 1024)
+    expect(entry.result.after.defenseImbalance).toBe(
+      Math.abs(panel.physicalShield - (panel.magicalShield - 心法额外内防)),
+    )
     const detail = 洗髓自适应循环.循环详情.find((row) => (24 - row.循环加速等级) / 16 === entry.gcd)
     expect(计算洗髓循环(equipment.stats, settings, detail.技能详情, 300, false).秒伤).toBe(
       entry.result.after.dps,
@@ -157,6 +162,7 @@ test('高品级额外搜索起点包含各部位最高品级与8级精炼试做�
         (row) =>
           row.position === item.position &&
           row.kind === '防御' &&
+          gearAvailableForSchool(row, '少林') &&
           !row.orangeWeapon &&
           !优化模块.是橙色腰坠(row),
       ).map((row) => row.level),
@@ -166,6 +172,48 @@ test('高品级额外搜索起点包含各部位最高品级与8级精炼试做�
   expect(keys).toContain('trinkets:51358')
   expect(keys).toContain('trinkets:51370')
   expect(keys).not.toContain('trinkets:49897')
+  expect(keys).toContain('weapons:46747')
+  expect(keys).not.toContain('weapons:46764')
+})
+
+test('洗髓同档秒伤相同时选择扣除心法额外内防后更平衡的少林棍', () => {
+  const data = {
+    ...input(0),
+    cycle: { ...洗髓自适应循环, 循环详情: [洗髓自适应循环.循环详情[0]] },
+    allowHigherHaste: true,
+    slots: ['primary_weapon'],
+    defensePreference: 'magicalShield',
+    gearKeys: ['weapons:46632', 'weapons:46673', 'weapons:46690'],
+  }
+  const [one, two] = data.gearKeys.slice(0, 2).map((key) =>
+    优化模块.优化明尊方案({ ...data, gearKeys: [key] }),
+  )
+  expect(one.after.dps).toBe(two.after.dps)
+  expect(one.after.defenseImbalance).not.toBe(two.after.defenseImbalance)
+  const best = one.after.defenseImbalance < two.after.defenseImbalance ? one : two
+  expect(优化模块.优化明尊方案(data).plan.slots.primary_weapon).toEqual(best.plan.slots.primary_weapon)
+  expect(获取洗髓平衡内防({ magicalShield: 901, vitality: 1024 })).toBe(280)
+})
+
+test('洗髓跨档按秒伤优先，同秒伤按扣除心法内防后的防御差择优', () => {
+  jest.spyOn(优化模块, '优化明尊方案').mockImplementation((request) => {
+    const tier = request.cycle.循环详情[0].循环加速等级
+    return {
+      plan: request.initial,
+      before: { gcd: 1.1875 },
+      after: {
+        dps: tier === 3 ? 9999 : 10000,
+        gcd: (24 - tier) / 16,
+        toughness: 9.5,
+        physicalShield: 5000,
+        magicalShield: tier === 4 ? 7000 : 5000,
+        defenseImbalance: tier === 4 ? 50 : tier === 3 ? 0 : 1000,
+      },
+      usedToughnessEnchantFallback: tier === 4,
+      evaluations: 1,
+    }
+  })
+  expect(对比明尊加速档位(input()).recommendedCycleName).toBe('4档自适应理论循环')
 })
 
 test('高品级起点参与全范围比较，最终伤害不低于各品级单独搜索的结果', () => {

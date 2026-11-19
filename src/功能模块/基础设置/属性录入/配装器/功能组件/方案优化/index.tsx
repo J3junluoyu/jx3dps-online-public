@@ -83,6 +83,7 @@ function 方案优化(props: 方案优化入参) {
   const [minToughness, setMinToughness] = useState(8)
   const [includeMowen, setIncludeMowen] = useState(false)
   const [includeHasteConsumables, setIncludeHasteConsumables] = useState(false)
+  const [includeSingleDefenseGear, setIncludeSingleDefenseGear] = useState(true)
   const [enchantTier, setEnchantTier] = useState<72 | 90>(72)
   const [defensePreference, setDefensePreference] = useState<防御倾向>('physicalShield')
   const [orangeWeaponLevel, setOrangeWeaponLevel] = useState(0)
@@ -102,6 +103,7 @@ function 方案优化(props: 方案优化入参) {
   const 目标名称 = useAppSelector((state) => state.data.当前输出计算目标名称)
   const compareGcd = 洗髓模式 || mode === 'compare'
   const 防御条件 = defensePreference === 'magicalShield' ? '内防高于外防' : '外防高于内防'
+  const 达标条件 = 洗髓模式 ? '加速和最低御劲' : `加速、最低御劲和${防御条件}`
   const orangeModel = !洗髓模式 && orangeWeaponLevel > 0
   const cycles = props.循环待补充
     ? []
@@ -125,7 +127,9 @@ function 方案优化(props: 方案优化入参) {
   )
   const other = comparison?.entries
     .filter((entry) => entry !== recommended && entry.result?.after)
-    .sort((a, b) => 比较推荐指标(a.result!.after!, b.result!.after!, defensePreference))[0]
+    .sort((a, b) =>
+      比较推荐指标(a.result!.after!, b.result!.after!, 洗髓模式 ? 'balance' : defensePreference),
+    )[0]
   const hasPlan = comparison
     ? comparison.entries.some((entry) => entry.result?.plan)
     : !!result?.plan
@@ -137,16 +141,23 @@ function 方案优化(props: 方案优化入参) {
     recommended?.result?.after && other?.result?.after
       ? recommended.result.after[defensePreference] - other.result.after[defensePreference]
       : 0
+  const 洗髓更平衡 =
+    (recommended?.result?.after?.defenseImbalance ?? 0) <
+    (other?.result?.after?.defenseImbalance ?? 0)
   const comparisonSummary = !recommended
-    ? `${洗髓模式 ? '三个档位' : '两个档位'}均未找到可行方案。需同时满足加速、最低御劲和${防御条件}。`
+    ? `${洗髓模式 ? '三个档位' : '两个档位'}均未找到可行方案。需同时满足${达标条件}。`
     : difference === undefined
       ? `推荐${recommended.cycleName}；${洗髓模式 ? '其余档位' : '另一档'}未找到可行方案。`
-      : other?.result?.usedToughnessEnchantFallback && !recommended.result?.usedToughnessEnchantFallback
+      : !洗髓模式 &&
+          other?.result?.usedToughnessEnchantFallback &&
+          !recommended.result?.usedToughnessEnchantFallback
         ? `推荐${recommended.cycleName}，无需御劲附魔即可达标。${other.cycleName}使用御劲附魔补足。`
       : difference === 0
-        ? defenseDifference > 0
-          ? `可行方案秒伤相同，推荐${recommended.cycleName}，比${other!.cycleName}高${防御点数格式.format(defenseDifference)}点${防御名称[defensePreference]}。`
-          : `可行方案秒伤相同，优先保留${recommended.cycleName}。`
+        ? 洗髓模式 && 洗髓更平衡
+          ? `可行方案秒伤相同，推荐${recommended.cycleName}，扣除心法额外内防后的内外防差距更小。`
+          : !洗髓模式 && defenseDifference > 0
+            ? `可行方案秒伤相同，推荐${recommended.cycleName}，比${other!.cycleName}高${防御点数格式.format(defenseDifference)}点${防御名称[defensePreference]}。`
+            : `可行方案秒伤相同，优先保留${recommended.cycleName}。`
         : `推荐${recommended.cycleName}，比${other!.cycleName}高${difference.toFixed(2)}秒伤${
             other!.result!.after!.dps > 0
               ? `（${((difference / other!.result!.after!.dps) * 100).toFixed(2)}%）`
@@ -232,8 +243,9 @@ function 方案优化(props: 方案优化入参) {
         minToughness,
         includeMowen,
         includeHasteConsumables,
+        includeSingleDefenseGear,
         enchantTier,
-        defensePreference,
+        defensePreference: 洗髓模式 ? undefined : defensePreference,
         orangeWeaponLevel,
         gearScope,
         compareGcd,
@@ -338,7 +350,9 @@ function 方案优化(props: 方案优化入参) {
             <span>
               {props.循环待补充
                 ? '循环模板待补充，暂不计算推荐方案'
-                : `成装需满足${防御条件}，符合条件的方案按秒伤推荐`}
+                : 洗髓模式
+                  ? '优先秒伤。同秒伤时，扣除心法额外内防后比较内外防差距。'
+                  : `成装需满足${防御条件}，符合条件的方案按秒伤推荐`}
             </span>
             <div>
               {running ? (
@@ -456,19 +470,21 @@ function 方案优化(props: 方案优化入参) {
                 ]}
               />
             </label>
-            <label>
-              防御倾向{' '}
-              <Select
-                aria-label='防御倾向'
-                disabled={running}
-                value={defensePreference}
-                onChange={(value) => 设置条件(() => setDefensePreference(value))}
-                options={[
-                  { label: '外防', value: 'physicalShield' },
-                  { label: '内防', value: 'magicalShield' },
-                ]}
-              />
-            </label>
+            {!洗髓模式 && (
+              <label>
+                防御倾向{' '}
+                <Select
+                  aria-label='防御倾向'
+                  disabled={running}
+                  value={defensePreference}
+                  onChange={(value) => 设置条件(() => setDefensePreference(value))}
+                  options={[
+                    { label: '外防', value: 'physicalShield' },
+                    { label: '内防', value: 'magicalShield' },
+                  ]}
+                />
+              </label>
+            )}
           </div>
           <div className={styles.toggleFields}>
             <Checkbox
@@ -484,6 +500,13 @@ function 方案优化(props: 方案优化入参) {
               onChange={(e) => 设置条件(() => setIncludeHasteConsumables(e.target.checked))}
             >
               计算加速小吃小药
+            </Checkbox>
+            <Checkbox
+              disabled={running}
+              checked={includeSingleDefenseGear}
+              onChange={(e) => 设置条件(() => setIncludeSingleDefenseGear(e.target.checked))}
+            >
+              计算单防御装备
             </Checkbox>
           </div>
         </div>
@@ -586,7 +609,7 @@ function 方案优化(props: 方案优化入参) {
           <Alert
             type='warning'
             showIcon
-            message={`本次搜索未找到同时满足加速、最低御劲及${防御条件}的方案。`}
+            message={`本次搜索未找到同时满足${达标条件}的方案。`}
           />
         )}
         {result?.after && (

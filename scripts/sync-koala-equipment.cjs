@@ -41,13 +41,14 @@ const convert = (category, row) => ({
 })
 const eligible = (row) => {
   const tankSet = row.set_id > 0 && ['少林', '天策', '苍云'].includes(row.school)
-  const tank = row.kind === '防御' && (['明教', '通用'].includes(row.school) || tankSet)
+  const tankWeapon = row.position === 'primary_weapon' && ['明教', '少林'].includes(row.school)
+  const tank = row.kind === '防御' && (['明教', '通用'].includes(row.school) || tankSet || tankWeapon)
   const simplified = row.school === '精简' && row.kind === '内功'
   return (
     (tank || simplified) &&
     ['PVE', 'ALL'].includes(row.usage) &&
     row.level >= 1110 &&
-    (row.position !== 'primary_weapon' || row.school === '明教')
+    (row.position !== 'primary_weapon' || tankWeapon)
   )
 }
 const retirementReplacements = {

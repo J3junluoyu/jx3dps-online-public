@@ -21,6 +21,7 @@ import { 计算明尊基础循环 } from './基础循环'
 import { 获取明尊技能显示信息 } from './技能显示'
 import { findGearItem, isMingzunOrangeWeapon } from '@/心法模块/心法/明尊琉璃体/装备'
 import type { EquippedSpecialEffect } from '@/心法模块/心法/明尊琉璃体/装备特效'
+import { averageEquipmentProcGains } from '@/心法模块/心法/明尊琉璃体/装备特效计算'
 import { matchMajorEnchant } from '@/心法模块/心法/明尊琉璃体/大附魔'
 import { 获取明尊增益属性, 获取明尊战斗增益, 圣浴常驻名称 } from '@/心法模块/心法/明尊琉璃体/增益'
 import { 模拟明尊逐招循环 } from '@/心法模块/心法/明尊琉璃体/逐招模拟'
@@ -122,11 +123,16 @@ export function 获取明尊显示面板(
 ): 角色基础属性类型 {
   const 原始 = 获取明尊原始属性(装备信息?.装备基础属性)
   const 设置 = 获取明尊计算设置(奇穴, 增益数据, {}, 53, 增益启用, 原始)
-  设置.equipmentEffects = 获取明尊已选装备特效(装备信息)
+  const 已选特效 = 获取明尊已选装备特效(装备信息)
+  设置.equipmentEffects = 已选特效
   const 面板 = calculateAttributes(原始, 设置)
+  const 水特效体质 = averageEquipmentProcGains(
+    已选特效.filter(({ effect }) => effect.handlerId === 4877),
+    面板.hasteRating,
+  ).vitality_base || 0
   return {
     ...装备信息.装备基础属性,
-    明尊面板: 面板,
+    明尊面板: 水特效体质 ? { ...面板, 朝圣基础体质: 面板.baseVitality - 水特效体质 } : 面板,
     明尊招式威胁: 面板.threat,
     体质: 面板.vitality,
     面板攻击: 面板.attack,

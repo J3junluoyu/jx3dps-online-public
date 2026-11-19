@@ -34,7 +34,7 @@ export function 获取档位对比循环(cycleName: string, talents: readonly st
   })
 }
 
-/** 每档独立寻优，跨档优先常规附魔方案，再比较秒伤和所选防御。 */
+/** 每档独立寻优；洗髓跨档先比秒伤，再比较扣除心法内防后的平衡。 */
 export function 对比明尊加速档位(
   input: 方案优化输入,
   onProgress?: (progress: 方案优化进度) => void,
@@ -74,7 +74,11 @@ export function 对比明尊加速档位(
         entry.result = undefined
         throw new Error('推荐方案未满足加速或最低御劲要求')
       }
-      if (entry.result.after && !满足面板防御倾向(entry.result.after, input.defensePreference)) {
+      if (
+        !xisui &&
+        entry.result.after &&
+        !满足面板防御倾向(entry.result.after, input.defensePreference)
+      ) {
         entry.result = undefined
         throw new Error('推荐方案未满足所选防御倾向')
       }
@@ -85,12 +89,14 @@ export function 对比明尊加速档位(
     entries.push(entry)
   }
   let best: 档位优化结果 | undefined
+  const 防御规则 = xisui ? 'balance' : input.defensePreference
+  const 附魔后备顺序 = (entry: 档位优化结果) =>
+    xisui ? 0 : Number(!!entry.result?.usedToughnessEnchantFallback)
   for (const entry of entries) {
     if (!entry.result?.plan || !entry.result.after) continue
     const 排名差 = best
-      ? Number(!!entry.result.usedToughnessEnchantFallback) -
-          Number(!!best.result!.usedToughnessEnchantFallback) ||
-        比较推荐指标(entry.result.after, best.result!.after!, input.defensePreference)
+      ? 附魔后备顺序(entry) - 附魔后备顺序(best) ||
+        比较推荐指标(entry.result.after, best.result!.after!, 防御规则)
       : -1
     if (
       排名差 < 0 ||

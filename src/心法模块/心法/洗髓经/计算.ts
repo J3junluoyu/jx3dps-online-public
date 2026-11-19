@@ -105,6 +105,16 @@ export function 计算洗髓面板(stats: EquipmentStats, settings: Settings, fl
   return panel
 }
 
+/** 择优时扣除心法固定内防和体质转内防，实际面板仍包含两项。 */
+export function 获取洗髓平衡内防(面板: { magicalShield: number; vitality: number }) {
+  const 心法 = 参考数据.belongs['10002'].attributes
+  return (
+    面板.magicalShield -
+    心法.magical_shield_base -
+    Math.trunc((面板.vitality * 心法.vitality_to_magical_shield) / 1024)
+  )
+}
+
 /** 按已记录的自身Buff命中状态，用当前装备与外部增益重新计伤。 */
 export function 计算洗髓循环(
   stats: EquipmentStats,

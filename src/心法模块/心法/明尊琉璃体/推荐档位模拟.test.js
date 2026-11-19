@@ -70,12 +70,20 @@ test('跨档比较允许快档装备参与慢档模板，但低于最低加速�
   expect(result.entries[1].result.plan).toBeDefined()
 })
 
-test('1280水特效武器与1300普通武器按完整伤害比较，最高品级存在可行方案也不会提前排除特效', () => {
+test('关闭单防御后替换原有单防普通武器，仍按完整伤害比较1280水特效武器与1300双防武器', () => {
   const cycle = 循环列表.find((row) => row.名称 === '0.8125GCD循环')
   const input = {
     ...common,
     kungfu: 'mzllt',
     cycle,
+    initial: {
+      ...common.initial,
+      slots: {
+        ...common.initial.slots,
+        primary_weapon: { ...common.initial.slots.primary_weapon, key: 'weapons:46803' },
+      },
+    },
+    includeSingleDefenseGear: false,
     settings: 获取明尊计算设置(
       cycle.奇穴,
       { 明尊设置: { stance: 'mainTank' } },
@@ -84,7 +92,7 @@ test('1280水特效武器与1300普通武器按完整伤害比较，最高品级
       true,
     ),
     slots: ['primary_weapon'],
-    gearKeys: ['weapons:46725', 'weapons:46764'],
+    gearKeys: ['weapons:46725', 'weapons:46764', 'weapons:46803'],
   }
   const ordinary = 优化明尊方案({ ...input, gearKeys: ['weapons:46764'] })
   const result = 优化明尊方案(input)

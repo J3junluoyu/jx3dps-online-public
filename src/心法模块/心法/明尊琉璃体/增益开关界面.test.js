@@ -75,6 +75,7 @@ import { fireEvent, getByRole, getAllByRole } from '@testing-library/dom'
 import 面板信息, { 获取面板显示数据数值 } from '@/功能模块/基础设置/面板信息'
 import 增益设置 from '@/功能模块/基础设置/增益面板'
 import { 秒伤计算 } from '@/计算模块/计算函数'
+import { 获取明尊显示面板 } from '@/计算模块/职业特殊处理/明尊'
 import useCycle from '@/hooks/use-cycle'
 import { 转换明尊基础属性 } from '@/数据/数据工具/明尊数据适配'
 import { 获取明尊固定秘籍 } from './秘籍'
@@ -162,6 +163,32 @@ test.each(['明尊面板', '洗髓面板'])('%s的满层差值与溢出按9600�
     expect(container.textContent).toMatch(/每(?:满)?96点基础体质/)
     expect(container.textContent).toContain(expected)
   }
+})
+
+test.each([
+  [9493, 98, '距离100层还需107点基础体质。'],
+  [9612, 100, '已达100层，溢出12点基础体质。'],
+])('水特效体质保留在面板，朝圣用%d点基础体质及对应满层差值', (基础体质, 层数, 差值) => {
+  const data = mockState.data
+  data.装备信息 = {
+    装备基础属性: 转换明尊基础属性({
+      ...八一数据.equipment,
+      vitality: 基础体质 - 18,
+      vitalityGain: 7.91,
+    }),
+    装备列表: [{ id: 46725 }],
+  }
+  const 属性 = 获取明尊显示面板(data.装备信息, data.当前奇穴信息, data.增益数据, false)
+  expect(属性.明尊面板.baseVitality).toBe(基础体质 + 220)
+  expect(属性.明尊面板.朝圣基础体质).toBe(基础体质)
+  act(render)
+  const 朝圣 = container.querySelector('.character-pilgrimage-stacks')
+  expect(朝圣.textContent).toBe(`朝圣${层数}层`)
+  expect(朝圣.previousElementSibling.textContent).toBe(String(属性.明尊面板.vitality))
+
+  act(() => root.render(获取面板显示数据数值('体质', 属性)))
+  expect(container.textContent).toContain(`基础体质：${基础体质}（已扣除水特效）`)
+  expect(container.textContent).toContain(差值)
 })
 
 test.each(['明尊面板', '洗髓面板'])('%s的内外防悬浮提示分别显示当前防御点数', (key) => {

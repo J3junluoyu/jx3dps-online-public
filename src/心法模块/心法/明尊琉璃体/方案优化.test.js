@@ -1,4 +1,10 @@
-import { 优化明尊方案, 获取同档附魔, 获取优化GCD, 满足面板防御倾向 } from './方案优化'
+import {
+  优化明尊方案,
+  获取同档附魔,
+  获取优化GCD,
+  满足面板防御倾向,
+  获取最高品级候选,
+} from './方案优化'
 import { GEAR_ITEMS, ENCHANTS, STONES, SLOTS, slotPosition, calculateLoadout } from './装备'
 import { DEFAULT_SETTINGS, calculateAttributes } from './计算'
 import { 获取明尊增益属性, 明尊小药小吃 } from './增益'
@@ -293,6 +299,21 @@ test('不选橙武时排除候选，武器参与更换则替换，不参与更�
   expect(result.plan).toBeDefined()
   expect(result.plan.slots.primary_weapon.key).toBe(ordinary.key)
   expect(input.initial.slots.primary_weapon.key).toBe(orange.key)
+})
+
+test('排除单内防和单外防词条，双防、无防御词条及特效武器照常参与', () => {
+  const 单防帽 = ['armors:112395', 'armors:112626']
+  const 双防帽 = 'armors:112319'
+  const 精简帽 = 'armors:112783'
+  const 单防武器 = 'weapons:46803'
+  const 特效武器 = 'weapons:46725'
+  const gearKeys = [...单防帽, 双防帽, 精简帽, 单防武器, 特效武器]
+  const input = { ...输入(), gearKeys }
+
+  expect(获取最高品级候选(input)).toEqual(expect.arrayContaining(gearKeys))
+  expect(获取最高品级候选({ ...input, includeSingleDefenseGear: false }).sort()).toEqual(
+    [双防帽, 精简帽, 特效武器].sort(),
+  )
 })
 
 test('仅防御装备限制所有参与部位，初始精简装备不能作为结果保留', () => {

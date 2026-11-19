@@ -3,7 +3,7 @@ import {
   获取五十级装备数据,
   转换明尊配装,
   获取明尊配装,
-  规范洗髓橙武,
+  规范洗髓武器,
   更新明尊装备威胁,
 } from '@/数据/数据工具/明尊数据适配'
 import { 属性类型 } from '@/@types/属性'
@@ -103,7 +103,7 @@ test.each([
     primary_weapon: selection(oldId, { strength: 8, embeds: [8, 7, 6] }),
   })
   const before = JSON.stringify(original)
-  const normalized = 规范洗髓橙武(original)
+  const normalized = 规范洗髓武器(original)
   const weapon = normalized.装备列表.find((row) => row.id === newId)
   expect(weapon.当前精炼等级).toBe(8)
   expect(weapon.镶嵌孔数组.map((row) => row.镶嵌宝石等级)).toEqual([8, 7, 6])
@@ -112,13 +112,28 @@ test.each([
     primary_weapon: selection(newId, { strength: 8, embeds: [8, 7, 6] }),
   })
   expect(normalized.装备基础属性).toEqual(expected.装备基础属性)
-  expect(规范洗髓橙武(normalized)).toBe(normalized)
+  expect(规范洗髓武器(normalized)).toBe(normalized)
   expect(JSON.stringify(original)).toBe(before)
 })
 
-test('未借用明尊橙武的洗髓方案不改动', () => {
-  const ordinary = 转换明尊配装({ primary_weapon: selection(46764) })
-  expect(规范洗髓橙武(ordinary)).toBe(ordinary)
+test('洗髓只列本门主武器，旧配装的赤穹熠换成空磬禅并保留精炼、宝石和附魔', () => {
+  const 武器 = 获取五十级装备数据('洗髓经').武器
+  expect(武器.every((row) => row.所属门派 === '少林')).toBe(true)
+  expect(武器).toEqual(expect.arrayContaining([
+    expect.objectContaining({ id: 46708, 装备名称: '钟沉暮远' }),
+    expect.objectContaining({ id: 46747, 装备名称: '空磬禅', 武器伤害_最大值: 364 }),
+  ]))
+  expect(获取五十级装备数据('明尊琉璃体').武器.some((row) => row.id === 46747)).toBe(false)
+
+  const 选择 = { strength: 6, embeds: [8, 7, 6], enchantId: 16486 }
+  const 旧方案 = 转换明尊配装({ primary_weapon: selection(46764, 选择) })
+  const 迁移后 = 规范洗髓武器(旧方案)
+  expect(获取明尊配装(迁移后).slots.primary_weapon).toEqual(selection(46747, 选择))
+  expect(迁移后.装备基础属性.明尊属性.weaponMax).toBe(364)
+  expect(规范洗髓武器(迁移后)).toBe(迁移后)
+  expect(获取明尊配装(旧方案).slots.primary_weapon).toEqual(selection(46764, 选择))
+  expect(获取明尊配装(转换明尊配装({ primary_weapon: selection(48494, 选择) })).slots
+    .primary_weapon).toEqual(selection(46747, 选择))
 })
 
 test('旧缓存重新载入时清理已支持的橙武触发提示，保留其他未计入效果', () => {

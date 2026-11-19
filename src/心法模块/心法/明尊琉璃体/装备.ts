@@ -97,34 +97,38 @@ for (const row of [...eligibleGear].sort((a, b) => a.id - b.id)) {
   gearAliases.set(row.key, canonical)
 }
 export const GEAR_ITEMS = eligibleGear.filter((row) => gearAliases.get(row.key) === row)
+const gearById = new Map<number, GearItem[]>()
+for (const row of eligibleGear) {
+  const matches = gearById.get(row.id)
+  if (matches) matches.push(row)
+  else gearById.set(row.id, [row])
+}
+const retiredGearKeys = new Map<number, string>()
 for (const [oldKey, targetKey] of Object.entries(database.legacyAliases || {})) {
   const target = gearAliases.get(targetKey)
   if (target) gearAliases.set(oldKey, target)
+  const id = Number(oldKey.split(':')[1])
+  if (!Number.isNaN(id) && !retiredGearKeys.has(id)) retiredGearKeys.set(id, oldKey)
 }
 /** 下拉和推荐共用门派规则；已装备项仍可按原ID读取。 */
 export function gearAvailableForSchool(item: GearItem, school: string) {
   if (item.school === school) return true
-  if (item.setId && !['通用', '精简'].includes(item.school)) return false
+  if ((item.position === 'primary_weapon' || item.setId) && !['通用', '精简'].includes(item.school))
+    return false
   return !item.orangeWeapon && !item.specialEffects?.some((effect) => effect.key === 'gain_4877_89')
 }
 
 /** 同时接受旧装备键和旧ID；部位校验防止ID跨表冲突。 */
 export function findGearItem(identifier: string | number, position?: string): GearItem | undefined {
-  const raw =
-    typeof identifier === 'number'
-      ? eligibleGear.find(
-          (row) => row.id === identifier && (!position || row.position === position),
-        )
-      : undefined
-  const retiredKey =
-    typeof identifier === 'number' && !raw
-      ? Object.keys(database.legacyAliases || {}).find(
-          (key) => Number(key.split(':')[1]) === identifier,
-        )
-      : undefined
-  const canonical = gearAliases.get(
-    typeof identifier === 'string' ? identifier : raw?.key || retiredKey || '',
-  )
+  let key: string
+  if (typeof identifier === 'number') {
+    const matches = gearById.get(identifier)
+    const raw = position ? matches?.find((row) => row.position === position) : matches?.[0]
+    key = raw?.key || retiredGearKeys.get(identifier) || ''
+  } else {
+    key = identifier
+  }
+  const canonical = gearAliases.get(key)
   return canonical && (!position || canonical.position === position) ? canonical : undefined
 }
 
@@ -228,6 +232,10 @@ export const ENCHANTS = database.enchants.filter(
     !/归正|武伤|武器伤害/.test(row.name) &&
     !('weapon_damage_base' in row.attributes),
 )
+const enchantsById = new Map<number, Enchant>()
+for (const row of ENCHANTS) {
+  if (!enchantsById.has(row.id)) enchantsById.set(row.id, row)
+}
 const canonicalStones = new Map<string, Stone>()
 const stoneAliases = new Map<number, number>()
 for (const row of [...database.stones].sort((a, b) => a.id - b.id)) {
@@ -241,9 +249,17 @@ for (const row of [...database.stones].sort((a, b) => a.id - b.id)) {
   stoneAliases.set(row.id, canonical.id)
 }
 export const STONES = [...canonicalStones.values()]
+const stonesById = new Map<number, Stone>()
+for (const row of STONES) {
+  if (!stonesById.has(row.id)) stonesById.set(row.id, row)
+}
+function findStone(stoneId: number): Stone | undefined {
+  const canonicalId = stoneAliases.get(stoneId)
+  return canonicalId === undefined ? undefined : stonesById.get(canonicalId)
+}
 export type StoneAttributeSelection = [string, string, string]
 export function getStoneAttributeSelection(stoneId = 0): StoneAttributeSelection {
-  const stone = STONES.find((row) => row.id === stoneAliases.get(stoneId))
+  const stone = findStone(stoneId)
   const keys = Object.keys(stone?.attributes || {})
   return [keys[0] || '', keys[1] || '', keys[2] || '']
 }
@@ -507,7 +523,7 @@ export function calculateLoadout(loadout: Loadout, stoneId = 0) {
       add({ [key]: value }, embedCoefficient(selection.embeds[index] || 0)),
     )
     if (selection.enchantId) {
-      const enchant = ENCHANTS.find((row) => row.id === selection.enchantId)
+      const enchant = enchantsById.get(selection.enchantId)
       if (!enchant || enchant.position !== item.position) throw new Error('附魔与部位不匹配')
       add(enchant.attributes)
     }
@@ -517,7 +533,7 @@ export function calculateLoadout(loadout: Loadout, stoneId = 0) {
     }
   }
   if (stoneId) {
-    const stone = STONES.find((row) => row.id === stoneAliases.get(stoneId))
+    const stone = findStone(stoneId)
     if (!hasPrimary || !stone) throw new Error('请先选择近战武器，再选择有效五彩石')
     add(stone.attributes)
   }

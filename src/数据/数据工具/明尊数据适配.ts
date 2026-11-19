@@ -1,7 +1,7 @@
 import { 属性类型 } from '@/@types/属性'
 import { 装备部位枚举 } from '@/@types/枚举'
 import { 装备类型枚举, 装备位置部位枚举 } from '@/@types/装备'
-import type { 装备信息数据类型, 装备属性信息模型 } from '@/@types/装备'
+import type { 装备信息数据类型, 装备属性信息模型, 选择装备数据类型 } from '@/@types/装备'
 import type { 角色基础属性类型 } from '@/@types/角色'
 import {
   GEAR_ITEMS,
@@ -143,30 +143,47 @@ export function 获取五十级装备数据(心法名称: string) {
   )
 }
 
-/** 洗髓旧方案曾借用明尊橙武，按相同品级换为原始洗髓ID并重算武伤和孔位。 */
-export function 规范洗髓橙武(装备信息: 装备信息数据类型) {
-  let 已替换 = false
-  const 装备列表 = 装备信息?.装备列表?.map((项) => {
-    if (项.装备部位 !== 装备位置部位枚举._12 || !项.id) return 项
-    const 原始 = findGearItem(项.id, 'primary_weapon')
-    if (!原始?.orangeWeapon || 原始.school !== '明教') return 项
-    const 对应 = GEAR_ITEMS.find(
-      (装备) => 装备.orangeWeapon && 装备.school === '少林' && 装备.level === 原始.level,
-    )
-    const 新装备 = 对应 && 获取明尊装备条目(项.装备部位, 对应.id)
-    if (!新装备) return 项
-    已替换 = true
-    return {
-      ...项,
-      ...新装备,
-      装备部位: 项.装备部位,
-      镶嵌孔数组: (新装备.镶嵌孔数组 || []).map((孔, 索引) => ({
-        ...孔,
-        镶嵌宝石等级: 项.镶嵌孔数组?.[索引]?.镶嵌宝石等级 || 0,
-      })),
-    }
-  })
-  return 已替换 ? 计算明尊装备属性({ ...装备信息, 装备列表 }) : 装备信息
+/** 旧洗髓配装借用过明教武器，按正式服同来源、同品级的少林武器迁移。 */
+const 洗髓普通武器对应ID: Readonly<Record<number, number>> = {
+  46530: 46513,
+  46569: 46552,
+  46609: 46592,
+  46649: 46632,
+  46690: 46673,
+  46725: 46708,
+  46764: 46747,
+  46803: 46786,
+  47535: 47518,
+  47921: 47904,
+}
+
+export function 规范洗髓武器条目(项: 选择装备数据类型): 选择装备数据类型 {
+  if (项?.装备部位 !== 装备位置部位枚举._12 || !项.id) return 项
+  const 原始 = findGearItem(项.id, 'primary_weapon')
+  if (原始?.school !== '明教') return 项
+  const 对应ID = 原始.orangeWeapon
+    ? GEAR_ITEMS.find(
+        (装备) => 装备.orangeWeapon && 装备.school === '少林' && 装备.level === 原始.level,
+      )?.id
+    : 洗髓普通武器对应ID[原始.id]
+  const 新装备 = 获取明尊装备条目(项.装备部位, 对应ID)
+  if (!新装备) return 项
+  return {
+    ...项,
+    ...新装备,
+    装备部位: 项.装备部位,
+    镶嵌孔数组: (新装备.镶嵌孔数组 || []).map((孔, 索引) => ({
+      ...孔,
+      镶嵌宝石等级: 项.镶嵌孔数组?.[索引]?.镶嵌宝石等级 || 0,
+    })),
+  }
+}
+
+export function 规范洗髓武器(装备信息: 装备信息数据类型) {
+  const 装备列表 = 装备信息?.装备列表?.map(规范洗髓武器条目)
+  return 装备列表?.some((项, 索引) => 项 !== 装备信息.装备列表[索引])
+    ? 计算明尊装备属性({ ...装备信息, 装备列表 })
+    : 装备信息
 }
 
 function 规范明尊装备列表(装备信息: 装备信息数据类型) {

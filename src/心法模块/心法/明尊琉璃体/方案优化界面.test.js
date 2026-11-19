@@ -270,6 +270,22 @@ test('计算加速小吃小药默认关闭，勾选后旧结果失效并更新�
   expect(finish().input.includeHasteConsumables).toBe(true)
 })
 
+test('单防御装备默认参与推荐，取消勾选后清除旧结果并更新后台条件', async () => {
+  render()
+  await click('配装方案推荐')
+  const checkbox = getByRole(container, 'checkbox', { name: '计算单防御装备' })
+  expect(checkbox.checked).toBe(true)
+  await click('开始推荐')
+  expect(checkbox.disabled).toBe(true)
+  expect(finish().input.includeSingleDefenseGear).toBe(true)
+
+  act(() => fireEvent.click(checkbox))
+  expect(checkbox.checked).toBe(false)
+  expect(getByRole(container, 'button', { name: '应用并计算' }).disabled).toBe(true)
+  await click('开始推荐')
+  expect(finish().input.includeSingleDefenseGear).toBe(false)
+})
+
 test('橙武品级默认不选，选择后切换理论比较并传给后台，变更清除旧结果且运行时不可修改', async () => {
   const props = render()
   await click('配装方案推荐')
@@ -310,7 +326,7 @@ test('移除部位勾选，选择和取消橙武品级时均向后台发送全�
   render()
   await click('配装方案推荐')
   expect(container.textContent).not.toContain('参与优化的装备及附魔部位')
-  expect(container.querySelectorAll('input[type="checkbox"]')).toHaveLength(2)
+  expect(container.querySelectorAll('input[type="checkbox"]')).toHaveLength(3)
   const level = getByRole(container, 'combobox', { name: '橙武品级' })
   for (const 品级 of [719, 0]) {
     act(() => fireEvent.change(level, { target: { value: String(品级) } }))
@@ -569,7 +585,7 @@ test('洗髓等待循环时沿用推荐设置，不提供明尊循环或启动�
   expect([...cycle.options]).toHaveLength(0)
   expect(getByRole(container, 'combobox', { name: '装备范围' }).disabled).toBe(false)
   expect(getByRole(container, 'spinbutton', { name: '最低御劲' }).disabled).toBe(false)
-  expect(container.querySelectorAll('input[type="checkbox"]')).toHaveLength(2)
+  expect(container.querySelectorAll('input[type="checkbox"]')).toHaveLength(3)
   expect(container.textContent).toContain('循环模板待补充')
   expect(container.textContent).not.toContain('0.75GCD')
   expect(container.textContent).not.toContain('0.81GCD')

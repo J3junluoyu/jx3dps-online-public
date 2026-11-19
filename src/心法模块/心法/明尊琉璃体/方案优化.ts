@@ -21,7 +21,7 @@ import { 明尊小药小吃, 获取明尊战斗增益 } from './增益'
 import { 明尊阵眼 } from './阵眼'
 import { 计算明尊基础循环 } from '@/计算模块/职业特殊处理/明尊/基础循环'
 import { matchMajorEnchant } from './大附魔'
-import { 计算洗髓面板, 计算洗髓循环, 获取洗髓增益属性 } from '../洗髓经/计算'
+import { 计算洗髓面板, 计算洗髓循环, 获取洗髓增益属性, 获取洗髓平衡内防 } from '../洗髓经/计算'
 import { 洗髓自适应循环 } from '../洗髓经/循环'
 import 明尊循环列表 from './计算循环'
 import { 获取理论档位循环 } from './计算循环/理论循环'
@@ -40,6 +40,7 @@ export interface 优化指标 {
   toughness: number
   physicalShield: number
   magicalShield: number
+  defenseImbalance?: number
 }
 export type 防御倾向 = 'physicalShield' | 'magicalShield'
 export interface 方案优化输入 {
@@ -54,6 +55,7 @@ export interface 方案优化输入 {
   minToughness: number
   includeMowen?: boolean
   includeHasteConsumables?: boolean
+  includeSingleDefenseGear?: boolean
   enchantTier?: 72 | 90
   defensePreference?: 防御倾向
   /** 0或未选时排除橙武候选；选择品级后固定装备该心法的对应橙武。 */
@@ -82,8 +84,13 @@ type 选择组 = { label: string; slot?: string; apply: ((plan: 优化方案) =>
 type 防御点数 = Pick<优化指标, 'physicalShield' | 'magicalShield'>
 type 约束指标 = Pick<优化指标, 'haste' | 'toughness'> & 防御点数
 
-export const 比较推荐指标 = (前: 优化指标, 后: 优化指标, 倾向?: 防御倾向) =>
-  后.dps - 前.dps || (倾向 ? 后[倾向] - 前[倾向] : 0)
+export const 比较推荐指标 = (前: 优化指标, 后: 优化指标, 防御规则?: 防御倾向 | 'balance') =>
+  后.dps - 前.dps ||
+  (防御规则 === 'balance'
+    ? (前.defenseImbalance ?? 0) - (后.defenseImbalance ?? 0)
+    : 防御规则
+      ? 后[防御规则] - 前[防御规则]
+      : 0)
 
 const 防御减伤常数 = ratingScale('shield')
 const 对侧防御 = { physicalShield: 'magicalShield', magicalShield: 'physicalShield' } as const
@@ -263,16 +270,32 @@ const 是当前心法橙武 = (input: Pick<方案优化输入, 'kungfu'>, item: 
   item.position === 'primary_weapon' &&
   item.school === (input.kungfu === 'xsj' ? '少林' : '明教')
 
-const 允许装备候选 = (input: 方案优化输入, item: GearItem) =>
-  gearAvailableForSchool(item, input.kungfu === 'xsj' ? '少林' : '明教') &&
-  (!input.orangeWeaponLevel || item.position !== 'primary_weapon' || item.orangeWeapon === true) &&
-  (item.orangeWeapon
-    ? item.level === input.orangeWeaponLevel && 是当前心法橙武(input, item)
-    : input.gearKeys.includes(item.key)) &&
-  (input.gearScope !== 'defensive' || item.kind === '防御')
+const 应排除单防御装备 = (item: GearItem) => {
+  if (item.position === 'primary_weapon' && (item.orangeWeapon || item.specialEffects?.length))
+    return false
+  const { magic } = item
+  const 有外防 = Number(magic.physical_shield_base) > 0 || Number(magic.physical_shield_add) > 0
+  const 有内防 = Number(magic.magical_shield_base) > 0
+  return 有外防 !== 有内防
+}
+
+const 获取可选装备 = (input: 方案优化输入) => {
+  const gearKeys = new Set(input.gearKeys)
+  const school = input.kungfu === 'xsj' ? '少林' : '明教'
+  return GEAR_ITEMS.filter(
+    (item) =>
+      gearAvailableForSchool(item, school) &&
+      (!input.orangeWeaponLevel || item.position !== 'primary_weapon' || item.orangeWeapon === true) &&
+      (item.orangeWeapon
+        ? item.level === input.orangeWeaponLevel && 是当前心法橙武(input, item)
+        : gearKeys.has(item.key)) &&
+      (input.gearScope !== 'defensive' || item.kind === '防御') &&
+      (input.includeSingleDefenseGear !== false || !应排除单防御装备(item)),
+  )
+}
 
 export function 获取最高品级候选(input: 方案优化输入): string[] {
-  const candidates = GEAR_ITEMS.filter((item) => 允许装备候选(input, item))
+  const candidates = 获取可选装备(input)
   const maxLevels = new Map<string, number>()
   for (const item of candidates) {
     if (!是橙色腰坠(item))
@@ -323,13 +346,13 @@ function 搜索推荐方案(
   const started = Date.now()
   if (input.gearScope && !['defensive', 'includeStreamlined'].includes(input.gearScope))
     throw new Error('装备范围无效')
-  const { defensePreference } = input
+  const defensePreference = xisui ? undefined : input.defensePreference
+  const 防御规则 = xisui ? 'balance' : defensePreference
   const 防御差 = (metrics: 防御点数) =>
     defensePreference ? metrics[defensePreference] - metrics[对侧防御[defensePreference]] : 0
   // 普通装备沿用配装器范围；选择橙武品级后，武器仅允许该心法的对应橙武。
-  const allowed = new Set(
-    GEAR_ITEMS.filter((item) => 允许装备候选(input, item)).map((item) => item.key),
-  )
+  const candidates = 获取可选装备(input)
+  const allowed = new Set(candidates.map((item) => item.key))
   const activeSlots = new Set(input.slots)
   if (input.slots.some((slot) => !SLOTS.some(([key]) => key === slot)))
     throw new Error('优化部位无效')
@@ -351,9 +374,7 @@ function 搜索推荐方案(
   for (const [slot, label] of SLOTS) {
     if (!activeSlots.has(slot)) continue
     const current = input.initial.slots[slot]
-    const items = GEAR_ITEMS.filter(
-      (item) => item.position === slotPosition(slot) && allowed.has(item.key),
-    )
+    const items = candidates.filter((item) => item.position === slotPosition(slot))
     if (!items.length)
       throw new Error(
         `${label}在当前${input.gearScope === 'defensive' ? '防御' : ''}装备筛选范围内没有候选装备`,
@@ -456,7 +477,7 @@ function 搜索推荐方案(
     })),
   })
   const cache = new Map<string, 候选结果>()
-  const statsCache = new Map<string, ReturnType<typeof calculateLoadout>>()
+  const statsCache = new Map<string, Pick<ReturnType<typeof calculateLoadout>, 'stats' | 'specialEffects'>>()
   let constraintEvaluations = 0
   const evaluations = () => cache.size + constraintEvaluations
   let best: 候选结果 | undefined
@@ -478,7 +499,8 @@ function 搜索推荐方案(
     const gearKey = JSON.stringify([SLOTS.map(([slot]) => plan.slots[slot]), plan.stone])
     let equipped = statsCache.get(gearKey)
     if (!equipped) {
-      equipped = calculateLoadout(plan.slots, plan.stone)
+      const { stats, specialEffects } = calculateLoadout(plan.slots, plan.stone)
+      equipped = { stats, specialEffects }
       if (cacheStats) statsCache.set(gearKey, equipped)
     }
     const { stats, specialEffects } = equipped
@@ -528,6 +550,9 @@ function 搜索推荐方案(
         false,
       ).秒伤,
       ...panelConstraints(panel),
+      ...(xisui
+        ? { defenseImbalance: Math.abs(panel.physicalShield - 获取洗髓平衡内防(panel)) }
+        : {}),
       gcd: 获取优化GCD(panel.hasteRating, baseFrames),
       ...(input.allowHigherHaste ? { simulatedGcd: gcd } : {}),
     }
@@ -540,7 +565,7 @@ function 搜索推荐方案(
     const grade = SLOTS.reduce((sum, [slot]) => sum + (装备品级.get(plan.slots[slot]?.key) || 0), 0)
     const result = { plan, metrics, violation, key, grade }
     cache.set(key, result)
-    const 排名差 = best ? 比较推荐指标(metrics, best.metrics, input.defensePreference) : -1
+    const 排名差 = best ? 比较推荐指标(metrics, best.metrics, 防御规则) : -1
     if (
       meetsRequirements(metrics) &&
       inScope(plan) &&
@@ -686,16 +711,29 @@ function 搜索推荐方案(
     ).values(),
   ]
   const selectBeam = (candidates: 候选结果[]) => {
-    const unique = [...new Map(candidates.map((item) => [item.key, item])).values()]
+    const unique = new Map(candidates.map((item) => [item.key, item]))
     const selected = new Map<string, 候选结果>()
-    // 不同惩罚强度保留越过节点后仍可由后续部位修复的高收益组合。
-    for (const weight of [32, 8, 2, 0.5]) {
-      const score = (row: 候选结果) =>
-        Math.log(Math.max(1, row.metrics.dps)) - weight * row.violation
-      const ranked = [...unique].sort(
-        (a, b) => score(b) - score(a) || 比较推荐指标(a.metrics, b.metrics, input.defensePreference),
-      )
-      for (const candidate of ranked.slice(0, 4)) selected.set(candidate.key, candidate)
+    // 每种惩罚强度只保留前四项，完全同分时仍沿用候选原顺序。
+    const rankings = [32, 8, 2, 0.5].map((weight) => ({
+      weight,
+      ranked: [] as { candidate: 候选结果; score: number }[],
+    }))
+    for (const candidate of unique.values()) {
+      const logDps = Math.log(Math.max(1, candidate.metrics.dps))
+      for (const { weight, ranked } of rankings) {
+        const score = logDps - weight * candidate.violation
+        const index = ranked.findIndex(
+          (row) =>
+            (row.score - score ||
+              比较推荐指标(candidate.metrics, row.candidate.metrics, 防御规则)) < 0,
+        )
+        if (index >= 0) ranked.splice(index, 0, { candidate, score })
+        else if (ranked.length < 4) ranked.push({ candidate, score })
+        if (ranked.length > 4) ranked.pop()
+      }
+    }
+    for (const { ranked } of rankings) {
+      for (const { candidate } of ranked) selected.set(candidate.key, candidate)
     }
     return [...selected.values()]
   }

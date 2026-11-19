@@ -128,6 +128,11 @@ function 装备部位选择(props: 装备部位选择入参, ref) {
     return false
   }, [原始装备ID, allValue])
 
+  const 装备描述 = useMemo(
+    () => new Map(装备数据列表.map((item) => [item, 获取装备数据描述(item)])),
+    [装备数据列表],
+  )
+
   const 实际装备列表 = useMemo(() => {
     if (
       装备选择范围?.品级范围?.length ||
@@ -145,7 +150,7 @@ function 装备部位选择(props: 装备部位选择入参, ref) {
       }
       if (装备选择范围?.词条类型?.length) {
         新列表 = 新列表?.filter((item) => {
-          return 装备选择范围?.词条类型?.some((a) => 获取装备数据描述(item)?.includes(a))
+          return 装备选择范围?.词条类型?.some((a) => 装备描述.get(item)?.includes(a))
         })
       }
 
@@ -182,13 +187,32 @@ function 装备部位选择(props: 装备部位选择入参, ref) {
     } else {
       return 装备数据列表
     }
-  }, [装备数据列表, 装备选择范围, 部位])
+  }, [装备数据列表, 装备描述, 装备选择范围, 部位])
+
+  const 可选装备索引 = useMemo(() => {
+    const 索引 = new Map<number | undefined, { 装备: 装备属性信息模型; 搜索文本: string }>()
+    for (const 装备 of 实际装备列表) {
+      if (索引.has(装备.id)) continue
+      const 黄字说明 = 装备.装备黄字特效?.map(({ 说明 }) => 说明).join('') || ''
+      const 搜索文本 = `${装备.装备名称}${装备描述.get(装备)?.join('') || ''}${装备.装备品级}${黄字说明}`
+      索引.set(装备.id, { 装备, 搜索文本 })
+    }
+    return 索引
+  }, [实际装备列表, 装备描述])
+  const 筛选装备选项 = useCallback(
+    (input: string, option?: { value?: string | number | null }) => {
+      const id = option?.value
+      if (id !== undefined && typeof id !== 'number') return false
+      return 可选装备索引.get(id)?.搜索文本.includes(input.toLowerCase()) ?? false
+    },
+    [可选装备索引],
+  )
 
   const 当前镶嵌等级数组 = useMemo(() => {
     return allValue?.镶嵌孔数组?.map((item) => item.镶嵌宝石等级) || []
   }, [allValue])
 
-  const 列表中当前装备 = 实际装备列表.find((a) => a.id === allValue?.id)
+  const 列表中当前装备 = 可选装备索引.get(allValue?.id)?.装备
   const 当前选择装备 = 列表中当前装备 || 当前装备数据
 
   const 准备装备对比 = useCallback(
@@ -207,9 +231,10 @@ function 装备部位选择(props: 装备部位选择入参, ref) {
       )
       const 旧伤害 = 旧秒伤 || 当前秒伤
 
-      const 当前有加速 = 当前选择装备 && 获取装备数据描述(当前选择装备).includes('加速')
+      const 当前有加速 = 当前选择装备 &&
+        (装备描述.get(当前选择装备) ?? 获取装备数据描述(当前选择装备)).includes('加速')
       const 候选 = 实际装备列表.filter((item) => {
-        if (!对比加速 && 当前有加速 !== 获取装备数据描述(item).includes('加速')) return false
+        if (!对比加速 && 当前有加速 !== 装备描述.get(item)?.includes('加速')) return false
         const 品级达标 = item.装备品级 >= 智能对比最低品级
         const 橙武 = item.装备类型 === 装备类型枚举.橙武
         const 大橙武 = item.装备特效 === 装备特效枚举.大橙武特效
@@ -277,6 +302,7 @@ function 装备部位选择(props: 装备部位选择入参, ref) {
       增益数据,
       增益启用,
       实际装备列表,
+      装备描述,
       对比加速,
       装备选择范围,
       部位,
@@ -416,16 +442,7 @@ function 装备部位选择(props: 装备部位选择入参, ref) {
         onDropdownVisibleChange={设置下拉展开}
         listHeight={500}
         ref={ref}
-        filterOption={(input, option) => {
-          const findObj = 实际装备列表?.find((item) => item.id === option?.value)
-          if (findObj) {
-            const filterStr = `${findObj.装备名称}${获取装备数据描述(findObj).join('')}${
-              findObj.装备品级
-            }${findObj.装备黄字特效?.map((effect) => effect.说明).join('') || ''}`
-            return filterStr.includes(input.toLowerCase())
-          }
-          return false
-        }}
+        filterOption={筛选装备选项}
         onChange={onChange}
         {...options}
       >
@@ -457,7 +474,7 @@ function 装备部位选择(props: 装备部位选择入参, ref) {
                   </span>
                   <span className={'zhuangbei-select-shuoming'}>
                     {`(`}
-                    {(获取装备数据描述(item) || []).map((a) => {
+                    {装备描述.get(item)?.map((a) => {
                       const 装备描述文本样式 = classnames(
                         'zhuangbei-miaoshu-label',
                         a === '精简' ? 'zhuangbei-miaoshu-label-jingjian' : '',
