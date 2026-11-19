@@ -5,6 +5,7 @@ import {
   ratingScale,
   SKILLS,
   skillAvailable,
+  明尊神兵触发率,
 } from './计算'
 import type { EquipmentStats, Settings, Skill } from './计算'
 import { equipmentDamageRows, equipmentProcStates } from './装备特效计算'
@@ -23,6 +24,39 @@ export interface 明尊逐招模拟选项 extends 明尊时间轴选项 {
   目标零防御?: boolean
   常驻朝圣无双?: number
   加速档位?: 明尊逐招加速档位
+  记录秒伤曲线?: boolean
+}
+
+export interface 明尊秒伤样本 {
+  时间: number
+  累计伤害: number
+  秒伤: number
+}
+
+function 获取秒伤曲线(
+  命中列表: readonly { 帧: number; 伤害: number }[],
+  装备附伤: readonly { 时间: number; 伤害: number }[],
+  结算时长: number,
+  总伤害: number,
+): 明尊秒伤样本[] {
+  if (结算时长 <= 0) return []
+  // 四分之一秒起步，长循环按时长调整间隔，结束时保留实际结算点。
+  const 间隔 = Math.max(1, Math.ceil(结算时长 / 50)) / 4
+  const 本段伤害 = new Float64Array(Math.ceil(结算时长 / 间隔) + 1)
+  const 记录 = (时间: number, 伤害: number) => {
+    本段伤害[Math.max(1, Math.ceil(时间 / 间隔))] += 伤害
+  }
+  for (const 命中 of 命中列表) 记录(命中.帧 / 16, 命中.伤害)
+  for (const 附伤 of 装备附伤) 记录(附伤.时间, 附伤.伤害)
+
+  const 曲线 = [{ 时间: 0, 累计伤害: 0, 秒伤: 0 }]
+  let 累计伤害 = 0
+  for (let i = 1; i < 本段伤害.length; i++) {
+    const 时间 = Math.min(i * 间隔, 结算时长)
+    累计伤害 = 时间 === 结算时长 ? 总伤害 : 累计伤害 + 本段伤害[i]
+    曲线.push({ 时间, 累计伤害, 秒伤: 累计伤害 / 时间 })
+  }
+  return 曲线
 }
 
 export type 明尊逐招循环配置 = Omit<明尊时间轴选项, '时长' | '序列'> & {
@@ -68,8 +102,7 @@ const 命中掩码: Record<string, number> = skillEvents.masks
 function 获取逐招环境(装备: EquipmentStats, 初始设置: Settings, 加速档位?: 明尊逐招加速档位) {
   const 孤月无心 = 初始设置.talents.includes('21835')
   if (!孤月无心 && !初始设置.talents.includes('6771'))
-    throw new Error('请在主页面选择光明心或孤月无心奇穴后再模拟')
-  if (初始设置.mingzunOrangeWeapon) throw new Error('此版本支持普通武器的逐招模拟')
+    throw new Error('请选择光明心或孤月无心奇穴后再模拟')
   const 设置 = { ...初始设置, light: false, drive: false }
   let 常规属性 = calculateAttributes(装备, { ...设置, equipmentProcGains: {} })
   if (加速档位 !== undefined) {
@@ -101,19 +134,20 @@ export function 预览明尊逐招灵力(
   选项: Omit<明尊时间轴选项, '时长'> & Pick<明尊逐招模拟选项, '加速档位'>,
 ) {
   const { 郭氏加速, 规则 } = 获取逐招环境(装备, 初始设置, 选项.加速档位)
-  const { 施放列表, 中断, 结算时长, 技能栏状态 } = 生成明尊逐招时间轴(
+  const { 施放列表, 中断, 结算时长, 下次施放帧, 技能栏状态 } = 生成明尊逐招时间轴(
     { ...选项, 时长: undefined },
     郭氏加速,
     规则,
     true,
   )
-  return { 施放列表, 中断, 结算时长, 技能栏状态 }
+  return { 施放列表, 中断, 结算时长, 下次施放帧, 技能栏状态 }
 }
 
 export function 模拟明尊逐招循环(装备: EquipmentStats, 初始设置: Settings, 选项: 明尊逐招模拟选项) {
   const { 设置, 常规属性, 郭氏加速, 规则 } = 获取逐招环境(装备, 初始设置, 选项.加速档位)
   const 戒火设置 = 计入循环戒火(设置)
   const 时间轴 = 生成明尊逐招时间轴(选项, 郭氏加速, 规则)
+  const 技能设置 = { ...设置, mingzunOrangeWeapon: 时间轴.模拟橙武 }
   const 结算时长 = 时间轴.结算时长
   const { 已勾选循环增益 } = 选项
   const 增益窗口 =
@@ -126,13 +160,19 @@ export function 模拟明尊逐招循环(装备: EquipmentStats, 初始设置: S
     const key = 行.等级 === undefined ? String(行.id) : `${行.id}:${行.等级}`
     const skill = 技能索引.get(key)
     if (!skill) throw new Error(`缺少技能伤害公式（${key}）`)
-    return skillAvailable(skill, 设置) ? [{ ...行, skill }] : []
+    if (!skillAvailable(skill, 技能设置)) return []
+    const 命中倍率 = 行.id === 25796 ? 明尊神兵触发率 : 1
+    return [{ ...行, skill, 命中倍率 }]
   })
   const 特效 = 设置.equipmentEffects || []
   const 水封山 = 特效.find(({ effect }) => effect.key === 'gain_4877_89')?.effect.rules
   const 其他特效 = 特效.filter(({ effect }) => effect.key !== 'gain_4877_89')
   const 技能命中数 = new Map<Skill, number>()
-  for (const 行 of 命中) 技能命中数.set(行.skill, (技能命中数.get(行.skill) || 0) + 1)
+  let 期望命中数 = 0
+  for (const { skill, 命中倍率 } of 命中) {
+    技能命中数.set(skill, (技能命中数.get(skill) || 0) + 命中倍率)
+    期望命中数 += 命中倍率
+  }
   const 大附魔事件 = 其他特效.some(({ effect }) => isMajorEnchant(effect))
     ? majorEnchantContext(
         [...技能命中数].map(([skill, count]) => ({
@@ -146,7 +186,7 @@ export function 模拟明尊逐招循环(装备: EquipmentStats, 初始设置: S
     其他特效,
     常规属性.hasteRating,
     结算时长,
-    命中.length,
+    期望命中数,
     大附魔事件,
   )
 
@@ -156,7 +196,7 @@ export function 模拟明尊逐招循环(装备: EquipmentStats, 初始设置: S
   let 水失效帧 = 0
   const 伤害统计 = new Map<string, 明尊模拟伤害统计>()
   let 总伤害 = 0
-  const 命中列表 = 命中.map(({ skill, ...行 }) => {
+  const 命中列表 = 命中.map(({ skill, 命中倍率, ...行 }) => {
     const { 号令三军, 朝圣言, 仙王蛊鼎, 寒啸千军 } = 获取明尊时间点增益(增益窗口, 行.帧)
     const 鼓层数 = 号令三军?.层数 ?? 0
     const 朝圣层数 = 朝圣言?.层数 ?? 0
@@ -222,6 +262,7 @@ export function 模拟明尊逐招循环(装备: EquipmentStats, 初始设置: S
       )
       伤害缓存.set(伤害键, 伤害)
     }
+    伤害 *= 命中倍率
     // 水·封山在符合客户端事件掩码的命中后叠层、续期。
     if (水封山 && 命中掩码[行.id] & (水封山.eventMask ?? 0)) {
       水层数 = Math.min(水层数 + 1, 水封山.maxStacks ?? 1)
@@ -234,7 +275,17 @@ export function 模拟明尊逐招循环(装备: EquipmentStats, 初始设置: S
     总伤害 += 伤害
     return { ...行, 鼓层数, 朝圣层数, 蛊鼎层数, 寒啸层数, 伤害 }
   })
-  for (const 行 of equipmentDamageRows(其他特效, 常规属性, 结算时长, 命中.length, 大附魔事件)) {
+  const 装备附伤: { 时间: number; 伤害: number }[] = []
+  const 装备伤害统计 = equipmentDamageRows(
+    其他特效,
+    常规属性,
+    结算时长,
+    期望命中数,
+    大附魔事件,
+    'lunar',
+    选项.记录秒伤曲线 ? (时间, 伤害) => 装备附伤.push({ 时间, 伤害 }) : undefined,
+  )
+  for (const 行 of 装备伤害统计) {
     总伤害 += 行.技能总输出
     const key = `装备:${行.技能ID}`
     const 统计 = 伤害统计.get(key) ?? {
@@ -253,6 +304,9 @@ export function 模拟明尊逐招循环(装备: EquipmentStats, 初始设置: S
     循环增益覆盖: 统计增益覆盖(增益窗口, 结算时长 * 16),
     总伤害,
     秒伤: 总伤害 / 结算时长,
+    秒伤曲线: 选项.记录秒伤曲线
+      ? 获取秒伤曲线(命中列表, 装备附伤, 结算时长, 总伤害)
+      : undefined,
     伤害统计: [...伤害统计.values()].sort((前, 后) => 后.伤害 - 前.伤害),
   }
 }

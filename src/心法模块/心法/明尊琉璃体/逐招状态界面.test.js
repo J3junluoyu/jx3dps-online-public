@@ -70,6 +70,7 @@ test('孤月图标同时显示可用层数及恢复倒计时，下一层恢复�
   )
   const 光明相 = screen.getByRole('button', { name: '光明相' })
   expect(within(光明相).getByText('1/2')).toBeTruthy()
+  expect(光明相.dataset.cooling).toBe('false')
   expect(within(光明相).getByText('79').dataset.recharging).toBe('true')
   expect(光明相.getAttribute('title')).toContain('下一层还需 79 秒')
   fireEvent.click(光明相)
@@ -103,10 +104,14 @@ test('目标 Buff 显示日月斩，技能栏区分条件不足和正在冷却',
   expect(screen.queryByRole('button', { name: '净世破魔击·日' })).toBeNull()
   expect(screen.queryByRole('button', { name: '净世破魔击·月' })).toBeNull()
   expect(破魔.getAttribute('data-blocked')).toBe('true')
+  expect(破魔.dataset.cooling).toBe('false')
   expect(破魔.getAttribute('aria-disabled')).toBe('true')
   fireEvent.click(破魔)
   const 光明相 = screen.getByRole('button', { name: '光明相' })
   expect(光明相.getAttribute('aria-disabled')).toBe('true')
+  expect(光明相.dataset.cooling).toBe('true')
+  expect(screen.getByRole('button', { name: '烈日斩' }).dataset.cooling).toBe('true')
+  expect(screen.getByRole('button', { name: '银月斩' }).dataset.cooling).toBe('true')
   expect(within(光明相).getByText('60')).toBeTruthy()
   fireEvent.click(光明相)
   expect(添加指令).not.toHaveBeenCalled()
@@ -114,18 +119,51 @@ test('目标 Buff 显示日月斩，技能栏区分条件不足和正在冷却',
   expect(添加指令).toHaveBeenCalledWith(['赤日轮'])
 })
 
-test('日灵充满时显示满，数值仍可通过进度条读取', () => {
-  const 参数 = { 序列: [], 设置序列: jest.fn(), 添加指令: jest.fn() }
-  const { rerender } = render(
-    <明尊序列编辑 {...参数} 起手={{ 日灵: 100, 月魂: 0, 已戒火: false }} />,
+test('团队增益按插入位置校验前后冷却，等待到期后可以插入', () => {
+  const 序列 = [
+    { 增益: '号令三军', 层数: 100 },
+    { 增益: '寒啸千军', 层数: 100 },
+    { 等待: 15 },
+    { 等待: 15 },
+  ]
+  const { 施放列表, 下次施放帧 } = 生成明尊逐招时间轴(
+    { 初始日灵: 0, 初始月魂: 0, 开场戒火: false, 延迟: 0, 序列 },
+    0,
+    { 无量妙境: false, 五明乐见: false, 破魔回月: false, 炽炎镇恶: false },
+    true,
   )
-  const 日灵条 = screen.getByRole('progressbar', { name: '当前日灵' })
-  expect(日灵条.value).toBe(100)
-  expect(日灵条.parentElement.textContent).toBe('满')
-
-  rerender(<明尊序列编辑 {...参数} 起手={{ 日灵: 40, 月魂: 0, 已戒火: false }} />)
-  expect(日灵条.value).toBe(40)
-  expect(日灵条.parentElement.textContent).toBe('40')
+  const 添加指令 = jest.fn(() => 4)
+  render(
+    <明尊序列编辑
+      序列={序列.map((指令, id) => ({ id, 指令 }))}
+      设置序列={jest.fn()}
+      添加指令={添加指令}
+      施放列表={施放列表}
+      下次施放帧={下次施放帧}
+      起手={{ 日灵: 0, 月魂: 0, 已戒火: false }}
+    />,
+  )
+  const 鼓 = screen.getByRole('button', { name: '号令三军' })
+  const 寒啸 = screen.getByRole('button', { name: '寒啸千军' })
+  expect(鼓.dataset.cooling).toBe('true')
+  expect(鼓.textContent).toContain('已用')
+  expect(寒啸.dataset.cooling).toBe('false')
+  fireEvent.click(screen.getByRole('button', { name: /^第 1 项 号令三军/ }))
+  expect(寒啸.dataset.cooling).toBe('true')
+  expect(寒啸.title).toContain('与后续同名增益的施放间隔不足')
+  expect(寒啸.textContent).toContain('30s')
+  fireEvent.click(寒啸)
+  fireEvent.click(鼓)
+  fireEvent.click(screen.getByRole('button', { name: /^第 3 项 等待/ }))
+  expect(寒啸.getAttribute('aria-disabled')).toBe('true')
+  expect(寒啸.title).toContain('冷却剩余 15 秒')
+  fireEvent.click(寒啸)
+  expect(添加指令).not.toHaveBeenCalled()
+  fireEvent.click(screen.getByRole('button', { name: /^第 4 项 等待/ }))
+  expect(寒啸.dataset.cooling).toBe('false')
+  expect(寒啸.title).toContain('已就绪 · 插在等待结束后')
+  fireEvent.click(寒啸)
+  expect(添加指令).toHaveBeenCalledWith([{ 增益: '寒啸千军', 层数: 100 }], undefined)
 })
 
 test('可从未选中的图标直接删除对应招式，并保留当前选中项', () => {

@@ -1,6 +1,6 @@
 import React, { useMemo, useRef, useState } from 'react'
 import { DownOutlined, PlusCircleOutlined, SettingOutlined } from '@ant-design/icons'
-import { Alert, Button, Checkbox, InputNumber, Popover, Select, Switch, Table, Tabs } from 'antd'
+import { Alert, Button, Checkbox, InputNumber, Popover, Select, Table, Tabs } from 'antd'
 import { shallowEqual } from 'react-redux'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import {
@@ -13,7 +13,9 @@ import { 更新当前自定义循环列表 } from '@/store/data'
 import type { 循环数据 } from '@/@types/循环'
 import { 获取计算目标信息 } from '@/计算模块/统一工具函数/工具函数'
 import { TARGETS } from '@/心法模块/心法/明尊琉璃体/计算'
-import { 明尊循环最多指令 } from '@/心法模块/心法/明尊琉璃体/逐招时间轴'
+import {
+  明尊循环最多指令,
+} from '@/心法模块/心法/明尊琉璃体/逐招时间轴'
 import type { 明尊循环指令 } from '@/心法模块/心法/明尊琉璃体/逐招时间轴'
 import { 明尊逐招加速帧数, 模拟明尊逐招循环, 预览明尊逐招灵力 } from '@/心法模块/心法/明尊琉璃体/逐招模拟'
 import type { 明尊逐招加速档位, 明尊逐招循环配置 } from '@/心法模块/心法/明尊琉璃体/逐招模拟'
@@ -21,6 +23,7 @@ import 奇穴选择抽屉 from '../../公用设置/奇穴选择/drawer'
 import 明尊序列编辑 from './序列编辑'
 import type { 序列行 } from './序列编辑'
 import 保存循环 from './保存循环'
+import 明尊秒伤曲线 from './秒伤曲线'
 import './index.css'
 
 const 数字 = new Intl.NumberFormat('zh-CN', { maximumFractionDigits: 2 })
@@ -50,6 +53,7 @@ function 明尊循环模拟() {
   const [自选目标等级, 设置自选目标等级] = useState<number>()
   const 目标等级 = 自选目标等级 ?? 获取计算目标信息(输入.目标).等级
   const [展开设置, 设置展开设置] = useState(true)
+  const [当前结果页, 设置当前结果页] = useState('casts')
   const [延迟, 设置延迟] = useState<number | null>(40)
   const [加速档位, 设置加速档位] = useState<明尊逐招加速档位 | '随配装'>('随配装')
   const [自选奇穴, 设置自选奇穴] = useState<string[]>()
@@ -102,6 +106,7 @@ function 明尊循环模拟() {
         施放列表: undefined,
         中断: undefined,
         结算时长: undefined,
+        下次施放帧: undefined,
         技能栏状态: undefined,
         错误: error instanceof Error ? error.message : '无法预览当前灵力',
       }
@@ -114,19 +119,24 @@ function 明尊循环模拟() {
 
   const { 结果, 错误 } = useMemo(() => {
     if (!序列.length || 编辑提示) return {}
-    if (!序列参数) return { 错误: '请填写起手灵力和网络延迟' }
+    if (!序列参数) return { 错误: '请填写起手灵力与网络延迟' }
     if (!输入.装备信息?.装备列表?.some((项) => 项?.id))
       return { 错误: '请先在配装器保存一套装备' }
     try {
       return {
         结果: 模拟明尊逐招循环(装备, 设置, {
-          ...序列参数, 常驻朝圣无双, 已勾选循环增益,
+          ...序列参数,
+          常驻朝圣无双,
+          已勾选循环增益,
+          记录秒伤曲线: 当前结果页 === 'dps',
         }),
       }
     } catch (error) {
       return { 错误: error instanceof Error ? error.message : '无法计算当前循环' }
     }
-  }, [序列.length, 编辑提示, 序列参数, 输入.装备信息, 装备, 设置, 常驻朝圣无双, 已勾选循环增益])
+  }, [
+    序列.length, 编辑提示, 序列参数, 输入.装备信息, 装备, 设置, 常驻朝圣无双, 已勾选循环增益, 当前结果页,
+  ])
 
   const 新建序列行 = (指令: 明尊循环指令): 序列行 => ({ id: 下一个序号.current++, 指令 })
   const 添加指令 = (指令: 明尊循环指令[], 插入前?: number) => {
@@ -241,18 +251,14 @@ function 明尊循环模拟() {
             />
           </div>
           <div>
-            <label htmlFor='mingzun-rotation-talent-switch'>自定义奇穴</label>
-            <div className='mingzun-rotation-talent-controls'>
-              <Switch
-                id='mingzun-rotation-talent-switch'
-                checked={自选奇穴 !== undefined}
-                onChange={(开启) => {
-                  设置自选奇穴(开启 ? 规范明尊奇穴(输入.奇穴) : undefined)
-                  设置打开奇穴(开启)
-                }}
-              />
-              <Button disabled={!自选奇穴} onClick={() => 设置打开奇穴(true)}>设置奇穴</Button>
-            </div>
+            <Button
+              onClick={() => {
+                设置自选奇穴((当前) => 当前 ?? 规范明尊奇穴(输入.奇穴))
+                设置打开奇穴(true)
+              }}
+            >
+              设置奇穴
+            </Button>
           </div>
         </div>
       </div>
@@ -274,6 +280,7 @@ function 明尊循环模拟() {
         设置序列={设置序列}
         添加指令={添加指令}
         施放列表={编辑预览?.施放列表}
+        下次施放帧={编辑预览?.下次施放帧}
         已勾选循环增益={已勾选循环增益}
         技能栏状态={编辑预览?.技能栏状态}
         中断序号={编辑预览?.中断?.序号}
@@ -354,7 +361,14 @@ function 明尊循环模拟() {
             水·封山按命中叠层，其余装备触发沿用配装计算器的期望模型，附伤汇总在技能统计中。
           </p>
           <Tabs
+            activeKey={当前结果页}
+            onChange={设置当前结果页}
             items={[
+              {
+                key: 'dps',
+                label: '秒伤曲线',
+                children: 结果.秒伤曲线 && <明尊秒伤曲线 曲线={结果.秒伤曲线} />,
+              },
               {
                 key: 'casts',
                 label: '施放时间轴',

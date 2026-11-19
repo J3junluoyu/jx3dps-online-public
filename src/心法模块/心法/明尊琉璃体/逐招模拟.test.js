@@ -4,6 +4,7 @@ import 八一 from './测试数据/理论循环0.8125.json'
 import 七五 from './测试数据/理论循环0.75.json'
 import { 获取明尊逐招计算设置, 明尊秒伤计算 } from '@/计算模块/职业特殊处理/明尊'
 import { 迁移旧明尊自定义逐招循环 } from './自定义逐招循环'
+import { findGearItem } from './装备'
 
 const 常规 = { 延迟: 40, 初始日灵: 0, 初始月魂: 0, 开场戒火: false, 序列: ['赤日轮'] }
 const 双满 = {
@@ -13,6 +14,83 @@ const 双满 = {
   开场戒火: true,
   序列: ['光明相', '净世破魔击', '净世破魔击', '净世破魔击', '净世破魔击'],
 }
+
+test('橙武开启 5 秒，破魔按出招触发愿火、异色回灵和双斩，结束帧不再触发', () => {
+  const { equipment, settings } = 八一
+  const 配置 = {
+    ...常规,
+    延迟: 0,
+    加速档位: 13,
+    初始月魂: 100,
+    序列: ['橙武', '净世破魔击', '净世破魔击', { 等待: 3.375 }, '净世破魔击'],
+  }
+  const 结果 = 模拟明尊逐招循环(equipment, settings, 配置)
+  expect(预览明尊逐招灵力(equipment, settings, 配置).施放列表).toEqual(结果.施放列表)
+  expect(结果.施放列表[0]).toMatchObject({ 帧: 0, 施放后: { 橙武结束帧: 80 } })
+  expect(结果.施放列表[1]).toMatchObject({
+    帧: 0, 技能: '净世破魔击·月', 施放后: { 日灵: 100, 烈日结束帧: 288, 银月结束帧: 27 * 9 },
+  })
+  expect(结果.施放列表[2]).toMatchObject({
+    帧: 13, 技能: '净世破魔击·日', 施放后: { 月魂: 100 },
+  })
+  expect(结果.施放列表[4]).toMatchObject({
+    帧: 80, 技能: '净世破魔击·月', 施放后: { 日灵: 0, 橙武结束帧: undefined },
+  })
+  const 愿火 = 结果.命中列表.filter(({ id }) => id === 35065)
+  expect(愿火.map(({ 帧 }) => 帧)).toEqual([0, 13])
+  expect(愿火.every(({ 伤害 }) => 伤害 > 0)).toBe(true)
+  expect(结果.命中列表.filter(({ id }) => id === 4476)).toHaveLength(6)
+})
+
+test('普通武器也可加入橙武，从施放起调息 50 秒，到点可再次开启', () => {
+  const { equipment, settings } = 八一
+  const 预览 = (序列) => 预览明尊逐招灵力(equipment, settings, { ...常规, 延迟: 0, 序列 })
+  expect(预览([]).技能栏状态.橙武).toEqual({ 冷却帧: 0 })
+  expect(预览(['橙武']).技能栏状态.橙武.冷却帧).toBe(800)
+  expect(预览(['橙武', { 等待: 49 }, '橙武']).中断.提示).toContain('剩余 1.00 秒')
+  expect(预览(['橙武', { 等待: 50 }, '橙武']).施放列表.at(-1)).toMatchObject({
+    帧: 800, 施放后: { 橙武结束帧: 880 },
+  })
+})
+
+test('逐招神兵按序列是否加入橙武计算，与配装的橙武标记无关', () => {
+  const { equipment, settings } = 八一
+  const 装备橙武 = { ...settings, mingzunOrangeWeapon: true }
+  const 双斩 = { ...常规, 序列: ['烈日斩', '银月斩'] }
+  const 有橙武动作 = { ...双斩, 序列: [...双斩.序列, '橙武'] }
+  const 结果 = 模拟明尊逐招循环(equipment, settings, 有橙武动作)
+  expect(结果).toEqual(模拟明尊逐招循环(equipment, 装备橙武, 有橙武动作))
+  expect(结果.命中列表.filter(({ id }) => id === 25796)).toHaveLength(2)
+  const 常规结果 = 模拟明尊逐招循环(equipment, 装备橙武, 双斩)
+  expect(常规结果.命中列表.some(({ id }) => id === 35065 || id === 25796)).toBe(false)
+})
+
+test('秒伤曲线随命中累计，包含装备附伤，到实际结算时刻结束', () => {
+  const { equipment, settings } = 八一
+  const 配置 = { ...常规, 序列: ['烈日斩', { 等待: 3 }], 记录秒伤曲线: true }
+  const 武器外装备 = findGearItem(47972)
+  const 结果 = 模拟明尊逐招循环(
+    equipment,
+    {
+      ...settings,
+      equipmentEffects: 武器外装备.specialEffects.map((effect) => ({
+        slot: 'tertiary_weapon', gearKey: 武器外装备.key, effect,
+      })),
+    },
+    配置,
+  )
+  const { 秒伤曲线, 命中列表 } = 结果
+  const 附伤 = 结果.伤害统计.find((行) => 行.装备附伤).伤害
+  expect(秒伤曲线[0]).toEqual({ 时间: 0, 累计伤害: 0, 秒伤: 0 })
+  const 中途 = 秒伤曲线.find((点) => 点.时间 === 0.5)
+  const 技能伤害 = 命中列表.filter((行) => 行.帧 <= 8).reduce((和, 行) => 和 + 行.伤害, 0)
+  expect(中途.累计伤害).toBeCloseTo(技能伤害 + 附伤)
+  expect(中途.秒伤).toBeCloseTo((技能伤害 + 附伤) / 0.5)
+  expect(秒伤曲线.at(-1)).toEqual({
+    时间: 结果.结算时长, 累计伤害: 结果.总伤害, 秒伤: 结果.秒伤,
+  })
+  expect(模拟明尊逐招循环(equipment, settings, 常规).秒伤曲线).toBeUndefined()
+})
 
 test('目标烈日按 18 秒刷新，银月斩的到期取当前加速下的最后一跳', () => {
   const 规则 = { 无量妙境: false, 五明乐见: false, 破魔回月: false, 炽炎镇恶: false }

@@ -12,10 +12,12 @@ import {
   明尊团队增益持续秒,
   明尊戒火持续帧,
   明尊循环最多指令,
+  统一明尊循环增益名称,
 } from '@/心法模块/心法/明尊琉璃体/逐招时间轴'
 import type {
   明尊施放技能,
   明尊循环指令,
+  明尊增益窗口,
   明尊团队指令,
   明尊逐招记录,
   明尊技能栏状态,
@@ -29,6 +31,7 @@ interface 序列编辑参数 {
   设置序列: React.Dispatch<React.SetStateAction<序列行[]>>
   添加指令: (指令: 明尊循环指令[], 插入前?: number) => number
   施放列表?: 明尊逐招记录[]
+  下次施放帧?: number
   已勾选循环增益?: ReadonlySet<string>
   技能栏状态?: 明尊技能栏状态
   中断序号?: number
@@ -46,17 +49,24 @@ const 技能分组: { 名称: string; 技能: 明尊施放技能[] }[] = [
   },
   { 名称: '幻魔妙相', 技能: ['光明相'] },
   { 名称: '御暗烬灭令', 技能: ['驱夜断愁'] },
-  { 名称: '其他', 技能: ['戒火斩'] },
+  { 名称: '其他', 技能: ['戒火斩', '橙武'] },
 ]
 const 秒数 = new Intl.NumberFormat('zh-CN', { maximumFractionDigits: 4 })
 const 卡片秒数 = new Intl.NumberFormat('zh-CN', { maximumFractionDigits: 2 })
 const Buff秒数 = new Intl.NumberFormat('zh-CN', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
-const 团队增益选项: 明尊团队指令[] = [
+const 团队增益选项 = [
   { 增益: '号令三军', 层数: 100 },
   { 增益: '朝圣言', 层数: 100, 圣浴: false },
   { 增益: '仙王蛊鼎', 层数: 100 },
   { 增益: '寒啸千军', 层数: 100 },
-]
+] satisfies 明尊团队指令[]
+// 号令三军每场战斗只能施展一次，其余取团队施法者的基础调息。
+const 团队增益基础冷却秒: Record<明尊增益窗口['名称'], number> = {
+  号令三军: Infinity,
+  朝圣言: 300,
+  仙王蛊鼎: 120,
+  寒啸千军: 30,
+}
 
 type 状态Buff = { 名称: string; 图标: number; 到期帧: number; 层数?: number }
 
@@ -100,16 +110,9 @@ function 招式图标({ 指令, 施放名称 }: { 指令: 明尊循环指令; �
     )
 
   const 图标名称 = typeof 指令 === 'string' ? 指令 : 指令.增益
-  const 破魔名称 = 施放名称 ?? 图标名称
+  const 耗灵颜色 = /^净世破魔击·(日|月)$/.exec(施放名称 ?? 图标名称)?.[1]
   const 连段 = /^(赤日轮|幽月轮)·([1-3])$/.exec(施放名称 ?? '')?.[2]
-  const 徽标 =
-    破魔名称 === '净世破魔击·日'
-      ? '日'
-      : 破魔名称 === '净世破魔击·月'
-        ? '月'
-        : 图标名称 === '一鼓' || 图标名称 === '二鼓'
-          ? 图标名称[0]
-          : 连段
+  const 徽标 = 耗灵颜色 ?? (图标名称 === '一鼓' || 图标名称 === '二鼓' ? 图标名称[0] : 连段)
   return (
     <span className='mingzun-rotation-icon' aria-hidden='true'>
       {图标名称[0]}
@@ -136,6 +139,7 @@ function 明尊序列编辑({
   设置序列,
   添加指令,
   施放列表,
+  下次施放帧,
   已勾选循环增益,
   技能栏状态,
   中断序号,
@@ -155,8 +159,25 @@ function 明尊序列编辑({
   const 选中增益 = typeof 选中指令 === 'object' && '增益' in 选中指令 ? 选中指令 : undefined
   const 选中结果 = 施放列表?.[选中序号]
   const 已达上限 = 序列.length >= 明尊循环最多指令
-  const 当前动作 = 选中结果 ?? 施放列表?.at(-1)
+  const 当前序号 = 选中结果 ? 选中序号 : (施放列表?.length ?? 0) - 1
+  const 当前动作 = 施放列表?.[当前序号]
   const 当前帧 = 当前动作?.帧 ?? 0
+  const 选中等待 = typeof 选中指令 === 'object' && '等待' in 选中指令
+  const 插入序号 = 选中序号 < 0 ? 序列.length : 选中序号 + Number(选中等待)
+  const 插入前ID = 序列[插入序号]?.id
+  const 插入帧 = 插入序号 === 0
+    ? 0
+    : 施放列表?.[插入序号]?.帧 ??
+      (插入序号 === 施放列表?.length ? 下次施放帧 : undefined)
+  const 插入位置 = 选中序号 < 0 ? '插在序列末尾' : 选中等待 ? '插在等待结束后' : '插在所选招式前'
+  const 最近团队施放 = new Map<string, number>()
+  const 下次团队施放 = new Map<string, number>()
+  for (const [序号, { 指令 }] of 序列.entries()) {
+    if (typeof 指令 === 'string' || !('增益' in 指令)) continue
+    const 名称 = 统一明尊循环增益名称(指令.增益)
+    if (序号 < 插入序号) 最近团队施放.set(名称, 序号)
+    else if (!下次团队施放.has(名称)) 下次团队施放.set(名称, 序号)
+  }
   const 当前资源 = 当前动作?.施放后
   const 日灵 = 当前资源?.日灵 ?? 起手.日灵
   const 月魂 = 当前资源?.月魂 ?? 起手.月魂
@@ -173,6 +194,12 @@ function 明尊序列编辑({
       图标: 技能图标.光明相.icon,
       到期帧: 当前资源.光明相结束帧,
       层数: 当前资源.光明相层数,
+    })
+  if (当前资源?.橙武结束帧)
+    自身Buff.push({
+      名称: '橙武',
+      图标: 技能图标.橙武.icon,
+      到期帧: 当前资源.橙武结束帧,
     })
   if (当前资源?.五明结束帧)
     自身Buff.push({
@@ -236,21 +263,59 @@ function 明尊序列编辑({
     <>
       <div className='mingzun-rotation-opening'>
         <div className='mingzun-rotation-buff-palette' role='group' aria-label='插入团队增益'>
-          {团队增益选项.map((指令) => (
-            <button
-              key={指令.增益}
-              type='button'
-              aria-label={指令.增益}
-              title={`${指令.增益} · 插在所选招式前，可拖动调整时间`}
-              disabled={已达上限}
-              onClick={() => 设置选中ID(添加指令([指令], 选中ID))}
-            >
-              <招式图标 指令={指令} />
-              <span className='mingzun-rotation-buff-duration'>
-                {明尊团队增益持续秒[指令.增益]}s
-              </span>
-            </button>
-          ))}
+          {团队增益选项.map((指令) => {
+            const 名称 = 指令.增益
+            const 冷却帧 = 团队增益基础冷却秒[名称] * 16
+            const 上次 = 最近团队施放.get(名称)
+            const 下次 = 下次团队施放.get(名称)
+            const 上次帧 = 上次 === undefined ? undefined : 施放列表?.[上次]?.帧
+            const 下次帧 = 下次 === undefined ? undefined : 施放列表?.[下次]?.帧
+            const 已使用 = 冷却帧 === Infinity && (上次 !== undefined || 下次 !== undefined)
+            const 缺少时间 =
+              插入帧 === undefined ||
+              (上次 !== undefined && 上次帧 === undefined) ||
+              (下次 !== undefined && 下次帧 === undefined)
+            const 剩余帧 = 上次帧 !== undefined && 插入帧 !== undefined
+              ? Number((上次帧 + 冷却帧 - 插入帧).toFixed(6))
+              : 0
+            const 后续冲突 = 下次帧 !== undefined && 插入帧 !== undefined &&
+              Number((插入帧 + 冷却帧 - 下次帧).toFixed(6)) > 0
+            const 冷却中 = 已使用 || 剩余帧 > 0 || 后续冲突
+            let 提示 = '已就绪'
+            let 标记 = `${明尊团队增益持续秒[名称]}s`
+            if (已使用) {
+              提示 = 上次 === undefined ? '本场已安排' : '本场已使用'
+              标记 = '已用'
+            } else if (剩余帧 > 0) {
+              const 剩余秒 = Math.ceil(剩余帧 / 16)
+              提示 = `冷却剩余 ${剩余秒} 秒`
+              标记 = `${剩余秒}s`
+            } else if (后续冲突) {
+              提示 = '与后续同名增益的施放间隔不足'
+              标记 = 下次帧 === 插入帧 ? `${团队增益基础冷却秒[名称]}s` : '冲突'
+            } else if (缺少时间) {
+              提示 = '请先修正循环时间轴'
+            }
+            return (
+              <button
+                key={名称}
+                type='button'
+                aria-label={名称}
+                title={`${名称} · ${提示} · ${插入位置}`}
+                data-cooling={冷却中}
+                disabled={已达上限}
+                aria-disabled={冷却中 || 缺少时间 || undefined}
+                onClick={() => {
+                  if (!冷却中 && !缺少时间) 设置选中ID(添加指令([指令], 插入前ID))
+                }}
+              >
+                <招式图标 指令={指令} />
+                <span className='mingzun-rotation-buff-duration'>
+                  {标记}
+                </span>
+              </button>
+            )
+          })}
         </div>
         {children}
         <div className='mingzun-rotation-display-options'>
@@ -506,6 +571,7 @@ function 明尊序列编辑({
                     disabled={已达上限}
                     aria-disabled={!!不可施放 || undefined}
                     data-blocked={!!不可施放 && !冷却秒}
+                    data-cooling={冷却秒 > 0}
                     title={[不可施放, 充能提示].filter(Boolean).join('。') || undefined}
                     onClick={() => {
                       if (!不可施放) 添加并选中(招式)

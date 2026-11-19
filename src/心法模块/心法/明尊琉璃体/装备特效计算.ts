@@ -228,6 +228,7 @@ export function equipmentDamageRows(
   hits: number,
   majorContext?: MajorEnchantContext,
   damageType: 'solar' | 'lunar' = 'lunar',
+  onDamage?: (time: number, damage: number) => void,
 ): 计算结果技能列表类型[] {
   if (hits <= 0) return []
   const used = new Set<string>()
@@ -241,20 +242,6 @@ export function equipmentDamageRows(
     const group = rule.shared || effect.key
     if (used.has(group)) continue
     used.add(group)
-    const triggers = majorDamage
-      ? majorEnchantProc(effect, duration, majorContext).count
-      : Math.min(Math.ceil(hits), Math.ceil(duration / rule.cooldown))
-    let count = triggers
-    if (rule.interval) {
-      count = 0
-      const ticks = equipmentDotTicks(panel.hasteRating)
-      for (let n = 0; n < triggers; n++) {
-        const start = n * rule.cooldown
-        for (let tick = 1; tick <= ticks; tick++)
-          if (start + tick * rule.interval < duration - 1e-9) count++
-      }
-    }
-    if (!count) continue
     // 明尊自适应伤害为阴性；原式仅含等级压制与易伤，不吃攻击、破防、会心、无双或普通增伤。
     const hit = Math.max(
       0,
@@ -263,6 +250,31 @@ export function equipmentDamageRows(
           (1 + panel.variables[`${damageType}_damage_scale`]),
       ),
     )
+    const triggers = majorDamage
+      ? majorEnchantProc(
+          effect,
+          duration,
+          majorContext,
+          onDamage && ((time, chance) => onDamage(time, hit * chance)),
+        ).count
+      : Math.min(Math.ceil(hits), Math.ceil(duration / rule.cooldown))
+    let count = triggers
+    if (rule.interval) {
+      count = 0
+      const ticks = equipmentDotTicks(panel.hasteRating)
+      for (let n = 0; n < triggers; n++) {
+        const start = n * rule.cooldown
+        for (let tick = 1; tick <= ticks; tick++) {
+          const time = start + tick * rule.interval
+          if (time >= duration - 1e-9) break
+          count++
+          onDamage?.(time, hit)
+        }
+      }
+    } else if (onDamage && !majorDamage) {
+      for (let n = 0; n < triggers; n++) onDamage(n * rule.cooldown, hit)
+    }
+    if (!count) continue
     const total = hit * count
     rows.push({
       技能ID: rule.id,

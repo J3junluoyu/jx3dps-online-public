@@ -14,6 +14,7 @@ import {
 } from './装备特效计算'
 
 export const LEVEL = 50
+export const 明尊神兵触发率 = 205 / 1024
 export const GLOBAL_COEFFICIENTS = {
   critical: 9.609,
   criticalPower: 3.54,

@@ -83,12 +83,6 @@
   font-size: 13px;
 }
 
-.mingzun-rotation-talent-controls {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
 .mingzun-rotation-save-label {
   display: block;
   margin: 14px 0 10px;
@@ -128,9 +122,13 @@
   cursor: pointer;
 }
 
+.mingzun-rotation-buff-palette button:disabled,
+.mingzun-rotation-buff-palette button[aria-disabled='true'] {
+  cursor: not-allowed;
+}
+
 .mingzun-rotation-buff-palette button:disabled {
   opacity: 0.5;
-  cursor: not-allowed;
 }
 
 .mingzun-rotation-buff-palette button .mingzun-rotation-icon {
@@ -648,6 +646,11 @@
   filter: grayscale(1) brightness(0.79);
 }
 
+.mingzun-rotation-buff-palette button[data-cooling='true'] .mingzun-rotation-icon,
+.mingzun-rotation-skill-button[data-cooling='true'] .mingzun-rotation-icon {
+  filter: grayscale(1) brightness(0.35);
+}
+
 .mingzun-rotation-skill-button[data-blocked='true'] {
   color: var(--rotation-subtle);
 }
@@ -762,5 +765,38 @@
   margin-left: 4px;
   color: var(--ant-primary-color);
   font-size: 17px;
+  font-variant-numeric: tabular-nums;
+}
+
+.mingzun-rotation-dps-figure {
+  margin: 0 0 12px;
+  padding: 10px 12px 0;
+  border: 1px solid var(--rotation-border);
+  border-radius: 8px;
+  background: white;
+}
+
+.mingzun-rotation-dps-figure figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 14px;
+  margin: 0 8px;
+  color: var(--rotation-subtle);
+  font-size: 13px;
+}
+
+.mingzun-rotation-dps-reference::before {
+  display: inline-block;
+  width: 18px;
+  margin-right: 6px;
+  border-top: 1px dashed #627582;
+  vertical-align: middle;
+  content: '';
+}
+
+.mingzun-rotation-dps-tooltip {
+  padding: 6px 0;
+  white-space: pre-line;
   font-variant-numeric: tabular-nums;
 }

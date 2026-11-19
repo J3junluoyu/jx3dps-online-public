@@ -172,7 +172,6 @@ export function 获取明尊逐招计算设置(
     团队增益: 增益数据.团队增益?.filter(({ 增益名称 }) => !时间轴增益.has(增益名称)),
   }
   const 设置 = 获取明尊计算设置(奇穴, 增益, 秘籍, 目标等级, 增益启用, 装备)
-  设置.mingzunOrangeWeapon = 装备信息?.装备列表?.some((项) => isMingzunOrangeWeapon(项?.id))
   设置.equipmentEffects = 获取明尊已选装备特效(装备信息)
   let 常驻朝圣无双 = 0
   if (增益?.团队增益?.some((项) => 项.增益名称 === 圣浴常驻名称 && 项.启用)) {

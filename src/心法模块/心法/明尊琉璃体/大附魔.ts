@@ -224,11 +224,12 @@ export function majorEnchantExpectation(
   chance: number,
   cooldown: number,
   active = 0,
+  onTrigger?: (time: number, probability: number) => void,
 ) {
   if (events <= 0 || duration <= 0 || chance <= 0) return { count: 0, coverage: 0 }
   const key = `${events}:${duration}:${chance}:${cooldown}:${active}`
   const cached = expectationCache.get(key)
-  if (cached) return cached
+  if (cached && !onTrigger) return cached
   // 常规300秒循环低于千次；异常超大次数转为高频极限，避免阻塞Worker。
   const n = Math.min(10000, Math.ceil(events))
   const interval = duration / events
@@ -242,6 +243,7 @@ export function majorEnchantExpectation(
     const available = Math.max(0, 1 - (prefix[i] - prefix[left]))
     const probability = Math.min(1, chance) * available
     prefix.push(prefix[i] + probability)
+    if (events <= 10000 && probability > 0) onTrigger?.(time, probability)
     coverage += (probability * Math.min(active, duration - time)) / duration
   }
   const result =
@@ -251,6 +253,13 @@ export function majorEnchantExpectation(
           coverage: Math.min(1, active / (cooldown + ((1 - chance) / chance) * interval)),
         }
       : { count: prefix[prefix.length - 1], coverage: Math.min(1, coverage) }
+  if (onTrigger && events > 10000) {
+    // 高频极限仅有总期望次数，按等间隔分摊。
+    const samples = Math.min(600, Math.ceil(duration))
+    for (let i = 0; i < samples; i++) {
+      onTrigger(((i + 0.5) * duration) / samples, result.count / samples)
+    }
+  }
   if (expectationCache.size >= 2000) expectationCache.clear()
   expectationCache.set(key, result)
   return result
@@ -260,6 +269,7 @@ export function majorEnchantProc(
   effect: EquipmentSpecialEffect,
   duration: number,
   context?: MajorEnchantContext,
+  onTrigger?: (time: number, probability: number) => void,
 ) {
   const rule = effect.rules
   const opportunities = context?.[rule.eventMask || 0]
@@ -269,5 +279,6 @@ export function majorEnchantProc(
     (rule.procChance || 0) * (rule.trigger === 'critical' ? opportunities?.critical || 0 : 1),
     rule.cooldownSeconds || duration,
     rule.durationSeconds,
+    onTrigger,
   )
 }

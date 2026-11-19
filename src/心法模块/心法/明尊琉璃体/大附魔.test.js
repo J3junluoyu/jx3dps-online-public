@@ -58,6 +58,9 @@ test('50级两档伤御大附魔按部位验证，御腕两档采用相同的五
 
 test('概率过程保留未触发及内置冷却，短战斗不能按冷却就绪必触发', () => {
   expect(majorEnchantExpectation(2, 2, 0.5, 10, 8)).toEqual({ count: 0.75, coverage: 0.625 })
+  const 触发 = jest.fn()
+  expect(majorEnchantExpectation(2, 2, 0.5, 10, 8, 触发)).toEqual({ count: 0.75, coverage: 0.625 })
+  expect(触发.mock.calls).toEqual([[0, 0.5], [1, 0.25]])
   expect(majorEnchantExpectation(40, 40, 1, 10, 5)).toEqual({ count: 4, coverage: 0.5 })
   expect(majorEnchantExpectation(0, 40, 1, 10, 5)).toEqual({ count: 0, coverage: 0 })
   const slow = majorEnchantExpectation(40, 40, 102 / 1024, 10)
@@ -91,17 +94,24 @@ test('武伤和附伤不能递归触发，鞋子使用各技能会心概率', ()
   ])
   expect(context[492].events).toBe(40)
   expect(context[492].critical).toBeCloseTo(0.3, 12)
+  const 计入曲线 = jest.fn()
   const rows = equipmentDamageRows(
     effects(16692, 16691),
     calculateAttributes(equipment, settings),
     40,
     40,
     context,
+    'lunar',
+    计入曲线,
   )
   expect(rows.map((row) => row.技能名称)).toEqual(['大附魔·昆吾·弦刃', '大附魔·刃凌'])
   expect(rows[0].技能最终详情.命中.最小值).toBe(6840)
   expect(rows[1].技能最终详情.命中.最小值).toBe(4560)
   expect(rows.every((row) => row.技能数量 > 0 && row.技能数量 < 4)).toBe(true)
+  expect(计入曲线.mock.calls.every(([时间, 伤害]) => 时间 >= 0 && 时间 < 40 && 伤害 > 0)).toBe(true)
+  expect(计入曲线.mock.calls.reduce((合计, [, 伤害]) => 合计 + 伤害, 0)).toBeCloseTo(
+    rows.reduce((合计, 行) => 合计 + 行.技能总输出, 0),
+  )
   expect(
     equipmentDamageRows(
       effects(16691),
