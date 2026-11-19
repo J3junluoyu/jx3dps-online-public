@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import {
   ArrowLeftOutlined,
   ArrowRightOutlined,
@@ -32,7 +32,6 @@ interface 序列编辑参数 {
   添加指令: (指令: 明尊循环指令[], 插入前?: number) => number
   施放列表?: 明尊逐招记录[]
   下次施放帧?: number
-  已勾选循环增益?: ReadonlySet<string>
   技能栏状态?: 明尊技能栏状态
   中断序号?: number
   编辑提示?: string
@@ -60,10 +59,10 @@ const 团队增益选项 = [
   { 增益: '仙王蛊鼎', 层数: 100 },
   { 增益: '寒啸千军', 层数: 100 },
 ] satisfies 明尊团队指令[]
-// 号令三军每场战斗只能施展一次，其余取团队施法者的基础调息。
+// 号令三军每场战斗只能施展一次，其余按模拟约定的团队调息。
 const 团队增益基础冷却秒: Record<明尊增益窗口['名称'], number> = {
   号令三军: Infinity,
-  朝圣言: 300,
+  朝圣言: 130,
   仙王蛊鼎: 120,
   寒啸千军: 30,
 }
@@ -140,7 +139,6 @@ function 明尊序列编辑({
   添加指令,
   施放列表,
   下次施放帧,
-  已勾选循环增益,
   技能栏状态,
   中断序号,
   编辑提示,
@@ -153,6 +151,15 @@ function 明尊序列编辑({
   const [显示灵力, 设置显示灵力] = useState(true)
   const [显示光明相覆盖, 设置显示光明相覆盖] = useState(true)
   const 时间轴 = useRef<HTMLDivElement>(null)
+  const 团队施放 = useMemo(() => {
+    const 列表: { 名称: string; 序号: number }[] = []
+    序列.forEach(({ 指令 }, 序号) => {
+      if (typeof 指令 !== 'string' && '增益' in 指令)
+        列表.push({ 名称: 统一明尊循环增益名称(指令.增益), 序号 })
+    })
+    return 列表
+  }, [序列])
+  const 团队增益窗口 = useMemo(() => 施放列表?.flatMap(({ 生效窗口 }) => 生效窗口 ?? []) ?? [], [施放列表])
   const 选中序号 = 序列.findIndex((行) => 行.id === 选中ID)
   const 选中招式 = 序列[选中序号]
   const 选中指令 = 选中招式?.指令
@@ -172,21 +179,14 @@ function 明尊序列编辑({
   const 插入位置 = 选中序号 < 0 ? '插在序列末尾' : 选中等待 ? '插在等待结束后' : '插在所选招式前'
   const 最近团队施放 = new Map<string, number>()
   const 下次团队施放 = new Map<string, number>()
-  for (const [序号, { 指令 }] of 序列.entries()) {
-    if (typeof 指令 === 'string' || !('增益' in 指令)) continue
-    const 名称 = 统一明尊循环增益名称(指令.增益)
+  for (const { 名称, 序号 } of 团队施放) {
     if (序号 < 插入序号) 最近团队施放.set(名称, 序号)
     else if (!下次团队施放.has(名称)) 下次团队施放.set(名称, 序号)
   }
   const 当前资源 = 当前动作?.施放后
   const 日灵 = 当前资源?.日灵 ?? 起手.日灵
   const 月魂 = 当前资源?.月魂 ?? 起手.月魂
-  const 当前团队增益 = 获取明尊时间点增益(
-    施放列表
-      ?.flatMap(({ 生效窗口 }) => 生效窗口 ?? [])
-      .filter(({ 名称 }) => !已勾选循环增益 || 已勾选循环增益.has(名称)) ?? [],
-    当前帧,
-  )
+  const 当前团队增益 = 获取明尊时间点增益(团队增益窗口, 当前帧)
   const 自身Buff: 状态Buff[] = []
   if (当前资源?.光明相结束帧)
     自身Buff.push({
@@ -301,7 +301,7 @@ function 明尊序列编辑({
                 key={名称}
                 type='button'
                 aria-label={名称}
-                title={`${名称} · ${提示} · ${插入位置}`}
+                title={`${名称}（队友施放） · ${提示} · ${插入位置}`}
                 data-cooling={冷却中}
                 disabled={已达上限}
                 aria-disabled={冷却中 || 缺少时间 || undefined}

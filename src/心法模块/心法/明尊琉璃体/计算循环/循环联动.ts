@@ -7,8 +7,16 @@ export function 规范理论循环名称(名称: string, _奇穴: readonly strin
   return 旧理论循环名称.includes(名称) || ['0.75GCD循环', '0.8125GCD循环'].includes(名称)
     ? 自适应光明心循环名称 : 名称
 }
-export function 根据明尊循环同步奇穴(循环名称: string, 奇穴: readonly string[] = []): string[] {
-  if (规范理论循环名称(循环名称) !== 自适应光明心循环名称) return [...奇穴]
+export function 获取明尊逐招联动奇穴(奇穴: readonly string[] = []) {
+  return 光明心(奇穴) ? '光明心' : undefined
+}
+export function 根据明尊循环同步奇穴(
+  循环名称: string,
+  奇穴: readonly string[] = [],
+  逐招奇穴?: readonly string[],
+): string[] {
+  if (规范理论循环名称(循环名称) !== 自适应光明心循环名称 && !获取明尊逐招联动奇穴(逐招奇穴))
+    return [...奇穴]
   const 第六层 = new Set(['6760', '6771', '21835', '纵遇善缘', '光明心', '孤月无心'])
   const 索引 = 奇穴.findIndex((项) => 第六层.has(项))
   const 结果 = 奇穴.filter((项) => !第六层.has(项))

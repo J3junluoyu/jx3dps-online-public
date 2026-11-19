@@ -2,9 +2,70 @@
 
 import React from 'react'
 import { fireEvent, render, screen, within } from '@testing-library/react'
+import 明尊循环模拟 from '@/功能模块/基础设置/增益面板/明尊循环模拟'
 import 明尊序列编辑 from '@/功能模块/基础设置/增益面板/明尊循环模拟/序列编辑'
 import 保存循环 from '@/功能模块/基础设置/增益面板/明尊循环模拟/保存循环'
 import { 生成明尊逐招时间轴 } from './逐招时间轴'
+
+import 八一 from './测试数据/理论循环0.8125.json'
+
+jest.mock('@/hooks', () => ({
+  useAppSelector: (select) => select(mockState),
+  useAppDispatch: () => jest.fn(),
+}))
+jest.mock('@/计算模块/计算函数', () => ({ 触发秒伤计算: jest.fn() }))
+jest.mock('@/数据/数据工具/获取当前数据', () => ({ __esModule: true, default: jest.fn() }))
+jest.mock('@/store/data', () => ({ 更新当前自定义循环列表: jest.fn() }))
+jest.mock('@/功能模块/基础设置/公用设置/奇穴选择/drawer', () => () => null)
+jest.mock('@/功能模块/基础设置/增益面板/明尊循环模拟/秒伤曲线', () => () => null)
+jest.mock('@/功能模块/基础设置/增益面板/明尊循环模拟/index.css', () => ({}))
+
+let mockState
+
+test('模拟直接结算队友朝圣和鼓，外部团队勾选不影响预览，也不占玩家出招时间', () => {
+  const oldMatchMedia = window.matchMedia
+  window.matchMedia = () => ({ matches: false, addListener: jest.fn(), removeListener: jest.fn() })
+  mockState = {
+    data: {
+      自定义循环列表: [],
+      装备信息: { 装备列表: [{ id: '1' }], 装备基础属性: { 明尊属性: 八一.equipment } },
+      当前奇穴信息: ['光明心'],
+      当前秘籍信息: {},
+      增益启用: false,
+      增益数据: { 团队增益: [] },
+    },
+  }
+  const { rerender, unmount } = render(<明尊循环模拟 />)
+  try {
+    const 读秒伤 = () => Number(screen.getByRole('status', { name: 'DPS' }).textContent.replaceAll(',', ''))
+    const 读用时 = () => screen.getByRole('status', { name: '战斗用时' }).textContent
+    fireEvent.click(screen.getByRole('button', { name: '赤日轮' }))
+    const 原用时 = 读用时()
+    const 基础秒伤 = 读秒伤()
+    fireEvent.click(screen.getByRole('button', { name: '朝圣言' }))
+    const 朝圣秒伤 = 读秒伤()
+    expect(朝圣秒伤).toBeGreaterThan(基础秒伤)
+    fireEvent.click(screen.getByRole('button', { name: '号令三军' }))
+    const 朝鼓秒伤 = 读秒伤()
+    expect(朝鼓秒伤).toBeGreaterThan(朝圣秒伤)
+    expect(读用时()).toBe(原用时)
+    const 自身 = within(screen.getByRole('heading', { name: '自身 Buff' }).parentElement)
+    expect(自身.getByRole('img', { name: '朝圣言' })).toBeTruthy()
+    expect(自身.getByRole('img', { name: '号令三军（一鼓）' })).toBeTruthy()
+    expect(screen.getByText('朝圣言（队友）')).toBeTruthy()
+    expect(screen.getByText('号令三军（队友）')).toBeTruthy()
+
+    mockState.data.增益启用 = true
+    mockState.data.增益数据 = {
+      团队增益: [{ 增益名称: '仙王蛊鼎', 启用: true, 层数: 100, 覆盖率: 100 }],
+    }
+    rerender(<明尊循环模拟 />)
+    expect(读秒伤()).toBe(朝鼓秒伤)
+  } finally {
+    unmount()
+    window.matchMedia = oldMatchMedia
+  }
+})
 
 test('切换招式时，状态区显示该步的灵力与自身、目标 Buff', () => {
   const 序列 = ['戒火斩', '光明相', { 增益: '一鼓', 层数: 100 }, '赤日轮', { 等待: 35 }, '幽月轮']
@@ -119,12 +180,16 @@ test('目标 Buff 显示日月斩，技能栏区分条件不足和正在冷却',
   expect(添加指令).toHaveBeenCalledWith(['赤日轮'])
 })
 
-test('团队增益按插入位置校验前后冷却，等待到期后可以插入', () => {
+test.each([
+  [{ 增益: '寒啸千军', 层数: 100 }, 30, 15],
+  [{ 增益: '朝圣言', 层数: 100, 圣浴: false }, 130, 129],
+])('团队增益 %j 按 %i 秒冷却校验插入位置', (指令, 冷却, 首次等待) => {
+  const 剩余 = 冷却 - 首次等待
   const 序列 = [
     { 增益: '号令三军', 层数: 100 },
-    { 增益: '寒啸千军', 层数: 100 },
-    { 等待: 15 },
-    { 等待: 15 },
+    指令,
+    { 等待: 首次等待 },
+    { 等待: 剩余 },
   ]
   const { 施放列表, 下次施放帧 } = 生成明尊逐招时间轴(
     { 初始日灵: 0, 初始月魂: 0, 开场戒火: false, 延迟: 0, 序列 },
@@ -144,26 +209,26 @@ test('团队增益按插入位置校验前后冷却，等待到期后可以插�
     />,
   )
   const 鼓 = screen.getByRole('button', { name: '号令三军' })
-  const 寒啸 = screen.getByRole('button', { name: '寒啸千军' })
+  const 增益按钮 = screen.getByRole('button', { name: 指令.增益 })
   expect(鼓.dataset.cooling).toBe('true')
   expect(鼓.textContent).toContain('已用')
-  expect(寒啸.dataset.cooling).toBe('false')
+  expect(增益按钮.dataset.cooling).toBe('false')
   fireEvent.click(screen.getByRole('button', { name: /^第 1 项 号令三军/ }))
-  expect(寒啸.dataset.cooling).toBe('true')
-  expect(寒啸.title).toContain('与后续同名增益的施放间隔不足')
-  expect(寒啸.textContent).toContain('30s')
-  fireEvent.click(寒啸)
+  expect(增益按钮.dataset.cooling).toBe('true')
+  expect(增益按钮.title).toContain('与后续同名增益的施放间隔不足')
+  expect(增益按钮.textContent).toContain(`${冷却}s`)
+  fireEvent.click(增益按钮)
   fireEvent.click(鼓)
   fireEvent.click(screen.getByRole('button', { name: /^第 3 项 等待/ }))
-  expect(寒啸.getAttribute('aria-disabled')).toBe('true')
-  expect(寒啸.title).toContain('冷却剩余 15 秒')
-  fireEvent.click(寒啸)
+  expect(增益按钮.getAttribute('aria-disabled')).toBe('true')
+  expect(增益按钮.title).toContain(`冷却剩余 ${剩余} 秒`)
+  fireEvent.click(增益按钮)
   expect(添加指令).not.toHaveBeenCalled()
   fireEvent.click(screen.getByRole('button', { name: /^第 4 项 等待/ }))
-  expect(寒啸.dataset.cooling).toBe('false')
-  expect(寒啸.title).toContain('已就绪 · 插在等待结束后')
-  fireEvent.click(寒啸)
-  expect(添加指令).toHaveBeenCalledWith([{ 增益: '寒啸千军', 层数: 100 }], undefined)
+  expect(增益按钮.dataset.cooling).toBe('false')
+  expect(增益按钮.title).toContain('已就绪 · 插在等待结束后')
+  fireEvent.click(增益按钮)
+  expect(添加指令).toHaveBeenCalledWith([指令], undefined)
 })
 
 test('可从未选中的图标直接删除对应招式，并保留当前选中项', () => {
