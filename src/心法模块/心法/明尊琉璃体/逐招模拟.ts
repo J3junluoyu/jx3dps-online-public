@@ -13,18 +13,23 @@ import { isMajorEnchant, majorEnchantContext } from './大附魔'
 import skillEvents from './大附魔技能事件.json'
 import { 计入循环戒火 } from './戒火斩'
 import { 获取明尊时间点增益, 生成明尊逐招时间轴 } from './逐招时间轴'
-import type { 明尊增益窗口, 明尊循环指令, 明尊时间轴选项 } from './逐招时间轴'
+import { 生成宏团队增益施放 } from './宏团队增益'
+import type { 团队增益选项数据类型 } from '@/@types/团队增益'
+import type { 明尊增益窗口, 明尊循环指令, 明尊宏来源, 明尊时间轴选项 } from './逐招时间轴'
+import type { 明尊宏方案 } from './宏循环'
 
 export const 明尊逐招加速帧数 = [15, 14, 13, 12] as const
 export type 明尊逐招加速档位 = (typeof 明尊逐招加速帧数)[number]
 
 export interface 明尊逐招模拟选项 extends 明尊时间轴选项 {
   启用循环增益?: boolean
+  宏团队增益?: readonly 团队增益选项数据类型[]
   已勾选循环增益?: ReadonlySet<string>
   目标零防御?: boolean
   常驻朝圣无双?: number
   加速档位?: 明尊逐招加速档位
   记录秒伤曲线?: boolean
+  仅计算秒伤?: boolean
 }
 
 export interface 明尊秒伤样本 {
@@ -33,7 +38,7 @@ export interface 明尊秒伤样本 {
   秒伤: number
 }
 
-function 获取秒伤曲线(
+export function 获取秒伤曲线(
   命中列表: readonly { 帧: number; 伤害: number }[],
   装备附伤: readonly { 时间: number; 伤害: number }[],
   结算时长: number,
@@ -59,8 +64,11 @@ function 获取秒伤曲线(
   return 曲线
 }
 
-export type 明尊逐招循环配置 = Omit<明尊时间轴选项, '时长' | '序列'> & {
+export type 明尊逐招循环配置 = Omit<明尊时间轴选项, '序列'> & {
   序列: 明尊循环指令[]
+  宏来源?: (明尊宏来源 | null)[]
+  宏方案?: 明尊宏方案
+  宏自动重排?: boolean
   目标等级: number
   加速档位?: 明尊逐招加速档位
   奇穴: string[]
@@ -78,7 +86,7 @@ export interface 明尊循环增益覆盖 {
   覆盖率: number
 }
 
-function 统计增益覆盖(窗口: 明尊增益窗口[], 战斗帧数: number): 明尊循环增益覆盖[] {
+export function 统计增益覆盖(窗口: readonly 明尊增益窗口[], 战斗帧数: number): 明尊循环增益覆盖[] {
   const 合计 = new Map<明尊增益窗口['名称'], { 结束帧: number; 覆盖帧: number }>()
   // 两段鼓以及重复插入的同名增益都按区间并集统计。
   for (const 项 of [...窗口].sort((a, b) => a.开始帧 - b.开始帧)) {
@@ -99,10 +107,10 @@ for (const skill of SKILLS) {
 }
 const 命中掩码: Record<string, number> = skillEvents.masks
 
-function 获取逐招环境(装备: EquipmentStats, 初始设置: Settings, 加速档位?: 明尊逐招加速档位) {
+export function 获取逐招环境(装备: EquipmentStats, 初始设置: Settings, 加速档位?: 明尊逐招加速档位) {
   const 孤月无心 = 初始设置.talents.includes('21835')
   if (!孤月无心 && !初始设置.talents.includes('6771'))
-    throw new Error('请选择光明心或孤月无心奇穴后再模拟')
+    throw new Error('请选择光明心、孤月无心奇穴后再模拟')
   const 设置 = { ...初始设置, light: false, drive: false }
   let 常规属性 = calculateAttributes(装备, { ...设置, equipmentProcGains: {} })
   if (加速档位 !== undefined) {
@@ -131,11 +139,11 @@ function 获取逐招环境(装备: EquipmentStats, 初始设置: Settings, 加�
 export function 预览明尊逐招灵力(
   装备: EquipmentStats,
   初始设置: Settings,
-  选项: Omit<明尊时间轴选项, '时长'> & Pick<明尊逐招模拟选项, '加速档位'>,
+  选项: 明尊时间轴选项 & Pick<明尊逐招模拟选项, '加速档位'>,
 ) {
   const { 郭氏加速, 规则 } = 获取逐招环境(装备, 初始设置, 选项.加速档位)
   const { 施放列表, 中断, 结算时长, 下次施放帧, 技能栏状态 } = 生成明尊逐招时间轴(
-    { ...选项, 时长: undefined },
+    选项,
     郭氏加速,
     规则,
     true,
@@ -143,27 +151,37 @@ export function 预览明尊逐招灵力(
   return { 施放列表, 中断, 结算时长, 下次施放帧, 技能栏状态 }
 }
 
-export function 模拟明尊逐招循环(装备: EquipmentStats, 初始设置: Settings, 选项: 明尊逐招模拟选项) {
+export function 模拟明尊逐招循环(
+  装备: EquipmentStats, 初始设置: Settings, 选项: 明尊逐招模拟选项,
+  已生成时间轴?: ReturnType<typeof 生成明尊逐招时间轴>,
+) {
   const { 设置, 常规属性, 郭氏加速, 规则 } = 获取逐招环境(装备, 初始设置, 选项.加速档位)
   const 戒火设置 = 计入循环戒火(设置)
-  const 时间轴 = 生成明尊逐招时间轴(选项, 郭氏加速, 规则)
+  const 时间轴 = 已生成时间轴 ?? 生成明尊逐招时间轴(选项, 郭氏加速, 规则)
+  const 仅计算秒伤 = 选项.仅计算秒伤 && !选项.记录秒伤曲线
   const 技能设置 = { ...设置, mingzunOrangeWeapon: 时间轴.模拟橙武 }
   const 结算时长 = 时间轴.结算时长
   const { 已勾选循环增益 } = 选项
+  const 团队增益启用 = (名称: 明尊增益窗口['名称']) =>
+    选项.启用循环增益 !== false && (!已勾选循环增益 || 已勾选循环增益.has(名称))
+  const 定时团队施放 = 生成宏团队增益施放(选项.宏团队增益, 结算时长)
+    .filter(({ 技能 }) => 团队增益启用(技能))
   const 增益窗口 =
     选项.启用循环增益 === false
       ? []
-      : 时间轴.施放列表
-          .flatMap(({ 生效窗口 }) => 生效窗口 ?? [])
-          .filter(({ 名称 }) => !已勾选循环增益 || 已勾选循环增益.has(名称))
-  const 命中 = 时间轴.命中列表.flatMap((行) => {
+      : [
+          ...时间轴.施放列表.flatMap(({ 生效窗口 }) => 生效窗口?.filter(({ 名称 }) => 团队增益启用(名称)) ?? []),
+          ...定时团队施放.flatMap(({ 生效窗口 }) => 生效窗口),
+        ]
+  const 命中: { 行: (typeof 时间轴.命中列表)[number]; skill: Skill; 命中倍率: number }[] = []
+  for (const 行 of 时间轴.命中列表) {
     const key = 行.等级 === undefined ? String(行.id) : `${行.id}:${行.等级}`
     const skill = 技能索引.get(key)
     if (!skill) throw new Error(`缺少技能伤害公式（${key}）`)
-    if (!skillAvailable(skill, 技能设置)) return []
+    if (!skillAvailable(skill, 技能设置)) continue
     const 命中倍率 = 行.id === 25796 ? 明尊神兵触发率 : 1
-    return [{ ...行, skill, 命中倍率 }]
-  })
+    命中.push({ 行, skill, 命中倍率 })
+  }
   const 特效 = 设置.equipmentEffects || []
   const 水封山 = 特效.find(({ effect }) => effect.key === 'gain_4877_89')?.effect.rules
   const 其他特效 = 特效.filter(({ effect }) => effect.key !== 'gain_4877_89')
@@ -196,8 +214,17 @@ export function 模拟明尊逐招循环(装备: EquipmentStats, 初始设置: S
   let 水失效帧 = 0
   const 伤害统计 = new Map<string, 明尊模拟伤害统计>()
   let 总伤害 = 0
-  const 命中列表 = 命中.map(({ skill, 命中倍率, ...行 }) => {
-    const { 号令三军, 朝圣言, 仙王蛊鼎, 寒啸千军 } = 获取明尊时间点增益(增益窗口, 行.帧)
+  const 命中列表: ((typeof 时间轴.命中列表)[number] & {
+    鼓层数: number; 朝圣层数: number; 蛊鼎层数: number; 寒啸层数: number; 伤害: number
+  })[] = []
+  let 上次命中帧 = -1
+  let 当前增益: ReturnType<typeof 获取明尊时间点增益> = {}
+  for (const { 行, skill, 命中倍率 } of 命中) {
+    if (增益窗口.length && 行.帧 !== 上次命中帧) {
+      当前增益 = 获取明尊时间点增益(增益窗口, 行.帧)
+      上次命中帧 = 行.帧
+    }
+    const { 号令三军, 朝圣言, 仙王蛊鼎, 寒啸千军 } = 当前增益
     const 鼓层数 = 号令三军?.层数 ?? 0
     const 朝圣层数 = 朝圣言?.层数 ?? 0
     const 蛊鼎层数 = 仙王蛊鼎?.层数 ?? 0
@@ -268,13 +295,15 @@ export function 模拟明尊逐招循环(装备: EquipmentStats, 初始设置: S
       水层数 = Math.min(水层数 + 1, 水封山.maxStacks ?? 1)
       水失效帧 = 行.帧 + (水封山.durationSeconds || 0) * 16
     }
-    const 统计 = 伤害统计.get(行.技能) ?? { 技能: 行.技能, 次数: 0, 伤害: 0 }
-    统计.次数++
-    统计.伤害 += 伤害
-    伤害统计.set(行.技能, 统计)
     总伤害 += 伤害
-    return { ...行, 鼓层数, 朝圣层数, 蛊鼎层数, 寒啸层数, 伤害 }
-  })
+    if (!仅计算秒伤) {
+      const 统计 = 伤害统计.get(行.技能) ?? { 技能: 行.技能, 次数: 0, 伤害: 0 }
+      统计.次数++
+      统计.伤害 += 伤害
+      伤害统计.set(行.技能, 统计)
+      命中列表.push({ ...行, 鼓层数, 朝圣层数, 蛊鼎层数, 寒啸层数, 伤害 })
+    }
+  }
   const 装备附伤: { 时间: number; 伤害: number }[] = []
   const 装备伤害统计 = equipmentDamageRows(
     其他特效,
@@ -300,8 +329,9 @@ export function 模拟明尊逐招循环(装备: EquipmentStats, 初始设置: S
   }
   return {
     ...时间轴,
+    定时团队施放,
     命中列表,
-    循环增益覆盖: 统计增益覆盖(增益窗口, 结算时长 * 16),
+    循环增益覆盖: 仅计算秒伤 ? [] : 统计增益覆盖(增益窗口, 结算时长 * 16),
     总伤害,
     秒伤: 总伤害 / 结算时长,
     秒伤曲线: 选项.记录秒伤曲线

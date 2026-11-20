@@ -46,7 +46,16 @@ export type 明尊增益窗口 = {
   鼓阶段?: '一鼓' | '二鼓'
 }
 
+// 号令三军每场战斗只能施展一次，其余按模拟约定的团队调息。
+export const 团队增益基础冷却秒: Record<明尊增益窗口['名称'], number> = {
+  号令三军: Infinity,
+  朝圣言: 130,
+  仙王蛊鼎: 120,
+  寒啸千军: 30,
+}
+
 const 朝圣面板选项 = ['朝圣', '圣浴明心']
+export const 普通朝圣每层无双 = 27
 
 export function 统一明尊循环增益名称(名称: string) {
   if (朝圣面板选项.includes(名称)) return '朝圣言'
@@ -60,7 +69,9 @@ export function 获取已勾选循环增益(团队增益: readonly 团队增益�
 }
 
 /** 配装面板中与逐招窗口表示同一个效果的选项。 */
-export function 获取循环覆盖的团队增益(序列: readonly 明尊循环指令[]) {
+export function 获取循环覆盖的团队增益(
+  序列: readonly (string | { 等待: number } | Pick<明尊团队指令, '增益'>)[],
+) {
   const 名称 = new Set<string>()
   for (const 指令 of 序列) {
     if (typeof 指令 === 'string' || !('增益' in 指令)) continue
@@ -81,6 +92,7 @@ export function 获取明尊时间点增益(窗口列表: readonly 明尊增益�
   return 当前增益
 }
 export const 明尊循环最多指令 = 1200
+export const 明尊循环最长时长 = 600
 const 调息帧: Partial<Record<明尊施放技能, number>> = {
   [S.日斩]: 96,
   [S.月斩]: 96,
@@ -122,6 +134,19 @@ export type 明尊技能栏状态 = Record<
     充能?: { 层数: number; 上限: number; 每层帧: number; 恢复剩余帧: number }
   }
 >
+export type 明尊宏状态 = {
+  当前帧: number
+  资源: 资源
+  上一招?: 明尊施放技能
+  读取技能状态: (技能: 明尊施放技能) => 明尊技能栏状态[明尊施放技能]
+}
+export type 明尊宏来源 = '起手' | '循环' | '爆发'
+export type 明尊宏选招 = { 技能: 明尊施放技能; 来源: 明尊宏来源 }
+type 明尊自动选招 = {
+  含橙武: boolean
+  选招: (状态: 明尊宏状态) => 明尊宏选招 | undefined
+  施放后: (选择: 明尊宏选招, 状态: 明尊宏状态) => void
+}
 export interface 明尊时间轴选项 {
   时长?: number
   延迟: number
@@ -142,7 +167,7 @@ interface 明尊时间轴规则 {
 
 const 帧 = (value: number) => Math.round(value * 1e6) / 1e6
 
-function 生成团队增益窗口(指令: 明尊团队指令, 开始帧: number): 明尊增益窗口[] {
+export function 生成团队增益窗口(指令: 明尊团队指令, 开始帧: number): 明尊增益窗口[] {
   const { 增益, 层数 } = 指令
   if (!Number.isInteger(层数) || 层数 < 0 || 层数 > 100)
     throw new Error(`${增益}层数须为 0–100 的整数`)
@@ -169,7 +194,7 @@ function 生成团队增益窗口(指令: 明尊团队指令, 开始帧: number)
   if (增益 === '一鼓' || 增益 === '二鼓')
     return [{ ...首段鼓窗口, 层数: 增益 === '二鼓' ? 二鼓层数 : 层数 }]
   const 每层无双 = {
-    朝圣言: 增益 === '朝圣言' && 指令.圣浴 ? 41 : 27,
+    朝圣言: 增益 === '朝圣言' && 指令.圣浴 ? 41 : 普通朝圣每层无双,
     仙王蛊鼎: 蛊鼎数据.attributes.strain_base,
     寒啸千军: 寒啸数据.attributes.strain_base,
   }
@@ -190,10 +215,11 @@ export function 生成明尊逐招时间轴(
   加速郭氏: number,
   { 无量妙境, 五明乐见, 破魔回月, 炽炎镇恶, 怜世人, 孤月无心 }: 明尊时间轴规则,
   仅预览 = false,
+  宏?: 明尊自动选招,
 ) {
   const { 时长, 延迟, 初始日灵, 初始月魂, 序列, 开场戒火 } = 选项
-  const 模拟橙武 = 序列.includes(S.橙武)
-  if (时长 !== undefined && (!Number.isFinite(时长) || 时长 < 0.01 || 时长 > 600))
+  const 模拟橙武 = 宏?.含橙武 ?? 序列.includes(S.橙武)
+  if (时长 !== undefined && (!Number.isFinite(时长) || 时长 < 0.01 || 时长 > 明尊循环最长时长))
     throw new Error('战斗时长须在 0–600 秒之间')
   if (!Number.isFinite(延迟) || 延迟 < 0 || 延迟 > 1000) throw new Error('延迟须在 0–1000 毫秒之间')
   if ([初始日灵, 初始月魂].some((值) => !Number.isInteger(值) || 值 < 0 || 值 > 100))
@@ -204,7 +230,7 @@ export function 生成明尊逐招时间轴(
   const gcd = 加速帧(16)
   const 延迟帧 = 帧((延迟 * 16) / 1000)
   const 间隔 = gcd + 延迟帧
-  const 上限帧 = 600 * 16
+  const 上限帧 = 明尊循环最长时长 * 16
   let 结束帧 = 时长 === undefined ? 上限帧 : 帧(时长 * 16)
   const 命中列表: 命中[] = []
   const 施放列表: 明尊逐招记录[] = []
@@ -471,7 +497,43 @@ export function 生成明尊逐招时间轴(
   let 下次施放 = 0
   let 已执行 = 0
   let 中断: 明尊逐招中断 | undefined
-  for (const 指令 of 序列) {
+  const 生成序列: 明尊循环指令[] = []
+  const 宏来源: (明尊宏来源 | null)[] = []
+  let 上一宏招式: 明尊施放技能 | undefined
+  const 读取宏状态 = (): 明尊宏状态 => ({ 当前帧, 资源: 资源(), 上一招: 上一宏招式, 读取技能状态 })
+  function* 读取指令(): Generator<明尊循环指令> {
+    if (!宏) {
+      yield* 序列
+      return
+    }
+    while (下次施放 < 结束帧) {
+      const 等待开始 = 下次施放
+      let 选择: 明尊宏选招 | undefined
+      while (下次施放 < 结束帧) {
+        推进(下次施放)
+        选择 = 宏.选招(读取宏状态())
+        if (选择) break
+        下次施放 = Math.min(帧(下次施放 + 1), 结束帧)
+      }
+      const 等待 = (下次施放 - 等待开始) / 16
+      if (等待 >= 0.01) {
+        生成序列.push({ 等待: 帧(等待 * 16) / 16 })
+        宏来源.push(null)
+      }
+      if (选择) {
+        生成序列.push(选择.技能)
+        宏来源.push(选择.来源)
+      }
+      if (生成序列.length > 明尊循环最多指令)
+        throw new Error(`生成的循环超过 ${明尊循环最多指令} 项，请缩短战斗时长`)
+      if (选择) {
+        yield 选择.技能
+        上一宏招式 = 选择.技能
+        宏.施放后(选择, 读取宏状态())
+      }
+    }
+  }
+  for (const 指令 of 读取指令()) {
     if (下次施放 >= 结束帧) break
     推进(下次施放)
     try {
@@ -487,10 +549,11 @@ export function 生成明尊逐招时间轴(
   let 技能栏状态: 明尊技能栏状态 | undefined
   if (仅预览) {
     // 下一招结算同一帧到期的增益及冷却返还，再读取技能栏。
-    推进(Math.min(下次施放, 上限帧))
-    技能栏状态 = Object.fromEntries(
-      明尊施放技能列表.map((技能) => [技能, 读取技能状态(技能)]),
-    ) as 明尊技能栏状态
+    推进(Math.min(下次施放, 结束帧))
+    if (!宏)
+      技能栏状态 = Object.fromEntries(
+        明尊施放技能列表.map((技能) => [技能, 读取技能状态(技能)]),
+      ) as 明尊技能栏状态
   }
   if (时长 === undefined) {
     if (!中断 && (下次施放 > 上限帧 || 已执行 < 序列.length)) {
@@ -511,5 +574,7 @@ export function 生成明尊逐招时间轴(
     施放列表,
     中断,
     技能栏状态,
+    生成序列,
+    宏来源,
   }
 }

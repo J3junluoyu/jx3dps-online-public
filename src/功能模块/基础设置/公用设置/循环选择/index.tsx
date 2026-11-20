@@ -147,7 +147,7 @@ function 循环选择(props) {
           optionFilterProp='label'
           labelRender={({ value, label }) => {
             const 循环 = 全部循环.find((项) => 项.名称 === value)
-            return 循环?.明尊逐招配置 ? 循环.标题 : label
+            return 循环?.明尊逐招配置 || 循环?.洗髓逐招配置 ? 循环.标题 : label
           }}
           popupMatchSelectWidth={300}
           dropdownRender={(menu) => (
@@ -183,9 +183,9 @@ function 循环选择(props) {
                 <Select.Option
                   value={item?.名称}
                   key={item.名称}
-                  label={item.明尊逐招配置 ? item.标题 : 显示循环(item.名称)}
+                  label={item.明尊逐招配置 || item.洗髓逐招配置 ? item.标题 : 显示循环(item.名称)}
                   disabled={
-                    item.自动选择 === false &&
+                    item.自动选择 === false && !item.明尊逐招配置 && !item.洗髓逐招配置 &&
                     当前加速等级 !== undefined &&
                     !item.循环详情.some((详情) => Number(详情.循环加速等级) === 当前加速等级)
                   }
@@ -240,7 +240,7 @@ function 循环选择(props) {
                     }
                   >
                     <div className='cycle-select-item'>
-                      {item.明尊逐招配置 ? (
+                      {item.明尊逐招配置 || item.洗髓逐招配置 ? (
                         <div>{item.标题}</div>
                       ) : (
                         <div dangerouslySetInnerHTML={{ __html: 显示循环(item.标题 || item.名称) }} />

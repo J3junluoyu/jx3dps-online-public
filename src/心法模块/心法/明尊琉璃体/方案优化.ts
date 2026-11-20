@@ -20,9 +20,11 @@ import type { GearItem, Loadout } from './装备'
 import { 明尊小药小吃, 获取明尊战斗增益 } from './增益'
 import { 明尊阵眼 } from './阵眼'
 import { 计算明尊基础循环 } from '@/计算模块/职业特殊处理/明尊/基础循环'
-import { matchMajorEnchant } from './大附魔'
+import { MAJOR_ENCHANTS, matchMajorEnchant } from './大附魔'
+import type { EquipmentSpecialEffect } from './装备特效'
 import { 计算洗髓面板, 计算洗髓循环, 获取洗髓增益属性, 获取洗髓平衡内防 } from '../洗髓经/计算'
 import { 洗髓自适应循环 } from '../洗髓经/循环'
+import { 创建推荐逐招计算, 获取推荐逐招帧数, 获取逐招推荐范围 } from './推荐逐招'
 import 明尊循环列表 from './计算循环'
 import { 获取理论档位循环 } from './计算循环/理论循环'
 
@@ -51,6 +53,8 @@ export interface 方案优化输入 {
   exploreHighLevelCandidates?: boolean
   initial: 优化方案
   cycle: 循环数据
+  simulationFrames?: number
+  networkLatency?: number
   settings: Settings
   minToughness: number
   includeMowen?: boolean
@@ -140,6 +144,10 @@ const 方案键 = (plan: 优化方案) =>
     [...plan.consumables].sort(),
   ])
 const 装备品级 = new Map(GEAR_ITEMS.map((item) => [item.key, item.level]))
+const 有加速特效 = ({ rules }: EquipmentSpecialEffect) =>
+  !!rules.attributes?.haste_base || !!rules.attributeVariants?.some(({ attributes }) => attributes.haste_base)
+const 特效可能改变加速 = GEAR_ITEMS.some((item) => item.specialEffects?.some(有加速特效)) ||
+  MAJOR_ENCHANTS.some(({ effect }) => 有加速特效(effect))
 
 const wineValues = new Map(
   明尊小药小吃
@@ -157,13 +165,17 @@ export function 优化明尊方案(
   input: 方案优化输入,
   onProgress?: (progress: 方案优化进度) => void,
 ): 方案优化结果 {
+  if (!Number.isFinite(input.minToughness) || input.minToughness < 0 || input.minToughness > 100)
+    throw new Error('御劲要求须为0到100之间的百分比')
+  const 逐招帧数 = 获取推荐逐招帧数(input.cycle, input.kungfu)
+  if (逐招帧数.length) input = { ...input, allowHigherHaste: false }
   const orangeLevels =
     input.kungfu === 'xsj' ? XISUI_ORANGE_WEAPON_LEVELS : MINGZUN_ORANGE_WEAPON_LEVELS
   if (input.orangeWeaponLevel && !orangeLevels.includes(input.orangeWeaponLevel))
     throw new Error(`请选择装备库中可用的${input.kungfu === 'xsj' ? '洗髓' : '明尊'}橙武品级`)
   if (input.orangeWeaponLevel && !input.slots.includes('primary_weapon'))
     input = { ...input, slots: [...input.slots, 'primary_weapon'] }
-  if (使用橙武推荐模型(input)) {
+  if (!逐招帧数.length && 使用橙武推荐模型(input)) {
     const tier = Number(input.cycle.循环详情[0]?.循环加速等级)
     if (tier === 3 || tier === 4)
       input = {
@@ -315,8 +327,6 @@ function 搜索推荐方案(
   startingPlans: 优化方案[] = [],
   允许御劲附魔 = false,
 ): 方案优化结果 {
-  if (!Number.isFinite(input.minToughness) || input.minToughness < 0 || input.minToughness > 100)
-    throw new Error('御劲要求须为0到100之间的百分比')
   if (
     !Number.isInteger(input.defaultEmbedLevel) ||
     input.defaultEmbedLevel < 0 ||
@@ -324,17 +334,23 @@ function 搜索推荐方案(
   )
     throw new Error('镶嵌等级无效')
   const detail = input.cycle.循环详情[0]
-  const tier = Number(detail?.循环加速等级)
   const xisui = input.kungfu === 'xsj'
-  if (!(xisui ? [3, 4, 5] : [3, 4]).includes(tier))
-    throw new Error(xisui ? '请选择洗髓3、4、5档循环' : '请选择0.81GCD或0.75GCD循环')
   const baseFrames = xisui ? 24 : 16
+  const 逐招帧数 = 获取推荐逐招帧数(input.cycle, input.kungfu)
+  const 逐招档 = input.simulationFrames ?? (逐招帧数.length === 1 ? 逐招帧数[0] : undefined)
+  const 支持帧数 = 获取逐招推荐范围(input.kungfu)
+  if (逐招帧数.length && (逐招档 === undefined || !支持帧数.includes(逐招档) || !逐招帧数.includes(逐招档)))
+    throw new Error(xisui ? '洗髓逐招推荐仅计算3、4、5档' : '明尊逐招推荐仅计算2、3、4档')
+  const 逐招计算 = 逐招档 === undefined ? undefined : 创建推荐逐招计算(input, 逐招档)
+  const tier = 逐招计算 ? baseFrames - 逐招档! : Number(detail?.循环加速等级)
+  if (!逐招计算 && !(xisui ? [3, 4, 5] : [3, 4]).includes(tier))
+    throw new Error(xisui ? '请选择洗髓3、4、5档循环' : '请选择0.81GCD或0.75GCD循环')
   const gcd = (baseFrames - tier) / 16
-  const minHaste = Math.ceil(
+  const minHaste = Math.max(0, Math.ceil(
     ((Math.floor((1024 * baseFrames) / (baseFrames + 1 - tier) - 1024) + 1) *
       ratingScale('haste')) /
       1024,
-  )
+  ))
   const maxHaste =
     input.allowHigherHaste || tier === (xisui ? 5 : 4)
       ? Infinity
@@ -508,12 +524,12 @@ function 搜索推荐方案(
     const gainData = {
       阵眼: plan.formation,
       小吃: plan.consumables,
-      团队增益: input.teamGains || [],
+      团队增益: 逐招计算?.平均团队增益 ?? input.teamGains ?? [],
     }
     const gains = xisui
       ? 获取洗髓增益属性(gainData, true)
       : 获取明尊战斗增益(
-          { 阵眼: plan.formation, 小吃: plan.consumables, 团队增益: input.teamGains || [] },
+          gainData,
           true,
           stats,
           input.settings,
@@ -541,20 +557,20 @@ function 搜索推荐方案(
     const cached = cache.get(key)
     if (cached) return cached
     const { stats, settings, panel } = panelFor(plan)
+    const 实际GCD = 获取优化GCD(panel.hasteRating, baseFrames)
+    const dps = 逐招计算
+      ? 逐招计算.计算秒伤(stats, settings, panel, 实际GCD === gcd)
+      : (xisui ? 计算洗髓循环 : 计算明尊基础循环)(
+          stats, settings, detail.技能详情, detail.战斗时间, false,
+        ).秒伤
     const metrics = {
-      dps: (xisui ? 计算洗髓循环 : 计算明尊基础循环)(
-        stats,
-        settings,
-        detail.技能详情,
-        detail.战斗时间,
-        false,
-      ).秒伤,
+      dps: dps ?? 0,
       ...panelConstraints(panel),
       ...(xisui
         ? { defenseImbalance: Math.abs(panel.physicalShield - 获取洗髓平衡内防(panel)) }
         : {}),
-      gcd: 获取优化GCD(panel.hasteRating, baseFrames),
-      ...(input.allowHigherHaste ? { simulatedGcd: gcd } : {}),
+      gcd: 实际GCD,
+      ...(input.allowHigherHaste || 逐招计算 ? { simulatedGcd: gcd } : {}),
     }
     const violation =
       (Math.max(0, minHaste - metrics.haste) +
@@ -567,7 +583,7 @@ function 搜索推荐方案(
     cache.set(key, result)
     const 排名差 = best ? 比较推荐指标(metrics, best.metrics, 防御规则) : -1
     if (
-      meetsRequirements(metrics) &&
+      dps !== undefined && meetsRequirements(metrics) &&
       inScope(plan) &&
       (!best ||
         排名差 < 0 ||
@@ -579,7 +595,13 @@ function 搜索推荐方案(
   }
   const initial = evaluate(input.initial)
   let before = initial.metrics
-  if (xisui || input.allowHigherHaste) {
+  if (逐招计算 && initial.metrics.gcd !== gcd) {
+    const { stats, settings, panel } = panelFor(input.initial)
+    before = {
+      ...before, dps: 逐招计算.计算秒伤(stats, settings, panel, true) ?? 0,
+      simulatedGcd: 逐招帧数.length === 1 ? gcd : initial.metrics.gcd,
+    }
+  } else if (!逐招计算 && (xisui || input.allowHigherHaste)) {
     const theoretical = detail.技能详情.some((row) => row.明尊技能状态)
     const actual = (
       xisui
@@ -624,6 +646,7 @@ function 搜索推荐方案(
   if (!best) {
     const gearByKey = new Map(GEAR_ITEMS.map((item) => [item.key, item]))
     const coupledSets = new Set<number>()
+    let 存在加速套装 = false
     for (const item of GEAR_ITEMS) {
       if (!item.setId || coupledSets.has(item.setId)) continue
       const maxPieces = SLOTS.filter(([slot]) =>
@@ -636,6 +659,8 @@ function 搜索推荐方案(
             )
           : gearByKey.get(seed.plan.slots[slot]?.key)?.setId === item.setId,
       ).length
+      if (Object.entries(item.sets).some(([pieces, bonus]) => Number(pieces) <= maxPieces && bonus.haste_base))
+        存在加速套装 = true
       if (
         Object.entries(item.sets).some(
           ([pieces, bonus]) =>
@@ -667,22 +692,41 @@ function 搜索推荐方案(
       ...groups.filter((group) => !group.slot),
       ...groups.filter((group) => group.slot),
     ]
+    const 获取组候选 = ({ apply }: 选择组) => apply.map((替换) => ({
+      apply: 替换, metrics: constraintsFor(替换(seed.plan)),
+    }))
+    // 逐招要求精确档位。只有加速可逐组累加时才用剩余部位的上下界排除无解分支。
+    const 加速可逐组累加 = !!逐招计算 && !特效可能改变加速 && !存在加速套装
+    const 组候选 = 加速可逐组累加 ? orderedGroups.map(获取组候选) : undefined
+    const 剩余加速: { 最少: number; 最多: number }[] = [{ 最少: 0, 最多: 0 }]
+    if (组候选) {
+      for (let i = 组候选.length - 1; i >= 0; i--) {
+        const 变化 = 组候选[i].map(({ metrics }) => metrics.haste - seed.metrics.haste)
+        const 后续 = 剩余加速[0]
+        剩余加速.unshift({
+          最少: 后续.最少 + Math.min(...变化),
+          最多: 后续.最多 + Math.max(...变化),
+        })
+      }
+    }
     onProgress?.({ percent: 0, stage: '核查推荐条件可行性', evaluations: evaluations() })
     feasibility: for (let i = 0; i < orderedGroups.length; i++) {
       const group = orderedGroups[i]
-      const choices = group.apply.map((apply) => ({
-        apply,
-        metrics: constraintsFor(apply(seed.plan)),
-      }))
+      const choices = 组候选?.[i] ?? 获取组候选(group)
+      const 后续加速 = 剩余加速[i + 1]
       const next = new Map<string, 可行性状态[]>()
       for (const state of states) {
         for (const choice of choices) {
+          const 加速 = state.metrics.haste + choice.metrics.haste - seed.metrics.haste
+          if (后续加速 &&
+            (加速 + 后续加速.最多 < minHaste - 1e-8 || 加速 + 后续加速.最少 >= maxHaste + 1e-8))
+            continue
           const plan = choice.apply(state.plan)
           const metrics = 需要重算面板
             ? constraintsFor(plan)
             : {
                 ...state.metrics,
-                haste: state.metrics.haste + choice.metrics.haste - seed.metrics.haste,
+                haste: 加速,
                 toughness:
                   state.metrics.toughness + choice.metrics.toughness - seed.metrics.toughness,
               }
@@ -806,7 +850,7 @@ function 搜索推荐方案(
           const withWine = applyWine(candidate)
           const cached = cache.get(方案键(withWine))
           if (cached) {
-            if (meetsRequirements(cached.metrics) && inScope(withWine)) break
+            if (!逐招计算 && meetsRequirements(cached.metrics) && inScope(withWine)) break
             continue
           }
           const { panel } = panelFor(withWine)
@@ -817,8 +861,8 @@ function 搜索推荐方案(
           )
             continue
           evaluate(withWine)
-          // 酒品按数值从低到高比较；同一装备、附魔满足固定GCD后，各酒档的伤害相同。
-          break
+          // 内置循环使用固定技能次数。逐招循环还需比较同档不同加速对应的时间点。
+          if (!逐招计算) break
         }
       }
       jointIndex++

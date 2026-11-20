@@ -1,19 +1,21 @@
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { Button, Space, Tooltip } from 'antd'
 import React, { useMemo, useState } from 'react'
-import { 团队增益数据类型, 增益选项数据类型 } from '@/@types/团队增益'
+import type { 团队增益数据类型, 增益选项数据类型 } from '@/@types/团队增益'
 import 获取当前数据 from '@/数据/数据工具/获取当前数据'
 import classNames from 'classnames'
 import { 触发秒伤计算 } from '@/计算模块/计算函数'
 import { 更新方案数据, 更新团队增益轴 } from '@/store/data'
 import { 获取团队增益禁用原因 } from '@/数据/数据工具/团队增益限制'
-import { 明尊一键团队增益 } from '@/心法模块/心法/明尊琉璃体/团队增益预设'
+import { 获取明尊固定团队覆盖率, 明尊一键团队增益 } from '@/心法模块/心法/明尊琉璃体/团队增益预设'
+import { 圣浴常驻名称 } from '@/心法模块/心法/明尊琉璃体/增益'
+import { 明尊宏默认团队节点 } from '@/心法模块/心法/明尊琉璃体/宏团队增益'
+import { 查找逐招循环, 获取自动重排宏 } from '@/心法模块/心法/明尊琉璃体/自定义逐招循环'
 import {
   获取已勾选循环增益,
   获取循环覆盖的团队增益,
   统一明尊循环增益名称,
 } from '@/心法模块/心法/明尊琉璃体/逐招时间轴'
-import 明尊逐招图标 from '@/心法模块/心法/明尊琉璃体/逐招技能图标.json'
 import { 使用五十级装备 } from '@/心法模块/模块工具/心法模式'
 
 import 团队增益设置弹窗 from './团队增益设置弹窗'
@@ -22,28 +24,31 @@ import 团队增益图标 from './团队增益图标'
 import 团队增益收益弹窗 from './团队增益收益弹窗'
 import './index.css'
 
-const { 名称, 团队增益 = [] } = 获取当前数据()
-const 覆盖数字 = new Intl.NumberFormat('zh-CN', { maximumFractionDigits: 1 })
+const { 名称, 团队增益 = [], 计算循环 } = 获取当前数据()
+const 获取固定覆盖率 = (增益名称: string) =>
+  使用五十级装备(名称) ? 获取明尊固定团队覆盖率(增益名称) : undefined
 
 function 团队增益选择({ 保存数据并计算 }) {
   const 增益数据 = useAppSelector((state) => state.data.增益数据)
   const 增益启用 = useAppSelector((state) => state.data.增益启用)
   const 当前奇穴信息 = useAppSelector((state) => state.data.当前奇穴信息)
   const 当前循环 = useAppSelector((state) => state.data.当前计算循环名称)
-  const 逐招配置 = useAppSelector(
-    (state) => state.data.自定义循环列表?.find((项) => 项.名称 === state.data.当前计算循环名称)?.明尊逐招配置,
+  const 当前逐招循环 = useAppSelector(({ data }) =>
+    查找逐招循环(data.当前计算循环名称, data.自定义循环列表, 计算循环),
   )
+  const 使用宏默认节点 = !!获取自动重排宏(当前逐招循环?.明尊逐招配置) ||
+    !!当前逐招循环?.洗髓逐招配置?.宏生成
   const 上次循环增益 = useAppSelector((state) => state.data.当前计算结果?.循环内增益)
   const 循环覆盖的团队增益 = useMemo(
-    () => (逐招配置 ? 获取循环覆盖的团队增益(逐招配置.序列) : undefined),
-    [逐招配置],
+    () => 使用宏默认节点 ? 获取循环覆盖的团队增益(明尊宏默认团队节点) : undefined,
+    [使用宏默认节点],
   )
   const 已勾选循环增益 = useMemo(
     () => 获取已勾选循环增益(增益数据?.团队增益),
     [增益数据?.团队增益],
   )
   const 循环增益覆盖 =
-    增益启用 && 逐招配置 && 上次循环增益?.循环名称 === 当前循环
+    增益启用 && 循环覆盖的团队增益 && 上次循环增益?.循环名称 === 当前循环
       ? 上次循环增益?.覆盖.filter(({ 名称 }) => 已勾选循环增益.has(名称))
       : undefined
   const 新手引导流程状态 = useAppSelector((state) => state.system.新手引导流程状态)
@@ -58,8 +63,9 @@ function 团队增益选择({ 保存数据并计算 }) {
   const onChangeZengyi = (e: boolean | null, 增益: 团队增益数据类型, 层数?, 覆盖率?) => {
     if (获取团队增益禁用原因(增益, 当前奇穴信息)) return
     const 使用循环设置 = 循环覆盖的团队增益?.has(增益.增益名称)
+    const 固定覆盖率 = 获取固定覆盖率(增益.增益名称)
     const 匹配增益 = (名称: string) =>
-      使用循环设置
+      使用循环设置 || 固定覆盖率 !== undefined
         ? 统一明尊循环增益名称(名称) === 统一明尊循环增益名称(增益.增益名称)
         : 名称 === 增益.增益名称
     const exist = 增益数据?.团队增益?.some((item) => 匹配增益(item.增益名称))
@@ -74,7 +80,7 @@ function 团队增益选择({ 保存数据并计算 }) {
             ...item,
             启用: e === null ? item?.启用 : e,
             层数: 层数 ?? item?.层数,
-            覆盖率: 覆盖率 ?? item?.覆盖率,
+            覆盖率: 固定覆盖率 ?? 覆盖率 ?? item?.覆盖率,
           }
         } else {
           return {
@@ -87,9 +93,9 @@ function 团队增益选择({ 保存数据并计算 }) {
         ...newData.团队增益,
         {
           增益名称: 增益?.增益名称,
-          启用: e === null ? true : e,
+          启用: e ?? (固定覆盖率 === undefined && !(使用宏默认节点 && 使用循环设置)),
           层数: 层数 ?? 增益?.层数 ?? 1,
-          覆盖率: 覆盖率 ?? 增益?.覆盖率 ?? 100,
+          覆盖率: 固定覆盖率 ?? 覆盖率 ?? 增益?.覆盖率 ?? 100,
         },
       ]
     }
@@ -117,26 +123,32 @@ function 团队增益选择({ 保存数据并计算 }) {
   }
 
   const 显示团队增益 = useMemo(() => {
-    return (
-      团队增益
-        .filter((item) => {
-          return (
-            !!(增益数据?.团队增益 || []).find((a) => item?.增益名称 === a?.增益名称)?.启用 &&
-            !获取团队增益禁用原因(item, 当前奇穴信息)
-          )
-        })
-        .map((item) => {
-          const 当前数据 = (增益数据?.团队增益 || []).find((a) => item?.增益名称 === a?.增益名称)
-          return {
-            ...item,
-            当前数据: 当前数据,
-          }
-        }) || []
-    )
-  }, [团队增益, 增益数据, 当前奇穴信息])
-  const 面板团队增益 = 显示团队增益.filter(
-    (项) => !增益启用 || !循环覆盖的团队增益?.has(项.增益名称),
+    const 已启用 = (增益数据?.团队增益 ?? []).filter((选项) => 选项.启用)
+    const 普通选项 = new Map(已启用.map((选项) => [选项.增益名称, 选项]))
+    const 循环选项 = new Map(已启用.map((选项) => [统一明尊循环增益名称(选项.增益名称), 选项]))
+    const 已显示 = new Set<string>()
+    return 团队增益.flatMap((定义) => {
+      const 按循环结算 = !!增益启用 && !!循环覆盖的团队增益?.has(定义.增益名称)
+      const 显示名称 = 按循环结算 ? 统一明尊循环增益名称(定义.增益名称) : 定义.增益名称
+      const 固定覆盖率 = 获取固定覆盖率(定义.增益名称)
+      const 当前数据 = 普通选项.get(定义.增益名称) ??
+        (按循环结算 || 固定覆盖率 !== undefined
+          ? 循环选项.get(统一明尊循环增益名称(显示名称))
+          : undefined)
+      if (!当前数据 || 已显示.has(显示名称) || 获取团队增益禁用原因(定义, 当前奇穴信息)) return []
+      已显示.add(显示名称)
+      return [{ 定义, 当前数据, 显示名称, 按循环结算, 固定覆盖率 }]
+    })
+  }, [增益数据?.团队增益, 增益启用, 循环覆盖的团队增益, 当前奇穴信息])
+  const 实际覆盖率 = new Map<string, number>(
+    循环增益覆盖?.map(({ 名称, 覆盖率 }) => [名称, Math.round(覆盖率 * 10) / 10]),
   )
+  const 取消团队增益 = (定义: 团队增益数据类型) => {
+    onChangeZengyi(false, 定义)
+    if (!增益启用 && 定义.增益名称 === 圣浴常驻名称) {
+      dispatch(触发秒伤计算({ 是否更新显示计算结果: true }))
+    }
+  }
 
   const 一键增益预设 = useMemo(
     () =>
@@ -156,7 +168,7 @@ function 团队增益选择({ 保存数据并计算 }) {
           当前.增益名称 === 预设.增益名称 &&
           当前.启用 &&
           当前.层数 === 预设.层数 &&
-          当前.覆盖率 === 预设.覆盖率,
+          (获取固定覆盖率(当前.增益名称) ?? 当前.覆盖率) === 预设.覆盖率,
       ),
     )
   const 切换一键增益 = (启用: boolean) => {
@@ -242,27 +254,20 @@ function 团队增益选择({ 保存数据并计算 }) {
         </Button>
       </div>
       <div className={cls}>
-        {面板团队增益.length || 循环增益覆盖?.length ? (
-          <>
-            {!!面板团队增益.length && (
-              <Space size={[12, 12]} wrap>
-                {面板团队增益.map((item) => (
-                  <团队增益图标 data={item} key={item.增益名称} 当前数据={item.当前数据} />
-                ))}
-              </Space>
-            )}
-            {!!循环增益覆盖?.length && (
-              <div className='tuandui-cycle-gains' role='group' aria-label='循环内增益'>
-                <span>循环内增益</span>
-                {循环增益覆盖.map(({ 名称, 覆盖率 }) => (
-                  <span className='tuandui-cycle-gain' key={名称} title='实际覆盖率'>
-                    <img src={`https://icon.jx3box.com/icon/${明尊逐招图标[名称].icon}.png`} alt='' />
-                    {名称} <strong>{覆盖数字.format(覆盖率)}%</strong>
-                  </span>
-                ))}
-              </div>
-            )}
-          </>
+        {显示团队增益.length ? (
+          <Space size={[12, 12]} wrap>
+            {显示团队增益.map(({ 定义, 当前数据, 显示名称, 按循环结算, 固定覆盖率 }) => (
+              <团队增益图标
+                key={显示名称}
+                data={按循环结算 ? { ...定义, 增益名称: 显示名称, 支持快照增益轴: false } : 定义}
+                当前数据={按循环结算 ? {
+                  层数: 使用宏默认节点 ? 当前数据.层数 : undefined,
+                  覆盖率: 实际覆盖率.get(显示名称),
+                } : { ...当前数据, 覆盖率: 固定覆盖率 ?? 当前数据.覆盖率 }}
+                取消增益={() => 取消团队增益(定义)}
+              />
+            ))}
+          </Space>
         ) : (
           <p className={'tuandui-empty'}>当前无团队增益</p>
         )}
@@ -273,6 +278,8 @@ function 团队增益选择({ 保存数据并计算 }) {
         onChangeZengyi={onChangeZengyi}
         快捷设置团队增益={快捷设置团队增益}
         循环覆盖的团队增益={循环覆盖的团队增益}
+        使用宏默认节点={使用宏默认节点}
+        循环增益覆盖={循环增益覆盖}
         已勾选循环增益={已勾选循环增益}
       />
       <团队增益轴设置弹窗
@@ -280,7 +287,12 @@ function 团队增益选择({ 保存数据并计算 }) {
         onCancel={() => 更新设置轴增益弹窗展示(false)}
         修改团队增益轴={修改团队增益轴}
       />
-      <团队增益收益弹窗 open={增益收益弹窗展示} onCancel={() => 更新增益收益弹窗展示(false)} />
+      <团队增益收益弹窗
+        open={增益收益弹窗展示}
+        onCancel={() => 更新增益收益弹窗展示(false)}
+        使用宏默认节点={使用宏默认节点}
+        实际覆盖率={实际覆盖率}
+      />
     </div>
   )
 }

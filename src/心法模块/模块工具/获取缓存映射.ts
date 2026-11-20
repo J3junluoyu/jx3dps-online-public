@@ -31,9 +31,10 @@ export type 缓存映射类型 = typeof 缓存映射枚举
 
 // 用于保存在浏览器的各属性键值
 export const 获取缓存映射 = (心法): 缓存映射类型 => {
-  const res = {}
+  const res = {} as 缓存映射类型
   Object.keys(缓存映射枚举).forEach((key) => {
     res[key] = 缓存映射枚举[key]?.replace(`{{心法}}`, 心法)
   })
-  return res as 缓存映射类型
+  if (心法 === '明尊琉璃体') res.网络延迟 = `${心法}_网络延迟`
+  return res
 }

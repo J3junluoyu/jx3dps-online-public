@@ -1,7 +1,25 @@
 .tuandui-zengyi-item-wrap {
   width: 40px;
   height: 40px;
-  position: relative; 
+  position: relative;
+}
+
+.tuandui-zengyi-cancel {
+  display: block;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.tuandui-zengyi-cancel:hover .tuandui-zengyi-img {
+  filter: brightness(0.85);
+}
+
+.tuandui-zengyi-cancel:focus-visible {
+  outline: 2px solid var(--ant-primary-color);
+  outline-offset: 2px;
 }
 
 .tuandui-zengyi-img-count {

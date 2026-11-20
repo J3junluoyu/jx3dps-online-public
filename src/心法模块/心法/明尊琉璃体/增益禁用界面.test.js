@@ -34,10 +34,14 @@ jest.mock('@/功能模块/基础设置/增益面板/团队增益选择/团队增
 jest.mock(
   '@/功能模块/基础设置/增益面板/团队增益选择/团队增益图标',
   () =>
-    ({ data, disabled }) =>
-      require('react').createElement('span', {
+    ({ data, 当前数据, disabled, 取消增益 }) =>
+      require('react').createElement(取消增益 ? 'button' : 'span', {
         'data-testid': `gain-icon-${data.增益名称}`,
+        'data-coverage': 当前数据?.覆盖率,
+        'data-stacks': 当前数据?.层数,
         'aria-disabled': !!disabled,
+        'aria-label': 取消增益 ? `取消增益 ${data.增益名称}` : undefined,
+        onClick: 取消增益,
       }),
 )
 jest.mock('antd', () => {
@@ -51,7 +55,7 @@ jest.mock('antd', () => {
   const Select = ({ disabled, value, defaultValue, onChange, children }) =>
     element(
       'select',
-      { disabled, value: value ?? defaultValue, onChange: (e) => onChange(e.target.value) },
+      { disabled, value: value ?? defaultValue, onChange: (e) => onChange(Number(e.target.value)) },
       children,
     )
   Select.Option = ({ children, value }) => element('option', { value }, children)
@@ -107,32 +111,43 @@ const row = (name) =>
   )
 const activeIcon = () => container.querySelector('.tuandui-list [data-testid="gain-icon-戒火斩"]')
 
-test('仅展示勾选的循环增益，清空后可在设置中按原循环重新启用', () => {
+test('循环和普通增益共用图标，点击可取消，清空后可在设置中重新启用', () => {
   const 循环名称 = '测试逐招循环'
   mockState.data.当前计算循环名称 = 循环名称
   mockState.data.自定义循环列表 = [
-    { 名称: 循环名称, 明尊逐招配置: { 序列: [
-      { 增益: '号令三军', 层数: 100 },
-      { 增益: '朝圣言', 层数: 20 },
-    ] } },
+    { 名称: 循环名称, 明尊逐招配置: { 序列: ['赤日轮'], 宏方案: { 循环宏: '/cast 赤日轮' } } },
   ]
   mockState.data.当前计算结果 = { 循环内增益: { 循环名称, 覆盖: [{ 名称: '号令三军', 覆盖率: 75 }] } }
   mockState.data.增益数据.团队增益.push({ 增益名称: '号令三军', 启用: true, 层数: 30, 覆盖率: 20 })
   mockState.data.增益启用 = true
   saveChanges()
   render()
-  expect(getByRole(container, 'group', { name: '循环内增益' }).textContent).toContain('号令三军 75%')
-  expect(container.querySelector('.tuandui-list [data-testid="gain-icon-号令三军"]')).toBeNull()
+  const 图标列表 = within(container.querySelector('.tuandui-list'))
+  const 号令三军 = 图标列表.getByRole('button', { name: '取消增益 号令三军' })
+  expect(号令三军.dataset.coverage).toBe('75')
+  expect(号令三军.dataset.stacks).toBe('30')
+  expect(图标列表.getByRole('button', { name: '取消增益 秋肃' })).toBeTruthy()
+  expect(container.querySelector('.tuandui-list').textContent).not.toContain('循环内增益')
+
+  click('取消增益 号令三军')
+  render()
+  expect(图标列表.queryByRole('button', { name: '取消增益 号令三军' })).toBeNull()
+  expect(mockState.data.增益数据.团队增益).toContainEqual({
+    增益名称: '号令三军', 启用: false, 层数: 30, 覆盖率: 20,
+  })
+  expect(图标列表.getByRole('button', { name: '取消增益 秋肃' })).toBeTruthy()
+  click('取消增益 秋肃')
+  render()
+  expect(图标列表.queryByRole('button', { name: '取消增益 秋肃' })).toBeNull()
 
   click('清空团队增益')
   render()
   expect(mockState.data.增益数据.团队增益).toEqual([])
   expect(mockState.data.增益启用).toBe(true)
-  expect(container.querySelector('[aria-label="循环内增益"]')).toBeNull()
   expect(container.querySelector('.tuandui-empty').textContent).toBe('当前无团队增益')
 
   click('设置增益')
-  expect(row('朝圣言').textContent).toContain('按循环设置')
+  expect(row('朝圣言').textContent).toContain('覆盖率按时间节点计算')
   expect(row('朝圣言').querySelector('input[type="number"]')).toBeNull()
   act(() => fireEvent.click(getByRole(row('朝圣言'), 'checkbox')))
   render()
@@ -141,11 +156,83 @@ test('仅展示勾选的循环增益，清空后可在设置中按原循环重�
   ])
   act(() => fireEvent.click(getByRole(row('号令三军'), 'checkbox')))
   render()
-  expect(getByRole(container, 'group', { name: '循环内增益' }).textContent).toContain('号令三军 75%')
+  expect(图标列表.getByRole('button', { name: '取消增益 号令三军' }).dataset.coverage).toBe('75')
 
   mockState.data.增益启用 = false
   render()
-  expect(container.querySelector('[aria-label="循环内增益"]')).toBeNull()
+  expect(图标列表.getByRole('button', { name: '取消增益 号令三军' }).dataset.coverage).toBe('20')
+})
+
+test('自动宏的四种增益显示节点覆盖并保留层数选项，填写层数后仍需勾选', () => {
+  const 循环名称 = '自动宏'
+  const 逐招配置 = { 序列: ['赤日轮'], 宏方案: { 循环宏: '/cast 赤日轮' } }
+  mockState.data.当前计算循环名称 = 循环名称
+  mockState.data.自定义循环列表 = [{ 名称: 循环名称, 明尊逐招配置: 逐招配置 }]
+  mockState.data.增益启用 = true
+  saveChanges()
+  render()
+  click('设置增益')
+  for (const 名称 of ['朝圣言', '号令三军', '寒啸千军', '仙王蛊鼎']) {
+    expect(row(名称).textContent).toContain('覆盖率按时间节点计算')
+    expect(row(名称).querySelector('input[type="number"]')).toBeNull()
+    expect(getByRole(row(名称), 'combobox')).toBeTruthy()
+  }
+  act(() => fireEvent.change(getByRole(row('号令三军'), 'combobox'), { target: { value: '73' } }))
+  render()
+  expect(mockState.data.增益数据.团队增益).toContainEqual(expect.objectContaining({
+    增益名称: '号令三军', 启用: false, 层数: 73,
+  }))
+  act(() => fireEvent.click(getByRole(row('号令三军'), 'checkbox')))
+  mockState.data.当前计算结果 = {
+    循环内增益: { 循环名称, 覆盖: [{ 名称: '号令三军', 覆盖率: 75 }] },
+  }
+  render()
+  expect(row('号令三军').textContent).toContain('自动覆盖 75%')
+  expect(getByRole(row('号令三军'), 'combobox').value).toBe('73')
+  expect(getByRole(container, 'button', { name: '取消增益 号令三军' }).dataset.stacks).toBe('73')
+  mockState.data.自定义循环列表 = [{ 名称: 循环名称, 明尊逐招配置: { ...逐招配置, 宏自动重排: false } }]
+  render()
+  expect(row('号令三军').textContent).toContain('固定覆盖率 20%')
+  expect(row('号令三军').querySelector('input[type="number"]')).toBeNull()
+})
+
+test('点击朝圣言图标同步取消旧版朝圣选项', () => {
+  const 循环名称 = '旧朝圣'
+  mockState.data.当前计算循环名称 = 循环名称
+  mockState.data.自定义循环列表 = [
+    { 名称: 循环名称, 明尊逐招配置: { 序列: ['赤日轮'], 宏方案: { 循环宏: '/cast 赤日轮' } } },
+  ]
+  mockState.data.增益数据.团队增益 = [{ 增益名称: '朝圣', 启用: true, 层数: 85, 覆盖率: 10 }]
+  mockState.data.增益启用 = true
+  saveChanges()
+  render()
+  click('取消增益 朝圣言')
+  render()
+  expect(mockState.data.增益数据.团队增益).toEqual([
+    { 增益名称: '朝圣', 启用: false, 层数: 85, 覆盖率: 8 },
+  ])
+  expect(container.querySelector('.tuandui-empty').textContent).toBe('当前无团队增益')
+})
+
+test('自适应光明心显示四项固定覆盖率，仍可独立调整层数和勾选', () => {
+  const 固定选项 = [['号令三军', 20], ['寒啸千军', 50], ['仙王蛊鼎', 30], ['圣浴明心', 8]]
+  mockState.data.当前计算循环名称 = '自适应光明心循环'
+  mockState.data.增益启用 = true
+  mockState.data.增益数据.团队增益.push(...固定选项.map(([增益名称]) => ({
+    增益名称, 启用: true, 层数: 30, 覆盖率: 99,
+  })))
+  saveChanges()
+  render()
+  click('设置增益')
+  for (const [名称, 覆盖率] of 固定选项) {
+    const 项 = row(名称)
+    expect(项.textContent).toContain(`固定覆盖率 ${覆盖率}%`)
+    expect(within(项).queryByRole('spinbutton')).toBeNull()
+    expect(within(项).getByRole('checkbox').checked).toBe(true)
+    expect(within(项).getByRole('combobox').value).toBe('30')
+    expect(getByRole(container, 'button', { name: `取消增益 ${名称}` }).dataset.coverage).toBe(String(覆盖率))
+  }
+  expect(within(row('秋肃')).getByRole('spinbutton').disabled).toBe(false)
 })
 
 beforeEach(() => {
@@ -277,7 +364,7 @@ test('团队一键增益恢复用户记录的15项及具体层数覆盖率，并
   })
   expect(gains.团队增益.find((row) => row.增益名称 === '仙王蛊鼎')).toMatchObject({
     层数: 100,
-    覆盖率: 25,
+    覆盖率: 30,
   })
   expect(
     gains.团队增益.some((row) =>
@@ -344,7 +431,7 @@ test('手动改覆盖率后解除预设勾选，可再次一键恢复；总开�
   mockState.data.增益数据 = {
     ...mockState.data.增益数据,
     团队增益: mockState.data.增益数据.团队增益.map((row) =>
-      row.增益名称 === '寒啸千军' ? { ...row, 覆盖率: 75 } : row,
+      row.增益名称 === '秋肃' || row.增益名称 === '寒啸千军' ? { ...row, 覆盖率: 75 } : row,
     ),
   }
   render()

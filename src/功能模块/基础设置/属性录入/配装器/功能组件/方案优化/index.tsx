@@ -27,7 +27,6 @@ import {
   XISUI_ORANGE_WEAPON_LEVELS,
 } from '@/心法模块/心法/明尊琉璃体/装备'
 import { 明尊小药小吃, 圣浴常驻名称 } from '@/心法模块/心法/明尊琉璃体/增益'
-import 循环列表 from '@/心法模块/心法/明尊琉璃体/计算循环'
 import type {
   防御倾向,
   优化方案,
@@ -51,6 +50,8 @@ import styles from './index.module.less'
 import 获取当前数据 from '@/数据/数据工具/获取当前数据'
 import { 获取洗髓档位对比循环, 洗髓循环名称 } from '@/心法模块/心法/洗髓经/循环'
 import { 获取洗髓计算设置 } from '@/心法模块/心法/洗髓经/计算'
+import { 获取推荐逐招帧数, 获取逐招推荐范围 } from '@/心法模块/心法/明尊琉璃体/推荐逐招'
+import { 根据明尊循环同步奇穴 } from '@/心法模块/心法/明尊琉璃体/计算循环/循环联动'
 
 const 洗髓模式 = 获取当前数据().名称 === '洗髓经'
 const 推荐部位 = SLOTS.map(([key]) => key)
@@ -80,6 +81,7 @@ const 默认优化方式 = (cycleName?: string) =>
 function 方案优化(props: 方案优化入参) {
   const [open, setOpen] = useState(false)
   const [mode, setMode] = useState(默认优化方式(props.循环名称))
+  const [所选保存循环, 设置所选保存循环] = useState('')
   const [minToughness, setMinToughness] = useState(8)
   const [includeMowen, setIncludeMowen] = useState(false)
   const [includeHasteConsumables, setIncludeHasteConsumables] = useState(false)
@@ -101,11 +103,35 @@ function 方案优化(props: 方案优化入参) {
   const 奇穴 = useAppSelector((state) => state.data.当前奇穴信息)
   const 秘籍 = useAppSelector((state) => state.data.当前秘籍信息)
   const 目标名称 = useAppSelector((state) => state.data.当前输出计算目标名称)
-  const compareGcd = 洗髓模式 || mode === 'compare'
+  const 自定义循环 = useAppSelector((state) => state.data.自定义循环列表)
+  const 网络延迟 = useAppSelector((state) => state.data.网络延迟) ?? 1
+  const 心法 = 洗髓模式 ? 'xsj' : 'mzllt'
+  const 可选保存循环 = [...(获取当前数据().计算循环 ?? []), ...(自定义循环 ?? [])].filter((循环) =>
+    !循环.隐藏 && 获取推荐逐招帧数(循环, 心法).length,
+  )
+  const 已保存循环 = 可选保存循环.find((循环) => 循环.名称 === 所选保存循环)
+  const 保存循环帧数 = 已保存循环 ? 获取推荐逐招帧数(已保存循环, 心法) : []
+  const 固定档超出范围 = 保存循环帧数.length === 1 && !获取逐招推荐范围(心法).includes(保存循环帧数[0])
+  const compareGcd = 已保存循环
+    ? 保存循环帧数.length > 1 && mode === 'compare'
+    : 洗髓模式 || mode === 'compare'
+  const 选择保存循环 = (循环名称: string) => {
+    设置所选保存循环(循环名称)
+    const 循环 = 可选保存循环.find((项) => 项.名称 === 循环名称)
+    const 帧数 = 循环 ? 获取推荐逐招帧数(循环, 心法) : []
+    setMode(帧数.length === 1 ? String(帧数[0] / 16) : 帧数.length ? 'compare' : 默认优化方式(props.循环名称))
+  }
+  const 保存循环推荐选项 = [
+    ...(保存循环帧数.length > 1 ? [{ label: '全档位对比', value: 'compare' }] : []),
+    ...保存循环帧数.map((帧数) => ({
+      label: `${(洗髓模式 ? 24 : 16) - 帧数}档 · ${格式化明尊GCD(帧数 / 16)}GCD${保存循环帧数.length === 1 ? '（固定）' : ''}`,
+      value: String(帧数 / 16),
+    })),
+  ]
   const 防御条件 = defensePreference === 'magicalShield' ? '内防高于外防' : '外防高于内防'
   const 达标条件 = 洗髓模式 ? '加速和最低御劲' : `加速、最低御劲和${防御条件}`
-  const orangeModel = !洗髓模式 && orangeWeaponLevel > 0
-  const cycles = props.循环待补充
+  const orangeModel = !已保存循环 && !洗髓模式 && orangeWeaponLevel > 0
+  const cycles = props.循环待补充 || 已保存循环
     ? []
     : 洗髓模式
       ? 获取洗髓档位对比循环()
@@ -113,7 +139,7 @@ function 方案优化(props: 方案优化入参) {
           orangeModel ? 获取明尊自适应循环名称(奇穴 || []) : props.循环名称 || 自适应理论循环名称,
           奇穴 || [],
         )
-  const cycle =
+  const cycle = 已保存循环 ||
     cycles.find((item) =>
       compareGcd ? item.名称 === props.循环名称 : item.名称.startsWith(`${mode}`),
     ) || cycles[1]
@@ -145,9 +171,9 @@ function 方案优化(props: 方案优化入参) {
     (recommended?.result?.after?.defenseImbalance ?? 0) <
     (other?.result?.after?.defenseImbalance ?? 0)
   const comparisonSummary = !recommended
-    ? `${洗髓模式 ? '三个档位' : '两个档位'}均未找到可行方案。需同时满足${达标条件}。`
+    ? `${已保存循环 ? '所有档位' : 洗髓模式 ? '三个档位' : '两个档位'}均未找到可行方案。需同时满足${达标条件}。`
     : difference === undefined
-      ? `推荐${recommended.cycleName}；${洗髓模式 ? '其余档位' : '另一档'}未找到可行方案。`
+      ? `推荐${recommended.cycleName}；${已保存循环 || 洗髓模式 ? '其余档位' : '另一档'}未找到可行方案。`
       : !洗髓模式 &&
           other?.result?.usedToughnessEnchantFallback &&
           !recommended.result?.usedToughnessEnchantFallback
@@ -182,7 +208,7 @@ function 方案优化(props: 方案优化入参) {
     setOpen(false)
   }
   const 开始计算 = async () => {
-    if (props.循环待补充 || !cycle) return
+    if (props.循环待补充 || 固定档超出范围 || !cycle) return
     停止计算()
     const currentRun = runId.current
     setResult(undefined)
@@ -204,7 +230,9 @@ function 方案优化(props: 方案优化入参) {
             获取计算目标信息(目标名称).等级,
           )
         : 获取明尊计算设置(
-            奇穴,
+            已保存循环
+              ? 根据明尊循环同步奇穴(已保存循环.名称, 奇穴, 已保存循环.明尊逐招配置?.奇穴)
+              : 奇穴,
             { ...增益数据, 阵眼: '', 小吃: [], 团队增益: [] },
             秘籍,
             获取计算目标信息(目标名称).等级,
@@ -234,11 +262,15 @@ function 方案优化(props: 方案优化入参) {
         message.error('配装方案推荐计算中断，请刷新页面后重试')
       }
       worker.current.postMessage({
-        kungfu: 洗髓模式 ? 'xsj' : 'mzllt',
-        allowHigherHaste: true,
+        kungfu: 心法,
+        allowHigherHaste: !已保存循环,
         exploreHighLevelCandidates: true,
         initial: before,
         cycle: requestCycle,
+        ...(已保存循环 ? {
+          networkLatency: 网络延迟,
+          ...(!compareGcd ? { simulationFrames: Number(mode) * 16 } : {}),
+        } : {}),
         settings,
         minToughness,
         includeMowen,
@@ -249,8 +281,8 @@ function 方案优化(props: 方案优化入参) {
         orangeWeaponLevel,
         gearScope,
         compareGcd,
-        teamGains: 增益数据.团队增益
-          .filter((item) => !洗髓模式 && item.增益名称 === 圣浴常驻名称)
+        teamGains: (增益数据.团队增益 ?? [])
+          .filter((item) => (已保存循环 && 增益启用) || (!洗髓模式 && item.增益名称 === 圣浴常驻名称))
           .map((item) => ({ ...item })),
         gearKeys: props.获取候选装备键(),
         slots: 推荐部位,
@@ -327,7 +359,7 @@ function 方案优化(props: 方案优化入参) {
       <Button
         size='small'
         onClick={() => {
-          setMode(默认优化方式(props.循环名称))
+          选择保存循环(可选保存循环.some((项) => 项.名称 === props.循环名称) ? props.循环名称! : '')
           setResult(undefined)
           setComparison(undefined)
           setInitial(undefined)
@@ -365,8 +397,9 @@ function 方案优化(props: 方案优化入参) {
                   停止计算
                 </Button>
               ) : (
-                <Button disabled={props.循环待补充} onClick={开始计算}>
-                  {洗髓模式 ? '开始三档对比' : compareGcd ? '开始双档对比' : '开始推荐'}
+                <Button disabled={props.循环待补充 || 固定档超出范围} onClick={开始计算}>
+                  {已保存循环 ? (compareGcd ? '开始全档位对比' : '开始推荐')
+                    : 洗髓模式 ? '开始三档对比' : compareGcd ? '开始双档对比' : '开始推荐'}
                 </Button>
               )}
               <Button
@@ -376,8 +409,8 @@ function 方案优化(props: 方案优化入参) {
                   if (!props.循环待补充 && result?.plan) {
                     props.应用方案(
                       result.plan,
-                      洗髓模式 ? 洗髓循环名称 : 规范理论循环名称(resultCycleName),
-                      false,
+                      已保存循环?.名称 ?? (洗髓模式 ? 洗髓循环名称 : 规范理论循环名称(resultCycleName)),
+                      !!已保存循环 && !!增益启用,
                     )
                     关闭()
                   }
@@ -389,19 +422,42 @@ function 方案优化(props: 方案优化入参) {
           </div>
         }
       >
+        {固定档超出范围 && <Alert
+          type='warning'
+          showIcon
+          message={洗髓模式 ? '洗髓推荐支持 3、4、5 档，请在循环模拟里调整后保存。'
+            : '明尊推荐支持 2、3、4 档，请在循环模拟里调整后保存。'}
+        />}
         <div className={styles.requirements}>
           <div className={styles.selectionFields}>
+            {!!可选保存循环.length && (
+              <label>
+                推荐循环{' '}
+                <Select
+                  aria-label='推荐循环'
+                  disabled={running || props.循环待补充}
+                  value={已保存循环?.名称 ?? ''}
+                  onChange={(value) => 设置条件(() => 选择保存循环(value))}
+                  options={[
+                    { label: '内置循环', value: '' },
+                    ...可选保存循环.map((项) => ({ label: 项.标题 || 项.名称, value: 项.名称 })),
+                  ]}
+                />
+              </label>
+            )}
             <label>
               推荐方式{' '}
               <Select
                 aria-label='推荐方式'
-                disabled={running || props.循环待补充}
+                disabled={running || props.循环待补充 || 保存循环帧数.length === 1}
                 placeholder={props.循环待补充 ? '循环模板待补充' : undefined}
-                value={props.循环待补充 ? undefined : 洗髓模式 ? 'compare' : mode}
+                value={props.循环待补充 ? undefined : !已保存循环 && 洗髓模式 ? 'compare' : mode}
                 onChange={(value) => 设置条件(() => setMode(value))}
                 options={
                   props.循环待补充
                     ? []
+                    : 已保存循环
+                      ? 保存循环推荐选项
                     : 洗髓模式
                       ? [{ label: '3 / 4 / 5档自适应对比', value: 'compare' }]
                       : [
@@ -596,11 +652,12 @@ function 方案优化(props: 方案优化入参) {
               ]}
             />
             <p className={styles.note}>
-              技能次数按所选模拟档位，装备属性沿用实际数值；实际高档配装也可参与低档模拟。下方展示
+              {已保存循环 ? '各档按所选循环和配装实际加速计算。下方展示'
+                : '技能次数按所选模拟档位，装备属性沿用实际数值；实际高档配装也可参与低档模拟。下方展示'}
               {格式化明尊GCD(resultCycleName)}
               ，所有档位均要求最低{minToughness.toFixed(2)}
               %御劲，可切换查看并应用任一可行方案；应用后的计算按装备实际档位执行。
-              {洗髓模式 ? '三档' : '双档'}对比用时{(comparison.elapsed / 1000).toFixed(2)}
+              {已保存循环 ? '档位' : 洗髓模式 ? '三档' : '双档'}对比用时{(comparison.elapsed / 1000).toFixed(2)}
               秒。
             </p>
           </div>

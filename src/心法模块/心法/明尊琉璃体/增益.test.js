@@ -80,7 +80,7 @@ test('圣浴常驻实际计算按当前基础体质更新，忽略旧缓存层�
 
 test('完整朝圣与圣浴常驻互斥，不重复计算相同气劲', () => {
   const both = selected(['圣浴明心', 圣浴常驻名称])
-  expect(获取明尊增益属性(both, true, 9).strain_base).toBe(4100)
+  expect(获取明尊增益属性(both, true, 9).strain_base).toBe(328)
   expect(获取明尊增益属性(both, false, 9).strain_base).toBe(369)
   both.团队增益[0].启用 = false
   expect(获取明尊增益属性(both, true, 9).strain_base).toBe(369)
@@ -209,11 +209,11 @@ test('常用层数及覆盖率依考拉数值累计，0%覆盖率不产生增益
 })
 
 test.each([
-  ['仙王蛊鼎', 26, '治疗Buff增益', 25],
-  ['圣浴明心', 41, '坦克Buff增益', 100],
+  ['仙王蛊鼎', 26, '治疗Buff增益', 30],
+  ['圣浴明心', 41, '坦克Buff增益', 8],
   ['寒啸千军', 3, '坦克Buff增益', 50],
 ])(
-  '%s只计算对应团队无双，支持层数、覆盖率和总开关',
+  '%s按固定平均覆盖结算，支持层数和总开关',
   (name, perStack, category, defaultCoverage) => {
     const gain = 明尊团队增益.find((row) => row.增益名称 === name)
     expect(gain.团队增益类型).toBe(category)
@@ -221,24 +221,26 @@ test.each([
     expect(gain.增益集合).toEqual([{ 属性: 属性类型.无双等级, 值: perStack }])
     expect(gain.层数选项数组).toEqual(Array.from({ length: 100 }, (_, index) => index + 1))
     expect(gain.覆盖率).toBe(defaultCoverage)
+    expect(gain.覆盖率支持手动录入).toBe(false)
     const 默认数据 = selected([name])
     delete 默认数据.团队增益[0].覆盖率
     expect(获取明尊增益属性(默认数据, true)).toEqual({ strain_base: perStack * defaultCoverage })
     const data = selected([name])
     data.团队增益[0].层数 = 80
     data.团队增益[0].覆盖率 = 25
-    expect(获取明尊增益属性(data, true)).toEqual({ strain_base: perStack * 20 })
+    const 预期无双 = (perStack * 80 * defaultCoverage) / 100
+    expect(获取明尊增益属性(data, true).strain_base).toBeCloseTo(预期无双)
     const base = panel(selected())
     const after = panel(data)
-    expect(after.strainRating - base.strainRating).toBe(perStack * 20)
+    expect(after.strainRating - base.strainRating).toBe(Math.floor(预期无双))
     expect(after.attack).toBe(base.attack)
     expect(after.health).toBe(base.health)
     expect(panel(data, false)).toEqual(base)
     data.团队增益[0].层数 = 1000
     data.团队增益[0].覆盖率 = 100
-    expect(获取明尊增益属性(data, true)).toEqual({ strain_base: perStack * 100 })
+    expect(获取明尊增益属性(data, true).strain_base).toBeCloseTo(perStack * defaultCoverage)
     data.团队增益[0].覆盖率 = 0
-    expect(panel(data)).toEqual(base)
+    expect(获取明尊增益属性(data, true).strain_base).toBeCloseTo(perStack * defaultCoverage)
     data.团队增益[0].覆盖率 = 100
     data.团队增益[0].启用 = false
     expect(panel(data)).toEqual(base)
@@ -260,15 +262,16 @@ test('号令三军将总覆盖时间均分两鼓，二鼓层数向下取整，�
     12,
   )
   data.团队增益[0].覆盖率 = 100
-  expect(获取明尊增益属性(data, true)).toEqual({ strain_base: 2516 })
+  expect(获取明尊增益属性(data, true).strain_base).toBeCloseTo(503.2)
   data.团队增益[0].覆盖率 = 0
-  expect(panel(data)).toEqual(base)
+  expect(获取明尊增益属性(data, true).strain_base).toBeCloseTo(503.2)
   data.团队增益[0].覆盖率 = 20
   expect(panel(data, false)).toEqual(base)
   const combined = selected(['仙王蛊鼎', '圣浴明心', '寒啸千军', '号令三军'])
   combined.团队增益[3].覆盖率 = 20
-  expect(获取明尊增益属性(combined, true)).toEqual({ strain_base: 7510 })
+  expect(获取明尊增益属性(combined, true)).toEqual({ strain_base: 1768 })
   expect(明尊团队增益.some((row) => row.增益名称 === '朝圣')).toBe(false)
+  expect(获取明尊增益属性(selected(['朝圣']), true)).toEqual({ strain_base: 216 })
 })
 
 test('袖气按全属性45与内防86同步，主属性转攻击和会心会重新计算', () => {

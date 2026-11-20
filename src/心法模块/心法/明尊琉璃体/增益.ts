@@ -8,6 +8,8 @@ import { 获取明尊阵眼属性 } from './阵眼'
 import { 获取团队增益禁用原因 } from '@/数据/数据工具/团队增益限制'
 import { calculateAttributes } from './计算'
 import { 获取体质增益层数 } from './体质层数'
+import { 获取明尊固定团队覆盖率 } from './团队增益预设'
+import { 普通朝圣每层无双 } from './逐招时间轴'
 import type { EquipmentStats, Settings } from './计算'
 
 type Attributes = Record<string, number>
@@ -190,7 +192,7 @@ const 同袍属性 = { toughness_base: 10 }
 export const 圣浴常驻名称 = '圣浴明心（常驻）'
 export const 获取圣浴常驻层数 = (baseVitality: number) =>
   Math.floor(获取体质增益层数(baseVitality) / 10)
-export const 明尊团队增益: TeamGain[] = [
+const 共用团队增益: TeamGain[] = [
   team('31208', '29294', '1', '治疗Buff增益'),
   team('567', '20938', '1', '治疗Buff增益'),
   team('13422', '8504', '1', '坦克Buff增益'),
@@ -284,6 +286,11 @@ export const 明尊团队增益: TeamGain[] = [
   },
 ]
 
+export const 明尊团队增益 = 共用团队增益.map((增益) => {
+  const 覆盖率 = 获取明尊固定团队覆盖率(增益.增益名称)
+  return 覆盖率 === undefined ? 增益 : { ...增益, 覆盖率, 覆盖率支持手动录入: false }
+})
+
 /** Native gain controls own persistence, exclusivity, coverage and stacks. */
 export function 获取明尊增益属性(
   data?: 增益选项数据类型,
@@ -313,7 +320,11 @@ export function 获取明尊增益属性(
     if (循环已覆盖戒火 && item.增益名称 === '戒火斩') continue
     // 圣浴常驻由自身开关控制；总开关只控制其余团队增益、药食及阵眼。
     if (!enabled && item.增益名称 !== 圣浴常驻名称) continue
-    const selection = selected.get(item.增益名称)
+    const 直接选项 = selected.get(item.增益名称)
+    const 旧朝圣 = item.增益名称 === '圣浴明心' && item.覆盖率支持手动录入 === false && !直接选项?.启用
+      ? selected.get('朝圣') ?? selected.get('朝圣言')
+      : undefined
+    const selection = 旧朝圣 ?? 直接选项
     if (!selection?.启用) continue
     if (获取团队增益禁用原因(item, talents)) continue
     if (item.冲突增益?.some((name) => applied.has(name))) continue
@@ -321,7 +332,7 @@ export function 获取明尊增益属性(
       item.增益名称 === 圣浴常驻名称
         ? (常驻层数 ?? selection.层数 ?? 0)
         : (selection.层数 ?? item.层数)
-    const coverage = item.增益名称 === 圣浴常驻名称 ? 100 : (selection.覆盖率 ?? item.覆盖率)
+    const coverage = item.覆盖率支持手动录入 === false ? item.覆盖率 : (selection.覆盖率 ?? item.覆盖率)
     if (!Number.isFinite(stacks) || !Number.isFinite(coverage)) continue
     const 有效层数 = Math.max(0, Math.min(item.最大层数, stacks))
     const 有效覆盖率 = Math.max(0, Math.min(100, coverage)) / 100
@@ -330,7 +341,7 @@ export function 获取明尊增益属性(
       add(item.考拉属性, (有效层数 * 有效覆盖率) / 2)
       add(item.考拉属性, (Math.floor(有效层数 / 2) * 有效覆盖率) / 2)
     } else {
-      add(item.考拉属性, 有效层数 * 有效覆盖率)
+      add(旧朝圣 ? { strain_base: 普通朝圣每层无双 } : item.考拉属性, 有效层数 * 有效覆盖率)
     }
     applied.add(item.增益名称)
   }

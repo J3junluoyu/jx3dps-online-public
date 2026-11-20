@@ -1,7 +1,39 @@
 import type { 循环数据 } from '@/@types/循环'
 import type { 明尊逐招循环配置 } from './逐招模拟'
+import type { 明尊宏方案 } from './宏循环'
 
 export const 旧明尊逐招循环键 = 'mzllt:逐招自定义循环'
+const 最近明尊宏键 = 'mzllt:最近生成宏'
+type 明尊宏草稿 = { 宏方案: 明尊宏方案; 时长: number }
+
+export function 查找逐招循环(
+  名称: string,
+  自定义循环: readonly 循环数据[] = [],
+  内置循环: readonly 循环数据[] = [],
+) {
+  return 内置循环.find((循环) => 循环.名称 === 名称 && 循环.明尊逐招配置) ??
+    自定义循环.find((循环) => 循环.名称 === 名称 && (循环.明尊逐招配置 || 循环.洗髓逐招配置))
+}
+
+export const 获取自动重排宏 = (配置?: 明尊逐招循环配置) =>
+  配置?.宏自动重排 === false ? undefined : 配置?.宏方案
+
+export function 读取最近生成宏(): 明尊宏草稿 | undefined {
+  try {
+    const 草稿: 明尊宏草稿 | null = JSON.parse(localStorage.getItem(最近明尊宏键) ?? 'null')
+    return 草稿 && typeof 草稿.宏方案?.循环宏 === 'string' && Number.isFinite(草稿.时长) ? 草稿 : undefined
+  } catch {
+    return undefined
+  }
+}
+
+export function 保存最近生成宏(草稿: 明尊宏草稿) {
+  try {
+    localStorage.setItem(最近明尊宏键, JSON.stringify(草稿))
+  } catch {
+    // 浏览器存储被禁用时，当前会话仍可使用宏。
+  }
+}
 
 export function 创建明尊自定义逐招循环(标题: string, 明尊逐招配置: 明尊逐招循环配置): 循环数据 {
   return {

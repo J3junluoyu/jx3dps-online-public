@@ -12,11 +12,13 @@ import {
   明尊团队增益持续秒,
   明尊戒火持续帧,
   明尊循环最多指令,
+  团队增益基础冷却秒,
   统一明尊循环增益名称,
 } from '@/心法模块/心法/明尊琉璃体/逐招时间轴'
 import type {
   明尊施放技能,
   明尊循环指令,
+  明尊宏来源,
   明尊增益窗口,
   明尊团队指令,
   明尊逐招记录,
@@ -24,13 +26,15 @@ import type {
 } from '@/心法模块/心法/明尊琉璃体/逐招时间轴'
 import 技能图标 from '@/心法模块/心法/明尊琉璃体/逐招技能图标.json'
 
-export type 序列行 = { id: number; 指令: 明尊循环指令 }
+export type 序列行 = { id: number; 指令: 明尊循环指令; 宏来源?: 明尊宏来源 }
 
 interface 序列编辑参数 {
+  只读?: boolean
   序列: 序列行[]
   设置序列: React.Dispatch<React.SetStateAction<序列行[]>>
   添加指令: (指令: 明尊循环指令[], 插入前?: number) => number
   施放列表?: 明尊逐招记录[]
+  定时团队增益窗口?: readonly 明尊增益窗口[]
   下次施放帧?: number
   技能栏状态?: 明尊技能栏状态
   中断序号?: number
@@ -59,17 +63,9 @@ const 团队增益选项 = [
   { 增益: '仙王蛊鼎', 层数: 100 },
   { 增益: '寒啸千军', 层数: 100 },
 ] satisfies 明尊团队指令[]
-// 号令三军每场战斗只能施展一次，其余按模拟约定的团队调息。
-const 团队增益基础冷却秒: Record<明尊增益窗口['名称'], number> = {
-  号令三军: Infinity,
-  朝圣言: 130,
-  仙王蛊鼎: 120,
-  寒啸千军: 30,
-}
-
 type 状态Buff = { 名称: string; 图标: number; 到期帧: number; 层数?: number }
 
-function Buff列表({ 标题, 列表, 当前帧 }: { 标题: string; 列表: 状态Buff[]; 当前帧: number }) {
+export function Buff列表({ 标题, 列表, 当前帧 }: { 标题: string; 列表: 状态Buff[]; 当前帧: number }) {
   return (
     <div className='mingzun-rotation-state-buffs'>
       <h3>{标题}</h3>
@@ -134,10 +130,12 @@ function 招式图标({ 指令, 施放名称 }: { 指令: 明尊循环指令; �
 }
 
 function 明尊序列编辑({
+  只读 = false,
   序列,
   设置序列,
   添加指令,
   施放列表,
+  定时团队增益窗口,
   下次施放帧,
   技能栏状态,
   中断序号,
@@ -159,7 +157,10 @@ function 明尊序列编辑({
     })
     return 列表
   }, [序列])
-  const 团队增益窗口 = useMemo(() => 施放列表?.flatMap(({ 生效窗口 }) => 生效窗口 ?? []) ?? [], [施放列表])
+  const 团队增益窗口 = useMemo(() => [
+    ...(施放列表?.flatMap(({ 生效窗口 }) => 生效窗口 ?? []) ?? []),
+    ...(定时团队增益窗口 ?? []),
+  ], [施放列表, 定时团队增益窗口])
   const 选中序号 = 序列.findIndex((行) => 行.id === 选中ID)
   const 选中招式 = 序列[选中序号]
   const 选中指令 = 选中招式?.指令
@@ -303,7 +304,7 @@ function 明尊序列编辑({
                 aria-label={名称}
                 title={`${名称}（队友施放） · ${提示} · ${插入位置}`}
                 data-cooling={冷却中}
-                disabled={已达上限}
+                disabled={只读 || 已达上限}
                 aria-disabled={冷却中 || 缺少时间 || undefined}
                 onClick={() => {
                   if (!冷却中 && !缺少时间) 设置选中ID(添加指令([指令], 插入前ID))
@@ -372,7 +373,7 @@ function 明尊序列编辑({
                 size='small'
                 type='text'
                 icon={<ArrowLeftOutlined />}
-                disabled={选中序号 === 0}
+                disabled={只读 || 选中序号 === 0}
                 aria-label='向前移动所选招式'
                 onClick={() => 移动选中招式(-1)}
               />
@@ -380,7 +381,7 @@ function 明尊序列编辑({
                 size='small'
                 type='text'
                 icon={<ArrowRightOutlined />}
-                disabled={选中序号 === 序列.length - 1}
+                disabled={只读 || 选中序号 === 序列.length - 1}
                 aria-label='向后移动所选招式'
                 onClick={() => 移动选中招式(1)}
               />
@@ -395,12 +396,13 @@ function 明尊序列编辑({
               className='mingzun-rotation-sequence'
               list={序列}
               setList={更新拖拽顺序}
+              disabled={只读}
               animation={130}
               handle='.mingzun-rotation-card-button'
               ghostClass='mingzun-rotation-card-ghost'
               direction='horizontal'
             >
-              {序列.map(({ id, 指令 }, i) => {
+              {序列.map(({ id, 指令, 宏来源 }, i) => {
                 const 动作 = 施放列表?.[i]
                 const 名称 =
                   动作?.技能 ??
@@ -419,6 +421,7 @@ function 明尊序列编辑({
                 const 提示 = [
                   名称,
                   动作 && `${秒数.format(动作.帧 / 16)} 秒`,
+                  宏来源 && `${宏来源}宏`,
                   增益说明,
                 ]
                   .filter(Boolean)
@@ -431,6 +434,7 @@ function 明尊序列编辑({
                       aria-pressed={选中ID === id}
                       aria-label={[
                         `第 ${i + 1} 项 ${名称}`,
+                        宏来源 && `${宏来源}宏`,
                         增益说明 ?? (灵力 && `日灵 ${灵力.日灵}，月魂 ${灵力.月魂}`),
                       ]
                         .filter(Boolean)
@@ -457,8 +461,9 @@ function 明尊序列编辑({
                           </span>
                         )
                       )}
+                      {宏来源 && <span className='mingzun-rotation-card-note'>{宏来源}</span>}
                     </button>
-                    <button
+                    {!只读 && <button
                       type='button'
                       className='mingzun-rotation-card-delete'
                       aria-label={`删除第 ${i + 1} 项 ${名称}`}
@@ -466,13 +471,13 @@ function 明尊序列编辑({
                       onClick={() => 删除招式(id, i)}
                     >
                       <CloseOutlined />
-                    </button>
+                    </button>}
                   </li>
                 )
               })}
             </ReactSortable>
           ) : (
-            <div className='mingzun-rotation-empty'>点击下方技能图标编排循环</div>
+            <div className='mingzun-rotation-empty'>{只读 ? '当前没有可显示的宏动作' : '点击下方技能图标编排循环'}</div>
           )}
         </div>
         {编辑提示 && (
@@ -492,12 +497,14 @@ function 明尊序列编辑({
                     min={0}
                     max={100}
                     precision={0}
+                    disabled={只读}
                     value={选中增益.层数}
                     onChange={(层数) => 修改选中指令({ ...选中增益, 层数: 层数 ?? 0 })}
                   />
                 </label>
                 {选中增益.增益 === '朝圣言' && (
                   <Checkbox
+                    disabled={只读}
                     checked={选中增益.圣浴}
                     onChange={(e) => 修改选中指令({ ...选中增益, 圣浴: e.target.checked })}
                   >
@@ -514,6 +521,7 @@ function 明尊序列编辑({
                   max={600}
                   step={0.1}
                   aria-label={`第 ${选中序号 + 1} 项等待秒数`}
+                  disabled={只读}
                   value={选中指令.等待 || null}
                   onChange={(值) => 修改选中指令({ 等待: 值 ?? 0 })}
                 />{' '}
@@ -568,7 +576,7 @@ function 明尊序列编辑({
                     key={招式}
                     type='button'
                     className='mingzun-rotation-skill-button'
-                    disabled={已达上限}
+                    disabled={只读 || 已达上限}
                     aria-disabled={!!不可施放 || undefined}
                     data-blocked={!!不可施放 && !冷却秒}
                     data-cooling={冷却秒 > 0}
@@ -602,7 +610,7 @@ function 明尊序列编辑({
                 <button
                   type='button'
                   className='mingzun-rotation-skill-button'
-                  disabled={已达上限}
+                  disabled={只读 || 已达上限}
                   onClick={() => 添加并选中({ 等待: 1 })}
                 >
                   <招式图标 指令={{ 等待: 1 }} />
@@ -617,14 +625,14 @@ function 明尊序列编辑({
         <span>快捷添加</span>
         <Button
           size='small'
-          disabled={序列.length + 3 > 明尊循环最多指令}
+          disabled={只读 || 序列.length + 3 > 明尊循环最多指令}
           onClick={() => 添加并选中('赤日轮', '赤日轮', '赤日轮')}
         >
           三段赤日轮
         </Button>
         <Button
           size='small'
-          disabled={序列.length + 3 > 明尊循环最多指令}
+          disabled={只读 || 序列.length + 3 > 明尊循环最多指令}
           onClick={() => 添加并选中('幽月轮', '幽月轮', '幽月轮')}
         >
           三段幽月轮

@@ -22,8 +22,14 @@ const 默认秘籍 = 默认数据?.秘籍 || {}
 const 默认延迟 = 默认数据?.网络延迟 || 0
 const 默认装备信息 = 默认数据?.配装 || {}
 
-export const 加载缓存网络延迟 = () => {
-  const localNetwork = localStorage.getItem(缓存映射.网络延迟) || 默认延迟 || 1
+export const 加载缓存网络延迟 = (明尊默认延迟?: number) => {
+  const 已存延迟 = localStorage.getItem(缓存映射.网络延迟)
+  if (明尊默认延迟 !== undefined) {
+    const 延迟 = 已存延迟 ? Number(已存延迟) : 明尊默认延迟
+    if (Number.isFinite(延迟) && 延迟 >= 0 && 延迟 <= 1000) return 延迟
+    return Number.isFinite(明尊默认延迟) && 明尊默认延迟 >= 0 && 明尊默认延迟 <= 1000 ? 明尊默认延迟 : 40
+  }
+  const localNetwork = 已存延迟 || 默认延迟 || 1
   if (localNetwork) {
     return +localNetwork
   } else {

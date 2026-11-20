@@ -43,13 +43,14 @@ let mockTier = 4
 let mockCustomCycles = []
 global.IS_REACT_ACT_ENVIRONMENT = true
 
-test.each([3, 4])('加速档位%s仅显示自适应光明心循环，原单档入口隐藏', (tier) => {
+test.each([3, 4])('加速档位%s显示自适应光明心和蹬三轮，原单档入口隐藏', (tier) => {
   mockTier = tier
   const container = document.createElement('div')
   const root = createRoot(container)
   act(() => root.render(<循环选择 不提示循环 />))
   const options = mockSelectProps.children
-  expect(options.map((r) => r.props.value)).toEqual(['自适应光明心循环'])
+  expect(options.map((r) => r.props.value)).toEqual(['自适应光明心循环', '蹬三轮'])
+  expect(options.find((r) => r.props.value === '蹬三轮').props.disabled).toBe(false)
   expect(options.find((r) => r.props.value === '自适应光明心循环').props.disabled).toBe(false)
   act(() => mockSelectProps.onChange('自适应光明心循环'))
   expect(mockDispatch).toHaveBeenCalledWith(更新方案数据({ 属性: '当前计算循环名称', 数据: '自适应光明心循环' }))

@@ -185,7 +185,7 @@ test.each([72, 90])('指定%s档时，空附魔和其他档位全部参与且推
 test('优化使用的快速计算与技能详情计算总伤和秒伤完全相同', () => {
   const plan = 初始方案()
   const stats = calculateLoadout(plan.slots, plan.stone).stats
-  for (const cycle of 循环列表) {
+  for (const cycle of 循环列表.filter((item) => item.循环详情.length)) {
     const detail = cycle.循环详情[0]
     const full = 计算明尊基础循环(stats, DEFAULT_SETTINGS, detail.技能详情, detail.战斗时间)
     const fast = 计算明尊基础循环(stats, DEFAULT_SETTINGS, detail.技能详情, detail.战斗时间, false)
@@ -226,7 +226,7 @@ test('外防和内防倾向要求成装面板对应防御更高，无可行方�
   ).toBe(false)
 })
 
-test.each(循环列表)(
+test.each(循环列表.filter((item) => item.循环详情.length))(
   '$名称联合优化装备、同档附魔、常规增益与阵眼，应用后满足原始精度约束',
   (cycle) => {
     const input = 输入(cycle)

@@ -9,7 +9,7 @@ import 奇穴选择 from './奇穴选择'
 import 增益详情 from '../基础设置标题/增益详情'
 import 明尊小工具 from '../增益面板/明尊小工具'
 import 气劲切换 from './明尊设置/气劲切换'
-import 明尊循环模拟入口 from './明尊设置/循环模拟入口'
+import 循环模拟入口 from './明尊设置/循环模拟入口'
 import 获取当前数据 from '@/数据/数据工具/获取当前数据'
 import 洗髓奇穴设置 from '@/心法模块/心法/洗髓经/奇穴设置'
 import 洗髓气劲切换 from '@/心法模块/心法/洗髓经/气劲切换'
@@ -23,7 +23,7 @@ function 公用设置() {
     <div className={'common-set'}>
       <目标选择 />
       <循环选择 />
-      {名称 === '明尊琉璃体' && <明尊循环模拟入口 />}
+      {(名称 === '洗髓经' || 名称 === '明尊琉璃体') && <循环模拟入口 洗髓={名称 === '洗髓经'} />}
       <延迟选择 />
       <div className='common-item' style={{ height: 'unset' }}>
         <属性录入 紧凑布局 />

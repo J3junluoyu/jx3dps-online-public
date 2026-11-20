@@ -1,0 +1,33 @@
+.xisui-rotation-zen {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  color: var(--rotation-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.xisui-rotation-zen-points {
+  display: flex;
+  gap: 6px;
+}
+
+.xisui-rotation-zen-points span {
+  width: 19px;
+  height: 19px;
+  border: 1px solid #ba884d;
+  border-radius: 50%;
+  background: #eee5d7;
+}
+
+.xisui-rotation-zen-points span[data-active='true'] {
+  background: #aa681f;
+  box-shadow: inset 0 0 0 2px #f1c568;
+}
+
+.xisui-rotation-step {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}

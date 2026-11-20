@@ -267,7 +267,7 @@ const 穷举增益基准 = (input, base) => {
 
 test('核查固定装备下药食、酒品与阵眼的完整组合', () => {
   const misses = []
-  for (const cycle of 循环列表)
+  for (const cycle of 循环列表.filter((item) => item.循环详情.length))
     for (const minToughness of [8, 9, 10])
       for (const includeMowen of [false, true]) {
         const initial = 用户配装(false)

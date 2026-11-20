@@ -4,6 +4,7 @@ const path = require('node:path')
 const vm = require('node:vm')
 const loadSource = require('./load-calculator-source.cjs')
 const { 对比明尊加速档位: compareSource } = loadSource('心法模块/心法/明尊琉璃体/方案档位对比.ts')
+const { default: trikeCycle } = loadSource('心法模块/心法/明尊琉璃体/计算循环/蹬三轮.ts')
 
 const build = process.argv[2] ? path.resolve(process.argv[2]) : path.resolve(__dirname, '../build')
 const entry = fs
@@ -107,6 +108,20 @@ async function verify(basePath) {
   assert(last.result.plan, '没有返回可行优化方案')
   assert(last.result.after.dps > 0, '优化方案伤害无效')
   assert.equal(last.result.after.gcd, 0.8125)
+  const runTrike = (networkLatency) => {
+    const input = { ...request, cycle: trikeCycle, networkLatency, compareGcd: true }
+    sandbox.onmessage({ data: input })
+    const result = messages.at(-1)
+    assert.equal(result?.type, 'comparison', JSON.stringify(result))
+    assert.deepEqual(Array.from(result.comparison.entries, ({ gcd }) => gcd), [0.875, 0.8125, 0.75])
+    const entry = result.comparison.entries.find(({ gcd }) => gcd === 0.8125)
+    assert(entry.result?.after?.dps > 0, '蹬三轮未返回有效秒伤')
+    const reference = compareSource(input).entries.find(({ gcd }) => gcd === 0.8125)
+    assert.equal(entry.result.after.dps, reference.result.after.dps)
+    return entry.result.after.dps
+  }
+  assert.notEqual(runTrike(30), runTrike(150), '蹬三轮推荐未按网络延迟重排')
+  console.log(`蹬三轮动态宏Worker验证通过 ${basePath}：三档筛选和延迟重排`)
   assert(last.result.evaluations > 0, '未实际执行方案比较')
   assert(
     messages.some((message) => message.type === 'progress' && message.progress.percent === 100),

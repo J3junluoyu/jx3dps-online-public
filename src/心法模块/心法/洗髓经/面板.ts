@@ -2,10 +2,10 @@ import type { 装备信息数据类型 } from '@/@types/装备'
 import type { 角色基础属性类型 } from '@/@types/角色'
 import type { 增益选项数据类型 } from '@/@types/团队增益'
 import { calculateAttributePanel } from '@/心法模块/心法/明尊琉璃体/计算'
-import { 获取明尊增益属性, 圣浴常驻名称 } from '@/心法模块/心法/明尊琉璃体/增益'
 import { 获取明尊原始属性, 获取明尊已选装备特效 } from '@/计算模块/职业特殊处理/明尊'
 import { 洗髓常规奇穴ID, 洗髓混池奇穴ID } from './奇穴'
 import { 获取洗髓设置, 洗髓气劲 } from './气劲'
+import { 获取洗髓增益属性 } from './计算'
 import 参考数据 from './参考数据.json'
 
 type Belong = { attributes?: Record<string, number> }
@@ -27,16 +27,7 @@ export function 获取洗髓显示面板(
   for (const id of [...洗髓常规奇穴ID, ...洗髓混池奇穴ID])
     add((参考数据.belongs[id] as Belong).attributes)
   // 排除明尊专用常驻选项；动态技能增益待循环补充，不默认全程覆盖。
-  add(
-    获取明尊增益属性(
-      {
-        阵眼: 增益数据?.阵眼 || '',
-        小吃: 增益数据?.小吃 || [],
-        团队增益: (增益数据?.团队增益 || []).filter((row) => row.增益名称 !== 圣浴常驻名称),
-      },
-      增益启用,
-    ),
-  )
+  add(获取洗髓增益属性(增益数据, 增益启用, true))
   const 面板 = calculateAttributePanel(
     装备属性,
     {

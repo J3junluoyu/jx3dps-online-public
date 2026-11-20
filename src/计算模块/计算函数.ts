@@ -20,6 +20,7 @@ import 获取当前数据 from '@/数据/数据工具/获取当前数据'
 import { 明尊秒伤计算 } from './职业特殊处理/明尊'
 import { 获取明尊原始属性, 获取明尊已选装备特效 } from './职业特殊处理/明尊'
 import { 计算洗髓循环, 获取洗髓计算设置 } from '@/心法模块/心法/洗髓经/计算'
+import { 获取洗髓逐招设置, 模拟洗髓逐招 } from '@/心法模块/心法/洗髓经/逐招模拟'
 import { isXisuiOrangeWeapon } from '@/心法模块/心法/明尊琉璃体/装备'
 
 interface CurrentDpsFunctionProps {
@@ -69,7 +70,7 @@ export const 秒伤计算 =
     // 是否郭氏计算 && console.time('计算耗时')
     const currentState: RootState = getState?.() || {}
 
-    const 网络延迟 = 更新网络延迟 ? 更新网络延迟 : (currentState?.data?.网络延迟 ?? 1)
+    const 网络延迟 = 更新网络延迟 ?? currentState?.data?.网络延迟 ?? 1
     const 当前装备信息 = { ...currentState?.data?.装备信息, ...更新装备信息 }
     const 奇穴数据 = 更新奇穴数据?.length ? 更新奇穴数据 : currentState.data.当前奇穴信息
 
@@ -100,13 +101,47 @@ export const 秒伤计算 =
       : 实际计算循环详情?.技能详情
 
     if (获取当前数据().名称 === '洗髓经') {
+      const 逐招配置 = 更新循环技能列表?.length || 更新计算循环详情
+        ? undefined
+        : 当前循环信息?.洗髓逐招配置
+      const 装备 = 获取明尊原始属性(当前装备信息.装备基础属性)
+      const 装备特效 = {
+        equipmentEffects: 获取明尊已选装备特效(当前装备信息),
+        xisuiOrangeWeapon: (当前装备信息.装备列表 || []).some((row) => isXisuiOrangeWeapon(row?.id)),
+      }
+      if (逐招配置) {
+        let 结果: 当前计算结果类型
+        try {
+          const 模拟 = 模拟洗髓逐招(装备, {
+            ...获取洗髓逐招设置(逐招配置, 增益数据, 增益启用, 当前目标.等级),
+            ...装备特效,
+          }, 逐招配置, {
+            启用循环增益: !!逐招配置.宏生成,
+            宏团队增益: 增益启用 ? 增益数据?.团队增益 : undefined,
+            计算详情: 计算技能详情,
+          })
+          if (!模拟.结果) throw new Error(模拟.中断?.提示 || '请先在模拟器添加技能')
+          结果 = {
+            ...模拟.结果,
+            循环内增益: 模拟.循环增益覆盖?.length
+              ? { 循环名称: 当前循环信息!.名称, 覆盖: 模拟.循环增益覆盖 }
+              : undefined,
+          }
+        } catch (error) {
+          结果 = {
+            总伤: 0, 秒伤: 0, 秒伤计算时间: 0, 计算结果技能列表: [],
+            计算错误: error instanceof Error ? error.message : '无法计算保存的洗髓循环',
+          }
+        }
+        if (是否更新显示计算结果) dispatch?.(更新当前计算结果(结果))
+        return 结果
+      }
       const 结果 = 当前循环技能列表?.length
         ? 计算洗髓循环(
-            获取明尊原始属性(当前装备信息.装备基础属性),
+            装备,
             {
               ...获取洗髓计算设置(增益数据, 增益启用, 当前目标.等级),
-              equipmentEffects: 获取明尊已选装备特效(当前装备信息),
-              xisuiOrangeWeapon: (当前装备信息.装备列表 || []).some((row) => isXisuiOrangeWeapon(row?.id)),
+              ...装备特效,
             },
             当前循环技能列表,
             更新计算时间 || 实际计算循环详情?.战斗时间 || 300,
@@ -125,6 +160,7 @@ export const 秒伤计算 =
         增益启用,
         秘籍: 当前秘籍信息,
         目标等级: 当前目标.等级,
+        网络延迟,
         技能列表: 当前循环技能列表 || [],
         战斗时间: 更新计算时间 || 实际计算循环详情?.战斗时间 || 60,
         计算技能详情,

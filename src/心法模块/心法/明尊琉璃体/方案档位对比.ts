@@ -9,6 +9,8 @@ import {
 import { 优化明尊方案, 使用橙武推荐模型, 比较推荐指标, 满足面板防御倾向 } from './方案优化'
 import type { 方案优化输入, 方案优化结果, 方案优化进度 } from './方案优化'
 import { 获取洗髓档位对比循环 } from '../洗髓经/循环'
+import { 获取推荐逐招帧数, 获取逐招推荐范围 } from './推荐逐招'
+import { 格式化明尊GCD } from './GCD显示'
 
 export interface 档位优化结果 {
   cycleName: string
@@ -41,7 +43,11 @@ export function 对比明尊加速档位(
 ): 档位对比结果 {
   const started = Date.now()
   const xisui = input.kungfu === 'xsj'
-  const cycles = xisui
+  const baseFrames = xisui ? 24 : 16
+  const 逐招帧数 = 获取推荐逐招帧数(input.cycle, input.kungfu)
+  if (逐招帧数.some((帧数) => !获取逐招推荐范围(input.kungfu).includes(帧数)))
+    throw new Error(xisui ? '洗髓逐招推荐仅计算3、4、5档' : '明尊逐招推荐仅计算2、3、4档')
+  const 内置循环 = 逐招帧数.length ? [] : xisui
     ? 获取洗髓档位对比循环()
     : 获取档位对比循环(
         使用橙武推荐模型(input) ? 获取明尊自适应循环名称(input.settings.talents) : input.cycle.名称,
@@ -49,24 +55,37 @@ export function 对比明尊加速档位(
       )
   const entries: 档位优化结果[] = []
   let evaluations = 0
-  for (const [index, cycle] of cycles.entries()) {
+  const 档位 = 逐招帧数.length
+    ? 逐招帧数.map((frames) => ({
+        cycle: input.cycle, frames,
+        gcd: frames / 16,
+        name: `${input.cycle.标题 || input.cycle.名称} · ${格式化明尊GCD(frames / 16)}GCD`,
+      }))
+    : 内置循环.map((cycle) => ({
+        cycle, frames: undefined,
+        gcd: (baseFrames - Number(cycle.循环详情[0].循环加速等级)) / 16,
+        name: cycle.名称,
+      }))
+  for (const [index, { cycle, frames, gcd, name }] of 档位.entries()) {
     const entry: 档位优化结果 = {
-      cycleName: cycle.名称,
-      gcd: ((xisui ? 24 : 16) - Number(cycle.循环详情[0].循环加速等级)) / 16,
+      cycleName: name,
+      gcd,
     }
     try {
-      entry.result = 优化明尊方案({ ...input, cycle }, (progress) =>
+      entry.result = 优化明尊方案({
+        ...input, cycle, ...(frames === undefined ? {} : { simulationFrames: frames }),
+      }, (progress) =>
         onProgress?.({
-          percent: Math.floor((index * 100 + progress.percent) / cycles.length),
-          stage: `${cycle.名称}：${progress.stage}`,
+          percent: Math.floor((index * 100 + progress.percent) / 档位.length),
+          stage: `${name}：${progress.stage}`,
           evaluations: evaluations + progress.evaluations,
         }),
       )
       // 对比结论只接受同时满足该档GCD与同一最低御劲的最终面板。
       if (
-        (xisui || input.allowHigherHaste) &&
+        (逐招帧数.length || xisui || input.allowHigherHaste) &&
         entry.result.after &&
-        ((input.allowHigherHaste
+        ((input.allowHigherHaste && !逐招帧数.length
           ? entry.result.after.gcd > entry.gcd
           : entry.result.after.gcd !== entry.gcd) ||
           entry.result.after.toughness + 1e-10 < input.minToughness)
@@ -102,12 +121,15 @@ export function 对比明尊加速档位(
       排名差 < 0 ||
       (排名差 === 0 &&
         (entry.cycleName === input.cycle.名称 ||
-          (规范理论循环名称(input.cycle.名称, input.settings.talents) === 自适应理论循环名称 &&
+          (!!逐招帧数.length && entry.gcd === entry.result.before.gcd) ||
+          ([自适应理论循环名称].includes(
+            规范理论循环名称(input.cycle.名称, input.settings.talents),
+          ) &&
             entry.gcd === entry.result.before.gcd)))
     )
       best = entry
   }
-  onProgress?.({ percent: 100, stage: xisui ? '三档对比完成' : '双档对比完成', evaluations })
+  onProgress?.({ percent: 100, stage: 逐招帧数.length ? '所选档位对比完成' : xisui ? '三档对比完成' : '双档对比完成', evaluations })
   return {
     entries,
     recommendedCycleName: best?.cycleName,

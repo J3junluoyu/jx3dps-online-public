@@ -4,12 +4,20 @@ import 获取当前数据 from '@/数据/数据工具/获取当前数据'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { 团队增益类型枚举, 团队增益选项数据类型, 增益选项数据类型 } from '@/@types/团队增益'
 import { 秒伤计算 } from '@/计算模块/计算函数'
+import { 获取明尊固定团队覆盖率 } from '@/心法模块/心法/明尊琉璃体/团队增益预设'
+import { 使用五十级装备 } from '@/心法模块/模块工具/心法模式'
+import { 统一明尊循环增益名称 } from '@/心法模块/心法/明尊琉璃体/逐招时间轴'
 import 团队增益图标 from '../团队增益图标'
 import styles from './index.module.less'
 
-const { 团队增益 = [] } = 获取当前数据()
+const { 名称, 团队增益 = [] } = 获取当前数据()
 
-function 团队增益轴设置弹窗({ open, onCancel }) {
+function 团队增益收益弹窗({ open, onCancel, 使用宏默认节点, 实际覆盖率 }: {
+  open: boolean
+  onCancel: () => void
+  使用宏默认节点: boolean
+  实际覆盖率: ReadonlyMap<string, number>
+}) {
   const 增益数据 = useAppSelector((state) => state.data.增益数据)
   const 增益启用 = useAppSelector((state) => state?.data?.增益启用)
   const 当前计算结果 = useAppSelector((state) => state.data.当前计算结果)
@@ -146,10 +154,14 @@ function 团队增益轴设置弹窗({ open, onCancel }) {
           </div>
           {显示增益数据?.length ? (
             显示增益数据?.map((item) => {
+              const 固定覆盖率 = 使用五十级装备(名称) ? 获取明尊固定团队覆盖率(item.增益名称) : undefined
+              const 覆盖率 = 固定覆盖率 === undefined
+                ? item.覆盖率
+                : 使用宏默认节点 ? 实际覆盖率.get(统一明尊循环增益名称(item.增益名称)) : 固定覆盖率
               return (
                 <div className={styles.dataWrap} key={`${item?.增益名称}_增益收益`}>
                   <div className={styles.content}>
-                    <团队增益图标 data={item as any} 当前数据={item} />
+                    <团队增益图标 data={item as any} 当前数据={{ 层数: item.层数, 覆盖率 }} />
                     <div className={styles.data}>
                       <h1 className={styles.name}>{item?.增益名称}</h1>
                       <span className={styles.info}>{item?.团队增益类型}</span>
@@ -192,4 +204,4 @@ function 团队增益轴设置弹窗({ open, onCancel }) {
   )
 }
 
-export default 团队增益轴设置弹窗
+export default 团队增益收益弹窗

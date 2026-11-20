@@ -19,6 +19,7 @@ import 橙武神兵 from './橙武神兵.json'
 import { 适配洗髓橙武循环 } from './橙武循环'
 
 type 状态 = NonNullable<循环技能详情['洗髓技能状态']>
+export type 洗髓伤害行 = 循环技能详情 & { 时间?: number; 团队无双?: number }
 const 奇穴ID = [...洗髓常规奇穴ID, ...洗髓混池奇穴ID]
 const 秘籍 = Object.fromEntries(
   [
@@ -45,7 +46,7 @@ const [dotLevel, dotRecord] = Object.entries(dotLevels)[0]
   label: '横扫六合（DOT）',
 } as Skill)
 
-export function 获取洗髓增益属性(data?: 增益选项数据类型, enabled = false) {
+export function 获取洗髓增益属性(data?: 增益选项数据类型, enabled = false, 循环已覆盖戒火 = false) {
   return 获取明尊增益属性(
     {
       阵眼: data?.阵眼 || '',
@@ -55,7 +56,7 @@ export function 获取洗髓增益属性(data?: 增益选项数据类型, enable
     enabled,
     undefined,
     [],
-    false,
+    循环已覆盖戒火,
   )
 }
 
@@ -119,9 +120,10 @@ export function 获取洗髓平衡内防(面板: { magicalShield: number; vitali
 export function 计算洗髓循环(
   stats: EquipmentStats,
   settings: Settings,
-  rows: 循环技能详情[],
+  rows: 洗髓伤害行[],
   duration: number,
   details = true,
+  记录伤害?: (时间: number, 伤害: number, 命中序号?: number) => void,
 ): 当前计算结果类型 {
   if (!Number.isFinite(duration) || duration <= 0) throw new Error('循环时长必须大于零')
   rows = 适配洗髓橙武循环(rows, settings)
@@ -150,7 +152,7 @@ export function 计算洗髓循环(
   const panels = new Map<string, ReturnType<typeof 计算洗髓面板>>()
   const resultRows = new Map<string, 计算结果技能列表类型>()
   let total = 0
-  for (const { row, skill, flags, weight } of entries) {
+  for (const [序号, { row, skill, flags, weight }] of entries.entries()) {
     if (!row.技能数量 || !weight) continue
     const name = row.技能名称.startsWith('武伤')
       ? '武伤'
@@ -164,17 +166,25 @@ export function 计算洗髓循环(
         flags.dashan,
         flags.chanyu,
         flags.cw,
+        row.团队无双 ?? 0,
         index,
       ])
       if (!panels.has(key))
         panels.set(
           key,
-          计算洗髓面板(stats, { ...settings, equipmentProcGains: state.gains }, flags),
+          计算洗髓面板(stats, {
+            ...settings,
+            equipmentProcGains: state.gains,
+            gains: row.团队无双
+              ? { ...settings.gains, strain_base: (settings.gains?.strain_base ?? 0) + row.团队无双 }
+              : settings.gains,
+          }, flags),
         )
       const panel = panels.get(key)!
       const damage = calculateSkill(skill, panel)
       const count = row.技能数量 * weight * state.weight
       total += damage.expected * count
+      if (row.时间 !== undefined) 记录伤害?.(row.时间, damage.expected * count, 序号)
       if (!details) continue
       const min = calculateSkill(skill, { ...panel, variables: { ...panel.variables, rand: 0 } })
       const max = calculateSkill(skill, { ...panel, variables: { ...panel.variables, rand: 1 } })
@@ -216,6 +226,7 @@ export function 计算洗髓循环(
     hits,
     majorContext,
     'solar',
+    记录伤害,
   )
   total += equipmentRows.reduce((sum, row) => sum + row.技能总输出, 0)
   return {
