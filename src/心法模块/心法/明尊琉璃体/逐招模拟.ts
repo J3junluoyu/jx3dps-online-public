@@ -134,8 +134,8 @@ const 命中掩码: Record<string, number> = skillEvents.masks
 export function 获取逐招环境(装备: EquipmentStats, 初始设置: Settings, 加速档位?: 明尊逐招加速档位) {
   const 孤月无心 = 初始设置.talents.includes('21835')
   if (!孤月无心 && !初始设置.talents.includes('6771'))
-    throw new Error('请选择光明心、孤月无心奇穴后再模拟')
-  const 设置 = { ...初始设置, light: false, drive: false }
+    throw new Error('请选择光明心或孤月无心奇穴后再模拟')
+  const 设置 = { ...初始设置, light: false, drive: false, differentSlash: false }
   let 常规属性 = calculateAttributes(装备, { ...设置, equipmentProcGains: {} })
   if (加速档位 !== undefined) {
     if (!明尊逐招加速帧数.includes(加速档位)) throw new Error('请选择有效的加速档位')
@@ -151,7 +151,9 @@ export function 获取逐招环境(装备: EquipmentStats, 初始设置: Setting
   const 郭氏加速 = Math.min(256, Math.floor((常规属性.hasteRating * 1024) / ratingScale('haste')))
   const 规则 = {
     无量妙境: 设置.talents.includes('18296'),
+    净体不畏: 设置.talents.includes('25166'),
     五明乐见: 设置.talents.includes('46492'),
+    妙镜惊寂: 设置.talents.includes('6895'),
     破魔回月: 设置.recipes.includes('recipe_5206_1'),
     炽炎镇恶: 设置.talents.includes('44569'),
     斩火: 设置.talents.includes('6766'),
@@ -265,8 +267,9 @@ export function 模拟明尊逐招循环(
         Math.max(0, 朝圣层数 * (朝圣言?.每层无双 ?? 0) - 常驻朝圣无双)
     }
     const 水层数 = 水特效?.stacksBeforeHit(行.帧, 命中掩码[行.id] ?? 0) ?? 0
-    const { 光明相, 驱夷, 五明, 戒火, 烈日 } = 行.状态
-    const 技能状态 = (光明相 ? 1 : 0) | (驱夷 ? 2 : 0) | (五明 ? 4 : 0) | (戒火 ? 8 : 0) | (烈日 ? 16 : 0)
+    const { 光明相, 驱夷, 五明, 戒火, 烈日, 异色斩 } = 行.状态
+    const 技能状态 =
+      (光明相 ? 1 : 0) | (驱夷 ? 2 : 0) | (五明 ? 4 : 0) | (戒火 ? 8 : 0) | (烈日 ? 16 : 0) | (异色斩 ? 32 : 0)
     const 状态键 = `${技能状态}:${团队无双}:${水层数}`
     let 技能伤害 = 伤害缓存.get(skill)
     if (!技能伤害) {
@@ -289,6 +292,7 @@ export function 模拟明尊逐招循环(
             sunlight: !!烈日,
             light: !!光明相,
             drive: !!驱夷,
+            differentSlash: !!异色斩,
             equipmentProcGains: 水特效?.addGains(装备增益, 水层数) ?? 装备增益,
           })
           if (选项.目标零防御)

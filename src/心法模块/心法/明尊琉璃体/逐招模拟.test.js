@@ -5,6 +5,7 @@ import 七五 from './测试数据/理论循环0.75.json'
 import { 获取明尊逐招计算设置, 明尊秒伤计算 } from '@/计算模块/职业特殊处理/明尊'
 import { 转换明尊基础属性 } from '@/数据/数据工具/明尊数据适配'
 import { 迁移旧明尊自定义逐招循环 } from './自定义逐招循环'
+import { 生成明尊宏循环 } from './宏循环'
 import { findGearItem } from './装备'
 import { calculateAttributes, calculateSkill, 明尊神兵触发率, SKILLS } from './计算'
 import { 计入循环戒火 } from './戒火斩'
@@ -18,6 +19,78 @@ const 双满 = {
   开场戒火: true,
   序列: ['光明相', '净世破魔击', '净世破魔击', '净世破魔击', '净世破魔击'],
 }
+
+test('妙镜惊寂按破魔施放叠法镜，五层突破加速上限，刷新后满20秒消失', () => {
+  const { equipment, settings } = 八一
+  const 设置 = { ...settings, talents: settings.talents.map((id) => (id === '46492' ? '6895' : id)) }
+  const 起手 = {
+    ...常规, 延迟: 0, 加速档位: 12, 初始日灵: 100, 初始月魂: 0,
+    目标等级: 设置.targetLevel, 奇穴: 设置.talents,
+  }
+  const 序列 = [
+    '橙武', ...Array(7).fill('净世破魔击'), { 等待: (320 - 11) / 16 }, '赤日轮', '赤日轮',
+  ]
+  const 配置 = { ...起手, 序列 }
+  const 结果 = 模拟明尊逐招循环(equipment, 设置, 配置)
+  const 预览 = 预览明尊逐招灵力(equipment, 设置, 配置)
+  expect(预览.施放列表).toEqual(结果.施放列表)
+  expect(结果.gcd).toBe(0.75)
+  const 破魔 = 结果.施放列表.slice(1, 8)
+  expect(破魔.map(({ 帧 }) => 帧)).toEqual([0, 12, 24, 36, 48, 60, 71])
+  expect(破魔.map(({ 施放后 }) => 施放后.法镜层数)).toEqual([1, 2, 3, 4, 5, 5, 5])
+  expect(破魔.map(({ 帧, 施放后 }) => 施放后.法镜结束帧 - 帧)).toEqual(Array(7).fill(320))
+  expect(结果.施放列表.slice(-2).map(({ 帧 }) => 帧)).toEqual([391, 403])
+  expect(结果.施放列表.at(-2).施放前.法镜层数).toBeUndefined()
+  expect(预览明尊逐招灵力(equipment, settings, 配置).施放列表[1].施放后.法镜层数).toBeUndefined()
+
+  const 宏 = '/cast [buff:法镜>=2] 赤日轮\n/cast 净世破魔击'
+  const 生成 = 生成明尊宏循环(宏, 4, equipment, 设置, { ...起手, 初始月魂: 100 })
+  expect(生成.序列.slice(0, 3)).toEqual(['净世破魔击', '净世破魔击', '赤日轮'])
+  expect(模拟明尊逐招循环(equipment, 设置, 生成).施放列表[2].施放前.法镜层数).toBe(2)
+})
+
+test.each([
+  ['烈日斩', '银月斩', 40088, 40089],
+  ['银月斩', '烈日斩', 40089, 40088],
+])('净体不畏在%s后强化%s，同色斩为每次破魔追加一段', (第一斩, 第二斩, 第一ID, 第二ID) => {
+  const { equipment, settings } = 八一
+  const 净体设置 = {
+    ...settings,
+    differentSlash: true,
+    talents: settings.talents.map((id) => (id === '18296' ? '25166' : id)),
+  }
+  const 序列 = [第一斩, 第二斩, '净世破魔击·日', '净世破魔击·月']
+  const 模拟 = (设置, 序列) => 模拟明尊逐招循环(equipment, 设置, { ...双满, 序列 })
+  const 结果 = 模拟(净体设置, 序列)
+  const 无净体 = 模拟(settings, 序列)
+  const 查伤害 = (记录, id) => 记录.命中列表.find((行) => 行.id === id)
+  expect(查伤害(结果, 第一ID).伤害).toBe(查伤害(无净体, 第一ID).伤害)
+  expect(查伤害(结果, 第二ID).伤害 / 查伤害(无净体, 第二ID).伤害).toBeCloseTo(1.5, 2)
+  expect(结果.命中列表.filter(({ id }) => id === 4476)).toHaveLength(3)
+  const 附伤 = 结果.命中列表.filter(({ id }) => id === 26708 || id === 26709)
+  expect(附伤.map(({ id }) => id)).toEqual([26708, 26709])
+  expect(附伤.every(({ 伤害 }) => 伤害 > 0)).toBe(true)
+  expect(无净体.伤害统计.some(({ 技能 }) => 技能.startsWith('净体不畏'))).toBe(false)
+  const 仅首斩 = 模拟(净体设置, [第一斩, ...序列.slice(2)])
+  expect(仅首斩.命中列表.filter(({ id }) => id === 26708 || id === 26709).map(({ id }) => id))
+    .toEqual([第一ID === 40088 ? 26708 : 26709])
+
+  const 斩已过期 = 模拟(净体设置, [第一斩, { 等待: 20 }, 第二斩, { 等待: 20 }, ...序列.slice(2)])
+  expect(查伤害(斩已过期, 第二ID).状态.异色斩).toBe(false)
+  expect(斩已过期.伤害统计.some(({ 技能 }) => 技能.startsWith('净体不畏'))).toBe(false)
+})
+
+test('光明相只在选中五明乐见时有三次，未选无量妙境仅补满异色灵力', () => {
+  const { equipment, settings } = 八一
+  const 设置 = { ...settings, talents: settings.talents.map((id) => ({ 18296: '25166', 46492: '6895' }[id] ?? id)) }
+  const 结果 = 模拟明尊逐招循环(equipment, 设置, {
+    ...双满, 初始月魂: 65, 序列: ['光明相', '净世破魔击', '净世破魔击'],
+  })
+  expect(结果.施放列表[0].施放后.光明相层数).toBe(1)
+  expect(结果.施放列表[1].施放后).toMatchObject({ 日灵: 0, 月魂: 100, 光明相层数: 0 })
+  expect(结果.命中列表.find(({ id }) => id === 4476).状态.光明相).toBe(false)
+  expect(结果.伤害统计.some(({ 技能 }) => 技能.startsWith('无量妙境'))).toBe(false)
+})
 
 test('逐招增益按区间共享，同名重叠、末帧和向前查看都沿用原判定', () => {
   const 窗口 = [
@@ -151,7 +224,7 @@ test('空序列中的灵力限制与下一招同帧的光明心返还均反映�
     规则,
     true,
   )
-  expect(五秒.技能栏状态.光明相.冷却帧).toBe(440)
+  expect(五秒.技能栏状态.光明相.冷却帧).toBe(480)
 })
 
 test('孤月光明相有两层充能、1 秒保护，耗尽后逐层恢复', () => {

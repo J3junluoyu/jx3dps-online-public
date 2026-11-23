@@ -111,6 +111,36 @@ test('切换招式时，状态区显示该步的灵力与自身、目标 Buff', 
   expect(container.querySelectorAll('[data-light="true"]')).toHaveLength(0)
 })
 
+test('自身 Buff 显示法镜层数和剩余时长，等待结束时隐藏已到期的图标', () => {
+  const 序列 = ['净世破魔击·月', '净世破魔击·日', { 等待: 5 }, { 等待: 15 }]
+  const { 施放列表 } = 生成明尊逐招时间轴(
+    { 初始日灵: 100, 初始月魂: 100, 开场戒火: false, 延迟: 0, 序列 },
+    0,
+    { 无量妙境: false, 五明乐见: false, 妙镜惊寂: true, 破魔回月: false, 炽炎镇恶: false },
+    true,
+  )
+  render(
+    <明尊序列编辑
+      序列={序列.map((指令, id) => ({ id, 指令 }))}
+      设置序列={jest.fn()}
+      添加指令={jest.fn()}
+      施放列表={施放列表}
+      起手={{ 日灵: 100, 月魂: 100, 已戒火: false }}
+    />,
+  )
+  const 自身 = within(screen.getByRole('heading', { name: '自身 Buff' }).parentElement)
+  fireEvent.click(screen.getByRole('button', { name: /^第 1 项 净世破魔击/ }))
+  expect(自身.getByTitle('法镜，1 层，剩余 20.0 秒')).toBeTruthy()
+  fireEvent.click(screen.getByRole('button', { name: /^第 2 项 净世破魔击/ }))
+  const 法镜 = within(自身.getByTitle('法镜，2 层，剩余 20.0 秒'))
+  expect(法镜.getByRole('img', { name: '法镜' }).getAttribute('src')).toContain('/3834.png')
+  expect(法镜.getByText('2')).toBeTruthy()
+  fireEvent.click(screen.getByRole('button', { name: /^第 3 项 等待/ }))
+  expect(自身.getByTitle('法镜，2 层，剩余 14.1 秒')).toBeTruthy()
+  fireEvent.click(screen.getByRole('button', { name: /^第 4 项 等待/ }))
+  expect(自身.queryByRole('img', { name: '法镜' })).toBeNull()
+})
+
 test('孤月图标同时显示可用层数及恢复倒计时，下一层恢复中仍可施放', () => {
   const 指令 = ['光明相', { 等待: 1 }]
   const { 技能栏状态 } = 生成明尊逐招时间轴(
@@ -173,7 +203,7 @@ test('目标 Buff 显示日月斩，技能栏区分条件不足和正在冷却',
   expect(光明相.dataset.cooling).toBe('true')
   expect(screen.getByRole('button', { name: '烈日斩' }).dataset.cooling).toBe('true')
   expect(screen.getByRole('button', { name: '银月斩' }).dataset.cooling).toBe('true')
-  expect(within(光明相).getByText('60')).toBeTruthy()
+  expect(within(光明相).getByText('65')).toBeTruthy()
   fireEvent.click(光明相)
   expect(添加指令).not.toHaveBeenCalled()
   fireEvent.click(screen.getByRole('button', { name: '赤日轮' }))

@@ -469,7 +469,7 @@ function 明尊循环模拟() {
               期望总伤害 <strong>{数字.format(结果.总伤害)}</strong>
             </div>
             <div>
-              实际 GCD <strong>{结果.gcd} 秒</strong>
+              {设置.talents.includes('6895') ? '起始 GCD' : '实际 GCD'} <strong>{结果.gcd} 秒</strong>
             </div>
           </div>
           <p className='mingzun-cycle-compare-hint'>

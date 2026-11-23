@@ -170,6 +170,10 @@ function 明尊序列编辑({
   const 当前序号 = 选中结果 ? 选中序号 : (施放列表?.length ?? 0) - 1
   const 当前动作 = 施放列表?.[当前序号]
   const 当前帧 = 当前动作?.帧 ?? 0
+  const 当前指令 = 序列[当前序号]?.指令
+  const 当前是等待 = typeof 当前指令 === 'object' && '等待' in 当前指令
+  const 等待帧 = 当前是等待 ? 当前指令.等待 * 16 : 0
+  const 观察帧 = 当前帧 + 等待帧
   const 选中等待 = typeof 选中指令 === 'object' && '等待' in 选中指令
   const 插入序号 = 选中序号 < 0 ? 序列.length : 选中序号 + Number(选中等待)
   const 插入前ID = 序列[插入序号]?.id
@@ -187,7 +191,7 @@ function 明尊序列编辑({
   const 当前资源 = 当前动作?.施放后
   const 日灵 = 当前资源?.日灵 ?? 起手.日灵
   const 月魂 = 当前资源?.月魂 ?? 起手.月魂
-  const 当前团队增益 = 获取明尊时间点增益(团队增益窗口, 当前帧)
+  const 当前团队增益 = 获取明尊时间点增益(团队增益窗口, 观察帧)
   const 自身Buff: 状态Buff[] = []
   if (当前资源?.光明相结束帧)
     自身Buff.push({
@@ -207,6 +211,13 @@ function 明尊序列编辑({
       名称: '五明乐见',
       图标: 13403,
       到期帧: 当前资源.五明结束帧,
+    })
+  if (当前资源?.法镜结束帧)
+    自身Buff.push({
+      名称: '法镜',
+      图标: 3834,
+      到期帧: 当前资源.法镜结束帧,
+      层数: 当前资源.法镜层数,
     })
   for (const buff of Object.values(当前团队增益)) {
     if (!buff.层数) continue
@@ -343,8 +354,8 @@ function 明尊序列编辑({
             </div>
           ))}
         </div>
-        <Buff列表 标题='自身 Buff' 列表={自身Buff} 当前帧={当前帧} />
-        <Buff列表 标题='目标 Buff' 列表={目标Buff} 当前帧={当前帧} />
+        <Buff列表 标题='自身 Buff' 列表={自身Buff.filter(({ 到期帧 }) => 到期帧 > 观察帧)} 当前帧={观察帧} />
+        <Buff列表 标题='目标 Buff' 列表={目标Buff.filter(({ 到期帧 }) => 到期帧 > 观察帧)} 当前帧={观察帧} />
         <div className='mingzun-rotation-live-metrics'>
           <output className='mingzun-rotation-live-dps' aria-label='DPS'>
             {秒伤 === undefined ? '—' : 卡片秒数.format(秒伤)}
