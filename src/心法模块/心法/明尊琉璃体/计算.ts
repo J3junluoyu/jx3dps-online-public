@@ -368,13 +368,13 @@ export function calculateAttributePanel(
   const extraPhysicalAttack = fromVitality('vitality_to_physical_attack_power')
   const physicalAttack =
     Math.trunc(basePhysicalAttack * (1 + physicalAttackAddition)) + extraPhysicalAttack
-  const criticalRating =
+  const baseCriticalRating =
     equipment.critical +
     equipment.magicalCritical +
     gain('all_critical_strike_base') +
     gain('magical_critical_strike_base') +
-    Math.trunc(spirit * 0.25) +
-    fromVitality('vitality_to_magical_critical_strike')
+    Math.trunc(spirit * 0.25)
+  const criticalRating = baseCriticalRating + fromVitality('vitality_to_magical_critical_strike')
   const physicalCriticalRating =
     equipment.critical +
     equipment.physicalCritical +
@@ -497,6 +497,7 @@ export function calculateAttributePanel(
     physicalAttack,
     health,
     critical,
+    baseCriticalRating,
     criticalRating,
     criticalPower,
     overcome,

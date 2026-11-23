@@ -2,16 +2,15 @@ import { memo } from 'react'
 import styles from './index.module.less'
 import { 属性简写枚举 } from '@/@types/枚举'
 import 图标 from '@/数据/静态数据/图标.json'
-import 获取当前数据 from '@/数据/数据工具/获取当前数据'
-import { embedCoefficient } from '@/心法模块/心法/明尊琉璃体/装备'
 import { 属性类型 } from '@/@types/属性'
+import type { 装备属性信息模型 } from '@/@types/装备'
+import { 获取装备镶嵌数值 } from './换装属性'
+import type { 装备强化信息 } from './换装属性'
 
 interface 装备镶嵌类型 {
-  当前装备信息: any
-  装备数据: any
+  当前装备信息?: 装备强化信息
+  装备数据: 装备属性信息模型
 }
-
-const { 镶嵌孔: 镶嵌孔数据 } = 获取当前数据()
 
 const 装备镶嵌: React.FC<装备镶嵌类型> = (props) => {
   const { 装备数据, 当前装备信息 } = props
@@ -21,26 +20,18 @@ const 装备镶嵌: React.FC<装备镶嵌类型> = (props) => {
       <h1 className={styles.title}>镶嵌</h1>
       <div className={styles.stoneContent}>
         {装备数据?.镶嵌孔数组?.map((镶嵌孔, index) => {
-          const 图标信息 = 图标?.五行石?.[镶嵌孔?.镶嵌宝石等级 || 8]
-          const 该镶嵌孔 = 镶嵌孔数据.find(
-            (b) =>
-              镶嵌孔.镶嵌类型 &&
-              (镶嵌孔.镶嵌类型 === b.镶嵌类型 || b.镶嵌索引?.includes(镶嵌孔.镶嵌类型)),
-          )
-          const 等级数据 = 当前装备信息?.镶嵌孔数组?.[index]?.镶嵌宝石等级 || 8
+          const 等级 = 当前装备信息?.镶嵌孔数组?.[index]?.镶嵌宝石等级 ?? 8
+          const 图标信息 = 图标?.五行石?.[等级]
 
           return (
             <div key={index} className={styles.stomeItem}>
-              <img className={styles.stoneImg} src={图标信息} />
+              {图标信息 && <img className={styles.stoneImg} src={图标信息} />}
               <span className={styles.stomeLabel}>
                 {镶嵌孔.镶嵌类型 ? 属性简写枚举[镶嵌孔.镶嵌类型] || '未知' : '未知'}
               </span>
               {镶嵌孔.镶嵌类型 !== 属性类型.仇恨 && (
                 <div className={styles.stomeValue}>
-                  +
-                  {镶嵌孔.镶嵌基数 !== undefined
-                    ? Math.trunc(镶嵌孔.镶嵌基数 * embedCoefficient(等级数据))
-                    : 该镶嵌孔?.各等级增益数据[等级数据]?.增益数值}
+                  {等级 ? `+${获取装备镶嵌数值(镶嵌孔, 等级)}` : '空孔'}
                 </div>
               )}
             </div>

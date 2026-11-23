@@ -36,7 +36,7 @@ import { MIN_GEAR_LEVEL } from '@/心法模块/心法/明尊琉璃体/装备'
 
 import 根据表单选项获取装备信息 from '../../../工具函数/根据表单选项获取装备信息'
 import { 获取寻优循环详情 } from '../../../工具函数/循环加速要求'
-import { 获取最大精炼等级 } from '..'
+import { 获取换装强化 } from '../../../工具函数/获取换装强化'
 
 import 装备详情容器 from './装备详情容器'
 import 渐变特效文字 from './渐变特效文字'
@@ -208,10 +208,6 @@ function 装备部位选择(props: 装备部位选择入参, ref) {
     [可选装备索引],
   )
 
-  const 当前镶嵌等级数组 = useMemo(() => {
-    return allValue?.镶嵌孔数组?.map((item) => item.镶嵌宝石等级) || []
-  }, [allValue])
-
   const 列表中当前装备 = 可选装备索引.get(allValue?.id)?.装备
   const 当前选择装备 = 列表中当前装备 || 当前装备数据
 
@@ -251,17 +247,9 @@ function 装备部位选择(props: 装备部位选择入参, ref) {
       })
 
       const 计算候选 = (item: 装备属性信息模型): 装备对比结果 | undefined => {
-        const 装备最大精炼等级 = 获取最大精炼等级(item)
-
         const 新装备数据 = {
           ...allValue,
-          镶嵌孔数组: item?.镶嵌孔数组?.map((a, index) => {
-            return {
-              ...a,
-              镶嵌宝石等级: 当前镶嵌等级数组?.[index] || 默认镶嵌宝石等级,
-            }
-          }),
-          当前精炼等级: 装备最大精炼等级,
+          ...获取换装强化(item, allValue, 默认镶嵌宝石等级),
           id: item?.id,
           装备部位: 装备位置部位枚举[部位索引],
         }
@@ -298,7 +286,6 @@ function 装备部位选择(props: 装备部位选择入参, ref) {
       allValue,
       当前秒伤,
       当前选择装备,
-      当前镶嵌等级数组,
       增益数据,
       增益启用,
       实际装备列表,
@@ -455,7 +442,13 @@ function 装备部位选择(props: 装备部位选择入参, ref) {
               value={item.id}
               label={item.装备名称}
             >
-              <装备详情容器 装备数据={item} 当前装备信息={allValue}>
+              <装备详情容器
+                装备数据={item}
+                当前装备信息={allValue}
+                对比部位={部位}
+                当前部位装备={当前选择装备?.id ? 当前选择装备 : undefined}
+                默认镶嵌宝石等级={默认镶嵌宝石等级}
+              >
                 <div className={`zhuangbei-select-item-wrap`} translate='no'>
                   {item?.图标ID ? (
                     <ImageComponent

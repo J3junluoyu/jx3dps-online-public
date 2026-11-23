@@ -22,6 +22,7 @@ import {
 import 获取当前数据 from '@/数据/数据工具/获取当前数据'
 import { 获取明尊装备条目 } from '@/数据/数据工具/明尊数据适配'
 import { 获取最大精炼等级 } from '../../工具函数/获取最大精炼等级'
+import { 获取换装强化 } from '../../工具函数/获取换装强化'
 import { 五十级附魔可见, 附魔数值降序 } from '../../工具函数/附魔显示'
 import './index.css'
 
@@ -69,10 +70,6 @@ function 装备选择(props: 装备选择入参, ref) {
   //   return value?.当前精炼等级 || 0
   // }, [value])
 
-  const 当前镶嵌等级数组 = useMemo(() => {
-    return value?.镶嵌孔数组?.map((item) => item.镶嵌宝石等级) || []
-  }, [value])
-
   // const 当前精炼等级 =
 
   const list: 装备属性信息模型[] = useMemo(() => {
@@ -82,8 +79,6 @@ function 装备选择(props: 装备选择入参, ref) {
   // 选择装备
   const 选择装备 = (e) => {
     const obj = list.find((item) => item.id === e)
-    const 装备最大精炼等级 = 获取最大精炼等级(obj)
-    // const 切换后精炼等级 = 当前精炼等级 > 装备最大精炼等级 ? 装备最大精炼等级 : 当前精炼等级
     onChange &&
       onChange({
         ...value,
@@ -98,13 +93,7 @@ function 装备选择(props: 装备选择入参, ref) {
                 )?.id || 0,
             }
           : {}),
-        镶嵌孔数组: obj?.镶嵌孔数组?.map((item, index) => {
-          return {
-            ...item,
-            镶嵌宝石等级: 当前镶嵌等级数组?.[index] || 默认镶嵌宝石等级,
-          }
-        }),
-        当前精炼等级: 装备最大精炼等级,
+        ...获取换装强化(obj, value, 默认镶嵌宝石等级),
         id: e,
         装备部位: 装备位置部位枚举[部位索引],
       } as any)

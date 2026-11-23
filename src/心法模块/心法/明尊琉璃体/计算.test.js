@@ -181,6 +181,8 @@ test('极本溯源的90/1024体质转会心依赖气劲，无视防御常驻', (
   const config = settings({ talents: ['26717'] })
   const noBuff = calculateAttributes(gear({ vitality: 1006 }), config)
   const withBuff = calculateAttributes(gear({ vitality: 1006 }), { ...config, stance: 'mainTank' })
+  expect(noBuff.baseCriticalRating).toBe(4)
+  expect(withBuff.baseCriticalRating).toBe(noBuff.baseCriticalRating)
   expect(noBuff.criticalRating).toBe(4)
   expect(withBuff.criticalRating).toBe(94)
   expect(noBuff.variables.all_shield_ignore).toBe(563)

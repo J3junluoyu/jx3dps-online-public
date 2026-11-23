@@ -5,22 +5,45 @@ import { 属性简写枚举 } from '@/@types/枚举'
 import { 精炼加成系数算法 } from '../../../../工具函数/根据装备信息获取基础属性'
 import { Tag } from 'antd'
 import { 属性类型 } from '@/@types/属性'
+import type { 获取换装属性 } from './换装属性'
 
 interface 装备属性类型 {
   装备数据: 装备属性信息模型
-  当前装备信息: any
+  当前精炼等级?: number
+  部位?: string
+  属性对比?: ReturnType<typeof 获取换装属性>
+  对比装备名称?: string
 }
 
 const 装备属性: React.FC<装备属性类型> = (props) => {
-  const { 装备数据, 当前装备信息 } = props
+  const { 装备数据, 当前精炼等级 = 0, 部位, 属性对比, 对比装备名称 } = props
   return (
     <div className={styles.data}>
       <div className={styles.header}>
         <h1 className={styles.mainTitle}>属性 - {装备数据?.装备名称}</h1>
-        {当前装备信息?.装备部位 ? (
-          <Tag color={PositionMap[当前装备信息?.装备部位]}>{当前装备信息?.装备部位}</Tag>
-        ) : null}
+        {部位 && <Tag color={PositionMap[部位]}>{部位}</Tag>}
       </div>
+      {属性对比 ? (
+        <div>
+          <p className={styles.comparisonNote} title={对比装备名称}>
+            {对比装备名称 ? '相比当前装备' : '相比空槽位'}（含精炼、镶嵌）
+          </p>
+          {属性对比.map(({ 名称, 数值, 差值 }) => (
+            <div key={名称} className={styles.comparisonRow}>
+              <Tag className={styles.attrLabel} color={ColorMap[名称]}>{名称}</Tag>
+              <Tag className={styles.comparisonValue}>{数值}</Tag>
+              <span className={styles.attributeDifference} aria-label={`${名称}变化`}>
+                {差值.map((值, 索引) => (
+                  <span key={索引}>
+                    {索引 > 0 && ' ～ '}
+                    <span data-change={Math.sign(值)}>{值 > 0 ? `+${值}` : 值}</span>
+                  </span>
+                ))}
+              </span>
+            </div>
+          ))}
+        </div>
+      ) : (
       <div className={styles.dataContent}>
         {获取属性列表(装备数据)?.map((item, index) => {
           return (
@@ -33,7 +56,7 @@ const 装备属性: React.FC<装备属性类型> = (props) => {
                 <div className={styles.dataItemValueWrap}>{item?.数值}</div>
                 {item?.名称 !== '武伤' ? (
                   <span className={styles.dataItemValueText}>
-                    {`+ ${item.不参与精炼 ? 0 : 精炼加成系数算法(item?.数值, 当前装备信息?.当前精炼等级) - item?.数值}`}
+                    {`+ ${item.不参与精炼 ? 0 : 精炼加成系数算法(item?.数值, 当前精炼等级) - item?.数值}`}
                   </span>
                 ) : null}
               </Tag>
@@ -41,6 +64,7 @@ const 装备属性: React.FC<装备属性类型> = (props) => {
           )
         })}
       </div>
+      )}
     </div>
   )
 }

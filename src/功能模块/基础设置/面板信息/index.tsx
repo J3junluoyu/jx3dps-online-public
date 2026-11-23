@@ -387,11 +387,23 @@ export const 获取面板显示数据数值 = (
         </div>
       )
     case '会心':
-      return 角色最终属性.会心等级
+      if (!面板) return 角色最终属性.会心等级
+      return (
+        <div>
+          <p>基础会心：{面板.baseCriticalRating}</p>
+          <p>最终会心：{面板.criticalRating}（{获取面板显示数据(key, 角色最终属性)}）</p>
+        </div>
+      )
     case '会效':
       return 角色最终属性.会心效果等级
     case '破防':
-      return 角色最终属性.破防等级
+      if (!面板) return 角色最终属性.破防等级
+      return (
+        <div>
+          <p>基础破防：{面板.baseOvercomeRating}</p>
+          <p>最终破防：{面板.overcomeRating}（{获取面板显示数据(key, 角色最终属性)}）</p>
+        </div>
+      )
     case '无双':
       return 角色最终属性.无双等级
     case '破招':

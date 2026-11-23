@@ -197,6 +197,29 @@ test.each(['明尊面板', '洗髓面板'])('%s的内外防悬浮提示分别显
   expect(获取面板显示数据数值('内防', 属性)).toBe('当前内功防御：901 点')
 })
 
+test.each(['明尊面板', '洗髓面板'])('%s的会心和破防悬浮提示显示基础点数及最终值', (key) => {
+  const 属性 = {
+    [key]: {
+      baseCriticalRating: 1250,
+      criticalRating: 1410,
+      critical: 0.1813,
+      baseOvercomeRating: 1000,
+      overcomeRating: 1710,
+      overcome: 0.2005,
+    },
+  }
+  act(() => root.render(获取面板显示数据数值('会心', 属性)))
+  expect([...container.querySelectorAll('p')].map((row) => row.textContent)).toEqual([
+    '基础会心：1250',
+    '最终会心：1410（18.13%）',
+  ])
+  act(() => root.render(获取面板显示数据数值('破防', 属性)))
+  expect([...container.querySelectorAll('p')].map((row) => row.textContent)).toEqual([
+    '基础破防：1000',
+    '最终破防：1710（20.05%）',
+  ])
+})
+
 test('仅查询秒伤时跳过技能明细，保留同一套配装及循环的伤害结果', () => {
   const 完整结果 = mockDispatch(秒伤计算())
   expect(完整结果.秒伤).toBeGreaterThan(0)
