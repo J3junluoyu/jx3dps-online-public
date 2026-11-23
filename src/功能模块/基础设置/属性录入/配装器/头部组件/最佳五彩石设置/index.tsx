@@ -1,6 +1,6 @@
 // 一键设置最佳五彩石
 import { App, Button, Modal, Table } from 'antd'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import classNames from 'classnames'
 import { useAppDispatch } from '@/hooks'
 import { RiseOutlined } from '@ant-design/icons'
@@ -18,18 +18,34 @@ import './index.css'
 
 const { 五彩石, 名称 } = 获取当前数据()
 
-const 五彩石原始数据 = 五彩石?.[6]
+const 五彩石原始数据 = 五彩石?.[6] ?? []
+const 每批计算预算毫秒 = 8
+const 秒伤变化格式 = new Intl.NumberFormat('zh-CN', {
+  style: 'percent',
+  signDisplay: 'exceptZero',
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+})
+
+function 获取秒伤变化(秒伤: number, 基准秒伤: number) {
+  if (!Number.isFinite(秒伤) || !Number.isFinite(基准秒伤) || 秒伤 <= 0 || 基准秒伤 <= 0)
+    return undefined
+  return (秒伤 - 基准秒伤) / 基准秒伤
+}
+
+function 秒伤变化样式(变化?: number) {
+  return 变化 ? (变化 > 0 ? 'dps-up-color' : 'dps-low-color') : ''
+}
 
 function 最佳五彩石设置({ 一键替换五彩石, 对比秒伤, 对比装备信息, 循环待补充 = false }) {
   const [open, setOpen] = useState<boolean>(false)
   const [最大五彩石, 更新最大五彩石] = useState<string>('')
   const [最大Dps, 更新最大Dps] = useState<number>(0)
   const [计算用时, 更新计算用时] = useState<number>(0)
-  const [无五彩石装备属性, 设置无五彩石装备属性] = useState<角色基础属性类型>()
   const [五彩石秒伤数据, 设置五彩石秒伤数据] = useState<五彩石秒伤数据类型[]>([])
+  const 计算序号 = useRef(0)
   const { modal } = App.useApp()
 
-  // 所有组合的缓存数据
   const dispatch = useAppDispatch()
 
   useEffect(() => {
@@ -39,72 +55,65 @@ function 最佳五彩石设置({ 一键替换五彩石, 对比秒伤, 对比装�
     }
   }, [open])
 
-  useEffect(() => {
-    if (!循环待补充) 获取当前装备信息去除五彩石加成的面板()
-  }, [对比装备信息, 循环待补充])
-
-  const 获取当前装备信息去除五彩石加成的面板 = () => {
-    const { 装备基础属性 } = 根据装备信息获取基础属性(对比装备信息, { 计算五彩石: false })
-    设置无五彩石装备属性(装备基础属性)
-  }
+  useEffect(() => () => { 计算序号.current++ }, [])
 
   const 计算前提示 = () => {
     if (循环待补充) return
     modal.confirm({
       title: `确定开始计算吗`,
-      content: `共 ${五彩石原始数据?.length} 个六级五彩石，计算将造成一定卡顿`,
+      content: `将比较 ${五彩石原始数据.length} 个六级五彩石`,
       okText: '我要计算',
-      onOk: async () => {
-        开始计算()
-      },
+      onOk: 开始计算,
+      onCancel: () => { 计算序号.current++ },
     })
   }
 
-  const 开始计算 = () => {
+  const 开始计算 = async () => {
     if (循环待补充) return
     数据埋点('计算最佳五彩石')
-    const 开始计算时间 = new Date().valueOf()
+    const 本次计算 = ++计算序号.current
+    const 开始计算时间 = performance.now()
+    let 批次截止 = 开始计算时间 + 每批计算预算毫秒
+    const 五十级装备 = 使用五十级装备(名称)
+    const 无五彩石装备属性 = 五十级装备
+      ? undefined
+      : 根据装备信息获取基础属性(对比装备信息, { 计算五彩石: false }).装备基础属性
     let 最大秒伤 = 0
-    let 最大五彩石: any = {}
+    let 最大五彩石 = ''
     const 全部五彩石秒伤数据: 五彩石秒伤数据类型[] = []
-    if (五彩石原始数据?.length) {
-      for (let i = 0; i < 五彩石原始数据?.length; i++) {
-        const 当前五彩石 = 五彩石原始数据[i]
-        const 重算装备信息 = 使用五十级装备(名称)
-          ? 根据装备信息获取基础属性({ ...对比装备信息, 五彩石: 当前五彩石.五彩石名称 })
-          : undefined
-        const 五彩石计算数据 = 重算装备信息
-          ? {
-              计算后属性: 重算装备信息.装备基础属性,
-              五彩石郭氏增益: [],
-            }
-          : 五彩石计算(当前五彩石?.五彩石名称, 无五彩石装备属性 as 角色基础属性类型)
-        const 装备增益 = 判断五彩石郭氏增益(五彩石计算数据?.五彩石郭氏增益, 对比装备信息?.装备增益)
-
-        const { 秒伤 } = dispatch(
-          秒伤计算({
-            更新装备信息: {
-              ...对比装备信息,
-              装备增益,
-              装备基础属性: 五彩石计算数据?.计算后属性,
-              五彩石: 当前五彩石?.五彩石名称,
-            } as any,
-            计算技能详情: false,
-          }),
-        )
-        // 显示五彩石属性简写
-        const 五彩石属性 = 当前五彩石?.装备增益?.map((item) => item?.增益名称) || []
-        全部五彩石秒伤数据.push({
-          名称: 当前五彩石?.五彩石名称,
-          属性: 五彩石属性,
-          秒伤,
-          较当前比较: 秒伤 === 对比秒伤 ? 3 : 秒伤 > 对比秒伤 ? 1 : 2,
-        })
-
-        if (秒伤 > 最大秒伤) {
-          最大秒伤 = 秒伤
-          最大五彩石 = 五彩石原始数据[i]?.五彩石名称
-        }
+    for (const [索引, 当前五彩石] of 五彩石原始数据.entries()) {
+      const 五彩石名称 = 当前五彩石.五彩石名称
+      const 五彩石计算数据 = 五十级装备
+        ? {
+            计算后属性: 根据装备信息获取基础属性({ ...对比装备信息, 五彩石: 五彩石名称 }).装备基础属性,
+            五彩石郭氏增益: [],
+          }
+        : 五彩石计算(五彩石名称, 无五彩石装备属性 as 角色基础属性类型)
+      const 装备增益 = 判断五彩石郭氏增益(五彩石计算数据.五彩石郭氏增益, 对比装备信息?.装备增益)
+      const { 秒伤 } = dispatch(
+        秒伤计算({
+          更新装备信息: {
+            ...对比装备信息,
+            装备增益,
+            装备基础属性: 五彩石计算数据.计算后属性,
+            五彩石: 五彩石名称,
+          },
+          计算技能详情: false,
+        }),
+      )
+      全部五彩石秒伤数据.push({
+        名称: 五彩石名称,
+        属性: 当前五彩石.装备增益?.map((item) => item.增益名称) || [],
+        秒伤,
+      })
+      if (秒伤 > 最大秒伤) {
+        最大秒伤 = 秒伤
+        最大五彩石 = 五彩石名称
+      }
+      if (索引 + 1 < 五彩石原始数据.length && performance.now() >= 批次截止) {
+        await new Promise((resolve) => setTimeout(resolve, 0))
+        if (本次计算 !== 计算序号.current) return
+        批次截止 = performance.now() + 每批计算预算毫秒
       }
     }
 
@@ -112,10 +121,8 @@ function 最佳五彩石设置({ 一键替换五彩石, 对比秒伤, 对比装�
     设置五彩石秒伤数据(全部五彩石秒伤数据)
     更新最大五彩石(最大五彩石)
     更新最大Dps(最大秒伤)
-    const 结束计算时间 = new Date().valueOf()
-    const 计算用时 = 结束计算时间 - 开始计算时间
     setOpen(true)
-    更新计算用时(计算用时)
+    更新计算用时(Math.round(performance.now() - 开始计算时间))
   }
 
   const closeModal = () => {
@@ -128,6 +135,8 @@ function 最佳五彩石设置({ 一键替换五彩石, 对比秒伤, 对比装�
     await 一键替换五彩石(五彩石名称)
     closeModal()
   }
+
+  const 最佳秒伤变化 = 获取秒伤变化(最大Dps, 对比秒伤)
 
   return (
     <>
@@ -153,7 +162,7 @@ function 最佳五彩石设置({ 一键替换五彩石, 对比秒伤, 对比装�
         centered
         open={open}
         onCancel={() => setOpen(false)}
-        width={670}
+        width={760}
         footer={false}
       >
         <div className={'max-wucaishi-wrap'}>
@@ -179,6 +188,11 @@ function 最佳五彩石设置({ 一键替换五彩石, 对比秒伤, 对比装�
                 <h1 className='max-wucaishi-dps dps-up-color'>
                   {最大Dps.toFixed(2)}
                   <RiseOutlined className='max-wucaishi-dps-icon' />
+                  {最佳秒伤变化 !== undefined && (
+                    <span className={classNames('max-wucaishi-dps-change', 秒伤变化样式(最佳秒伤变化))}>
+                      {秒伤变化格式.format(最佳秒伤变化)}
+                    </span>
+                  )}
                 </h1>
                 <div>
                   <div className={`max-wucaishi-item dps-up-color`}>
@@ -224,13 +238,12 @@ function 最佳五彩石设置({ 一键替换五彩石, 对比秒伤, 对比装�
                 render: (value, row) => {
                   const cls = classNames(
                     'max-wucaishi-all-value',
-                    row?.较当前比较 === 1 ? 'dps-up-color' : '',
-                    row?.较当前比较 === 2 ? 'dps-low-color' : '',
+                    秒伤变化样式(获取秒伤变化(row.秒伤, 对比秒伤)),
                   )
                   return (
                     <div>
                       <span className={cls}>{value}</span>
-                      {row?.较当前比较 === 3 ? `(当前)` : ''}
+                      {row.名称 === 对比装备信息?.五彩石 ? '(当前)' : ''}
                     </div>
                   )
                 },
@@ -252,6 +265,18 @@ function 最佳五彩石设置({ 一键替换五彩石, 对比秒伤, 对比装�
                 render: (value) => Number(value || 0).toFixed(2),
                 sorter: (a: any, b: any) => {
                   return (b.秒伤 || 0) - (a.秒伤 || 0)
+                },
+              },
+              {
+                key: '秒伤变化',
+                width: 105,
+                title: '较当前 DPS',
+                dataIndex: '秒伤',
+                render: (值: number) => {
+                  const 变化 = 获取秒伤变化(值, 对比秒伤)
+                  return 变化 === undefined ? '—' : (
+                    <span className={秒伤变化样式(变化)}>{秒伤变化格式.format(变化)}</span>
+                  )
                 },
               },
               {
@@ -277,5 +302,4 @@ interface 五彩石秒伤数据类型 {
   名称: string
   秒伤: number
   属性: string[]
-  较当前比较: number // 1 高 2低 3 不变
 }

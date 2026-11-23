@@ -454,7 +454,7 @@ function 明尊循环模拟() {
         <Checkbox
           checked={背后攻击}
           onChange={(e) => 设置背后攻击(e.target.checked)}
-          title='选中怜世人奇穴时，背后施展驱夜断愁返还 60% 调息'
+          title='驱夜断愁使用背后伤害，选中怜世人时还会返还 60% 调息'
         >
           背后攻击
         </Checkbox>
@@ -474,7 +474,7 @@ function 明尊循环模拟() {
           </div>
           <p className='mingzun-cycle-compare-hint'>
             {设置.talents.includes('6771') && '光明心按护盾完整结算。'}
-            水·封山按命中叠层，其余装备触发沿用配装计算器的期望模型，附伤汇总在技能统计中。
+            水·封山和水·灭虚按命中叠层，其余装备触发沿用配装计算器的期望模型，附伤汇总在技能统计中。
           </p>
           <Tabs
             activeKey={当前结果页}

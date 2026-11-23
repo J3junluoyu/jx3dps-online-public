@@ -16,13 +16,13 @@ import {
   XISUI_ORANGE_WEAPON_LEVELS,
   is72MainAttributeEnchant,
 } from './装备'
-import type { GearItem, Loadout } from './装备'
+import type { GearItem, GearSelection, Loadout } from './装备'
 import { 明尊小药小吃, 获取明尊战斗增益 } from './增益'
 import { 明尊阵眼 } from './阵眼'
 import { 计算明尊基础循环 } from '@/计算模块/职业特殊处理/明尊/基础循环'
 import { MAJOR_ENCHANTS, matchMajorEnchant } from './大附魔'
 import type { EquipmentSpecialEffect } from './装备特效'
-import { 计算洗髓面板, 计算洗髓循环, 获取洗髓增益属性, 获取洗髓平衡内防 } from '../洗髓经/计算'
+import { 计算洗髓面板, 计算洗髓循环, 获取洗髓增益属性 } from '../洗髓经/计算'
 import { 洗髓自适应循环 } from '../洗髓经/循环'
 import { 创建推荐逐招计算, 获取推荐逐招帧数, 获取逐招推荐范围 } from './推荐逐招'
 import 明尊循环列表 from './计算循环'
@@ -42,9 +42,10 @@ export interface 优化指标 {
   toughness: number
   physicalShield: number
   magicalShield: number
-  defenseImbalance?: number
+  equipmentDefense: 防御点数
 }
 export type 防御倾向 = 'physicalShield' | 'magicalShield'
+export const 默认防御倾向: 防御倾向 = 'physicalShield'
 export interface 方案优化输入 {
   kungfu?: 'xsj' | 'mzllt'
   /** 推荐以该档为加速下限，保留更高加速装备，技能次数仍使用所选模板。 */
@@ -84,25 +85,25 @@ export interface 方案优化进度 {
   evaluations: number
 }
 type 候选结果 = { plan: 优化方案; metrics: 优化指标; violation: number; key: string; grade: number }
-type 选择组 = { label: string; slot?: string; apply: ((plan: 优化方案) => 优化方案)[] }
+type 方案变更 = (plan: 优化方案) => 优化方案
+type 选择组 = {
+  label: string
+  slot?: string
+  apply: 方案变更[]
+  gearOnly?: 方案变更[]
+}
 type 防御点数 = Pick<优化指标, 'physicalShield' | 'magicalShield'>
 type 约束指标 = Pick<优化指标, 'haste' | 'toughness'> & 防御点数
 
-export const 比较推荐指标 = (前: 优化指标, 后: 优化指标, 防御规则?: 防御倾向 | 'balance') =>
+export const 比较推荐指标 = (前: 优化指标, 后: 优化指标, 倾向: 防御倾向 = 默认防御倾向) =>
   后.dps - 前.dps ||
-  (防御规则 === 'balance'
-    ? (前.defenseImbalance ?? 0) - (后.defenseImbalance ?? 0)
-    : 防御规则
-      ? 后[防御规则] - 前[防御规则]
-      : 0)
+  Number(满足装备防御倾向(后.equipmentDefense, 倾向)) -
+    Number(满足装备防御倾向(前.equipmentDefense, 倾向)) ||
+  后.equipmentDefense[倾向] - 前.equipmentDefense[倾向]
 
-const 防御减伤常数 = ratingScale('shield')
 const 对侧防御 = { physicalShield: 'magicalShield', magicalShield: 'physicalShield' } as const
-const 面板防御百分比 = (点数: number) =>
-  Number(((点数 / (点数 + 防御减伤常数)) * 100).toFixed(2))
-export const 满足面板防御倾向 = (metrics: 防御点数, 倾向?: 防御倾向) =>
-  !倾向 ||
-  面板防御百分比(metrics[倾向]) > 面板防御百分比(metrics[对侧防御[倾向]])
+export const 满足装备防御倾向 = (防御: 防御点数, 倾向: 防御倾向) =>
+  防御[倾向] > 防御[对侧防御[倾向]]
 
 export const 获取优化GCD = (加速: number, 基础帧数 = 16) =>
   Math.floor(
@@ -136,14 +137,20 @@ export function 获取同档附魔(
   return candidates.length ? candidates : [0]
 }
 
-const 方案键 = (plan: 优化方案) =>
-  JSON.stringify([
-    SLOTS.map(([slot]) => plan.slots[slot]),
-    plan.stone,
-    plan.formation,
-    [...plan.consumables].sort(),
-  ])
+const 有御劲附魔 = (slots: Loadout) =>
+  Object.values(slots).some((装备) => 御劲附魔ID.has(装备?.enchantId ?? 0))
+
+export const 可以补御劲附魔 = (input: 方案优化输入) =>
+  input.minToughness > 0 &&
+  (有御劲附魔(input.initial.slots) ||
+    input.slots.some((slot) =>
+      获取同档附魔(
+        input.initial.slots[slot]?.enchantId || 0, slotPosition(slot), input.enchantTier, true,
+      ).some((id) => 御劲附魔ID.has(id)),
+    ))
+
 const 装备品级 = new Map(GEAR_ITEMS.map((item) => [item.key, item.level]))
+const 装备套装 = new Map(GEAR_ITEMS.filter((item) => item.setId).map((item) => [item.key, item.setId]))
 const 有加速特效 = ({ rules }: EquipmentSpecialEffect) =>
   !!rules.attributes?.haste_base || !!rules.attributeVariants?.some(({ attributes }) => attributes.haste_base)
 const 特效可能改变加速 = GEAR_ITEMS.some((item) => item.specialEffects?.some(有加速特效)) ||
@@ -160,10 +167,11 @@ const wineValues = new Map(
 const wineValue = (plan: 优化方案) =>
   plan.consumables.reduce((sum, name) => sum + (wineValues.get(name) || 0), 0)
 
-/** 保留不同约束余量的候选，再反复逐部位细化；返回本次搜索找到的最佳可行方案。 */
+/** 正反两次扩展多件装备的候选，再细化装备、附魔和增益。 */
 export function 优化明尊方案(
   input: 方案优化输入,
   onProgress?: (progress: 方案优化进度) => void,
+  搜索阶段: '自动' | '常规' | '御劲补足' = '自动',
 ): 方案优化结果 {
   if (!Number.isFinite(input.minToughness) || input.minToughness < 0 || input.minToughness > 100)
     throw new Error('御劲要求须为0到100之间的百分比')
@@ -183,17 +191,12 @@ export function 优化明尊方案(
         cycle: 获取理论档位循环(tier === 4 ? 0.75 : 0.8125),
       }
   }
-  const 可尝试御劲附魔 =
-    input.minToughness > 0 &&
-    input.slots.some((slot) =>
-      获取同档附魔(
-        input.initial.slots[slot]?.enchantId || 0,
-        slotPosition(slot),
-        input.enchantTier,
-        true,
-      ).some((id) => 御劲附魔ID.has(id)),
-    )
-  if (!可尝试御劲附魔) return 搜索完整装备范围(input, onProgress)
+  if (搜索阶段 === '常规' || !可以补御劲附魔(input))
+    return 搜索完整装备范围(input, onProgress)
+  if (搜索阶段 === '御劲补足') {
+    const 补足 = 搜索完整装备范围(input, onProgress, true)
+    return { ...补足, usedToughnessEnchantFallback: !!补足.plan && 有御劲附魔(补足.plan.slots) }
+  }
 
   const started = Date.now()
   const 常规 = 搜索完整装备范围(input, (progress) =>
@@ -218,9 +221,7 @@ export function 优化明尊方案(
   )
   return {
     ...备用,
-    usedToughnessEnchantFallback: input.slots.some((slot) =>
-      御劲附魔ID.has(备用.plan?.slots[slot]?.enchantId ?? 0),
-    ),
+    usedToughnessEnchantFallback: !!备用.plan && 有御劲附魔(备用.plan.slots),
     evaluations: 常规.evaluations + 备用.evaluations,
     elapsed: Date.now() - started,
   }
@@ -245,6 +246,7 @@ function 搜索完整装备范围(
       }),
     [],
     允许御劲附魔,
+    false,
   )
   // 高品级可行方案只是额外起点；始终再搜索用户范围内的全部装备，包括较低品级特效。
   const result = 搜索推荐方案(
@@ -326,6 +328,7 @@ function 搜索推荐方案(
   onProgress?: (progress: 方案优化进度) => void,
   startingPlans: 优化方案[] = [],
   允许御劲附魔 = false,
+  检查多部位 = true,
 ): 方案优化结果 {
   if (
     !Number.isInteger(input.defaultEmbedLevel) ||
@@ -362,14 +365,14 @@ function 搜索推荐方案(
   const started = Date.now()
   if (input.gearScope && !['defensive', 'includeStreamlined'].includes(input.gearScope))
     throw new Error('装备范围无效')
-  const defensePreference = xisui ? undefined : input.defensePreference
-  const 防御规则 = xisui ? 'balance' : defensePreference
-  const 防御差 = (metrics: 防御点数) =>
-    defensePreference ? metrics[defensePreference] - metrics[对侧防御[defensePreference]] : 0
+  const 防御规则 = input.defensePreference ?? 默认防御倾向
   // 普通装备沿用配装器范围；选择橙武品级后，武器仅允许该心法的对应橙武。
   const candidates = 获取可选装备(input)
   const allowed = new Set(candidates.map((item) => item.key))
   const activeSlots = new Set(input.slots)
+  const 固定御劲附魔 = !允许御劲附魔 && Object.entries(input.initial.slots).some(
+    ([slot, item]) => !activeSlots.has(slot) && 御劲附魔ID.has(item?.enchantId ?? 0),
+  )
   if (input.slots.some((slot) => !SLOTS.some(([key]) => key === slot)))
     throw new Error('优化部位无效')
   if (
@@ -402,34 +405,37 @@ function 搜索推荐方案(
       允许御劲附魔,
     )
     validEnchants.set(slot, enchants)
+    const replace = (item: GearItem, enchantId: number): GearSelection => ({
+      ...(current?.majorEnchantId
+        ? { majorEnchantId: matchMajorEnchant(current.majorEnchantId, slot, item.kind)?.id }
+        : {}),
+      key: item.key,
+      strength: item.key === current?.key ? current.strength : item.maxStrength,
+      embeds: Object.keys(item.embed).map((_, i) => current?.embeds[i] ?? input.defaultEmbedLevel),
+      enchantId,
+    })
+    const equip = (plan: 优化方案, selection: GearSelection): 优化方案 => ({
+      ...plan,
+      slots: { ...plan.slots, [slot]: selection },
+    })
     groups.push({
       label: `${label}与附魔`,
       slot,
       apply: items.flatMap((item) =>
-        enchants.map(
-          (enchantId) =>
-            (plan: 优化方案): 优化方案 => ({
-              ...plan,
-              slots: {
-                ...plan.slots,
-                [slot]: {
-                  ...(current?.majorEnchantId
-                    ? {
-                        majorEnchantId: matchMajorEnchant(current.majorEnchantId, slot, item.kind)
-                          ?.id,
-                      }
-                    : {}),
-                  key: item.key,
-                  strength: item.key === current?.key ? current.strength : item.maxStrength,
-                  embeds: Object.keys(item.embed).map(
-                    (_, i) => current?.embeds[i] ?? input.defaultEmbedLevel,
-                  ),
-                  enchantId,
-                },
-              },
-            }),
-        ),
+        enchants.map((enchantId) => {
+          const selection = replace(item, enchantId)
+          return (plan: 优化方案) => equip(plan, selection)
+        }),
       ),
+      gearOnly: items.map((item) => {
+        const selection = replace(item, enchants[0])
+        return (plan) => {
+          const previous = plan.slots[slot]
+          if (!previous || !enchants.includes(previous.enchantId)) return equip(plan, selection)
+          if (previous.key === item.key) return plan
+          return equip(plan, { ...selection, enchantId: previous.enchantId })
+        }
+      }),
     })
   }
   const enhancementItems = 明尊小药小吃.filter(
@@ -492,12 +498,24 @@ function 搜索推荐方案(
       formation,
     })),
   })
+  const 槽位键缓存 = new WeakMap<Loadout, string>()
+  const 装备键 = (plan: 优化方案) => {
+    let key = 槽位键缓存.get(plan.slots)
+    if (key === undefined) {
+      key = JSON.stringify(SLOTS.map(([slot]) => plan.slots[slot]))
+      槽位键缓存.set(plan.slots, key)
+    }
+    return `[${key},${plan.stone}]`
+  }
+  const 方案键 = (plan: 优化方案) =>
+    `[${装备键(plan)},${JSON.stringify(plan.formation)},${JSON.stringify([...plan.consumables].sort())}]`
   const cache = new Map<string, 候选结果>()
   const statsCache = new Map<string, Pick<ReturnType<typeof calculateLoadout>, 'stats' | 'specialEffects'>>()
   let constraintEvaluations = 0
   const evaluations = () => cache.size + constraintEvaluations
   let best: 候选结果 | undefined
   const inScope = (plan: 优化方案) =>
+    !固定御劲附魔 &&
     formations.includes(plan.formation) &&
     validEnhancements.has(enhancementKey(plan.consumables)) &&
     input.slots.every(
@@ -506,13 +524,12 @@ function 搜索推荐方案(
         validEnchants.get(slot)?.includes(plan.slots[slot]?.enchantId),
     )
   const meetsRequirements = (metrics: 约束指标) =>
+    metrics.toughness + 1e-10 >= input.minToughness &&
     (input.allowHigherHaste
       ? metrics.haste >= minHaste
-      : 获取优化GCD(metrics.haste, baseFrames) === gcd) &&
-    metrics.toughness + 1e-10 >= input.minToughness &&
-    满足面板防御倾向(metrics, defensePreference)
+      : 获取优化GCD(metrics.haste, baseFrames) === gcd)
   const panelFor = (plan: 优化方案, cacheStats = true) => {
-    const gearKey = JSON.stringify([SLOTS.map(([slot]) => plan.slots[slot]), plan.stone])
+    const gearKey = 装备键(plan)
     let equipped = statsCache.get(gearKey)
     if (!equipped) {
       const { stats, specialEffects } = calculateLoadout(plan.slots, plan.stone)
@@ -552,11 +569,14 @@ function 搜索推荐方案(
     magicalShield: panel.magicalShield,
   })
   const constraintsFor = (plan: 优化方案) => panelConstraints(panelFor(plan, false).panel)
-  const evaluate = (plan: 优化方案): 候选结果 => {
-    const key = 方案键(plan)
+  const evaluate = (
+    plan: 优化方案,
+    key = 方案键(plan),
+    prepared?: ReturnType<typeof panelFor>,
+  ): 候选结果 => {
     const cached = cache.get(key)
     if (cached) return cached
-    const { stats, settings, panel } = panelFor(plan)
+    const { stats, settings, panel } = prepared ?? panelFor(plan)
     const 实际GCD = 获取优化GCD(panel.hasteRating, baseFrames)
     const dps = 逐招计算
       ? 逐招计算.计算秒伤(stats, settings, panel, 实际GCD === gcd)
@@ -566,9 +586,7 @@ function 搜索推荐方案(
     const metrics = {
       dps: dps ?? 0,
       ...panelConstraints(panel),
-      ...(xisui
-        ? { defenseImbalance: Math.abs(panel.physicalShield - 获取洗髓平衡内防(panel)) }
-        : {}),
+      equipmentDefense: { physicalShield: stats.physicalShield, magicalShield: stats.magicalShield },
       gcd: 实际GCD,
       ...(input.allowHigherHaste || 逐招计算 ? { simulatedGcd: gcd } : {}),
     }
@@ -576,21 +594,19 @@ function 搜索推荐方案(
       (Math.max(0, minHaste - metrics.haste) +
         (metrics.haste >= maxHaste ? metrics.haste - maxHaste + 1 : 0)) /
         888 +
-      Math.max(0, input.minToughness - metrics.toughness) / Math.max(1, input.minToughness) +
-      Math.max(0, -防御差(metrics)) / 1000
+      Math.max(0, input.minToughness - metrics.toughness) / Math.max(1, input.minToughness)
     const grade = SLOTS.reduce((sum, [slot]) => sum + (装备品级.get(plan.slots[slot]?.key) || 0), 0)
     const result = { plan, metrics, violation, key, grade }
     cache.set(key, result)
-    const 排名差 = best ? 比较推荐指标(metrics, best.metrics, 防御规则) : -1
-    if (
-      dps !== undefined && meetsRequirements(metrics) &&
-      inScope(plan) &&
-      (!best ||
-        排名差 < 0 ||
-        (排名差 === 0 &&
-          (grade > best.grade || (grade === best.grade && wineValue(plan) < wineValue(best.plan)))))
-    )
-      best = result
+    if (dps !== undefined && meetsRequirements(metrics) && inScope(plan)) {
+      const 排名差 = best
+        ? (允许御劲附魔 ? Number(有御劲附魔(plan.slots)) - Number(有御劲附魔(best.plan.slots)) : 0) ||
+          比较推荐指标(metrics, best.metrics, 防御规则)
+        : -1
+      if (!best || 排名差 < 0 || (排名差 === 0 &&
+        (grade > best.grade || (grade === best.grade && wineValue(plan) < wineValue(best.plan)))))
+        best = result
+    }
     return result
   }
   const initial = evaluate(input.initial)
@@ -630,6 +646,7 @@ function 搜索推荐方案(
       ...(input.allowHigherHaste ? { simulatedGcd: initial.metrics.gcd } : {}),
     }
   }
+  if (固定御劲附魔) return { before, evaluations: evaluations(), elapsed: Date.now() - started }
   const seedInitial = input.orangeWeaponLevel
     ? groups.find((group) => group.slot === 'primary_weapon')!.apply[0](input.initial)
     : input.initial
@@ -640,8 +657,8 @@ function 搜索推荐方案(
       ? input.initial.consumables
       : input.initial.consumables.filter((name) => !enhancementNames.has(name)),
   })
-  const extraSeeds = startingPlans.filter(inScope).map(evaluate)
-  // 可行性核查按加速和套装分组，保留御劲与所选防御差值各有优势的组合。
+  const extraSeeds = startingPlans.filter(inScope).map((plan) => evaluate(plan))
+  // 可行性核查按加速和套装分组，保留同组御劲较高的组合。
   // 先检查当前装备搭配不同增益，再检查换装，避免把加速药食路径提前丢弃。
   if (!best) {
     const gearByKey = new Map(GEAR_ITEMS.map((item) => [item.key, item]))
@@ -665,10 +682,7 @@ function 搜索推荐方案(
         Object.entries(item.sets).some(
           ([pieces, bonus]) =>
             Number(pieces) <= maxPieces &&
-            (Number(bonus.haste_base) ||
-              Number(bonus.toughness_base) ||
-              (defensePreference &&
-                Object.keys(bonus).some((key) => /shield|vitality|all_major/.test(key)))),
+            (Number(bonus.haste_base) || Number(bonus.toughness_base)),
         )
       )
         coupledSets.add(item.setId)
@@ -685,8 +699,8 @@ function 搜索推荐方案(
     }
     type 可行性状态 = { plan: 优化方案; metrics: 约束指标 }
     const 占优 = (a: 约束指标, b: 约束指标) =>
-      a.toughness >= b.toughness && 防御差(a) >= 防御差(b)
-    const 需要重算面板 = coupledSets.size > 0 || !!defensePreference
+      a.toughness >= b.toughness
+    const 需要重算面板 = coupledSets.size > 0
     let states: 可行性状态[] = [{ plan: seed.plan, metrics: seed.metrics }]
     const orderedGroups = [
       ...groups.filter((group) => !group.slot),
@@ -754,11 +768,10 @@ function 搜索推荐方案(
       [seed, ...extraSeeds, ...(best ? [best] : [])].map((row) => [row.key, row]),
     ).values(),
   ]
-  const selectBeam = (candidates: 候选结果[]) => {
+  const selectBeam = (candidates: 候选结果[], weights: number[], limit: number) => {
     const unique = new Map(candidates.map((item) => [item.key, item]))
     const selected = new Map<string, 候选结果>()
-    // 每种惩罚强度只保留前四项，完全同分时仍沿用候选原顺序。
-    const rankings = [32, 8, 2, 0.5].map((weight) => ({
+    const rankings = weights.map((weight) => ({
       weight,
       ranked: [] as { candidate: 候选结果; score: number }[],
     }))
@@ -772,8 +785,8 @@ function 搜索推荐方案(
               比较推荐指标(candidate.metrics, row.candidate.metrics, 防御规则)) < 0,
         )
         if (index >= 0) ranked.splice(index, 0, { candidate, score })
-        else if (ranked.length < 4) ranked.push({ candidate, score })
-        if (ranked.length > 4) ranked.pop()
+        else if (ranked.length < limit) ranked.push({ candidate, score })
+        if (ranked.length > limit) ranked.pop()
       }
     }
     for (const { ranked } of rankings) {
@@ -781,16 +794,104 @@ function 搜索推荐方案(
     }
     return [...selected.values()]
   }
+  const reverseGear = 检查多部位
+    ? groups
+        .flatMap(({ label, slot, gearOnly }) =>
+          slot && gearOnly && gearOnly.length > 1 ? [{ label, slot, gearOnly }] : [],
+        )
+        .reverse()
+    : []
+  const 有反向搜索 = reverseGear.length > 1
   for (let i = 0; i < groups.length; i++) {
     const group = groups[i]
     beam = selectBeam(
       beam.flatMap((candidate) => group.apply.map((apply) => evaluate(apply(candidate.plan)))),
+      [32, 8, 2, 0.5],
+      4,
     )
     onProgress?.({
-      percent: 30 + Math.round(((i + 1) / groups.length) * 50),
+      percent: 30 + Math.round(((i + 1) / groups.length) * (有反向搜索 ? 42 : 50)),
       stage: group.label,
       evaluations: evaluations(),
     })
+  }
+  if (有反向搜索) {
+    const equippedSets = new Set(SLOTS.map(([slot]) => 装备套装.get(seed.plan.slots[slot]?.key)))
+    const promising = reverseGear.map(({ slot, gearOnly }) => {
+      const rows = gearOnly
+        .map((apply) => ({ apply, result: evaluate(apply(seed.plan)) }))
+        .filter(({ result }) => result.plan.slots[slot]?.key !== seed.plan.slots[slot]?.key)
+        .sort((a, b) => 比较推荐指标(a.result.metrics, b.result.metrics, 防御规则))
+      const alternatives = new Set(rows.slice(0, 2))
+      const below = rows.find(({ result }) => result.metrics.haste < minHaste)
+      const above = rows.find(({ result }) => result.metrics.haste >= maxHaste)
+      if (below) alternatives.add(below)
+      if (above) alternatives.add(above)
+      const sets = new Set<number>()
+      for (const row of rows) {
+        const set = 装备套装.get(row.result.plan.slots[slot]?.key)
+        if (!set || !equippedSets.has(set) || sets.has(set)) continue
+        alternatives.add(row)
+        sets.add(set)
+      }
+      return [...alternatives]
+    })
+    // 跨部位组合可以直接修复单件换装的加速或御劲缺口。先筛最终面板，再进行逐招计算。
+    for (const [index, first] of promising.entries()) {
+      for (const second of promising.slice(index + 1)) {
+        for (const { result } of first) {
+          for (const { apply } of second) {
+            const plan = apply(result.plan)
+            const key = 方案键(plan)
+            if (cache.has(key)) continue
+            const prepared = panelFor(plan, false)
+            constraintEvaluations++
+            if (meetsRequirements(panelConstraints(prepared.panel))) evaluate(plan, key, prepared)
+          }
+        }
+      }
+    }
+    // 保留原配装和前向搜索所得起点，反向遍历全部可换部位。中间未达标的配装也可进入下一步。
+    let frontier = [...new Map([seed, ...(best ? [best] : [])].map((row) => [row.key, row])).values()]
+    const exact =
+      reverseGear.reduce((size, group) => size * group.gearOnly.length, frontier.length) <= 128
+    for (const [index, group] of reverseGear.entries()) {
+      const expanded = new Map<string, 候选结果>()
+      for (const candidate of frontier) {
+        for (const apply of group.gearOnly) {
+          const result = evaluate(apply(candidate.plan))
+          expanded.set(result.key, result)
+        }
+      }
+      const choices = [...expanded.values()]
+      if (exact || choices.length <= 8) {
+        frontier = choices
+      } else {
+        const kept = new Map(selectBeam(choices, [24, 2, 0], 2).map((row) => [row.key, row]))
+        const ordered = choices.sort((a, b) => 比较推荐指标(a.metrics, b.metrics, 防御规则))
+        // 给低于和高于目标档的路线留位置，后续装备可以把它们拉回目标档。
+        const below = ordered.find(({ metrics }) => metrics.haste < minHaste)
+        const above = ordered.find(({ metrics }) => metrics.haste >= maxHaste)
+        for (const row of [below, above]) if (row) kept.set(row.key, row)
+        const setKey = ({ plan }: 候选结果) =>
+          SLOTS.map(([slot]) => 装备套装.get(plan.slots[slot]?.key) || 0).sort().join(',')
+        const sets = new Set([...kept.values()].map(setKey))
+        // 套装种类与件数不同的组合可以在后续部位激活新的套装效果。
+        for (const row of ordered) {
+          if (kept.size >= 10) break
+          const key = setKey(row)
+          if (sets.has(key)) continue
+          sets.add(key)
+          kept.set(row.key, row)
+        }
+        frontier = [...kept.values()]
+      }
+      onProgress?.({
+        percent: 72 + Math.round(((index + 1) / reverseGear.length) * 8),
+        stage: `多部位换装：${group.label}`,
+        evaluations: evaluations(),
+      })
+    }
   }
   const hasteSlots = [...validEnchants].filter(([, ids]) =>
     ids.some((id) => Number(ENCHANTS.find((item) => item.id === id)?.attributes.haste_base) > 0),
@@ -848,19 +949,20 @@ function 搜索推荐方案(
         checkedJoint.add(key)
         for (const applyWine of wineGroup.apply) {
           const withWine = applyWine(candidate)
-          const cached = cache.get(方案键(withWine))
+          const wineKey = 方案键(withWine)
+          const cached = cache.get(wineKey)
           if (cached) {
             if (!逐招计算 && meetsRequirements(cached.metrics) && inScope(withWine)) break
             continue
           }
-          const { panel } = panelFor(withWine)
+          const prepared = panelFor(withWine)
           constraintEvaluations++
           if (
-            !meetsRequirements(panelConstraints(panel)) ||
+            !meetsRequirements(panelConstraints(prepared.panel)) ||
             !inScope(withWine)
           )
             continue
-          evaluate(withWine)
+          evaluate(withWine, wineKey, prepared)
           // 内置循环使用固定技能次数。逐招循环还需比较同档不同加速对应的时间点。
           if (!逐招计算) break
         }

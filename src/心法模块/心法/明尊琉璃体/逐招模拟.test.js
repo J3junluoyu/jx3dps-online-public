@@ -1,11 +1,14 @@
 import { 模拟明尊逐招循环, 预览明尊逐招灵力 } from './逐招模拟'
-import { 生成明尊逐招时间轴 } from './逐招时间轴'
+import { 创建逐招增益查询, 生成明尊逐招时间轴, 获取明尊时间点增益 } from './逐招时间轴'
 import 八一 from './测试数据/理论循环0.8125.json'
 import 七五 from './测试数据/理论循环0.75.json'
 import { 获取明尊逐招计算设置, 明尊秒伤计算 } from '@/计算模块/职业特殊处理/明尊'
 import { 转换明尊基础属性 } from '@/数据/数据工具/明尊数据适配'
 import { 迁移旧明尊自定义逐招循环 } from './自定义逐招循环'
 import { findGearItem } from './装备'
+import { calculateAttributes, calculateSkill, 明尊神兵触发率, SKILLS } from './计算'
+import { 计入循环戒火 } from './戒火斩'
+import { 获取技能统计数据 } from '@/功能模块/计算结果/结果统计/util'
 
 const 常规 = { 延迟: 40, 初始日灵: 0, 初始月魂: 0, 开场戒火: false, 序列: ['赤日轮'] }
 const 双满 = {
@@ -15,6 +18,18 @@ const 双满 = {
   开场戒火: true,
   序列: ['光明相', '净世破魔击', '净世破魔击', '净世破魔击', '净世破魔击'],
 }
+
+test('逐招增益按区间共享，同名重叠、末帧和向前查看都沿用原判定', () => {
+  const 窗口 = [
+    { 名称: '号令三军', 层数: 2, 每层无双: 300, 开始帧: 20, 结束帧: 50 },
+    { 名称: '号令三军', 层数: 1, 每层无双: 300, 开始帧: 10, 结束帧: 30 },
+    { 名称: '寒啸千军', 层数: 100, 每层无双: 3, 开始帧: 15, 结束帧: 35 },
+  ]
+  const 查询 = 创建逐招增益查询(窗口)
+  for (const 帧 of [0, 10, 14, 15, 20, 29, 30, 35, 50, 15, 0, 50])
+    expect(查询(帧)).toEqual(获取明尊时间点增益(窗口, 帧))
+  expect(查询(11)).toBe(查询(12))
+})
 
 test('橙武开启 5 秒，破魔按出招触发愿火、异色回灵和双斩，结束帧不再触发', () => {
   const { equipment, settings } = 八一
@@ -59,9 +74,13 @@ test('逐招神兵按序列是否加入橙武计算，与配装的橙武标记�
   const 装备橙武 = { ...settings, mingzunOrangeWeapon: true }
   const 双斩 = { ...常规, 序列: ['烈日斩', '银月斩'] }
   const 有橙武动作 = { ...双斩, 序列: [...双斩.序列, '橙武'] }
-  const 结果 = 模拟明尊逐招循环(equipment, settings, 有橙武动作)
-  expect(结果).toEqual(模拟明尊逐招循环(equipment, 装备橙武, 有橙武动作))
+  const 配置 = { ...有橙武动作, 计算技能详情: true }
+  const 结果 = 模拟明尊逐招循环(equipment, settings, 配置)
+  expect(结果).toEqual(模拟明尊逐招循环(equipment, 装备橙武, 配置))
   expect(结果.命中列表.filter(({ id }) => id === 25796)).toHaveLength(2)
+  const 神兵 = 结果.伤害统计.find(({ 技能 }) => 技能 === '日月斩·神兵（期望）')
+  expect(神兵.详情.期望次数).toBe(2 * 明尊神兵触发率)
+  expect(神兵.详情.命中.总值 + 神兵.详情.会心.总值).toBeCloseTo(神兵.伤害)
   const 常规结果 = 模拟明尊逐招循环(equipment, 装备橙武, 双斩)
   expect(常规结果.命中列表.some(({ id }) => id === 35065 || id === 25796)).toBe(false)
 })
@@ -187,6 +206,44 @@ test('改变目标等级会重新计算逐招 DPS，自动结算时长仍取动�
   const 高等级 = 模拟明尊逐招循环(equipment, { ...settings, targetLevel: 54 }, 选项)
   expect(低等级.结算时长).toBe(高等级.结算时长)
   expect(低等级.秒伤).toBeGreaterThan(高等级.秒伤)
+})
+
+test('主页面逐招技能详情按命中时状态汇总会心期望和伤害范围', () => {
+  const 输入 = {
+    装备信息: {
+      装备列表: [{ id: '1' }],
+      装备基础属性: { 明尊属性: { ...八一.equipment, magicalCritical: 1000 } },
+    },
+    奇穴: ['光明心'], 目标等级: 54, 秘籍: {}, 技能列表: [], 战斗时间: 60,
+    逐招配置: {
+      ...常规, 目标等级: 54, 奇穴: ['光明心'], 序列: ['赤日轮', '戒火斩', '赤日轮'],
+    },
+  }
+  const 结果 = 明尊秒伤计算(输入)
+  const 赤日轮 = 结果.计算结果技能列表.find(({ 技能ID }) => 技能ID === '4028')
+  const { 装备, 设置 } = 获取明尊逐招计算设置(输入)
+  const 技能 = SKILLS.find(({ id }) => id === '4028')
+  const [无戒火, 有戒火] = [设置, 计入循环戒火(设置)].map((选项) =>
+    calculateAttributes(装备, { ...选项, light: false, drive: false, sunlight: false }),
+  )
+  const [首击, 第二击] = [无戒火, 有戒火].map((面板) => calculateSkill(技能, 面板))
+  const 最小 = calculateSkill(技能, { ...无戒火, variables: { ...无戒火.variables, rand: 0 } })
+  const 最大 = calculateSkill(技能, { ...有戒火, variables: { ...有戒火.variables, rand: 1 } })
+  expect(赤日轮.技能数量).toBe(2)
+  expect(赤日轮.会心几率).toBeCloseTo((首击.critical + 第二击.critical) / 2)
+  expect(赤日轮.会心几率).toBeGreaterThan(0)
+  expect(赤日轮.技能最终详情).toMatchObject({
+    命中: { 最小值: 最小.hit, 最大值: 最大.hit },
+    会心: { 最小值: 最小.criticalHit, 最大值: 最大.criticalHit },
+  })
+  const { 命中, 会心 } = 赤日轮.技能最终详情
+  expect(会心.总值).toBeCloseTo(首击.critical * 首击.criticalHit + 第二击.critical * 第二击.criticalHit)
+  expect(命中.总值 + 会心.总值).toBeCloseTo(赤日轮.技能总输出)
+  expect(获取技能统计数据(结果, true).find((行) => 行.统计名称 === '赤日轮').技能最终详情)
+    .toEqual(赤日轮.技能最终详情)
+  expect(明尊秒伤计算({ ...输入, 计算技能详情: false })).toMatchObject({
+    秒伤: 结果.秒伤, 总伤: 结果.总伤, 计算结果技能列表: [],
+  })
 })
 
 test('主页面手编循环按固定平均覆盖结算，清空后回到无团队增益', () => {
@@ -372,6 +429,15 @@ test('背后攻击仅在怜世人下返还驱夜断愁调息', () => {
   expect(() =>
     生成明尊逐招时间轴({ ...选项, 背后攻击: true }, 0, { ...规则, 怜世人: false }),
   ).toThrow(/驱夜断愁尚未冷却/)
+})
+
+test('逐招的背后攻击切换驱夜内功的伤害档位，武伤保持独立', () => {
+  const { equipment, settings } = 八一
+  const 选项 = { ...常规, 序列: ['驱夜断愁'] }
+  const 命中 = (背后攻击, id) =>
+    模拟明尊逐招循环(equipment, settings, { ...选项, 背后攻击 }).命中列表.find((行) => 行.id === id).伤害
+  expect(命中(true, 4480)).toBeGreaterThan(命中(false, 4480))
+  expect(命中(true, 19055)).toBe(命中(false, 19055))
 })
 
 test.each([

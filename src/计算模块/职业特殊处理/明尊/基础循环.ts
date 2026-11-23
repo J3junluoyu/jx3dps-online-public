@@ -177,10 +177,8 @@ export function 计算明尊基础循环(
     装备状态索引: number,
   ) => {
     const 面板 = 获取面板(状态, 装备状态索引)
-    const 结果 = calculateSkill(技能, 面板)
-    const 最小 = calculateSkill(技能, { ...面板, variables: { ...面板.variables, rand: 0 } })
-    const 最大 = calculateSkill(技能, { ...面板, variables: { ...面板.variables, rand: 1 } })
-    return { ...结果, 数量, 最小, 最大, 总伤: 结果.expected * 数量 }
+    const { range, ...结果 } = calculateSkill(技能, 面板, false, true)
+    return { ...结果, 数量, 最小: range!.min, 最大: range!.max, 总伤: 结果.expected * 数量 }
   }
   const 结果列表: 计算结果技能列表类型[] = []
   let 总伤 = 0

@@ -31,17 +31,15 @@ import { 明尊宏默认团队节点 } from '@/心法模块/心法/明尊琉璃�
 import { 获取自动重排宏 } from '@/心法模块/心法/明尊琉璃体/自定义逐招循环'
 import { 获取已勾选循环增益, 获取循环覆盖的团队增益 } from '@/心法模块/心法/明尊琉璃体/逐招时间轴'
 
-const 迁移明尊奇穴选择 = (名称: string[]) =>
-  名称.map((项) => (项 === '斩火' ? '月尽天明' : 项 === '6766' ? '6000' : 项))
-
-export const 规范明尊奇穴 = (名称: string[] = []) => {
-  const 已迁移 = 迁移明尊奇穴选择(名称)
-  return normalizeTalents(
-    TALENTS.filter((奇穴) => 已迁移.includes(奇穴.name) || 已迁移.includes(奇穴.id)).map(
+const 获取明尊奇穴ID = (名称: string[]) =>
+  normalizeTalents(
+    TALENTS.filter((奇穴) => 名称.includes(奇穴.name) || 名称.includes(奇穴.id)).map(
       (奇穴) => 奇穴.id,
     ),
-  ).map((id) => TALENTS.find((奇穴) => 奇穴.id === id)!.name)
-}
+  )
+
+export const 规范明尊奇穴 = (名称: string[] = []) =>
+  获取明尊奇穴ID(名称).map((id) => TALENTS.find((奇穴) => 奇穴.id === id)!.name)
 
 export function 规范明尊秘籍(秘籍: 选中秘籍信息 = {}): 选中秘籍信息 {
   const 已选 = new Set(Object.values(秘籍 || {}).flat())
@@ -65,12 +63,7 @@ export function 获取明尊计算设置(
   装备属性?: EquipmentStats,
 ): Settings {
   const 已选秘籍 = new Set(Object.values(规范明尊秘籍(秘籍)).flat())
-  const 已迁移奇穴 = 迁移明尊奇穴选择(奇穴)
-  const 奇穴ID = normalizeTalents(
-    TALENTS.filter((项) => 已迁移奇穴.includes(项.name) || 已迁移奇穴.includes(项.id)).map(
-      (项) => 项.id,
-    ),
-  )
+  const 奇穴ID = 获取明尊奇穴ID(奇穴)
   const 设置: Settings = {
     ...DEFAULT_SETTINGS,
     ...增益数据?.明尊设置,
@@ -129,7 +122,7 @@ export function 获取明尊显示面板(
   设置.equipmentEffects = 已选特效
   const 面板 = calculateAttributes(原始, 设置)
   const 水特效体质 = averageEquipmentProcGains(
-    已选特效.filter(({ effect }) => effect.handlerId === 4877),
+    已选特效.filter(({ effect }) => effect.key === 'gain_4877_89'),
     面板.hasteRating,
   ).vitality_base || 0
   return {
@@ -218,14 +211,20 @@ export function 明尊秒伤计算(参数: 明尊计算输入 & {
             ...已存配置, 延迟: 参数.网络延迟 ?? 已存配置.延迟,
           })
         : 已存配置
+      const 计算技能详情 = 参数.计算技能详情 !== false
       const 结果 = 模拟明尊逐招循环(装备, 设置, {
         ...当前配置,
         启用循环增益: !!自动宏,
         宏团队增益: 自动宏 && 参数.增益启用 ? 参数.增益数据?.团队增益 : undefined,
         常驻朝圣无双,
         已勾选循环增益,
+        计算技能详情,
+        仅计算秒伤: !计算技能详情,
+        记录循环增益覆盖: true,
       })
-      const 技能ID = new Map(结果.命中列表.map(({ 技能, id }) => [技能, String(id)]))
+      const 技能ID = 计算技能详情
+        ? new Map(结果.命中列表.map(({ 技能, id }) => [技能, String(id)]))
+        : undefined
       return {
         总伤: 结果.总伤害,
         秒伤: 结果.秒伤,
@@ -233,16 +232,24 @@ export function 明尊秒伤计算(参数: 明尊计算输入 & {
         循环内增益: 参数.循环名称 && 结果.循环增益覆盖.length
           ? { 循环名称: 参数.循环名称, 覆盖: 结果.循环增益覆盖 }
           : undefined,
-        计算结果技能列表: 参数.计算技能详情 === false ? [] : 结果.伤害统计.map((行) => {
-          const id = 技能ID.get(行.技能)
-          return {
-            ...(id ? 获取明尊技能显示信息(id) : {}),
-            技能ID: id,
-            技能名称: 行.技能,
-            技能数量: 行.次数,
-            技能总输出: 行.伤害,
-          }
-        }),
+        计算结果技能列表: 技能ID
+          ? 结果.伤害统计
+              .filter((行) => !行.装备附伤)
+              .map<计算结果技能列表类型>((行) => {
+                const id = 技能ID.get(行.技能)
+                const 详情 = 行.详情
+                return {
+                  ...(id ? 获取明尊技能显示信息(id) : {}),
+                  技能ID: id,
+                  技能名称: 行.技能,
+                  技能数量: 详情?.期望次数 ?? 行.次数,
+                  技能总输出: 行.伤害,
+                  会心几率: 详情?.期望次数 ? Math.min(详情.会心次数 / 详情.期望次数, 1) : 0,
+                  技能最终详情: 详情 && { 命中: 详情.命中, 会心: 详情.会心 },
+                }
+              })
+              .concat(结果.装备伤害统计)
+          : [],
       }
     } catch (error) {
       return {

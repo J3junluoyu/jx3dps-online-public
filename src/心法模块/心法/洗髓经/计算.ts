@@ -8,7 +8,11 @@ import {
   calculateSkill,
 } from '@/心法模块/心法/明尊琉璃体/计算'
 import { 获取明尊增益属性, 圣浴常驻名称 } from '@/心法模块/心法/明尊琉璃体/增益'
-import { equipmentProcStates, equipmentDamageRows } from '@/心法模块/心法/明尊琉璃体/装备特效计算'
+import {
+  createWaterProc,
+  equipmentProcStates,
+  equipmentDamageRows,
+} from '@/心法模块/心法/明尊琉璃体/装备特效计算'
 import { isMajorEnchant, majorEnchantContext } from '@/心法模块/心法/明尊琉璃体/大附魔'
 import { 洗髓常规奇穴ID, 洗髓混池奇穴ID } from './奇穴'
 import { 洗髓秘籍选项 } from './秘籍'
@@ -20,6 +24,11 @@ import { 适配洗髓橙武循环 } from './橙武循环'
 
 type 状态 = NonNullable<循环技能详情['洗髓技能状态']>
 export type 洗髓伤害行 = 循环技能详情 & { 时间?: number; 团队无双?: number }
+type 技能伤害 = ReturnType<typeof calculateSkill>
+type 面板缓存项 = {
+  panel: ReturnType<typeof 计算洗髓面板>
+  skills: Map<Skill, 技能伤害>
+}
 const 奇穴ID = [...洗髓常规奇穴ID, ...洗髓混池奇穴ID]
 const 秘籍 = Object.fromEntries(
   [
@@ -28,6 +37,19 @@ const 秘籍 = Object.fromEntries(
   ].map((key) => [key, 1]),
 )
 const 技能 = new Map<string, Skill>()
+// 正式服 skills.tab 的 SkillEventMask1，武伤子技能等未触发的命中按 0 处理。
+const 水特效命中掩码: Readonly<Record<string, number>> = {
+  11: 131075, // 六合棍
+  17641: 67109425, // 普渡四方
+  3848: 561, // 韦驮献杵三禅那
+  3849: 561,
+  3850: 561,
+  3830: 561, // 横扫六合
+  43073: 561, // 横扫六合持续伤害
+  24888: 561, // 醍醐灌顶
+  28574: 561, // 心诤·棍舞
+  28576: 561, // 心诤·扫击
+}
 技能.set('orange:25794', { ...橙武神兵, key: 'orange:25794', label: 橙武神兵.record.name } as Skill)
 for (const row of 洗髓原始技能) {
   const key = `${row.group}:${row.id}`
@@ -45,6 +67,26 @@ const [dotLevel, dotRecord] = Object.entries(dotLevels)[0]
   record: dotRecord,
   label: '横扫六合（DOT）',
 } as Skill)
+
+const 累加属性 = (目标: Record<string, number>, 来源?: Record<string, number>, 倍率 = 1) => {
+  if (!来源) return
+  for (const [key, value] of Object.entries(来源)) 目标[key] = (目标[key] || 0) + value * 倍率
+}
+
+function 生成基础属性({ 名称: _名称, ...stance }: typeof 洗髓气劲.mainTank | typeof 洗髓气劲.offTank) {
+  const 属性: Record<string, number> = { ...参考数据.belongs['10002'].attributes }
+  累加属性(属性, stance)
+  for (const id of 奇穴ID)
+    累加属性(属性, (参考数据.belongs[id] as { attributes?: Record<string, number> }).attributes)
+  return 属性
+}
+
+const 基础属性 = {
+  mainTank: 生成基础属性(洗髓气劲.mainTank),
+  offTank: 生成基础属性(洗髓气劲.offTank),
+}
+const 常规秘籍 = { ...秘籍, recipe_2862_1: 0 }
+const 橙武秘籍 = { ...秘籍, recipe_2862_1: 1 }
 
 export function 获取洗髓增益属性(data?: 增益选项数据类型, enabled = false, 循环已覆盖戒火 = false) {
   return 获取明尊增益属性(
@@ -77,43 +119,23 @@ export function 获取洗髓计算设置(
 
 /** 仅叠加洗髓自身气劲、奇穴、秘籍及传入增益，不调用明尊心法转换。 */
 export function 计算洗髓面板(stats: EquipmentStats, settings: Settings, flags: Partial<状态> = {}) {
-  const attrs: Record<string, number> = { ...参考数据.belongs['10002'].attributes }
-  const add = (source: Record<string, number> = {}, multiplier = 1) => {
-    for (const [key, value] of Object.entries(source))
-      attrs[key] = (attrs[key] || 0) + value * multiplier
-  }
-  const { 名称: _名称, ...stance } =
-    洗髓气劲[settings.stance === 'mainTank' ? 'mainTank' : 'offTank']
-  add(stance)
-  for (const id of 奇穴ID)
-    add((参考数据.belongs[id] as { attributes?: Record<string, number> }).attributes)
-  add(settings.gains)
+  const attrs = { ...基础属性[settings.stance === 'mainTank' ? 'mainTank' : 'offTank'] }
+  累加属性(attrs, settings.gains)
   if (flags.qin) {
-    add({ magical_attack_power_gain: 204 })
-    add(参考数据.buffs['14750']['31134']['1'].attributes)
+    累加属性(attrs, { magical_attack_power_gain: 204 })
+    累加属性(attrs, 参考数据.buffs['14750']['31134']['1'].attributes)
   }
-  if (flags.gold) add(参考数据.buffs['23972']['9809']['2'].attributes)
-  if (flags.ring) add(参考数据.buffs['235']['24285']['1'].attributes)
-  if (flags.dashan) add(参考数据.buffs['25353']['18222']['1'].attributes, flags.dashan)
+  if (flags.gold) 累加属性(attrs, 参考数据.buffs['23972']['9809']['2'].attributes)
+  if (flags.ring) 累加属性(attrs, 参考数据.buffs['235']['24285']['1'].attributes)
+  if (flags.dashan) 累加属性(attrs, 参考数据.buffs['25353']['18222']['1'].attributes, flags.dashan)
   // 自身和团队立地来自不同来源，直接叠加减防值。
-  if (flags.lidi) add({ solar_shield_gain: -154 })
-  const recipes = { ...秘籍, recipe_2862_1: settings.xisuiOrangeWeapon && flags.cw ? 1 : 0 }
-  let panel = calculateAttributePanel(stats, settings, { ...attrs }, recipes, 'solar')
+  if (flags.lidi) 累加属性(attrs, { solar_shield_gain: -154 })
+  const recipes = settings.xisuiOrangeWeapon && flags.cw ? 橙武秘籍 : 常规秘籍
   if (flags.chanyu) {
-    add({ strain_base: panel.pilgrimageStacks * 5 })
-    panel = calculateAttributePanel(stats, settings, { ...attrs }, recipes, 'solar')
+    const { pilgrimageStacks } = calculateAttributePanel(stats, settings, { ...attrs }, recipes, 'solar')
+    累加属性(attrs, { strain_base: pilgrimageStacks * 5 })
   }
-  return panel
-}
-
-/** 择优时扣除心法固定内防和体质转内防，实际面板仍包含两项。 */
-export function 获取洗髓平衡内防(面板: { magicalShield: number; vitality: number }) {
-  const 心法 = 参考数据.belongs['10002'].attributes
-  return (
-    面板.magicalShield -
-    心法.magical_shield_base -
-    Math.trunc((面板.vitality * 心法.vitality_to_magical_shield) / 1024)
-  )
+  return calculateAttributePanel(stats, settings, attrs, recipes, 'solar')
 }
 
 /** 按已记录的自身Buff命中状态，用当前装备与外部增益重新计伤。 */
@@ -124,6 +146,7 @@ export function 计算洗髓循环(
   duration: number,
   details = true,
   记录伤害?: (时间: number, 伤害: number, 命中序号?: number) => void,
+  查询团队无双?: (时间: number) => number,
 ): 当前计算结果类型 {
   if (!Number.isFinite(duration) || duration <= 0) throw new Error('循环时长必须大于零')
   rows = 适配洗髓橙武循环(rows, settings)
@@ -148,46 +171,62 @@ export function 计算洗髓循环(
         })),
       )
     : undefined
-  const states = equipmentProcStates(effects, basePanel.hasteRating, duration, hits, majorContext)
-  const panels = new Map<string, ReturnType<typeof 计算洗髓面板>>()
+  const 水武器 = rows[0]?.时间 === undefined ? undefined : createWaterProc(effects)
+  const 水特效 =
+    水武器 && rows.every((row) => row.时间 !== undefined && row.技能数量 === 1)
+      ? 水武器
+      : undefined
+  const 平均特效 = 水特效 ? effects.filter((项) => 项 !== 水特效.source) : effects
+  const states = equipmentProcStates(平均特效, basePanel.hasteRating, duration, hits, majorContext)
+  const panels = new Map<string, 面板缓存项[]>()
   const resultRows = new Map<string, 计算结果技能列表类型>()
   let total = 0
   for (const [序号, { row, skill, flags, weight }] of entries.entries()) {
     if (!row.技能数量 || !weight) continue
-    const name = row.技能名称.startsWith('武伤')
-      ? '武伤'
-      : row.技能名称.replace(/（[123]禅那）/, '')
-    for (const [index, state] of states.entries()) {
-      const key = JSON.stringify([
-        flags.qin,
-        flags.gold,
-        flags.ring,
-        flags.lidi,
-        flags.dashan,
-        flags.chanyu,
-        flags.cw,
-        row.团队无双 ?? 0,
-        index,
-      ])
-      if (!panels.has(key))
-        panels.set(
-          key,
-          计算洗髓面板(stats, {
+    const 团队无双 = row.团队无双 ?? 查询团队无双?.(row.时间!) ?? 0
+    const 水层数 = 水特效?.stacksBeforeHit(row.时间! * 16, 水特效命中掩码[skill.id] ?? 0) ?? 0
+    const { qin, gold, ring, lidi, chanyu, cw, dashan } = flags
+    const 技能状态 =
+      (qin ? 1 : 0) | (gold ? 2 : 0) | (ring ? 4 : 0) |
+      (lidi ? 8 : 0) | (chanyu ? 16 : 0) | (cw ? 32 : 0)
+    const 增益键 = `${技能状态}:${dashan ?? 0}:${团队无双}:${水层数}`
+    let 状态面板 = panels.get(增益键)
+    if (!状态面板) {
+      状态面板 = []
+      panels.set(增益键, 状态面板)
+    }
+    for (let index = 0; index < states.length; index++) {
+      const state = states[index]
+      let cached = 状态面板[index]
+      if (!cached) {
+        cached = {
+          panel: 计算洗髓面板(stats, {
             ...settings,
-            equipmentProcGains: state.gains,
-            gains: row.团队无双
-              ? { ...settings.gains, strain_base: (settings.gains?.strain_base ?? 0) + row.团队无双 }
+            equipmentProcGains: 水特效?.addGains(state.gains, 水层数) ?? state.gains,
+            gains: 团队无双
+              ? { ...settings.gains, strain_base: (settings.gains?.strain_base ?? 0) + 团队无双 }
               : settings.gains,
           }, flags),
-        )
-      const panel = panels.get(key)!
-      const damage = calculateSkill(skill, panel)
+          skills: new Map(),
+        }
+        状态面板[index] = cached
+      }
+      const { panel, skills } = cached
+      let damage = skills.get(skill)
+      if (!damage) {
+        damage = calculateSkill(skill, panel, false, details)
+        skills.set(skill, damage)
+      }
+      const { range } = damage
       const count = row.技能数量 * weight * state.weight
-      total += damage.expected * count
-      if (row.时间 !== undefined) 记录伤害?.(row.时间, damage.expected * count, 序号)
-      if (!details) continue
-      const min = calculateSkill(skill, { ...panel, variables: { ...panel.variables, rand: 0 } })
-      const max = calculateSkill(skill, { ...panel, variables: { ...panel.variables, rand: 1 } })
+      const 本次伤害 = damage.expected * count
+      total += 本次伤害
+      if (row.时间 !== undefined) 记录伤害?.(row.时间, 本次伤害, 序号)
+      if (!range) continue
+      const { min, max } = range
+      const name = row.技能名称.startsWith('武伤')
+        ? '武伤'
+        : row.技能名称.replace(/（[123]禅那）/, '')
       const output = resultRows.get(name) || {
         技能ID: skill.id,
         技能名称: name,
@@ -206,7 +245,7 @@ export function 计算洗髓循环(
         ((output.会心几率 || 0) * output.技能数量 + damage.critical * count) /
         (output.技能数量 + count)
       output.技能数量 += count
-      output.技能总输出 += damage.expected * count
+      output.技能总输出 += 本次伤害
       for (const [type, field, probability] of [
         ['命中', 'hit', 1 - damage.critical],
         ['会心', 'criticalHit', damage.critical],

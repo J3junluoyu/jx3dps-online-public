@@ -2,7 +2,7 @@ import {
   优化明尊方案,
   获取同档附魔,
   获取优化GCD,
-  满足面板防御倾向,
+  满足装备防御倾向,
   获取最高品级候选,
 } from './方案优化'
 import { GEAR_ITEMS, ENCHANTS, STONES, SLOTS, slotPosition, calculateLoadout } from './装备'
@@ -15,6 +15,9 @@ import { 转换明尊配装, 获取明尊配装 } from '@/数据/数据工具/�
 import { 小吃类型枚举 } from '@/@types/枚举'
 import { 获取明尊计算设置 } from '@/计算模块/职业特殊处理/明尊'
 import { 圣浴常驻名称 } from './增益'
+import * as 装备模块 from './装备'
+import * as 属性模块 from './计算'
+import * as 基础循环模块 from '@/计算模块/职业特殊处理/明尊/基础循环'
 
 jest.setTimeout(120000)
 
@@ -195,7 +198,7 @@ test('优化使用的快速计算与技能详情计算总伤和秒伤完全相�
   }
 })
 
-test('外防和内防倾向要求成装面板对应防御更高，无可行方案时不返回反向装备', () => {
+test('可行性只检查加速和御劲，防御倾向不淘汰伤害最高的方案', () => {
   const input = {
     ...输入(循环列表.find((item) => item.循环详情[0].循环加速等级 === 3)),
     initial: 初始方案(true),
@@ -207,9 +210,7 @@ test('外防和内防倾向要求成装面板对应防御更高，无可行方�
   const 外防 = 优化明尊方案({ ...input, defensePreference: 'physicalShield' })
   const 内防 = 优化明尊方案({ ...input, defensePreference: 'magicalShield' })
   expect(外防.plan.slots.hat.key).toBe('armors:112395')
-  expect(内防.plan.slots.hat.key).toBe('armors:112626')
-  expect(外防.after.physicalShield).toBeGreaterThan(外防.after.magicalShield)
-  expect(内防.after.magicalShield).toBeGreaterThan(内防.after.physicalShield)
+  expect(内防.after.dps).toBe(外防.after.dps)
   for (const result of [外防, 内防]) {
     expect(result.after.gcd).toBeLessThanOrEqual(0.8125)
     expect(result.after.toughness).toBeGreaterThanOrEqual(input.minToughness)
@@ -219,11 +220,53 @@ test('外防和内防倾向要求成装面板对应防御更高，无可行方�
       ...input,
       gearKeys: ['armors:112395'],
       defensePreference: 'magicalShield',
-    }).plan,
-  ).toBeUndefined()
+    }).plan.slots.hat.key,
+  ).toBe('armors:112395')
   expect(
-    满足面板防御倾向({ physicalShield: 15000, magicalShield: 15001 }, 'magicalShield'),
-  ).toBe(false)
+    满足装备防御倾向({ physicalShield: 15000, magicalShield: 15001 }, 'magicalShield'),
+  ).toBe(true)
+})
+
+test('会跨过单件降伤，并在最低御劲变化后重新选择需要换多件装备的方案', () => {
+  const cycle = 循环列表.find((item) => item.循环详情[0].循环加速等级 === 3)
+  const initial = 初始方案()
+  const slots = ['hat', 'jacket', 'belt', 'wrist', 'bottoms', 'shoes']
+  const alternatives = slots.map((slot) => GEAR_ITEMS.find((item) =>
+    item.position === slot && item.kind === '防御' && item.key !== initial.slots[slot].key &&
+    装备模块.gearAvailableForSchool(item, '明教'),
+  ).key)
+  const count = (plan) => slots.filter((slot, index) => plan[slot].key === alternatives[index]).length
+  const equipment = calculateLoadout(initial.slots, initial.stone)
+  const panel = calculateAttributes(equipment.stats, DEFAULT_SETTINGS)
+  const gearSpy = jest.spyOn(装备模块, 'calculateLoadout').mockImplementation((loadout) => ({
+    ...equipment, stats: { ...equipment.stats, 换装件数: count(loadout) },
+  }))
+  const panelSpy = jest.spyOn(属性模块, 'calculateAttributes').mockImplementation(({ 换装件数 }) => ({
+    ...panel, hasteRating: 1500, toughness: 换装件数 === 5 ? 0.098 : 0.088,
+    physicalShield: 7000, magicalShield: 4000,
+  }))
+  const damageSpy = jest.spyOn(基础循环模块, '计算明尊基础循环').mockImplementation(({ 换装件数 }) => ({
+    秒伤: 换装件数 >= 5 ? 700 + 换装件数 * 100 : 1000 - 换装件数 * 60,
+  }))
+  try {
+    const input = {
+      ...输入(cycle), initial, slots, defensePreference: 'magicalShield',
+      gearKeys: slots.map((slot) => initial.slots[slot].key).concat(alternatives),
+    }
+    const first = 优化明尊方案({ ...input, minToughness: 8.5 })
+    expect(first.after).toMatchObject({ dps: 1300, gcd: 0.8125 })
+    expect(first.after.toughness).toBeCloseTo(8.8)
+    expect(count(first.plan.slots)).toBe(6)
+    const afterChange = 优化明尊方案({ ...input, minToughness: 9.5 })
+    expect(afterChange.after).toMatchObject({ dps: 1200, gcd: 0.8125 })
+    expect(afterChange.after.toughness).toBeCloseTo(9.8)
+    expect(count(afterChange.plan.slots)).toBe(5)
+    expect(count(input.initial.slots)).toBe(0)
+  } finally {
+    damageSpy.mockRestore()
+    panelSpy.mockRestore()
+    gearSpy.mockRestore()
+  }
 })
 
 test.each(循环列表.filter((item) => item.循环详情.length))(

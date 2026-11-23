@@ -49,13 +49,14 @@ test('按当前装备ID识别各品级明尊橙武，精炼8的腰坠及洗髓�
   expect(isMingzunOrangeWeapon(undefined)).toBe(false)
 })
 
-test('0.75橙武保留45%极本的历史基准，当前55%下完整与快速评估同口径', () => {
+test('0.75橙武使用正面驱夜伤害，对比45%与55%极本并校验快速评估', () => {
   const result = 计算()
   const legacy = 计算(七五, 历史设置(设置))
-  expect(legacy.秒伤).toBeCloseTo(原始数据.expectedDps, 8)
+  expect(legacy.秒伤).toBeCloseTo(49792.960100555334, 8)
   expect(result.秒伤).toBeGreaterThan(legacy.秒伤)
   expect(计算(七五, 设置, false).总伤).toBe(result.总伤)
-  expect(计算(七五, 历史设置(原始数据.settings)).秒伤).toBeCloseTo(原始数据.normalDps, 8)
+  expect(计算(七五, 历史设置(原始数据.settings)).秒伤).toBeCloseTo(47634.199890011376, 8)
+  expect(result.计算结果技能列表.find((row) => row.技能ID === '4480').技能等级).toBe('29')
   expect(总数(result, '35065')).toBe(38)
   expect(总数(result, '25796')).toBe(((40 + 16) * 205) / 1024)
   expect(result.计算结果技能列表.reduce((n, row) => n + row.技能总输出, 0)).toBeCloseTo(

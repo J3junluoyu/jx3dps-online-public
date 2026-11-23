@@ -20,6 +20,36 @@ const add = (target: Attributes, source: Attributes = {}, multiplier = 1) => {
     target[key] = (target[key] || 0) + value * multiplier
 }
 
+/** 水武器的同类气劲互斥。每个有效命中先按当前层数结算伤害，再叠层并续期。 */
+export function createWaterProc(effects: readonly EquippedSpecialEffect[]) {
+  const source = effects.find(({ effect }) =>
+    effect.handlerId === 4877 && effect.rules.maxStacks && equipmentEffectSupported(effect),
+  )
+  if (!source) return undefined
+  const { attributes, durationSeconds = 0, eventMask = 0, maxStacks = 1 } = source.effect.rules
+  const durationFrames = durationSeconds * 16
+  let stacks = 0
+  let expiresAt = 0
+  return {
+    source,
+    stacksBeforeHit(frame: number, mask: number) {
+      if (frame >= expiresAt) stacks = 0
+      const before = stacks
+      if (mask & eventMask) {
+        stacks = Math.min(maxStacks, stacks + 1)
+        expiresAt = frame + durationFrames
+      }
+      return before
+    },
+    addGains(gains: Attributes, layers: number) {
+      if (!layers) return gains
+      const merged = { ...gains }
+      add(merged, attributes, layers)
+      return merged
+    },
+  }
+}
+
 /** 客户端先按段线性插值，再向下取整到1/16秒；不是五个固定持续时间。 */
 export function equipmentAttackDuration(haste: number) {
   const h = Math.max(0, Math.floor(haste))

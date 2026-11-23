@@ -36,6 +36,9 @@ import { equipmentEffectDetails } from '@/心法模块/心法/明尊琉璃体/�
 export const 明尊部位映射 = Object.fromEntries(
   SLOTS.map(([键], 索引) => [键, 装备位置部位枚举[`_${索引 + 1}`]]),
 ) as Record<string, 装备位置部位枚举>
+const 装备部位索引 = new Map<string, string>(
+  SLOTS.map(([键]) => [明尊部位映射[键], slotPosition(键)]),
+)
 const 属性映射: Record<string, 属性类型> = {
   vitality_base: 属性类型.体质,
   all_major_base: 属性类型.全属性,
@@ -84,6 +87,7 @@ const describeAttributes = (属性: Record<string, number | string>) =>
     .join('、')
 
 export const 明尊装备数据: Record<string, 装备属性信息模型[]> = {}
+const 明尊装备条目索引 = new Map<string, 装备属性信息模型>()
 const 明尊装备列表 = [...GEAR_ITEMS].sort(
   (前, 后) => Number(后.kind === '防御') - Number(前.kind === '防御') || 后.level - 前.level,
 )
@@ -120,13 +124,14 @@ for (const 装备 of 明尊装备列表) {
       Number(装备.base.weapon_damage_base || 0) + Number(装备.base.weapon_damage_rand || 0),
   }
   ;(明尊装备数据[部位] ||= []).push(数据)
+  明尊装备条目索引.set(装备.key, 数据)
 }
 /** 导入旧ID时使用同属性的保留项，选择器本身只展示合并后的装备。 */
 export function 获取明尊装备条目(部位: string, id?: number) {
-  const 槽 = SLOTS.find(([键]) => 明尊部位映射[键] === 部位)?.[0]
-  if (!槽 || !id) return undefined
-  const 装备 = findGearItem(id, slotPosition(槽))
-  return 明尊装备数据[部位]?.find((项) => 项.uid === 装备?.key)
+  const 槽位 = 装备部位索引.get(部位)
+  if (!槽位 || !id) return undefined
+  const 装备 = findGearItem(id, 槽位)
+  return 装备 && 明尊装备条目索引.get(装备.key)
 }
 
 /** 装备下拉只列通用装备和当前门派可选装备。 */
@@ -150,6 +155,7 @@ const 洗髓普通武器对应ID: Readonly<Record<number, number>> = {
   46609: 46592,
   46649: 46632,
   46690: 46673,
+  46724: 46707,
   46725: 46708,
   46764: 46747,
   46803: 46786,
@@ -211,6 +217,14 @@ export const 明尊附魔数据 = ENCHANTS.map((附魔) => ({
   ],
   增益集合: 转换属性(附魔.attributes),
 }))
+const 附魔ID索引 = new Map<string, number>()
+const 附魔名称索引 = new Map<number, string>()
+for (const { id, 附魔名称 } of 明尊附魔数据) {
+  if (!附魔ID索引.has(附魔名称)) 附魔ID索引.set(附魔名称, id)
+  if (!附魔名称索引.has(id)) 附魔名称索引.set(id, 附魔名称)
+}
+const 五彩石ID索引 = new Map<string, number>()
+for (const { id, name } of STONES) if (!五彩石ID索引.has(name)) 五彩石ID索引.set(name, id)
 export const 明尊五彩石数据 = {
   5: [],
   6: STONES.map((石头) => ({
@@ -262,24 +276,24 @@ export function 获取明尊配装(装备信息: 装备信息数据类型) {
       embeds: 原始装备
         ? Object.keys(原始装备.embed).map((_, 索引) => 已选?.镶嵌孔数组?.[索引]?.镶嵌宝石等级 || 0)
         : [],
-      enchantId: ENCHANTS.find((附魔, 索引) => 明尊附魔数据[索引].附魔名称 === 已选?.附魔)?.id || 0,
+      enchantId: 附魔ID索引.get(已选?.附魔 ?? '') ?? 0,
       ...(已选?.大附魔 ? { majorEnchantId: 已选.大附魔 } : {}),
     }
   }
-  return normalizeLoadout(配装, STONES.find((石头) => 石头.name === 装备信息.五彩石)?.id || 0)
+  return normalizeLoadout(配装, 五彩石ID索引.get(装备信息.五彩石 ?? '') ?? 0)
 }
 
 export function 转换明尊配装(配装: Loadout, 五彩石 = 0): 装备信息数据类型 {
   const { slots, stone } = normalizeLoadout(配装, 五彩石)
   const 装备列表 = SLOTS.map(([键]) => {
     const 槽 = slots[键]
-    const 原始 = GEAR_ITEMS.find((装备) => 装备.key === 槽?.key)
+    const 原始 = 槽?.key ? findGearItem(槽.key) : undefined
     const 数据 = 明尊装备数据[明尊部位映射[键]].find((装备) => 装备.id === 原始?.id)
     return {
       id: 原始?.id,
       装备部位: 明尊部位映射[键],
       当前精炼等级: 槽?.strength || 0,
-      附魔: 明尊附魔数据[ENCHANTS.findIndex((附魔) => 附魔.id === 槽?.enchantId)]?.附魔名称,
+      附魔: 附魔名称索引.get(槽?.enchantId ?? 0),
       ...(槽?.majorEnchantId ? { 大附魔: 槽.majorEnchantId } : {}),
       镶嵌孔数组:
         数据?.镶嵌孔数组?.map((孔, 索引) => ({
@@ -360,12 +374,12 @@ export function 迁移明尊缓存() {
     )
     const 装备列表 = SLOTS.map(([键]) => {
       const 槽 = slots[键]
-      const 原始 = GEAR_ITEMS.find((装备) => 装备.key === 槽?.key)
+      const 原始 = 槽?.key ? findGearItem(槽.key) : undefined
       return {
         id: 原始?.id,
         装备部位: 明尊部位映射[键],
         当前精炼等级: 槽?.strength || 0,
-        附魔: 明尊附魔数据[ENCHANTS.findIndex((附魔) => 附魔.id === 槽?.enchantId)]?.附魔名称,
+        附魔: 附魔名称索引.get(槽?.enchantId ?? 0),
         镶嵌孔数组: 原始
           ? 明尊装备数据[明尊部位映射[键]]
               .find((装备) => 装备.id === 原始.id)!

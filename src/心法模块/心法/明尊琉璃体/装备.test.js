@@ -26,8 +26,8 @@ const selection = (item, overrides = {}) => ({
 })
 const slot = (item) => (item.position === 'ring' ? 'ring1' : item.position)
 
-test('230件可识别装备的精炼和镶嵌均产生有效属性', () => {
-  expect(GEAR_ITEMS).toHaveLength(230)
+test('232件可识别装备的精炼和镶嵌均产生有效属性', () => {
+  expect(GEAR_ITEMS).toHaveLength(232)
   expect(new Set(GEAR_ITEMS.map((item) => item.key)).size).toBe(GEAR_ITEMS.length)
   for (const item of GEAR_ITEMS) {
     const result = calculateLoadout({

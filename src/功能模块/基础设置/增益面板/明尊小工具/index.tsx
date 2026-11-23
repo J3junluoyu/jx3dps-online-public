@@ -4,7 +4,8 @@ import { Button, Modal } from 'antd'
 const 明尊循环对比 = lazy(() => import('../明尊循环对比'))
 const 朝圣言冷却模拟 = lazy(() => import('../朝圣言冷却模拟'))
 const 承伤模型计算 = lazy(() => import('../承伤模型计算'))
-type 工具 = '对比' | '朝圣' | '承伤'
+const 技能系数查询 = lazy(() => import('./技能系数查询'))
+type 工具 = '对比' | '朝圣' | '承伤' | '系数'
 
 function 明尊小工具() {
   const [打开, 设置打开] = useState(false)
@@ -65,6 +66,12 @@ function 明尊小工具() {
               </strong>
               <small>根据防御力提升和额外减伤计算实际承伤</small>
             </Button>
+            <Button className='mingzun-tool-card' block onClick={() => 打开工具('系数')}>
+              <strong>
+                技能系数查询 <span>›</span>
+              </strong>
+              <small>查看基础系数，输入增伤后即时换算</small>
+            </Button>
           </div>
         )}
         <Suspense fallback={<p role='status'>正在加载工具…</p>}>
@@ -81,6 +88,11 @@ function 明尊小工具() {
           {用过的工具.承伤 && (
             <div hidden={当前工具 !== '承伤'}>
               <承伤模型计算 />
+            </div>
+          )}
+          {用过的工具.系数 && (
+            <div hidden={当前工具 !== '系数'}>
+              <技能系数查询 />
             </div>
           )}
         </Suspense>

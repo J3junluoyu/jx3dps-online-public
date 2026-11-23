@@ -170,7 +170,7 @@ test.each(fixture.cases)('按存档输入校验考拉原Python数值：$stance /
     expect(result[key]).toBeCloseTo(expected, 12)
   for (const [key, expected] of Object.entries(item.skills)) {
     const skill = SKILLS.find((row) => row.key === key)
-    const damage = calculateSkill(skill, result)
+    const damage = calculateSkill(skill, result, skill.id === '4480')
     expect(damage.hit).toBe(expected.hit)
     expect(damage.criticalHit).toBe(expected.criticalHit)
     expect(damage.critical).toBeCloseTo(expected.critical, 12)

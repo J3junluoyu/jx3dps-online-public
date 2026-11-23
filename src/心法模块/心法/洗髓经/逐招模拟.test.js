@@ -1,6 +1,6 @@
 import { calculateLoadout } from '../明尊琉璃体/装备'
-import { 获取洗髓计算设置 } from './计算'
-import { 生成洗髓逐招时间轴, 模拟洗髓逐招 } from './逐招模拟'
+import { 计算洗髓循环, 获取洗髓计算设置 } from './计算'
+import { 获取洗髓逐招环境, 生成洗髓逐招时间轴, 模拟洗髓逐招 } from './逐招模拟'
 import 配装 from './测试配装.json'
 
 const 配置 = { 目标等级: 54, 起手禅那: 0, 延迟: 40 }
@@ -82,10 +82,58 @@ test('重新按指定加速、配装和勾选增益结算，秒伤曲线末点�
   const 设置 = 获取洗髓计算设置(undefined, false, 54)
   const 配置含鼓 = { ...配置, 加速帧数: 21, 序列: [{ 增益: '号令三军', 层数: 100 }, ...起手] }
   const 模拟 = 模拟洗髓逐招(装备, 设置, 配置含鼓, { 记录曲线: true })
+  const 只算秒伤 = 模拟洗髓逐招(装备, 设置, 配置含鼓, {
+    计算详情: false, 仅计算秒伤: true, 记录循环增益覆盖: true,
+  })
   const 实际 = 模拟洗髓逐招(装备, 设置, 配置含鼓, { 启用循环增益: false })
   expect(模拟.gcd).toBe(1.3125)
   expect(模拟.秒伤曲线.at(-1).秒伤).toBe(模拟.结果.秒伤)
+  expect(只算秒伤.结果).toEqual({ ...模拟.结果, 计算结果技能列表: [] })
+  expect(只算秒伤.循环增益覆盖).toEqual(模拟.循环增益覆盖)
   expect(模拟.结果.秒伤).toBeGreaterThan(实际.结果.秒伤)
   expect(实际.循环增益覆盖).toEqual([])
   expect(模拟.结算时长).toBe(实际.结算时长)
+})
+
+test.each([46707, 46708])('洗髓水武器 %i 按逐招命中叠加十层，无有效命中六秒后清空', (id) => {
+  const 装备 = calculateLoadout(配装.slots, 配装.stone).stats
+  const { specialEffects } = calculateLoadout({
+    primary_weapon: { key: `weapons:${id}`, strength: 6, embeds: [], enchantId: 0 },
+  })
+  const 设置 = 获取洗髓计算设置(undefined, false, 54)
+  const 水设置 = { ...设置, equipmentEffects: specialEffects }
+  const 选项 = { ...配置, 序列: ['普渡四方', { 等待: 20 }, '普渡四方'] }
+  const { 郭氏加速 } = 获取洗髓逐招环境(装备, 设置, 选项)
+  const 时间轴 = 生成洗髓逐招时间轴(选项, 郭氏加速, false)
+  const 模拟 = (设置, 已生成时间轴 = 时间轴) =>
+    模拟洗髓逐招(装备, 设置, 选项, { 记录命中: true, 已生成时间轴 })
+  const 原命中 = 模拟(设置).命中
+  const 水命中 = 模拟(水设置).命中
+  expect(水命中.slice(0, 2).map((行) => 行.技能名称)).toEqual(['六合棍', '普渡四方'])
+  expect(水命中[0].伤害).toBe(原命中[0].伤害)
+  const 属性 = id === 46707 ? 'all_attack_power_base' : 'vitality_base'
+  const 预期伤害 = (行, 层数) => 计算洗髓循环(
+    装备, { ...设置, gains: { ...设置.gains, [属性]: 层数 * 22 } }, [行], 1, false,
+  ).总伤
+  const 普渡 = 水命中.filter((行) => 行.技能名称 === '普渡四方')
+  expect(普渡[0].伤害).toBe(预期伤害(普渡[0], 1))
+  expect(普渡[1].伤害).toBe(预期伤害(普渡[1], 10))
+  const 第二次普攻 = 水命中.filter((行) => 行.技能名称 === '六合棍')[1]
+  expect(第二次普攻.伤害).toBe(预期伤害(第二次普攻, 2))
+
+  const 中断普攻 = {
+    ...时间轴,
+    命中: 时间轴.命中.filter((行) => 行.技能名称 !== '六合棍' || 行.时间 === 0),
+  }
+  const 末次普渡 = (设置) =>
+    模拟(设置, 中断普攻).命中.filter((行) => 行.技能名称 === '普渡四方').at(-1).伤害
+  expect(末次普渡(水设置)).toBe(末次普渡(设置))
+
+  const 六合时间轴 = 生成洗髓逐招时间轴(
+    { ...选项, 序列: ['横扫六合', { 等待: 4 }] }, 郭氏加速, false,
+  )
+  const 持续命中 = 六合时间轴.命中.filter((行) => 行.洗髓技能状态.技能键 === 'dot').slice(0, 2)
+  const 持续伤害 = []
+  计算洗髓循环(装备, 水设置, 持续命中, 六合时间轴.结算时长, false, (_, 伤害) => 持续伤害.push(伤害))
+  expect(持续伤害).toEqual([预期伤害(持续命中[0], 0), 预期伤害(持续命中[1], 1)])
 })

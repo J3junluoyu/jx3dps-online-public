@@ -224,7 +224,7 @@ test('所有技能、武伤和DOT表达式均能计算有限结果', () => {
 test('戒火斩直接使用Generator全部11档公式，命中与会心均逐级一致', () => {
   const skill = SKILLS.find((item) => item.id === '44567')
   for (let level = 1; level <= 11; level++) {
-    const vitality = level === 1 ? 18 : (level - 1) * 95
+    const vitality = level === 1 ? 18 : (level - 1) * 960
     const panel = calculateAttributes(gear({ vitality: vitality - 18, attack: 3000 }), settings())
     const expected = evaluateExpression(
       reference.skills['3980']['44567'][String(level)].damages[0].damage,
@@ -242,22 +242,20 @@ test('戒火斩直接使用Generator全部11档公式，命中与会心均逐级
   }
 })
 
-test('戒火斩在95点体质边界选档，超过950体质仍使用第11档且不改写面板攻击', () => {
+test('戒火斩按基础体质每960点选档，达到9600时封顶且不改写面板攻击', () => {
   const skill = SKILLS.find((item) => item.id === '44567')
   const panel = calculateAttributes(gear({ attack: 3000 }), settings())
-  for (const [vitality, level] of [
-    [94, 1],
-    [95, 2],
-    [189, 2],
-    [190, 3],
-    [949, 10],
-    [950, 11],
-    [1044, 11],
-    [1045, 11],
-    [9500, 11],
+  for (const [baseVitality, level] of [
+    [959, 1],
+    [960, 2],
+    [1919, 2],
+    [1920, 3],
+    [9599, 10],
+    [9600, 11],
+    [10000, 11],
   ]) {
     // 固定攻击和其余属性，单独验证选档，避免体质转攻击掩盖越界问题。
-    const current = { ...panel, vitality }
+    const current = { ...panel, baseVitality, vitality: baseVitality + 1200 }
     const result = calculateSkill(skill, current)
     expect(result.level).toBe(String(level))
     expect(result.hit).toBe(
@@ -268,7 +266,7 @@ test('戒火斩在95点体质边界选档，超过950体质仍使用第11档且�
     )
   }
   expect(panel.variables.solar_attack_power).toBe(panel.attack)
-  const cycle = calculateCycle(gear({ vitality: 9482 }), settings(), { [skill.key]: 1 }, 60)
+  const cycle = calculateCycle(gear({ vitality: 9582 }), settings(), { [skill.key]: 1 }, 60)
   expect(cycle.rows.find((row) => row.id === '44567').level).toBe('11')
 })
 test('没有外攻百分比或额外外攻时，武伤不计基础外攻', () => {

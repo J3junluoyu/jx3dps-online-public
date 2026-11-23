@@ -1,8 +1,9 @@
 import React, { useId, useState } from 'react'
-import { Alert, Button, Form, Input, InputNumber, Modal } from 'antd'
+import { Alert, Button, Form, Input, InputNumber, Modal, Space } from 'antd'
 
 export default function 宏生成({
-  时长, 最长时长, 有序列, 禁用, 示例宏, 初始宏 = '', 条件说明, 宏标签 = '剑网3宏', 宽度, 前置字段, 后置字段, 生成,
+  时长, 最长时长, 有序列, 禁用, 示例宏, 初始宏 = '', 条件说明, 宏标签 = '剑网3宏', 宽度, 前置字段, 后置字段,
+  清空分段宏, 生成,
 }: {
   时长?: number
   最长时长: number
@@ -15,6 +16,7 @@ export default function 宏生成({
   宽度?: number
   前置字段?: React.ReactNode
   后置字段?: React.ReactNode
+  清空分段宏?: () => void
   生成: (宏: string, 秒数: number) => void
 }) {
   const id = useId()
@@ -40,7 +42,14 @@ export default function 宏生成({
         设置错误('')
         设置打开(true)
       }}>从宏生成循环</Button>
-      <Modal title='从宏生成循环' width={宽度} open={打开} centered onCancel={() => 设置打开(false)} onOk={提交}
+      <Modal title={<Space>
+        <span>从宏生成循环</span>
+        <Button size='small' onClick={() => {
+          设置宏('')
+          设置错误('')
+          清空分段宏?.()
+        }}>清空宏</Button>
+      </Space>} width={宽度} open={打开} centered onCancel={() => 设置打开(false)} onOk={提交}
         okText={有序列 ? '生成并替换' : '生成循环'} cancelText='取消' okButtonProps={{ disabled: !宏.trim() || 秒数 === null }}>
         <Form layout='vertical' onChange={() => 设置错误('')}>
           <Form.Item label='战斗时长（秒）' htmlFor={id + '-duration'}>

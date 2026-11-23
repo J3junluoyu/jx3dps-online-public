@@ -34,7 +34,7 @@ import type {
   方案优化结果,
   方案优化进度,
 } from '@/心法模块/心法/明尊琉璃体/方案优化'
-import { 是橙色腰坠, 比较推荐指标 } from '@/心法模块/心法/明尊琉璃体/方案优化'
+import { 是橙色腰坠, 比较推荐指标, 满足装备防御倾向, 默认防御倾向 } from '@/心法模块/心法/明尊琉璃体/方案优化'
 import { 获取档位对比循环 } from '@/心法模块/心法/明尊琉璃体/方案档位对比'
 import {
   规范理论循环名称,
@@ -53,7 +53,6 @@ import { 获取洗髓计算设置 } from '@/心法模块/心法/洗髓经/计算
 import { 获取推荐逐招帧数, 获取逐招推荐范围 } from '@/心法模块/心法/明尊琉璃体/推荐逐招'
 import { 根据明尊循环同步奇穴 } from '@/心法模块/心法/明尊琉璃体/计算循环/循环联动'
 
-const 洗髓模式 = 获取当前数据().名称 === '洗髓经'
 const 推荐部位 = SLOTS.map(([key]) => key)
 const 防御名称 = { physicalShield: '外防', magicalShield: '内防' }
 const 防御点数格式 = new Intl.NumberFormat('zh-CN', { maximumFractionDigits: 2 })
@@ -75,19 +74,22 @@ const 装备名称 = (key?: string) => {
 }
 const 附魔名称 = (id?: number) =>
   格式化附魔名称(明尊附魔数据[ENCHANTS.findIndex((item) => item.id === id)]?.附魔名称 || '') || '无'
-const 默认优化方式 = (cycleName?: string) =>
+const 默认优化方式 = (洗髓模式: boolean, cycleName?: string) =>
   洗髓模式 ? 'compare' : cycleName?.startsWith('0.75') ? '0.75' : '0.8125'
 
 function 方案优化(props: 方案优化入参) {
+  const 当前数据 = 获取当前数据()
+  const 洗髓模式 = 当前数据.名称 === '洗髓经'
   const [open, setOpen] = useState(false)
-  const [mode, setMode] = useState(默认优化方式(props.循环名称))
-  const [所选保存循环, 设置所选保存循环] = useState('')
+  const [mode, setMode] = useState(默认优化方式(洗髓模式, props.循环名称))
+  const [所选循环名称, 设置所选循环名称] = useState('')
   const [minToughness, setMinToughness] = useState(8)
   const [includeMowen, setIncludeMowen] = useState(false)
   const [includeHasteConsumables, setIncludeHasteConsumables] = useState(false)
-  const [includeSingleDefenseGear, setIncludeSingleDefenseGear] = useState(true)
+  const [includeSingleDefenseGear, setIncludeSingleDefenseGear] = useState(false)
+  const [includeTeamGains, setIncludeTeamGains] = useState(false)
   const [enchantTier, setEnchantTier] = useState<72 | 90>(72)
-  const [defensePreference, setDefensePreference] = useState<防御倾向>('physicalShield')
+  const [defensePreference, setDefensePreference] = useState<防御倾向>(默认防御倾向)
   const [orangeWeaponLevel, setOrangeWeaponLevel] = useState(0)
   const [gearScope, setGearScope] = useState<方案优化输入['gearScope']>('includeStreamlined')
   const [running, setRunning] = useState(false)
@@ -106,43 +108,58 @@ function 方案优化(props: 方案优化入参) {
   const 自定义循环 = useAppSelector((state) => state.data.自定义循环列表)
   const 网络延迟 = useAppSelector((state) => state.data.网络延迟) ?? 1
   const 心法 = 洗髓模式 ? 'xsj' : 'mzllt'
-  const 可选保存循环 = [...(获取当前数据().计算循环 ?? []), ...(自定义循环 ?? [])].filter((循环) =>
+  const 内置循环 = 当前数据.计算循环 ?? []
+  const 可选内置循环 = 内置循环.filter((循环) => !循环.隐藏 && 循环.循环详情.length &&
+    !获取推荐逐招帧数(循环, 心法).length,
+  )
+  const 可选保存循环 = [...内置循环, ...(自定义循环 ?? [])].filter((循环) =>
     !循环.隐藏 && 获取推荐逐招帧数(循环, 心法).length,
   )
-  const 已保存循环 = 可选保存循环.find((循环) => 循环.名称 === 所选保存循环)
+  const 可选推荐循环 = [...可选内置循环, ...可选保存循环]
+  const 已保存循环 = 可选保存循环.find((循环) => 循环.名称 === 所选循环名称)
+  const 所选内置循环 = 可选内置循环.find((循环) => 循环.名称 === 所选循环名称)
   const 保存循环帧数 = 已保存循环 ? 获取推荐逐招帧数(已保存循环, 心法) : []
   const 固定档超出范围 = 保存循环帧数.length === 1 && !获取逐招推荐范围(心法).includes(保存循环帧数[0])
-  const compareGcd = 已保存循环
-    ? 保存循环帧数.length > 1 && mode === 'compare'
-    : 洗髓模式 || mode === 'compare'
-  const 选择保存循环 = (循环名称: string) => {
-    设置所选保存循环(循环名称)
+  const 选择推荐循环 = (循环名称: string, 打开弹窗 = false) => {
+    设置所选循环名称(循环名称)
     const 循环 = 可选保存循环.find((项) => 项.名称 === 循环名称)
     const 帧数 = 循环 ? 获取推荐逐招帧数(循环, 心法) : []
-    setMode(帧数.length === 1 ? String(帧数[0] / 16) : 帧数.length ? 'compare' : 默认优化方式(props.循环名称))
+    setMode(帧数.length || !打开弹窗 ? 'compare' : 默认优化方式(洗髓模式, props.循环名称))
   }
-  const 保存循环推荐选项 = [
-    ...(保存循环帧数.length > 1 ? [{ label: '全档位对比', value: 'compare' }] : []),
-    ...保存循环帧数.map((帧数) => ({
-      label: `${(洗髓模式 ? 24 : 16) - 帧数}档 · ${格式化明尊GCD(帧数 / 16)}GCD${保存循环帧数.length === 1 ? '（固定）' : ''}`,
+  const 防御条件 = defensePreference === 'magicalShield' ? '装备内防高于外防' : '装备外防高于内防'
+  const 达标条件 = '最低御劲和加速'
+  const orangeModel = !已保存循环 && !洗髓模式 && orangeWeaponLevel > 0
+  const 内置循环名称 = 所选内置循环?.名称 || props.循环名称 || 自适应理论循环名称
+  const 基础帧数 = 洗髓模式 ? 24 : 16
+  const 循环帧数 = (档: number | string | undefined) => 基础帧数 - Number(档)
+  const 所选内置档位 = 所选内置循环?.循环详情.map((项) => Number(项.循环加速等级))
+  const cycles = props.循环待补充 || 已保存循环
+    ? []
+    : 所选内置循环?.循环详情.length === 1
+      ? [所选内置循环]
+      : (洗髓模式
+          ? 获取洗髓档位对比循环()
+          : 获取档位对比循环(
+              orangeModel && !所选内置循环 ? 获取明尊自适应循环名称(奇穴 || []) : 内置循环名称,
+              奇穴 || [],
+            )
+        ).filter((项) => !所选内置档位 || 所选内置档位.includes(Number(项.循环详情[0]?.循环加速等级)))
+  const 推荐帧数 = 已保存循环 ? 保存循环帧数 : cycles.map(
+    (项) => 循环帧数(项.循环详情[0]?.循环加速等级),
+  )
+  const 固定加速 = 推荐帧数.length === 1
+  const 推荐方式 = 固定加速 ? String(推荐帧数[0] / 16) : mode
+  const compareGcd = 推荐帧数.length > 1 && 推荐方式 === 'compare'
+  const 推荐方式选项 = [
+    ...(推荐帧数.length > 1 ? [{ label: '全档位对比', value: 'compare' }] : []),
+    ...推荐帧数.map((帧数) => ({
+      label: `${基础帧数 - 帧数}档 · ${格式化明尊GCD(帧数 / 16)}GCD${固定加速 ? '（固定）' : ''}`,
       value: String(帧数 / 16),
     })),
   ]
-  const 防御条件 = defensePreference === 'magicalShield' ? '内防高于外防' : '外防高于内防'
-  const 达标条件 = 洗髓模式 ? '加速和最低御劲' : `加速、最低御劲和${防御条件}`
-  const orangeModel = !已保存循环 && !洗髓模式 && orangeWeaponLevel > 0
-  const cycles = props.循环待补充 || 已保存循环
-    ? []
-    : 洗髓模式
-      ? 获取洗髓档位对比循环()
-      : 获取档位对比循环(
-          orangeModel ? 获取明尊自适应循环名称(奇穴 || []) : props.循环名称 || 自适应理论循环名称,
-          奇穴 || [],
-        )
-  const cycle = 已保存循环 ||
-    cycles.find((item) =>
-      compareGcd ? item.名称 === props.循环名称 : item.名称.startsWith(`${mode}`),
-    ) || cycles[1]
+  const cycle = 已保存循环 || (compareGcd ? 所选内置循环 : cycles.find(
+    (项) => 循环帧数(项.循环详情[0]?.循环加速等级) === Number(推荐方式) * 16,
+  )) || cycles.find((项) => 项.名称 === props.循环名称) || cycles[1] || cycles[0]
   const cycleName = cycle?.名称 || ''
   const result = comparison
     ? comparison.entries.find((entry) => entry.cycleName === previewCycleName)?.result
@@ -154,7 +171,7 @@ function 方案优化(props: 方案优化入参) {
   const other = comparison?.entries
     .filter((entry) => entry !== recommended && entry.result?.after)
     .sort((a, b) =>
-      比较推荐指标(a.result!.after!, b.result!.after!, 洗髓模式 ? 'balance' : defensePreference),
+      比较推荐指标(a.result!.after!, b.result!.after!, defensePreference),
     )[0]
   const hasPlan = comparison
     ? comparison.entries.some((entry) => entry.result?.plan)
@@ -165,24 +182,21 @@ function 方案优化(props: 方案优化入参) {
       : undefined
   const defenseDifference =
     recommended?.result?.after && other?.result?.after
-      ? recommended.result.after[defensePreference] - other.result.after[defensePreference]
+      ? recommended.result.after.equipmentDefense[defensePreference] - other.result.after.equipmentDefense[defensePreference]
       : 0
-  const 洗髓更平衡 =
-    (recommended?.result?.after?.defenseImbalance ?? 0) <
-    (other?.result?.after?.defenseImbalance ?? 0)
+  const 更符合防御倾向 =
+    !!recommended?.result?.after && !!other?.result?.after &&
+    满足装备防御倾向(recommended.result.after.equipmentDefense, defensePreference) &&
+    !满足装备防御倾向(other.result.after.equipmentDefense, defensePreference)
   const comparisonSummary = !recommended
     ? `${已保存循环 ? '所有档位' : 洗髓模式 ? '三个档位' : '两个档位'}均未找到可行方案。需同时满足${达标条件}。`
     : difference === undefined
       ? `推荐${recommended.cycleName}；${已保存循环 || 洗髓模式 ? '其余档位' : '另一档'}未找到可行方案。`
-      : !洗髓模式 &&
-          other?.result?.usedToughnessEnchantFallback &&
-          !recommended.result?.usedToughnessEnchantFallback
-        ? `推荐${recommended.cycleName}，无需御劲附魔即可达标。${other.cycleName}使用御劲附魔补足。`
       : difference === 0
-        ? 洗髓模式 && 洗髓更平衡
-          ? `可行方案秒伤相同，推荐${recommended.cycleName}，扣除心法额外内防后的内外防差距更小。`
-          : !洗髓模式 && defenseDifference > 0
-            ? `可行方案秒伤相同，推荐${recommended.cycleName}，比${other!.cycleName}高${防御点数格式.format(defenseDifference)}点${防御名称[defensePreference]}。`
+        ? 更符合防御倾向
+          ? `可行方案秒伤相同，推荐${recommended.cycleName}，符合${防御条件}。`
+          : defenseDifference > 0
+            ? `可行方案秒伤相同，推荐${recommended.cycleName}，比${other!.cycleName}高${防御点数格式.format(defenseDifference)}点装备${防御名称[defensePreference]}。`
             : `可行方案秒伤相同，优先保留${recommended.cycleName}。`
         : `推荐${recommended.cycleName}，比${other!.cycleName}高${difference.toFixed(2)}秒伤${
             other!.result!.after!.dps > 0
@@ -230,8 +244,8 @@ function 方案优化(props: 方案优化入参) {
             获取计算目标信息(目标名称).等级,
           )
         : 获取明尊计算设置(
-            已保存循环
-              ? 根据明尊循环同步奇穴(已保存循环.名称, 奇穴, 已保存循环.明尊逐招配置?.奇穴)
+            已保存循环 || 所选内置循环
+              ? 根据明尊循环同步奇穴(cycle.名称, 奇穴, 已保存循环?.明尊逐招配置?.奇穴)
               : 奇穴,
             { ...增益数据, 阵眼: '', 小吃: [], 团队增益: [] },
             秘籍,
@@ -263,13 +277,13 @@ function 方案优化(props: 方案优化入参) {
       }
       worker.current.postMessage({
         kungfu: 心法,
-        allowHigherHaste: !已保存循环,
+        allowHigherHaste: !已保存循环 && !固定加速,
         exploreHighLevelCandidates: true,
         initial: before,
         cycle: requestCycle,
         ...(已保存循环 ? {
           networkLatency: 网络延迟,
-          ...(!compareGcd ? { simulationFrames: Number(mode) * 16 } : {}),
+          ...(!compareGcd ? { simulationFrames: Number(推荐方式) * 16 } : {}),
         } : {}),
         settings,
         minToughness,
@@ -277,12 +291,12 @@ function 方案优化(props: 方案优化入参) {
         includeHasteConsumables,
         includeSingleDefenseGear,
         enchantTier,
-        defensePreference: 洗髓模式 ? undefined : defensePreference,
+        defensePreference,
         orangeWeaponLevel,
         gearScope,
         compareGcd,
         teamGains: (增益数据.团队增益 ?? [])
-          .filter((item) => (已保存循环 && 增益启用) || (!洗髓模式 && item.增益名称 === 圣浴常驻名称))
+          .filter((item) => item.启用 && (includeTeamGains || (!洗髓模式 && item.增益名称 === 圣浴常驻名称)))
           .map((item) => ({ ...item })),
         gearKeys: props.获取候选装备键(),
         slots: 推荐部位,
@@ -359,7 +373,11 @@ function 方案优化(props: 方案优化入参) {
       <Button
         size='small'
         onClick={() => {
-          选择保存循环(可选保存循环.some((项) => 项.名称 === props.循环名称) ? props.循环名称! : '')
+          const 当前循环名称 = props.循环名称 || ''
+          const 匹配循环 = 可选推荐循环.find((项) => 项.名称 === 当前循环名称) ??
+            可选内置循环.find((项) => 项.名称 === 规范理论循环名称(当前循环名称, 奇穴)) ??
+            可选推荐循环[0]
+          选择推荐循环(匹配循环?.名称 ?? '', true)
           setResult(undefined)
           setComparison(undefined)
           setInitial(undefined)
@@ -382,9 +400,7 @@ function 方案优化(props: 方案优化入参) {
             <span>
               {props.循环待补充
                 ? '循环模板待补充，暂不计算推荐方案'
-                : 洗髓模式
-                  ? '优先秒伤。同秒伤时，扣除心法额外内防后比较内外防差距。'
-                  : `成装需满足${防御条件}，符合条件的方案按秒伤推荐`}
+                : '先校对最低御劲和加速，再比较秒伤。同秒伤时按装备防御倾向择优。'}
             </span>
             <div>
               {running ? (
@@ -398,8 +414,8 @@ function 方案优化(props: 方案优化入参) {
                 </Button>
               ) : (
                 <Button disabled={props.循环待补充 || 固定档超出范围} onClick={开始计算}>
-                  {已保存循环 ? (compareGcd ? '开始全档位对比' : '开始推荐')
-                    : 洗髓模式 ? '开始三档对比' : compareGcd ? '开始双档对比' : '开始推荐'}
+                  {compareGcd ? 已保存循环 ? '开始全档位对比' : 洗髓模式 ? '开始三档对比' : '开始双档对比'
+                    : '开始推荐'}
                 </Button>
               )}
               <Button
@@ -410,7 +426,7 @@ function 方案优化(props: 方案优化入参) {
                     props.应用方案(
                       result.plan,
                       已保存循环?.名称 ?? (洗髓模式 ? 洗髓循环名称 : 规范理论循环名称(resultCycleName)),
-                      !!已保存循环 && !!增益启用,
+                      includeTeamGains,
                     )
                     关闭()
                   }
@@ -430,18 +446,15 @@ function 方案优化(props: 方案优化入参) {
         />}
         <div className={styles.requirements}>
           <div className={styles.selectionFields}>
-            {!!可选保存循环.length && (
+            {!!可选推荐循环.length && (
               <label>
                 推荐循环{' '}
                 <Select
                   aria-label='推荐循环'
                   disabled={running || props.循环待补充}
-                  value={已保存循环?.名称 ?? ''}
-                  onChange={(value) => 设置条件(() => 选择保存循环(value))}
-                  options={[
-                    { label: '内置循环', value: '' },
-                    ...可选保存循环.map((项) => ({ label: 项.标题 || 项.名称, value: 项.名称 })),
-                  ]}
+                  value={所选循环名称}
+                  onChange={(value) => 设置条件(() => 选择推荐循环(value))}
+                  options={可选推荐循环.map((项) => ({ label: 项.标题 || 项.名称, value: 项.名称 }))}
                 />
               </label>
             )}
@@ -449,23 +462,11 @@ function 方案优化(props: 方案优化入参) {
               推荐方式{' '}
               <Select
                 aria-label='推荐方式'
-                disabled={running || props.循环待补充 || 保存循环帧数.length === 1}
+                disabled={running || props.循环待补充 || 固定加速}
                 placeholder={props.循环待补充 ? '循环模板待补充' : undefined}
-                value={props.循环待补充 ? undefined : !已保存循环 && 洗髓模式 ? 'compare' : mode}
+                value={props.循环待补充 ? undefined : 推荐方式}
                 onChange={(value) => 设置条件(() => setMode(value))}
-                options={
-                  props.循环待补充
-                    ? []
-                    : 已保存循环
-                      ? 保存循环推荐选项
-                    : 洗髓模式
-                      ? [{ label: '3 / 4 / 5档自适应对比', value: 'compare' }]
-                      : [
-                          { label: '0.75GCD', value: '0.75' },
-                          { label: '0.81GCD', value: '0.8125' },
-                          { label: '0.75 / 0.81双档对比', value: 'compare' },
-                        ]
-                }
+                options={props.循环待补充 ? [] : 推荐方式选项}
               />
             </label>
             <label>
@@ -502,18 +503,6 @@ function 方案优化(props: 方案优化入参) {
               </label>
             )}
             <label>
-              最低御劲{' '}
-              <InputNumber
-                disabled={running}
-                min={0}
-                max={100}
-                precision={2}
-                suffix='%'
-                value={minToughness}
-                onChange={(value) => 设置条件(() => setMinToughness(value ?? 0))}
-              />
-            </label>
-            <label>
               附魔档位{' '}
               <Select
                 aria-label='附魔档位'
@@ -526,21 +515,31 @@ function 方案优化(props: 方案优化入参) {
                 ]}
               />
             </label>
-            {!洗髓模式 && (
-              <label>
-                防御倾向{' '}
-                <Select
-                  aria-label='防御倾向'
-                  disabled={running}
-                  value={defensePreference}
-                  onChange={(value) => 设置条件(() => setDefensePreference(value))}
-                  options={[
-                    { label: '外防', value: 'physicalShield' },
-                    { label: '内防', value: 'magicalShield' },
-                  ]}
-                />
-              </label>
-            )}
+            <label>
+              最低御劲{' '}
+              <InputNumber
+                disabled={running}
+                min={0}
+                max={100}
+                precision={2}
+                suffix='%'
+                value={minToughness}
+                onChange={(value) => 设置条件(() => setMinToughness(value ?? 0))}
+              />
+            </label>
+            <label>
+              防御倾向{' '}
+              <Select
+                aria-label='防御倾向'
+                disabled={running}
+                value={defensePreference}
+                onChange={(value) => 设置条件(() => setDefensePreference(value))}
+                options={[
+                  { label: '外防', value: 'physicalShield' },
+                  { label: '内防', value: 'magicalShield' },
+                ]}
+              />
+            </label>
           </div>
           <div className={styles.toggleFields}>
             <Checkbox
@@ -563,6 +562,13 @@ function 方案优化(props: 方案优化入参) {
               onChange={(e) => 设置条件(() => setIncludeSingleDefenseGear(e.target.checked))}
             >
               计算单防御装备
+            </Checkbox>
+            <Checkbox
+              disabled={running}
+              checked={includeTeamGains}
+              onChange={(e) => 设置条件(() => setIncludeTeamGains(e.target.checked))}
+            >
+              计算团队增益
             </Checkbox>
           </div>
         </div>
@@ -620,10 +626,10 @@ function 方案优化(props: 方案优化入参) {
                       : '—',
                 },
                 {
-                  title: '外防 / 内防',
+                  title: '装备外防 / 内防',
                   render: (_, entry) =>
                     entry.result?.after
-                      ? `${防御点数格式.format(entry.result.after.physicalShield)} / ${防御点数格式.format(entry.result.after.magicalShield)}`
+                      ? `${防御点数格式.format(entry.result.after.equipmentDefense.physicalShield)} / ${防御点数格式.format(entry.result.after.equipmentDefense.magicalShield)}`
                       : '—',
                 },
                 {
@@ -701,17 +707,20 @@ function 方案优化(props: 方案优化入参) {
                 },
                 {
                   key: 'physicalShield',
-                  label: '外防',
-                  children: `${防御点数格式.format(result.before.physicalShield)} → ${防御点数格式.format(result.after.physicalShield)} 点`,
+                  label: '装备外防',
+                  children: `${防御点数格式.format(result.before.equipmentDefense.physicalShield)} → ${防御点数格式.format(result.after.equipmentDefense.physicalShield)} 点`,
                 },
                 {
                   key: 'magicalShield',
-                  label: '内防',
-                  children: `${防御点数格式.format(result.before.magicalShield)} → ${防御点数格式.format(result.after.magicalShield)} 点`,
+                  label: '装备内防',
+                  children: `${防御点数格式.format(result.before.equipmentDefense.magicalShield)} → ${防御点数格式.format(result.after.equipmentDefense.magicalShield)} 点`,
                 },
               ]}
             />
             <Table size='small' pagination={false} columns={columns} dataSource={gearRows} />
+            <p className={styles.note}>
+              防御倾向核对 · {防御条件} · {满足装备防御倾向(result.after.equipmentDefense, defensePreference) ? '符合' : '未达到'}
+            </p>
             <Divider>常规增益与阵眼</Divider>
             <Table
               size='small'
@@ -730,7 +739,9 @@ function 方案优化(props: 方案优化入参) {
               ]}
             />
             <p className={styles.note}>
-              以上秒伤均不计团队增益。应用后启用推荐常规增益，并关闭团队增益开关，保留其配置。用时
+              {includeTeamGains
+                ? '秒伤按当前勾选的团队增益计算。应用时沿用这些勾选。用时'
+                : '秒伤不计团队增益。应用时关闭团队增益勾选，保留层数与覆盖率。用时'}
               {(result.elapsed / 1000).toFixed(2)}秒。
             </p>
           </>

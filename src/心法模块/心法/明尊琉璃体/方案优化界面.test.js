@@ -1,6 +1,10 @@
 /** @jest-environment jsdom */
 
 jest.mock('@/hooks', () => ({ useAppSelector: (select) => select(mockState) }))
+jest.mock('@/数据/数据工具/获取当前数据', () => ({
+  __esModule: true,
+  default: () => mockCurrentData,
+}))
 jest.mock('@/功能模块/基础设置/属性录入/配装器/功能组件/方案优化/创建Worker', () => ({
   创建优化Worker: jest.fn(() => ({ postMessage: jest.fn(), terminate: jest.fn() })),
 }))
@@ -95,6 +99,7 @@ import { 转换明尊配装 } from '@/数据/数据工具/明尊数据适配'
 import { GEAR_ITEMS, SLOTS, slotPosition } from './装备'
 import { 获取明尊固定秘籍 } from './秘籍'
 import 循环列表 from './计算循环'
+import { 洗髓自适应循环 } from '../洗髓经/循环'
 
 global.IS_REACT_ACT_ENVIRONMENT = true
 const mockState = {
@@ -121,8 +126,10 @@ const 初始 = {
 }
 let root
 let container
+let mockCurrentData = {}
 beforeEach(() => {
   创建优化Worker.mockClear()
+  mockCurrentData = {}
   container = document.createElement('div')
   document.body.appendChild(container)
   root = createRoot(container)
@@ -158,11 +165,15 @@ const finish = () => {
     toughness: 8.12345,
     physicalShield: 4200,
     magicalShield: 3900,
+    equipmentDefense: { physicalShield: 4200, magicalShield: 3900 },
   }
   const result = {
     plan: input.initial,
     before: metrics,
-    after: { ...metrics, physicalShield: 4400, magicalShield: 4000 },
+    after: {
+      ...metrics, physicalShield: 7400, magicalShield: 9000,
+      equipmentDefense: { physicalShield: 4400, magicalShield: 4000 },
+    },
     evaluations: 100,
     elapsed: 1000,
   }
@@ -270,20 +281,20 @@ test('计算加速小吃小药默认关闭，勾选后旧结果失效并更新�
   expect(finish().input.includeHasteConsumables).toBe(true)
 })
 
-test('单防御装备默认参与推荐，取消勾选后清除旧结果并更新后台条件', async () => {
+test('单防御装备默认不参与推荐，勾选后清除旧结果并更新后台条件', async () => {
   render()
   await click('配装方案推荐')
   const checkbox = getByRole(container, 'checkbox', { name: '计算单防御装备' })
-  expect(checkbox.checked).toBe(true)
+  expect(checkbox.checked).toBe(false)
   await click('开始推荐')
   expect(checkbox.disabled).toBe(true)
-  expect(finish().input.includeSingleDefenseGear).toBe(true)
+  expect(finish().input.includeSingleDefenseGear).toBe(false)
 
   act(() => fireEvent.click(checkbox))
-  expect(checkbox.checked).toBe(false)
+  expect(checkbox.checked).toBe(true)
   expect(getByRole(container, 'button', { name: '应用并计算' }).disabled).toBe(true)
   await click('开始推荐')
-  expect(finish().input.includeSingleDefenseGear).toBe(false)
+  expect(finish().input.includeSingleDefenseGear).toBe(true)
 })
 
 test('橙武品级默认不选，选择后切换理论比较并传给后台，变更清除旧结果且运行时不可修改', async () => {
@@ -326,7 +337,7 @@ test('移除部位勾选，选择和取消橙武品级时均向后台发送全�
   render()
   await click('配装方案推荐')
   expect(container.textContent).not.toContain('参与优化的装备及附魔部位')
-  expect(container.querySelectorAll('input[type="checkbox"]')).toHaveLength(3)
+  expect(container.querySelectorAll('input[type="checkbox"]')).toHaveLength(4)
   const level = getByRole(container, 'combobox', { name: '橙武品级' })
   for (const 品级 of [719, 0]) {
     act(() => fireEvent.change(level, { target: { value: String(品级) } }))
@@ -354,16 +365,38 @@ test('可切换附魔档位，修改后清除旧推荐并将指定档位传给�
   }
 })
 
-test('移除计入团队增益选项，推荐请求排除团队增益并保留原配置', async () => {
-  const props = render()
-  await click('配装方案推荐')
-  expect(container.textContent).not.toContain('计入当前团队增益')
-  await click('开始推荐')
-  const { input, result } = finish()
-  expect(input.teamGains).toEqual([])
-  expect(mockState.data.增益数据.团队增益[0].启用).toBe(true)
-  await click('应用并计算')
-  expect(props.应用方案).toHaveBeenCalledWith(result.plan, '自适应光明心循环', false)
+test.each(['明尊琉璃体', '洗髓经'])('%s推荐可选择是否计算当前勾选的团队增益', async (名称) => {
+  const 原增益数据 = mockState.data.增益数据
+  const 原增益启用 = mockState.data.增益启用
+  const 已选 = { 增益名称: '同袍', 启用: true, 层数: 1, 覆盖率: 75 }
+  const 未选 = { 增益名称: '仙王蛊鼎', 启用: false, 层数: 35, 覆盖率: 30 }
+  mockState.data.增益数据 = { ...原增益数据, 团队增益: [已选, 未选] }
+  mockState.data.增益启用 = false
+  mockCurrentData = { 名称, 计算循环: 名称 === '洗髓经' ? [洗髓自适应循环] : 循环列表 }
+  try {
+    const props = render()
+    await click('配装方案推荐')
+    if (名称 === '洗髓经') changeSelect('推荐方式', '1.25')
+    const checkbox = getByRole(container, 'checkbox', { name: '计算团队增益' })
+    expect(checkbox.checked).toBe(false)
+    await click('开始推荐')
+    expect(finish().input.teamGains).toEqual([])
+    act(() => fireEvent.click(checkbox))
+    expect(checkbox.checked).toBe(true)
+    expect(getByRole(container, 'button', { name: '应用并计算' }).disabled).toBe(true)
+    await click('开始推荐')
+    expect(checkbox.disabled).toBe(true)
+    const { input, result } = finish()
+    expect(input.teamGains).toEqual([已选])
+    expect(mockState.data.增益数据.团队增益).toEqual([已选, 未选])
+    await click('应用并计算')
+    expect(props.应用方案).toHaveBeenCalledWith(
+      result.plan, 名称 === '洗髓经' ? 洗髓自适应循环.名称 : '自适应光明心循环', true,
+    )
+  } finally {
+    mockState.data.增益数据 = 原增益数据
+    mockState.data.增益启用 = 原增益启用
+  }
 })
 
 test('总开关关闭且不计入团队增益时，方案推荐仍沿用独立开启的圣浴常驻', async () => {
@@ -380,7 +413,7 @@ test('总开关关闭且不计入团队增益时，方案推荐仍沿用独立�
   try {
     render()
     await click('配装方案推荐')
-    expect(container.textContent).not.toContain('计入当前团队增益')
+    expect(getByRole(container, 'checkbox', { name: '计算团队增益' }).checked).toBe(false)
     await click('开始推荐')
     expect(finish().input.teamGains).toEqual([
       { 增益名称: '圣浴明心（常驻）', 启用: true, 层数: 0, 覆盖率: 100 },
@@ -406,6 +439,7 @@ const finishComparison = (dpsValues = [22000, 20000]) => {
       magicalShield:
         input.defensePreference === 'magicalShield' ? (index ? 4800 : 5100) : (index ? 3900 : 4000),
     }
+    metrics.equipmentDefense = { physicalShield: metrics.physicalShield, magicalShield: metrics.magicalShield }
     return {
       cycleName,
       gcd: metrics.gcd,
@@ -449,10 +483,15 @@ test('防御倾向只有外防和内防，双档先比秒伤，同秒伤才比�
   expect(finish().input.defensePreference).toBe('physicalShield')
   expect(container.textContent).toContain('4,200 → 4,400 点')
   expect(container.textContent).toContain('3,900 → 4,000 点')
+  expect(container.textContent).toContain('防御倾向核对 · 装备外防高于内防 · 符合')
 
   changeSelect('防御倾向', 'magicalShield')
   expect(getByRole(container, 'button', { name: '应用并计算' }).disabled).toBe(true)
-  expect(container.textContent).toContain('成装需满足内防高于外防')
+  expect(container.textContent).toContain('先校对最低御劲和加速，再比较秒伤')
+  await click('开始推荐')
+  expect(finish().input.defensePreference).toBe('magicalShield')
+  expect(container.textContent).toContain('防御倾向核对 · 装备内防高于外防 · 未达到')
+  expect(getByRole(container, 'button', { name: '应用并计算' }).disabled).toBe(false)
   changeSelect('推荐方式', 'compare')
   await click('开始双档对比')
   expect(select.disabled).toBe(true)
@@ -460,7 +499,7 @@ test('防御倾向只有外防和内防，双档先比秒伤，同秒伤才比�
   expect(container.textContent).toContain('推荐0.81GCD循环，比0.75GCD循环高2000.00秒伤')
   await click('开始双档对比')
   finishComparison([22000, 22000])
-  expect(container.textContent).toContain('秒伤相同，推荐0.75GCD循环，比0.81GCD循环高300点内防')
+  expect(container.textContent).toContain('秒伤相同，推荐0.75GCD循环，比0.81GCD循环高300点装备内防')
 })
 
 test('装备范围默认包含精简，改成仅防御会使旧结果失效并传给后台', async () => {
@@ -515,7 +554,7 @@ test('双档仅一档可行时推荐可行档，均不可行时不允许应用�
   await click('开始双档对比')
   finishComparison([0, 0])
   expect(container.textContent).toContain('两个档位均未找到可行方案')
-  expect(container.textContent).toContain('外防高于内防')
+  expect(container.textContent).toContain('需同时满足最低御劲和加速')
   expect(getByRole(container, 'button', { name: '应用并计算' }).disabled).toBe(true)
 })
 
@@ -543,9 +582,9 @@ test('优化方式直接选择0.75或0.81，移除目标GCD，0.81仍传入精�
   await click('配装方案推荐')
   const select = getByRole(container, 'combobox', { name: '推荐方式' })
   expect([...select.options].map((item) => item.textContent)).toEqual([
-    '0.75GCD',
-    '0.81GCD',
-    '0.75 / 0.81双档对比',
+    '全档位对比',
+    '4档 · 0.75GCD',
+    '3档 · 0.81GCD',
   ])
   expect(container.textContent).not.toContain('目标GCD')
   expect(container.querySelectorAll('select')).toHaveLength(5)
@@ -585,7 +624,7 @@ test('洗髓等待循环时沿用推荐设置，不提供明尊循环或启动�
   expect([...cycle.options]).toHaveLength(0)
   expect(getByRole(container, 'combobox', { name: '装备范围' }).disabled).toBe(false)
   expect(getByRole(container, 'spinbutton', { name: '最低御劲' }).disabled).toBe(false)
-  expect(container.querySelectorAll('input[type="checkbox"]')).toHaveLength(3)
+  expect(container.querySelectorAll('input[type="checkbox"]')).toHaveLength(4)
   expect(container.textContent).toContain('循环模板待补充')
   expect(container.textContent).not.toContain('0.75GCD')
   expect(container.textContent).not.toContain('0.81GCD')
@@ -595,4 +634,71 @@ test('洗髓等待循环时沿用推荐设置，不提供明尊循环或启动�
   expect(props.获取装备信息).not.toHaveBeenCalled()
   expect(创建优化Worker).not.toHaveBeenCalled()
   expect(props.应用方案).not.toHaveBeenCalled()
+})
+
+test('推荐窗口可选已保存循环，未固定时默认全档，固定时应用原循环键', async () => {
+  const 自定义循环 = (名称, 加速档位) => ({
+    名称: '明尊逐招:' + 名称, 标题: 名称, 循环详情: [],
+    明尊逐招配置: { 序列: ['赤日轮'], 加速档位, 奇穴: ['光明心'] },
+  })
+  const 原列表 = mockState.data.自定义循环列表
+  const 随配装 = 自定义循环('随配装测试')
+  const 固定 = 自定义循环('固定测试', 14)
+  const 范围外 = 自定义循环('一档测试', 15)
+  mockState.data.自定义循环列表 = [随配装, 固定, 范围外]
+  try {
+    const props = render({ 循环名称: 随配装.名称 })
+    await click('配装方案推荐')
+    const 推荐循环 = getByRole(container, 'combobox', { name: '推荐循环' })
+    expect(推荐循环.value).toBe(随配装.名称)
+    expect([...推荐循环.options].map(({ value }) => value))
+      .toEqual([随配装.名称, 固定.名称, 范围外.名称])
+    const 方式 = getByRole(container, 'combobox', { name: '推荐方式' })
+    expect(方式.value).toBe('compare')
+    expect([...方式.options].map(({ value }) => value)).toEqual(['compare', '0.875', '0.8125', '0.75'])
+    await click('开始全档位对比')
+    const request = 创建优化Worker.mock.results.at(-1).value.postMessage.mock.calls[0][0]
+    expect(request).toMatchObject({ cycle: 随配装, compareGcd: true, allowHigherHaste: false, teamGains: [] })
+    await click('停止计算')
+    changeSelect('推荐循环', 范围外.名称)
+    expect(getByRole(container, 'button', { name: '开始推荐' }).disabled).toBe(true)
+    expect(getByRole(container, 'alert').textContent).toContain('明尊推荐支持 2、3、4 档')
+    changeSelect('推荐循环', 固定.名称)
+    expect(getByRole(container, 'combobox', { name: '推荐方式' }).disabled).toBe(true)
+    act(() => fireEvent.click(getByRole(container, 'checkbox', { name: '计算团队增益' })))
+    await click('开始推荐')
+    const { input, result } = finish()
+    expect(input).toMatchObject({
+      cycle: 固定, compareGcd: false, simulationFrames: 14, teamGains: mockState.data.增益数据.团队增益,
+    })
+    await click('应用并计算')
+    expect(props.应用方案).toHaveBeenCalledWith(result.plan, 固定.名称, true)
+  } finally {
+    mockState.data.自定义循环列表 = 原列表
+  }
+})
+
+test('洗髓自适应循环可选任一档或全档，固定循环只显示自身档位并传入共同防御倾向', async () => {
+  const 固定 = { ...洗髓自适应循环, 名称: '洗髓固定四档', 循环详情: [洗髓自适应循环.循环详情[1]] }
+  mockCurrentData = { 名称: '洗髓经', 计算循环: [洗髓自适应循环, 固定] }
+  render({ 循环名称: '已删除的循环' })
+  await click('配装方案推荐')
+  const 推荐循环 = getByRole(container, 'combobox', { name: '推荐循环' })
+  expect(推荐循环.value).toBe(洗髓自适应循环.名称)
+  expect([...推荐循环.options].map(({ value }) => value)).toEqual([洗髓自适应循环.名称, 固定.名称])
+  const 方式 = getByRole(container, 'combobox', { name: '推荐方式' })
+  expect([...方式.options].map(({ value }) => value)).toEqual(['compare', '1.3125', '1.25', '1.1875'])
+  expect(方式.value).toBe('compare')
+  changeSelect('防御倾向', 'magicalShield')
+  changeSelect('推荐方式', '1.1875')
+  await click('开始推荐')
+  expect(finish().input).toMatchObject({
+    kungfu: 'xsj', defensePreference: 'magicalShield', compareGcd: false,
+    cycle: { 名称: '5档自适应理论循环' },
+  })
+  changeSelect('推荐循环', 固定.名称)
+  expect(方式.disabled).toBe(true)
+  expect([...方式.options].map(({ value }) => value)).toEqual(['1.25'])
+  await click('开始推荐')
+  expect(finish().input).toMatchObject({ cycle: 固定, compareGcd: false, allowHigherHaste: false })
 })

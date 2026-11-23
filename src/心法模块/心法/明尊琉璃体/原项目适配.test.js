@@ -152,7 +152,7 @@ test('仅佩戴第二枚戒指时仍保留正确位置，不挤入第一枚戒�
 test('原项目结果格式与Generator计算一致，并显示戒火斩最高11档', () => {
   const 装备属性 = {
     ...EMPTY_EQUIPMENT,
-    vitality: 9482,
+    vitality: 9582,
     attack: 3000,
     weaponMin: 100,
     weaponMax: 200,

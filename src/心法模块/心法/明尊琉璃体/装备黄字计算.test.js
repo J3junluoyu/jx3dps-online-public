@@ -50,12 +50,12 @@ const normal = [
   { 技能名称: '武伤', 技能数量: 0 },
 ]
 
-test('当前40件、29种黄字全部有对应结算，未知效果仍明确保留未计入', () => {
+test('当前42件、30种黄字全部有对应结算，未知效果仍明确保留未计入', () => {
   const selected = GEAR_ITEMS.filter((row) => row.specialEffects?.length)
-  expect(selected).toHaveLength(40)
+  expect(selected).toHaveLength(42)
   expect(
     new Set(selected.flatMap((row) => row.specialEffects.map((effect) => effect.key))).size,
-  ).toBe(29)
+  ).toBe(30)
   expect(selected.flatMap((row) => row.specialEffects).every(equipmentEffectSupported)).toBe(true)
   expect(equipmentEffectSupported({ key: 'gain_999_1' })).toBe(false)
   expect(

@@ -7,6 +7,7 @@ import {
   calculateAttributes,
   calculateSkill,
   calculateCycle,
+  获取技能结算档,
 } from './计算'
 import 驱夜秘籍 from './驱夜断愁秘籍.json'
 import reference from './参考数据.json'
@@ -48,15 +49,19 @@ test.each([
     recipes: [recipe],
   })
   const skill = SKILLS.find((row) => row.id === '4480')
-  const result = calculateSkill(skill, panel)
   const expectedVariables = {
     ...base.variables,
     magical_damage_addition: base.variables.magical_damage_addition + bonus,
     is_critical: 0,
   }
-  expect(result.hit).toBe(evaluateExpression(skill.record.damages[0].damage, expectedVariables))
-  expect(result.hit).toBeGreaterThan(calculateSkill(skill, base).hit)
-  expect(result.critical).toBe(calculateSkill(skill, base).critical)
+  for (const 背后攻击 of [false, true]) {
+    const [, record] = 获取技能结算档(skill, panel.baseVitality, 背后攻击)
+    const result = calculateSkill(skill, panel, 背后攻击)
+    const original = calculateSkill(skill, base, 背后攻击)
+    expect(result.hit).toBe(evaluateExpression(record.damages[0].damage, expectedVariables))
+    expect(result.hit).toBeGreaterThan(original.hit)
+    expect(result.critical).toBe(original.critical)
+  }
   for (const other of SKILLS.filter((row) => ['14701', '4476', '19055'].includes(row.id)))
     expect(calculateSkill(other, panel)).toEqual(calculateSkill(other, base))
   expect(panel.variables.magical_damage_addition).toBe(base.variables.magical_damage_addition)

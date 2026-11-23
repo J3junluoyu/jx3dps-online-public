@@ -51,16 +51,16 @@ export function equipmentEffectDetails(effect: EquipmentSpecialEffect): Equipmen
   }
 
   if (rule.attributes) {
-    const gains = Object.entries(rule.attributes)
-      .filter(([key]) => attributes[key])
-      .map(([key, amount]) => `${attributes[key]} +${amount}`)
-    if (gains.length) add('属性加成', gains.join('、'))
+    const bonuses = Object.entries(rule.attributes).filter(([key]) => attributes[key])
+    const gains = (层数: number) =>
+      bonuses.map(([key, amount]) => `${attributes[key]} +${amount * 层数}`).join('、')
+    if (bonuses.length) add('属性加成', gains(1))
     if (rule.maxStacks) {
       add(
         '叠层上限',
-        `${rule.maxStacks}层，基础体质 +${(rule.attributes.vitality_base || 0) * rule.maxStacks}`,
+        `${rule.maxStacks}层${bonuses.length ? `，${gains(rule.maxStacks)}` : ''}`,
       )
-      add('生效方式', '命中后叠层并续期；面板按满层稳态，DPS按命中次数估算叠层预热')
+      add('生效方式', '命中后叠层并续期。面板按满层显示，逐招模拟按实际命中，次数循环按均匀命中估算')
     }
     if (rule.averageForDamage) {
       add('生效方式', '主动使用，DPS采用平均收益')

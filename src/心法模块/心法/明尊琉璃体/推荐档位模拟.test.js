@@ -49,6 +49,8 @@ test('已保存的明尊宏按候选实际加速和当前延迟重排，应用�
   })
   expect(replay.计算结果技能列表.some(({ 技能名称 }) => 技能名称.startsWith('烈日斩'))).toBe(true)
   expect(result.after.dps).toBeCloseTo(replay.秒伤, 8)
+  const 无团队增益 = 优化明尊方案({ ...input, teamGains: [] })
+  expect(无团队增益.after.dps).toBeLessThan(result.after.dps)
 })
 
 test('洗髓低档逐招循环支持固定帧，慢档不接受更快的配装', () => {
@@ -59,7 +61,13 @@ test('洗髓低档逐招循环支持固定帧，慢档不接受更快的配装',
   const 洗髓逐招配置 = 生成洗髓宏循环('/cast 普渡四方', 12, 实际装备.stats, settings, {
     起手禅那: 0, 延迟: 40, 目标等级: 54, 加速帧数: 实际帧数, 序列: [],
   })
-  const cycle = { 名称: '洗髓宏', 循环详情: [], 洗髓逐招配置 }
+  const cycle = {
+    名称: '洗髓宏', 循环详情: [],
+    洗髓逐招配置: {
+      ...洗髓逐招配置,
+      序列: [{ 增益: '号令三军', 层数: 100 }, ...洗髓逐招配置.序列],
+    },
+  }
   const input = { ...common, kungfu: 'xsj', minToughness: 0, settings, cycle, teamGains }
   const result = 优化明尊方案(input)
   expect(result.after.gcd).toBe(实际帧数 / 16)
@@ -70,6 +78,10 @@ test('洗髓低档逐招循环支持固定帧，慢档不接受更快的配装',
   expect(result.after.dps).toBeCloseTo(模拟洗髓逐招(实际装备.stats, {
     ...复算设置, equipmentEffects: 实际装备.specialEffects,
   }, 洗髓逐招配置, { 宏团队增益: teamGains }).结果.秒伤, 8)
+  const 关闭团队增益 = 优化明尊方案({ ...input, teamGains: [] })
+  const 无团队增益 = 优化明尊方案({ ...input, cycle: { ...cycle, 洗髓逐招配置 }, teamGains: [] })
+  expect(关闭团队增益.after.dps).toBe(无团队增益.after.dps)
+  expect(关闭团队增益.after.dps).toBeLessThan(result.after.dps)
   const 慢档 = { ...cycle, 洗髓逐招配置: { ...洗髓逐招配置, 加速帧数: 实际帧数 + 1 } }
   expect(优化明尊方案({ ...input, cycle: 慢档 }).plan).toBeUndefined()
 })

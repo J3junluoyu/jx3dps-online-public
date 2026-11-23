@@ -135,19 +135,17 @@ export const TALENT_LAYOUT: { label: string; ids: string[]; fixed: boolean }[] =
   { label: '第五层', ids: ['6895', '46492'], fixed: false },
   { label: '第六层', ids: ['6760', '6771', '21835'], fixed: false },
 ]
-export const POOL_TALENT_IDS = ['18279', '5974', '14698', '44569', '6000']
+export const POOL_TALENT_IDS = ['18279', '5974', '14698', '44569', '6000', '6766']
 export const MAX_POOL_TALENTS = 3
 export const DEFAULT_TALENTS = TALENT_LAYOUT.map((tier) => tier.ids[0])
 
 /** Migrate old flat selections while preserving valid tier and pool choices. */
 export function normalizeTalents(selected: readonly string[] = []): string[] {
-  // 已移除的斩火选择迁移到月尽天明，避免旧方案保留不可见的回灵奇穴。
-  const migrated = selected.map((id) => (id === '6766' ? '6000' : id))
   return [
     ...TALENT_LAYOUT.map((tier) =>
-      tier.fixed ? tier.ids[0] : tier.ids.find((id) => migrated.includes(id)) || tier.ids[0],
+      tier.fixed ? tier.ids[0] : tier.ids.find((id) => selected.includes(id)) || tier.ids[0],
     ),
-    ...POOL_TALENT_IDS.filter((id) => migrated.includes(id)).slice(0, MAX_POOL_TALENTS),
+    ...POOL_TALENT_IDS.filter((id) => selected.includes(id)).slice(0, MAX_POOL_TALENTS),
   ]
 }
 export function selectTierTalent(selected: readonly string[], tierIndex: number, id: string) {
@@ -207,31 +205,29 @@ export const RECIPES = [
   })),
   { group: 驱夜秘籍.group, name: 驱夜秘籍.name, records: 驱夜秘籍.recipes },
 ]
+const 可选奇穴 = new Set(TALENTS.map(({ id }) => id))
+const 可选秘籍 = new Set(RECIPES.flatMap(({ records }) => records.map(({ recipe_key }) => recipe_key)))
+const 装备属性键 = Object.keys(EMPTY_EQUIPMENT) as (keyof EquipmentStats)[]
 
 export function validateSettings(settings: Settings) {
   if (!TARGETS.some((target) => target.level === settings.targetLevel))
     throw new Error('请选择 51–54 级目标')
   if (!['none', 'offTank', 'mainTank'].includes(settings.stance))
     throw new Error('无效的明尊气劲状态')
-  if (
-    new Set(settings.talents).size !== settings.talents.length ||
-    settings.talents.some((id) => !TALENTS.some((talent) => talent.id === id))
-  )
+  const 已选奇穴 = new Set(settings.talents)
+  if (已选奇穴.size !== settings.talents.length || settings.talents.some((id) => !可选奇穴.has(id)))
     throw new Error('奇穴选择无效')
   for (const tier of TALENT_LAYOUT) {
-    if (tier.ids.filter((id) => settings.talents.includes(id)).length !== 1)
+    if (tier.ids.filter((id) => 已选奇穴.has(id)).length !== 1)
       throw new Error(`${tier.label}必须选择一个指定奇穴`)
   }
-  if (settings.talents.filter((id) => POOL_TALENT_IDS.includes(id)).length > MAX_POOL_TALENTS)
+  if (POOL_TALENT_IDS.filter((id) => 已选奇穴.has(id)).length > MAX_POOL_TALENTS)
     throw new Error(`混池最多选择${MAX_POOL_TALENTS}个奇穴`)
-  const available = RECIPES.flatMap((group) => group.records.map((recipe) => recipe.recipe_key))
-  if (
-    new Set(settings.recipes).size !== settings.recipes.length ||
-    settings.recipes.some((key) => !available.includes(key))
-  )
+  const 已选秘籍 = new Set(settings.recipes)
+  if (已选秘籍.size !== settings.recipes.length || settings.recipes.some((key) => !可选秘籍.has(key)))
     throw new Error('秘籍选择无效')
   for (const group of RECIPES) {
-    if (group.records.filter((recipe) => settings.recipes.includes(recipe.recipe_key)).length > 4)
+    if (group.records.filter((recipe) => 已选秘籍.has(recipe.recipe_key)).length > 4)
       throw new Error('每个招式最多选择四本秘籍')
   }
   for (const value of [settings.pveBonus, settings.damageBonus]) {
@@ -242,7 +238,7 @@ export function validateSettings(settings: Settings) {
 /** All gear inputs exclude naked character values, kungfu, talents and the Mingzun buff. */
 export function calculateAttributes(equipment: EquipmentStats, settings: Settings) {
   validateSettings(settings)
-  for (const key of Object.keys(EMPTY_EQUIPMENT) as (keyof EquipmentStats)[]) {
+  for (const key of 装备属性键) {
     if (!Number.isFinite(equipment[key]) || equipment[key] < 0)
       throw new Error(`装备属性无效：${key}`)
   }
@@ -587,24 +583,63 @@ const JIE_HUO_ZHAN_LEVELS = Object.entries(skillGroups['3980']['44567']).sort(
   ([a], [b]) => Number(a) - Number(b),
 )
 
-export function calculateSkill(skill: Skill, panel: ReturnType<typeof calculateAttributes>) {
+// 4480的参考公式是背后命中的58级。客户端正面用29级，去掉1.3后分别对帧数、固定伤害和浮动取整。
+const 驱夜背后记录 = skillGroups['25355']['4480']['58']
+const 驱夜正面帧数 = Math.trunc(200 * 1.1 * 1.05 ** 3 * 3.2)
+const 驱夜正面系数 = 驱夜正面帧数 / (16 * SKILL_SCALES.magical)
+const 驱夜正面记录: SkillRecord = {
+  ...驱夜背后记录,
+  damages: 驱夜背后记录.damages.map((part) => ({
+    ...part,
+    damage: part.damage.replace(
+      `12 + rand + int(lunar_attack_power * ${驱夜背后记录.skill_attribute?.magical_attack_power_cof})`,
+      `9 + int(lunar_attack_power * ${驱夜正面系数})`,
+    ),
+    source_attribute: { ...part.source_attribute, lunar_damage_base: '9', lunar_damage_rand: '0' },
+  })),
+  skill_attribute: {
+    ...驱夜背后记录.skill_attribute,
+    frames: String(驱夜正面帧数),
+    magical_attack_power_cof: String(驱夜正面系数),
+  },
+}
+
+export function 获取技能结算档(skill: Skill, baseVitality: number, 背后攻击 = false) {
+  if (skill.id === '4480' && !背后攻击) return ['29', 驱夜正面记录] as const
+  // 客户端戒火斩读取 nVitalityBase，每960点升一档，最多提升10档。
+  return skill.id === '44567'
+    ? JIE_HUO_ZHAN_LEVELS[
+        Math.min(JIE_HUO_ZHAN_LEVELS.length - 1, Math.max(0, Math.floor(baseVitality / 960)))
+      ]
+    : ([skill.level, skill.record] as const)
+}
+
+interface DamageRoll {
+  hit: number
+  criticalHit: number
+}
+
+interface SkillDamage extends DamageRoll {
+  level: string
+  record: SkillRecord
+  critical: number
+  expected: number
+  range?: { min: DamageRoll; max: DamageRoll }
+}
+
+export function calculateSkill(
+  skill: Skill, panel: ReturnType<typeof calculateAttributes>, 背后攻击 = false, 计算伤害范围 = false,
+): SkillDamage {
   const variables = { ...panel.variables }
   if (skill.group === '25355' && skill.id === '4480') {
     // 明尊怜世人导出式未带秘籍变量，按考拉同名招式在原增伤、会心通道补齐。
-    // 明尊驱夜不计算背后30%增伤。
     variables.magical_damage_addition += evaluateExpression(驱夜秘籍.damage_addition, variables)
     variables.lunar_critical_strike += evaluateExpression(
       驱夜秘籍.critical_strike_offset,
       variables,
     )
   }
-  // Use Generator's original formula for each vitality tier, capped at its highest tier.
-  const [level, record] =
-    skill.id === '44567'
-      ? JIE_HUO_ZHAN_LEVELS[
-          Math.min(JIE_HUO_ZHAN_LEVELS.length - 1, Math.max(0, Math.floor(panel.vitality / 95)))
-        ]
-      : [skill.level, skill.record]
+  const [level, record] = 获取技能结算档(skill, panel.baseVitality, 背后攻击)
   const critical = Math.min(1, Math.max(0, evaluateExpression(record.critical_strike, variables)))
   const damage = (isCritical: number) => {
     variables.is_critical = isCritical
@@ -618,7 +653,7 @@ export function calculateSkill(skill: Skill, panel: ReturnType<typeof calculateA
   }
   const hit = damage(0)
   const criticalHit = damage(1)
-  return {
+  const result = {
     level,
     record,
     hit,
@@ -626,6 +661,16 @@ export function calculateSkill(skill: Skill, panel: ReturnType<typeof calculateA
     critical,
     expected: hit * (1 - critical) + criticalHit * critical,
   }
+  if (!计算伤害范围) return result
+  if (!record.damages.some((part) => /\brand\b/.test(part.damage))) {
+    const outcome = { hit, criticalHit }
+    return { ...result, range: { min: outcome, max: outcome } }
+  }
+  variables.rand = 0
+  const min = { hit: damage(0), criticalHit: damage(1) }
+  variables.rand = 1
+  const max = { hit: damage(0), criticalHit: damage(1) }
+  return { ...result, range: { min, max } }
 }
 
 export function calculateCycle(

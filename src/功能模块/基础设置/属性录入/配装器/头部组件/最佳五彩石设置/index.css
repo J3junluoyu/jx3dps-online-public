@@ -47,6 +47,12 @@
   margin-left: 4px;
 }
 
+.max-wucaishi-dps-change {
+  font-size: 14px;
+  margin-left: 6px;
+  white-space: nowrap;
+}
+
 .max-wucaishi-item {
   font-size: 16px;
   color: #333;

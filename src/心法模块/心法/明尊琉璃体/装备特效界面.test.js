@@ -111,7 +111,7 @@ test('当前全部可选黄字都有数值说明，外部说明仍按纯文本�
   const gear = Object.values(明尊装备数据)
     .flat()
     .filter((item) => item.装备黄字特效?.length)
-  expect(gear).toHaveLength(40)
+  expect(gear).toHaveLength(42)
   expect(
     gear.every((item) => item.装备黄字特效.every((effect) => effect.详细数值.length > 0)),
   ).toBe(true)

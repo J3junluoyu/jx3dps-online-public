@@ -6,7 +6,7 @@ import {
   自适应理论循环名称,
   获取明尊自适应循环名称,
 } from './计算循环/理论循环'
-import { 优化明尊方案, 使用橙武推荐模型, 比较推荐指标, 满足面板防御倾向 } from './方案优化'
+import { 优化明尊方案, 使用橙武推荐模型, 比较推荐指标, 可以补御劲附魔 } from './方案优化'
 import type { 方案优化输入, 方案优化结果, 方案优化进度 } from './方案优化'
 import { 获取洗髓档位对比循环 } from '../洗髓经/循环'
 import { 获取推荐逐招帧数, 获取逐招推荐范围 } from './推荐逐招'
@@ -36,7 +36,7 @@ export function 获取档位对比循环(cycleName: string, talents: readonly st
   })
 }
 
-/** 每档独立寻优；洗髓跨档先比秒伤，再比较扣除心法内防后的平衡。 */
+/** 两个心法都先搜索所选档位的常规方案，全部无解时才开放御劲附魔。 */
 export function 对比明尊加速档位(
   input: 方案优化输入,
   onProgress?: (progress: 方案优化进度) => void,
@@ -47,13 +47,16 @@ export function 对比明尊加速档位(
   const 逐招帧数 = 获取推荐逐招帧数(input.cycle, input.kungfu)
   if (逐招帧数.some((帧数) => !获取逐招推荐范围(input.kungfu).includes(帧数)))
     throw new Error(xisui ? '洗髓逐招推荐仅计算3、4、5档' : '明尊逐招推荐仅计算2、3、4档')
-  const 内置循环 = 逐招帧数.length ? [] : xisui
-    ? 获取洗髓档位对比循环()
-    : 获取档位对比循环(
-        使用橙武推荐模型(input) ? 获取明尊自适应循环名称(input.settings.talents) : input.cycle.名称,
-        input.settings.talents,
-      )
-  const entries: 档位优化结果[] = []
+  const 所选内置档位 = input.cycle.循环详情.length > 1
+    ? input.cycle.循环详情.map((项) => Number(项.循环加速等级))
+    : undefined
+  const 内置循环 = 逐招帧数.length ? [] : (xisui
+      ? 获取洗髓档位对比循环()
+      : 获取档位对比循环(
+          使用橙武推荐模型(input) ? 获取明尊自适应循环名称(input.settings.talents) : input.cycle.名称,
+          input.settings.talents,
+        )
+    ).filter((项) => !所选内置档位 || 所选内置档位.includes(Number(项.循环详情[0]?.循环加速等级)))
   let evaluations = 0
   const 档位 = 逐招帧数.length
     ? 逐招帧数.map((frames) => ({
@@ -66,56 +69,56 @@ export function 对比明尊加速档位(
         gcd: (baseFrames - Number(cycle.循环详情[0].循环加速等级)) / 16,
         name: cycle.名称,
       }))
-  for (const [index, { cycle, frames, gcd, name }] of 档位.entries()) {
-    const entry: 档位优化结果 = {
-      cycleName: name,
-      gcd,
-    }
-    try {
-      entry.result = 优化明尊方案({
-        ...input, cycle, ...(frames === undefined ? {} : { simulationFrames: frames }),
-      }, (progress) =>
-        onProgress?.({
-          percent: Math.floor((index * 100 + progress.percent) / 档位.length),
-          stage: `${name}：${progress.stage}`,
-          evaluations: evaluations + progress.evaluations,
-        }),
-      )
-      // 对比结论只接受同时满足该档GCD与同一最低御劲的最终面板。
-      if (
-        (逐招帧数.length || xisui || input.allowHigherHaste) &&
-        entry.result.after &&
-        ((input.allowHigherHaste && !逐招帧数.length
-          ? entry.result.after.gcd > entry.gcd
-          : entry.result.after.gcd !== entry.gcd) ||
-          entry.result.after.toughness + 1e-10 < input.minToughness)
-      ) {
-        entry.result = undefined
-        throw new Error('推荐方案未满足加速或最低御劲要求')
+  const 可用御劲附魔 = 可以补御劲附魔(input)
+  const 搜索各档 = (
+    阶段: '常规' | '御劲补足',
+    起始进度: number,
+    进度区间: number,
+    常规结果?: 档位优化结果[],
+  ) => {
+    return 档位.map(({ cycle, frames, gcd, name }, index): 档位优化结果 => {
+      const entry: 档位优化结果 = { cycleName: name, gcd }
+      if (常规结果?.[index].error) return 常规结果[index]
+      try {
+        const result = 优化明尊方案({
+          ...input, cycle, ...(frames === undefined ? {} : { simulationFrames: frames }),
+        }, (progress) =>
+          onProgress?.({
+            percent: 起始进度 + Math.floor((index + progress.percent / 100) * 进度区间 / 档位.length),
+            stage: `${name}：${阶段 === '御劲补足' ? '御劲附魔补足 · ' : ''}${progress.stage}`,
+            evaluations: evaluations + progress.evaluations,
+          }),
+        阶段)
+        evaluations += result.evaluations
+        const { after } = result
+        if (
+          after &&
+          (after.toughness + 1e-10 < input.minToughness ||
+            (input.allowHigherHaste && !逐招帧数.length ? after.gcd > gcd : after.gcd !== gcd))
+        ) throw new Error('推荐方案未满足加速或最低御劲要求')
+        const 上轮 = 常规结果?.[index].result
+        entry.result = 上轮 ? {
+          ...result,
+          evaluations: 上轮.evaluations + result.evaluations,
+          elapsed: 上轮.elapsed + result.elapsed,
+        } : result
+      } catch (error) {
+        entry.error = error instanceof Error ? error.message : '该档位优化失败'
       }
-      if (
-        !xisui &&
-        entry.result.after &&
-        !满足面板防御倾向(entry.result.after, input.defensePreference)
-      ) {
-        entry.result = undefined
-        throw new Error('推荐方案未满足所选防御倾向')
-      }
-      evaluations += entry.result.evaluations
-    } catch (error) {
-      entry.error = error instanceof Error ? error.message : '该档位优化失败'
-    }
-    entries.push(entry)
+      return entry
+    })
   }
+  const 常规 = 搜索各档('常规', 0, 可用御劲附魔 ? 65 : 100)
+  const entries = 可用御劲附魔 && 常规.some((entry) => !entry.error) &&
+    !常规.some(({ result }) => result?.plan && result.after)
+    ? 搜索各档('御劲补足', 65, 35, 常规)
+    : 常规
   let best: 档位优化结果 | undefined
-  const 防御规则 = xisui ? 'balance' : input.defensePreference
-  const 附魔后备顺序 = (entry: 档位优化结果) =>
-    xisui ? 0 : Number(!!entry.result?.usedToughnessEnchantFallback)
   for (const entry of entries) {
     if (!entry.result?.plan || !entry.result.after) continue
     const 排名差 = best
-      ? 附魔后备顺序(entry) - 附魔后备顺序(best) ||
-        比较推荐指标(entry.result.after, best.result!.after!, 防御规则)
+      ? Number(!!entry.result.usedToughnessEnchantFallback) - Number(!!best.result!.usedToughnessEnchantFallback) ||
+        比较推荐指标(entry.result.after, best.result!.after!, input.defensePreference)
       : -1
     if (
       排名差 < 0 ||
@@ -129,7 +132,10 @@ export function 对比明尊加速档位(
     )
       best = entry
   }
-  onProgress?.({ percent: 100, stage: 逐招帧数.length ? '所选档位对比完成' : xisui ? '三档对比完成' : '双档对比完成', evaluations })
+  const 完成阶段 = 逐招帧数.length || (所选内置档位 && 档位.length !== (xisui ? 3 : 2))
+    ? '所选档位对比完成'
+    : xisui ? '三档对比完成' : '双档对比完成'
+  onProgress?.({ percent: 100, stage: 完成阶段, evaluations })
   return {
     entries,
     recommendedCycleName: best?.cycleName,

@@ -50,7 +50,7 @@ test.each(fixture.cases)('与考拉原Python算法逐项一致：$name', (item) 
   for (const [key, expected] of Object.entries(item.skills)) {
     const skill = SKILLS.find((row) => row.key === key)
     for (const [index, rand] of [0, 0.5, 1].entries()) {
-      const result = calculateSkill(skill, { ...panel, variables: { ...panel.variables, rand } })
+      const result = calculateSkill(skill, { ...panel, variables: { ...panel.variables, rand } }, skill.id === '4480')
       expect(result.hit).toBe(expected.samples[index][0])
       expect(result.criticalHit).toBe(expected.samples[index][1])
       expect(result.critical).toBeCloseTo(expected.critical, 12)
@@ -59,12 +59,12 @@ test.each(fixture.cases)('与考拉原Python算法逐项一致：$name', (item) 
   expect(panel.variables).toEqual(variablesBefore)
 })
 
-// 固定数值由同版本考拉BaseAttribute及25355/4480/58原式计算，未添加背后增伤。
+// 历史考拉样本取4480的58级背后记录，实际默认循环使用29级正面记录。
 test.each([
   ['无秘籍、无五明', false, 2440, 4374, 0.09933868816166662, 2632.1210229046637],
   ['伤害3%、会心5%及五明', true, 2756, 4941, 0.14933868816166662, 3082.3050336332417],
 ])(
-  '明尊驱夜%s：单技能及300秒循环均不计背后30%增伤',
+  '明尊驱夜%s：背后保留原导出结果，默认循环使用正面',
   (_, enhanced, hit, criticalHit, critical, expected) => {
     const equipment = { ...EMPTY_EQUIPMENT, ...fixture.cases[0].equipment }
     const settings = {
@@ -77,11 +77,15 @@ test.each([
     const panel = calculateAttributes(equipment, settings)
     if (enhanced) panel.variables.magical_damage_addition += 102 / 1024
     const skill = SKILLS.find((row) => row.key === '25355:4480:58')
-    const result = calculateSkill(skill, panel)
+    const result = calculateSkill(skill, panel, true)
+    expect(result.level).toBe('58')
     expect(result.hit).toBe(hit)
     expect(result.criticalHit).toBe(criticalHit)
     expect(result.critical).toBeCloseTo(critical, 12)
     expect(result.expected).toBeCloseTo(expected, 10)
+    const 正面 = calculateSkill(skill, panel)
+    expect(正面.level).toBe('29')
+    expect(正面.hit).toBeLessThan(hit)
 
     const cycle = 计算明尊基础循环(
       equipment,
@@ -91,7 +95,8 @@ test.each([
     )
     expect(cycle.计算结果技能列表).toHaveLength(1)
     expect(cycle.计算结果技能列表[0].技能数量).toBe(9)
-    // 循环默认全程戒火，但仍不计背后增伤；单技能原始公式校验保留无戒火基准。
+    expect(cycle.计算结果技能列表[0].技能等级).toBe('29')
+    // 循环默认全程戒火，单技能历史样本采用无戒火状态。
     panel.variables.lunar_damage_scale += 21 / 1024
     const cycleExpected = calculateSkill(skill, panel).expected
     expect(cycle.总伤).toBeCloseTo(cycleExpected * 9, 9)

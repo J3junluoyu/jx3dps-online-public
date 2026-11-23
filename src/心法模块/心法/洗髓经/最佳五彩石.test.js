@@ -20,12 +20,13 @@ jest.mock('@/功能模块/基础设置/属性录入/配装器/头部组件/最�
 jest.mock('antd', () => {
   const React = require('react')
   return {
-    App: { useApp: () => ({ modal: { confirm: (props) => props.onOk() } }) },
+    App: { useApp: () => ({ modal: { confirm: (props) => { mockPendingCalculation = props.onOk() } } }) },
     Button: ({ children, onClick, disabled }) =>
       React.createElement('button', { onClick, disabled }, children),
     Modal: ({ open, children }) => (open ? children : null),
     Table: (props) => {
       mockRows = props.dataSource
+      mockColumns = props.columns
       return null
     },
   }
@@ -46,6 +47,8 @@ import 配装 from './测试配装.json'
 global.IS_REACT_ACT_ENVIRONMENT = true
 let mockDispatch
 let mockRows
+let mockColumns
+let mockPendingCalculation
 
 test('洗髓一键五彩石按每颗石头的原始属性和自适应档位计伤，排序后可应用最佳结果', async () => {
   const equipment = 转换明尊配装(配装.slots, 配装.stone)
@@ -66,13 +69,17 @@ test('洗髓一键五彩石按每颗石头的原始属性和自适应档位计�
   const container = document.createElement('div')
   document.body.appendChild(container)
   const root = createRoot(container)
+  const 渲染 = (对比秒伤) => act(async () => {
+    root.render(<最佳五彩石设置 一键替换五彩石={apply} 对比秒伤={对比秒伤} 对比装备信息={equipment} />)
+  })
   try {
-    await act(async () => {
-      root.render(<最佳五彩石设置 一键替换五彩石={apply} 对比秒伤={0} 对比装备信息={equipment} />)
-    })
+    await 渲染(0)
     const button = getByRole(container, 'button', { name: '一键设置五彩石' })
     expect(button.disabled).toBe(false)
-    await act(async () => fireEvent.click(button))
+    await act(async () => {
+      fireEvent.click(button)
+      await mockPendingCalculation
+    })
     expect(mockRows).toHaveLength(STONES.length)
     expect(new Set(mockRows.map((row) => row.秒伤)).size).toBeGreaterThan(1)
     const settings = {
@@ -93,13 +100,21 @@ test('洗髓一键五彩石按每颗石头的原始属性和自适应档位计�
     expect(mockRows.map((row) => row.秒伤)).toEqual(
       mockRows.map((row) => row.秒伤).sort((a, b) => b - a),
     )
+    const 基准秒伤 = mockDispatch(秒伤计算()).秒伤
+    const 渲染变化 = (值) => mockColumns.find((column) => column.title === '较当前 DPS').render(值)
+    expect(渲染变化(mockRows[0].秒伤)).toBe('—')
+    await 渲染(基准秒伤)
+    expect(渲染变化(基准秒伤).props.children).toBe('0.00%')
+    expect(渲染变化(基准秒伤 * 1.05).props.children).toBe('+5.00%')
+    expect(渲染变化(基准秒伤 * 0.95).props.children).toBe('-5.00%')
+    expect(渲染变化(0)).toBe('—')
+    await 渲染(0)
     const best = mockRows[0].名称
     await act(async () =>
       fireEvent.click(getByRole(container, 'button', { name: '替换为最佳五彩石' })),
     )
     expect(apply).toHaveBeenCalledWith(best)
     expect(JSON.stringify(equipment)).toBe(original)
-    expect(mockDispatch(秒伤计算()).秒伤).toBeGreaterThan(0)
   } finally {
     act(() => root.unmount())
     container.remove()
