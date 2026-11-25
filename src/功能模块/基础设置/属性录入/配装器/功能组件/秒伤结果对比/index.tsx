@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { 数据埋点 } from '@/工具函数/tools/log'
 
-function 秒伤结果对比({ 配装器内动态新秒伤, 打开配装器时秒伤, 循环待补充 = false }) {
+function 秒伤结果对比({ 配装器内动态新秒伤, 打开配装器时秒伤, 循环待补充 = false, 计算错误 = '' }) {
   const 百分比变化率 = (((配装器内动态新秒伤 - 打开配装器时秒伤) / 打开配装器时秒伤) * 100).toFixed(
     2,
   )
@@ -9,7 +9,7 @@ function 秒伤结果对比({ 配装器内动态新秒伤, 打开配装器时秒
   const 秒伤样式 =
     配装器内动态新秒伤 === 打开配装器时秒伤 ? '' : 秒伤增加 ? 'dps-up-color' : 'dps-low-color'
 
-  const 加速符不合文案 = () => <p className={'dps-diff-error-text'}>加速不符合循环需求</p>
+  const 加速符不合文案 = () => <span className='dps-diff-error-text'>加速不符合循环需求</span>
 
   useEffect(() => {
     if (
@@ -69,7 +69,7 @@ function 秒伤结果对比({ 配装器内动态新秒伤, 打开配装器时秒
             <div className='dps-diff-title'>替换后</div>
           </div>
           <p className={`dps-diff-dps dps-low-color`}>
-            <加速符不合文案 />
+            {计算错误 ? <span className='dps-diff-error-text'>{计算错误}</span> : <加速符不合文案 />}
           </p>
         </div>
       </div>

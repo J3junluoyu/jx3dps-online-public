@@ -5,7 +5,7 @@ import { fireEvent, getByRole } from '@testing-library/dom'
 import { 装备类型枚举 } from '@/@types/装备'
 import { 获取最大精炼等级 } from '@/功能模块/基础设置/属性录入/配装器/工具函数/获取最大精炼等级'
 import 精炼等级选择 from '@/功能模块/基础设置/属性录入/配装器/功能组件/装备选择/精炼等级选择'
-import { 明尊装备数据 } from '@/数据/数据工具/明尊数据适配'
+import { 明尊装备数据, 计算明尊装备属性 } from '@/数据/数据工具/明尊数据适配'
 import { GEAR_ITEMS, calculateLoadout } from './装备'
 
 jest.mock(
@@ -17,10 +17,16 @@ jest.mock('antd', () => {
   const Select = ({ children, value, onChange, disabled, 'aria-label': label }) =>
     React.createElement(
       'select',
-      { value, disabled, 'aria-label': label, onChange: (e) => onChange?.(Number(e.target.value)) },
+      {
+        value, disabled, 'aria-label': label,
+        onChange: (e) => {
+          const selected = children.find((item) => String(item.props.value ?? item.key) === e.target.value)
+          onChange?.(selected?.props.value ?? e.target.value)
+        },
+      },
       children,
     )
-  Select.Option = ({ label }) => React.createElement('option', { value: label }, label)
+  Select.Option = ({ label, value }) => React.createElement('option', { value: value ?? label }, label)
   return { Select, Tooltip: ({ children }) => children }
 })
 
@@ -84,6 +90,8 @@ test('切换6级、8级及其他6级腰坠时，精炼窗口同步更新并能�
     ])
     act(() => fireEvent.change(select, { target: { value: '8' } }))
     expect(change).toHaveBeenCalledWith(8)
+    act(() => fireEvent.change(select, { target: { value: '0' } }))
+    expect(change).toHaveBeenLastCalledWith(0)
     expect([...draw(51370).options].map((item) => Number(item.value))).toEqual([
       8, 7, 6, 5, 4, 3, 2, 1, 0,
     ])
@@ -94,4 +102,14 @@ test('切换6级、8级及其他6级腰坠时，精炼窗口同步更新并能�
     act(() => root.unmount())
     container.remove()
   }
+})
+
+test('旧表单和配装导入中的数字字符串按精炼等级计算', () => {
+  const item = 明尊装备数据.鞋子.find((row) => row.最大精炼等级 >= 6)
+  const 计算 = (当前精炼等级) => 计算明尊装备属性({
+    装备列表: [{ 装备部位: item.装备部位, id: item.id, 当前精炼等级 }],
+  }).装备基础属性
+  expect(计算('5')).toEqual(计算(5))
+  expect(计算('0')).toEqual(计算(0))
+  expect(() => 计算('不合法')).toThrow('精炼等级无效')
 })

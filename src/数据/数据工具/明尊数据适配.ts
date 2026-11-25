@@ -272,7 +272,7 @@ export function 获取明尊配装(装备信息: 装备信息数据类型) {
     const 原始装备 = 已选?.id ? findGearItem(已选.id, slotPosition(键)) : undefined
     配装[键] = {
       key: 原始装备?.key || '',
-      strength: 已选?.当前精炼等级 || 0,
+      strength: Number(已选?.当前精炼等级 ?? 0),
       embeds: 原始装备
         ? Object.keys(原始装备.embed).map((_, 索引) => 已选?.镶嵌孔数组?.[索引]?.镶嵌宝石等级 || 0)
         : [],

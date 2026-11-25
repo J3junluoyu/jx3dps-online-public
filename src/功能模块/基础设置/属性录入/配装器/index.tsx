@@ -55,6 +55,7 @@ function 配装器(props: ModalProps) {
     : undefined
   const [当前装备信息, 更新当前装备信息] = useState<装备信息数据类型>()
   const [配装器内动态新秒伤, 设置配装器内动态新秒伤] = useState<number | undefined>(undefined)
+  const [配装计算错误, 设置配装计算错误] = useState<string>()
   const [打开配装器时秒伤, 设置打开配装器时秒伤] = useState<number>(0)
   const [导入弹窗, 设置导入弹窗] = useState(false)
   const [导出弹窗, 设置导出弹窗] = useState(false)
@@ -86,6 +87,7 @@ function 配装器(props: ModalProps) {
       设置寻优循环名称(当前循环信息?.名称)
       更新当前装备信息(装备信息)
       设置配装器内动态新秒伤(undefined)
+      设置配装计算错误(undefined)
       设置默认镶嵌宝石等级(8)
       初始化表单(装备信息)
       设置打开配装器时秒伤(当前计算结果?.秒伤 || 0)
@@ -141,12 +143,14 @@ function 配装器(props: ModalProps) {
   const 更换装备计算秒伤 = (_, value) => {
     try {
       const 装备信息 = 根据表单选项获取装备信息(value)
-      const { 秒伤 } = dispatch(秒伤计算({ 更新装备信息: 装备信息 }))
+      const { 秒伤, 计算错误 } = dispatch(秒伤计算({ 更新装备信息: 装备信息 }))
       设置配装器内动态新秒伤(秒伤)
+      设置配装计算错误(计算错误)
       更新当前装备信息(装备信息)
-    } catch (_) {
+    } catch (error) {
       更新当前装备信息(undefined)
       设置配装器内动态新秒伤(0)
+      设置配装计算错误(error instanceof Error ? error.message : '无法计算此配装')
     }
   }
 
@@ -343,6 +347,7 @@ function 配装器(props: ModalProps) {
             <秒伤结果对比
               配装器内动态新秒伤={配装器内动态新秒伤}
               打开配装器时秒伤={打开配装器时秒伤}
+              计算错误={配装计算错误}
             />
           </div>
           <div className={styles.actions}>

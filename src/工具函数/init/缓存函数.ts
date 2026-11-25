@@ -182,14 +182,3 @@ export const 加载缓存当前秘籍信息 = () => {
     return { ...默认秘籍 }
   }
 }
-
-export const 获取方案内信息 = (属性) => {
-  const 当前方案名称 = 加载缓存当前方案名称()
-  const 全部方案数据 = 加载缓存全部方案数据()
-  const 当前方案数据 = 全部方案数据?.[当前方案名称]
-  if (当前方案数据 && 当前方案数据?.[属性] !== undefined) {
-    return 当前方案数据?.[属性]
-  } else {
-    return undefined
-  }
-}
