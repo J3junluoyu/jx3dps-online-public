@@ -9,8 +9,7 @@ import 装备镶嵌 from './装备镶嵌'
 import 装备特效 from './装备特效'
 import ImageComponent from '@/组件/图片展示'
 import { 获取换装强化 } from '../../../../工具函数/获取换装强化'
-import { 获取换装属性 } from './换装属性'
-import type { 装备强化信息 } from './换装属性'
+import type { 创建换装对比, 装备强化信息 } from './换装属性'
 
 interface 装备详情容器类型 {
   children: React.ReactNode
@@ -18,6 +17,7 @@ interface 装备详情容器类型 {
   当前装备信息?: 装备强化信息 & { 装备部位?: string }
   对比部位?: string
   当前部位装备?: 装备属性信息模型
+  比较装备属性?: ReturnType<typeof 创建换装对比>
   默认镶嵌宝石等级?: number
 }
 
@@ -26,11 +26,12 @@ function 装备详情内容({
   当前装备信息,
   对比部位,
   当前部位装备,
+  比较装备属性,
   默认镶嵌宝石等级 = 8,
 }: 装备详情容器类型) {
   const 对比 = 对比部位 && 装备数据.id !== 当前部位装备?.id
   const 强化 = 对比 ? 获取换装强化(装备数据, 当前装备信息, 默认镶嵌宝石等级) : 当前装备信息
-  const 属性对比 = 对比 && 强化 ? 获取换装属性(装备数据, 强化, 当前部位装备, 当前装备信息) : undefined
+  const 属性对比 = 对比 && 强化 ? 比较装备属性?.(装备数据, 强化) : undefined
   const 装备背景 =
     装备数据?.装备类型 === 装备类型枚举?.橙武 ? 图标?.橙色装备边框 : 图标?.紫色装备边框
 

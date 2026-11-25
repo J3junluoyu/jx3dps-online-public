@@ -39,6 +39,7 @@ import { 获取寻优循环详情 } from '../../../工具函数/循环加速要�
 import { 获取换装强化 } from '../../../工具函数/获取换装强化'
 
 import 装备详情容器 from './装备详情容器'
+import { 创建换装对比 } from './装备详情容器/换装属性'
 import 渐变特效文字 from './渐变特效文字'
 import styles from './index.module.less'
 import './index.css'
@@ -210,6 +211,11 @@ function 装备部位选择(props: 装备部位选择入参, ref) {
 
   const 列表中当前装备 = 可选装备索引.get(allValue?.id)?.装备
   const 当前选择装备 = 列表中当前装备 || 当前装备数据
+  const 当前心法数据 = 获取当前数据()
+  const 比较装备属性 = useMemo(
+    () => 创建换装对比(当前选择装备?.id ? 当前选择装备 : undefined, allValue),
+    [当前选择装备, allValue, 当前心法数据],
+  )
 
   const 准备装备对比 = useCallback(
     (当前装备列表信息, 获取最佳装备 = false, 固定循环?: 循环数据) => {
@@ -447,6 +453,7 @@ function 装备部位选择(props: 装备部位选择入参, ref) {
                 当前装备信息={allValue}
                 对比部位={部位}
                 当前部位装备={当前选择装备?.id ? 当前选择装备 : undefined}
+                比较装备属性={比较装备属性}
                 默认镶嵌宝石等级={默认镶嵌宝石等级}
               >
                 <div className={`zhuangbei-select-item-wrap`} translate='no'>
