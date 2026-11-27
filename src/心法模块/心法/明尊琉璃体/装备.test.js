@@ -26,8 +26,8 @@ const selection = (item, overrides = {}) => ({
 })
 const slot = (item) => (item.position === 'ring' ? 'ring1' : item.position)
 
-test('232件可识别装备的精炼和镶嵌均产生有效属性', () => {
-  expect(GEAR_ITEMS).toHaveLength(232)
+test('233件可识别装备的精炼和镶嵌均产生有效属性', () => {
+  expect(GEAR_ITEMS).toHaveLength(233)
   expect(new Set(GEAR_ITEMS.map((item) => item.key)).size).toBe(GEAR_ITEMS.length)
   for (const item of GEAR_ITEMS) {
     const result = calculateLoadout({
@@ -148,7 +148,7 @@ test('精简内功防具、首饰和暗器加入装备库并正确汇总攻击�
   const belt = GEAR_ITEMS.find((row) => row.key === 'armors:112444')
   const ring = GEAR_ITEMS.find((row) => row.key === 'trinkets:49922')
   const ranged = GEAR_ITEMS.find((row) => row.key === 'weapons:47966')
-  expect(GEAR_ITEMS.filter((row) => row.school === '精简')).toHaveLength(67)
+  expect(GEAR_ITEMS.filter((row) => row.school === '精简')).toHaveLength(68)
   for (const item of [belt, ring, ranged]) {
     expect(item.school).toBe('精简')
     expect(item.kind).toBe('内功')

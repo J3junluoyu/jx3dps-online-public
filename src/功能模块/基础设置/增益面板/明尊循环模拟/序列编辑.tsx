@@ -27,12 +27,14 @@ import type {
 import 技能图标 from '@/心法模块/心法/明尊琉璃体/逐招技能图标.json'
 
 export type 序列行 = { id: number; 指令: 明尊循环指令; 宏来源?: 明尊宏来源 }
+export type 节点预览 = { 技能栏状态?: 明尊技能栏状态; 战斗用时?: number; 秒伤?: number }
 
 interface 序列编辑参数 {
   只读?: boolean
   序列: 序列行[]
   设置序列: React.Dispatch<React.SetStateAction<序列行[]>>
   添加指令: (指令: 明尊循环指令[], 插入前?: number) => number
+  获取节点预览?: (序号: number) => 节点预览 | undefined
   施放列表?: 明尊逐招记录[]
   定时团队增益窗口?: readonly 明尊增益窗口[]
   下次施放帧?: number
@@ -134,6 +136,7 @@ function 明尊序列编辑({
   序列,
   设置序列,
   添加指令,
+  获取节点预览,
   施放列表,
   定时团队增益窗口,
   下次施放帧,
@@ -162,12 +165,16 @@ function 明尊序列编辑({
     ...(定时团队增益窗口 ?? []),
   ], [施放列表, 定时团队增益窗口])
   const 选中序号 = 序列.findIndex((行) => 行.id === 选中ID)
+  const 节点 = useMemo(() => 选中序号 < 0 ? undefined : 获取节点预览?.(选中序号), [获取节点预览, 选中序号])
+  const 当前技能栏 = 节点 ? 节点.技能栏状态 : 技能栏状态
+  const 当前用时 = 节点 ? 节点.战斗用时 : 战斗用时
+  const 当前秒伤 = 节点 ? 节点.秒伤 : 秒伤
   const 选中招式 = 序列[选中序号]
   const 选中指令 = 选中招式?.指令
   const 选中增益 = typeof 选中指令 === 'object' && '增益' in 选中指令 ? 选中指令 : undefined
   const 选中结果 = 施放列表?.[选中序号]
   const 已达上限 = 序列.length >= 明尊循环最多指令
-  const 当前序号 = 选中结果 ? 选中序号 : (施放列表?.length ?? 0) - 1
+  const 当前序号 = 选中序号 >= 0 ? 选中序号 : (施放列表?.length ?? 0) - 1
   const 当前动作 = 施放列表?.[当前序号]
   const 当前帧 = 当前动作?.帧 ?? 0
   const 当前指令 = 序列[当前序号]?.指令
@@ -246,7 +253,10 @@ function 明尊序列编辑({
     if (内框.top < 外框.top) 容器.scrollTop += 内框.top - 外框.top - 10
   }, [选中ID, 选中序号])
 
-  const 添加并选中 = (...指令: 明尊循环指令[]) => 设置选中ID(添加指令(指令))
+  const 添加并选中 = (...指令: 明尊循环指令[]) => {
+    const 下一项 = 选中序号 < 0 ? undefined : 序列[选中序号 + 1]
+    设置选中ID(下一项 ? 添加指令(指令, 下一项.id) : 添加指令(指令))
+  }
   const 修改选中指令 = (指令: 明尊循环指令) =>
     设置序列((旧) => 旧.map((行) => (行.id === 选中ID ? { ...行, 指令 } : 行)))
   const 删除招式 = (id: number, 序号: number) => {
@@ -356,14 +366,14 @@ function 明尊序列编辑({
         </div>
         <Buff列表 标题='自身 Buff' 列表={自身Buff.filter(({ 到期帧 }) => 到期帧 > 观察帧)} 当前帧={观察帧} />
         <Buff列表 标题='目标 Buff' 列表={目标Buff.filter(({ 到期帧 }) => 到期帧 > 观察帧)} 当前帧={观察帧} />
-        <div className='mingzun-rotation-live-metrics'>
+        <div className='mingzun-rotation-live-metrics' title={节点 ? `截至第 ${选中序号 + 1} 项的计算结果` : undefined}>
           <output className='mingzun-rotation-live-dps' aria-label='DPS'>
-            {秒伤 === undefined ? '—' : 卡片秒数.format(秒伤)}
+            {当前秒伤 === undefined ? '—' : 卡片秒数.format(当前秒伤)}
           </output>
           <div className='mingzun-rotation-live-duration'>
             <label htmlFor='mingzun-live-duration'>战斗用时</label>
             <output id='mingzun-live-duration'>
-              {战斗用时 === undefined ? '—' : `${秒数.format(战斗用时)}秒`}
+              {当前用时 === undefined ? '—' : `${秒数.format(当前用时)}秒`}
             </output>
           </div>
         </div>
@@ -396,6 +406,7 @@ function 明尊序列编辑({
                 aria-label='向后移动所选招式'
                 onClick={() => 移动选中招式(1)}
               />
+              <Button size='small' type='text' onClick={() => 设置选中ID(undefined)}>取消选中</Button>
             </div>
           )}
         </div>
@@ -572,7 +583,7 @@ function 明尊序列编辑({
             <h3>{名称}</h3>
             <div className='mingzun-rotation-skill-buttons'>
               {技能.map((招式) => {
-                const 状态 = 技能栏状态?.[招式]
+                const 状态 = 当前技能栏?.[招式]
                 const 不可施放 = 状态?.不可施放原因
                 const 充能 = 状态?.充能
                 const 冷却秒 = Math.ceil((状态?.冷却帧 ?? 0) / 16)
@@ -587,11 +598,11 @@ function 明尊序列编辑({
                     key={招式}
                     type='button'
                     className='mingzun-rotation-skill-button'
-                    disabled={只读 || 已达上限}
+                    disabled={只读 || 已达上限 || (!!节点 && !当前技能栏)}
                     aria-disabled={!!不可施放 || undefined}
                     data-blocked={!!不可施放 && !冷却秒}
                     data-cooling={冷却秒 > 0}
-                    title={[不可施放, 充能提示].filter(Boolean).join('。') || undefined}
+                    title={[不可施放, 充能提示, 选中招式 && '插在所选节点后'].filter(Boolean).join('。') || undefined}
                     onClick={() => {
                       if (!不可施放) 添加并选中(招式)
                     }}

@@ -4,9 +4,9 @@ import React from 'react'
 import { fireEvent, render, screen, within } from '@testing-library/react'
 import 明尊循环模拟 from '@/功能模块/基础设置/增益面板/明尊循环模拟'
 import 明尊序列编辑 from '@/功能模块/基础设置/增益面板/明尊循环模拟/序列编辑'
+import 洗髓循环模拟 from '@/功能模块/基础设置/增益面板/洗髓循环模拟'
 import 保存循环 from '@/功能模块/基础设置/增益面板/明尊循环模拟/保存循环'
 import { 生成明尊逐招时间轴 } from './逐招时间轴'
-
 import 八一 from './测试数据/理论循环0.8125.json'
 
 jest.mock('@/hooks', () => ({
@@ -17,10 +17,61 @@ jest.mock('@/计算模块/计算函数', () => ({ 触发秒伤计算: jest.fn() 
 jest.mock('@/数据/数据工具/获取当前数据', () => ({ __esModule: true, default: jest.fn() }))
 jest.mock('@/store/data', () => ({ 更新当前自定义循环列表: jest.fn() }))
 jest.mock('@/功能模块/基础设置/公用设置/奇穴选择/drawer', () => () => null)
+jest.mock('../洗髓经/奇穴设置.css', () => ({}))
 jest.mock('@/功能模块/基础设置/增益面板/明尊循环模拟/秒伤曲线', () => () => null)
 jest.mock('@/功能模块/基础设置/增益面板/明尊循环模拟/index.css', () => ({}))
+jest.mock('@/功能模块/基础设置/增益面板/洗髓循环模拟/index.css', () => ({}))
 
 let mockState
+
+test.each([
+  ['明尊', 明尊循环模拟, '赤日轮', '烈日斩', '幽月轮', '银月斩'],
+  ['洗髓', 洗髓循环模拟, '普渡四方', '横扫六合', '韦驮献杵', '醍醐灌顶'],
+])('%s选中前面的招式时按节点显示秒伤和冷却，新技能插在该节点后', (_, 模拟器, 第一招, 第二招, 第三招, 插入招式) => {
+  const oldMatchMedia = window.matchMedia
+  window.matchMedia = () => ({ matches: false, addListener: jest.fn(), removeListener: jest.fn() })
+  mockState = {
+    data: {
+      自定义循环列表: [],
+      装备信息: { 装备列表: [{ id: '1' }], 装备基础属性: { 明尊属性: 八一.equipment } },
+      当前奇穴信息: ['光明心'], 当前秘籍信息: {}, 增益启用: false, 增益数据: { 团队增益: [] },
+    },
+  }
+  const { container, unmount } = render(<模拟器 />)
+  try {
+    const 技能栏 = within(container.querySelector('.mingzun-rotation-palette'))
+    const 招式 = (名称) => 技能栏.getByRole('button', { name: 名称, exact: true })
+    const 节点 = (位置, 名称) => within(container.querySelector('.mingzun-rotation-board'))
+      .getByRole('button', { name: new RegExp(`^第 ${位置} 项 ${名称}`) })
+    const 秒伤 = () => screen.getByRole('status', { name: 'DPS' }).textContent
+    const 用时 = () => screen.getByRole('status', { name: '战斗用时' }).textContent
+    fireEvent.click(招式(第一招))
+    const 节点秒伤 = 秒伤()
+    const 节点用时 = 用时()
+    expect(节点秒伤).not.toBe('—')
+    fireEvent.click(招式(第二招))
+    fireEvent.click(招式(第三招))
+    expect(招式(第二招).dataset.cooling).toBe('true')
+    expect(用时()).not.toBe(节点用时)
+
+    fireEvent.click(节点(1, 第一招))
+    expect(秒伤()).toBe(节点秒伤)
+    expect(用时()).toBe(节点用时)
+    expect(招式(第二招).dataset.cooling).toBe('false')
+    fireEvent.click(招式(插入招式))
+    expect(节点(2, 插入招式).getAttribute('aria-pressed')).toBe('true')
+    expect(节点(3, 第二招)).toBeTruthy()
+    expect(节点(4, 第三招)).toBeTruthy()
+    const 插入后用时 = 用时()
+
+    fireEvent.click(screen.getByRole('button', { name: '取消选中' }))
+    expect(用时()).not.toBe(插入后用时)
+    expect(招式(第二招).dataset.cooling).toBe('true')
+  } finally {
+    unmount()
+    window.matchMedia = oldMatchMedia
+  }
+})
 
 test('模拟直接结算队友朝圣和鼓，外部团队勾选不影响预览，也不占玩家出招时间', () => {
   const oldMatchMedia = window.matchMedia
@@ -43,9 +94,13 @@ test('模拟直接结算队友朝圣和鼓，外部团队勾选不影响预览�
     const 原用时 = 读用时()
     const 基础秒伤 = 读秒伤()
     fireEvent.click(screen.getByRole('button', { name: '朝圣言' }))
+    expect(读用时()).toBe('0秒')
+    fireEvent.click(screen.getByRole('button', { name: '取消选中' }))
     const 朝圣秒伤 = 读秒伤()
     expect(朝圣秒伤).toBeGreaterThan(基础秒伤)
+    fireEvent.click(screen.getByRole('button', { name: /^第 2 项 赤日轮/ }))
     fireEvent.click(screen.getByRole('button', { name: '号令三军' }))
+    fireEvent.click(screen.getByRole('button', { name: '取消选中' }))
     const 朝鼓秒伤 = 读秒伤()
     expect(朝鼓秒伤).toBeGreaterThan(朝圣秒伤)
     expect(读用时()).toBe(原用时)

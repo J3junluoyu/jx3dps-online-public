@@ -5,6 +5,7 @@ import { 获取明尊显示面板 } from '@/计算模块/职业特殊处理/明�
 import { 获取明尊技能系数 } from '@/心法模块/心法/明尊琉璃体/技能系数查询'
 
 const 系数格式 = new Intl.NumberFormat('zh-CN', { maximumFractionDigits: 6 })
+const 仇恨格式 = new Intl.NumberFormat('zh-CN')
 
 export default function 技能系数查询() {
   const 装备信息 = useAppSelector((state) => state.data.装备信息)
@@ -22,6 +23,7 @@ export default function 技能系数查询() {
     <section aria-label='技能系数查询'>
       <h2>技能系数查询</h2>
       <p>戒火斩按当前面板基础体质 {基础体质.toLocaleString('zh-CN')} 换档。月破的实际系数按三段合计。</p>
+      <p>基础仇恨值为技能的固定仇恨，未核实的数值显示为「—」。</p>
       <Table
         rowKey='id'
         size='small'
@@ -33,6 +35,16 @@ export default function 技能系数查询() {
             title: '当前技能基础系数',
             align: 'right',
             render: (_, 行) => `${系数格式.format(行.基础系数)}${行.id === '13359' ? ' / 跳' : ''}`,
+          },
+          {
+            title: '基础仇恨值',
+            align: 'right',
+            render: (_, { id, 基础仇恨值, 段数 }) => {
+              if (基础仇恨值 === undefined) return '—'
+              if (基础仇恨值 === null) return <span title={`技能 ID ${id} 的伤害脚本未设置固定仇恨`}>未配置</span>
+              const 单段 = 仇恨格式.format(基础仇恨值)
+              return 段数 === 1 ? 单段 : `${单段} / 段（${段数} 段共 ${仇恨格式.format(基础仇恨值 * 段数)}）`
+            },
           },
           {
             title: '增伤百分比',

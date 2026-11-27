@@ -26,6 +26,18 @@ export const 明尊宏默认团队节点 = [
   { 秒数: 288.505, 增益: '寒啸千军' },
 ] as const satisfies readonly 宏团队节点[]
 
+export function 获取默认团队增益节点(
+  序列?: readonly (string | { 等待: number } | 明尊团队指令)[],
+  宏循环 = false,
+) {
+  if (
+    宏循环 ||
+    (序列?.length && !序列.some((指令) => 指令 && typeof 指令 === 'object' && '增益' in 指令))
+  ) {
+    return 明尊宏默认团队节点
+  }
+}
+
 export function 生成宏团队增益施放(
   团队增益: readonly 团队增益选项数据类型[] | undefined, 结算时长: number,
 ) {

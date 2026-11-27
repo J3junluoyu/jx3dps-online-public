@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react'
+import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { DownOutlined, PlusCircleOutlined, SettingOutlined } from '@ant-design/icons'
 import { Alert, Button, Checkbox, InputNumber, Popover, Select, Table, Tabs } from 'antd'
 import { shallowEqual } from 'react-redux'
@@ -22,11 +22,12 @@ import { 明尊逐招加速帧数, 模拟明尊逐招循环, 预览明尊逐招�
 import type { 明尊逐招加速档位, 明尊逐招循环配置 } from '@/心法模块/心法/明尊琉璃体/逐招模拟'
 import { 生成明尊宏循环 } from '@/心法模块/心法/明尊琉璃体/宏循环'
 import type { 明尊宏方案 } from '@/心法模块/心法/明尊琉璃体/宏循环'
+import { 获取默认团队增益节点 } from '@/心法模块/心法/明尊琉璃体/宏团队增益'
 import { 保存最近生成宏, 查找逐招循环, 获取自动重排宏, 读取最近生成宏 } from '@/心法模块/心法/明尊琉璃体/自定义逐招循环'
 import 奇穴选择抽屉 from '../../公用设置/奇穴选择/drawer'
 import 分段宏生成 from './分段宏生成'
 import 明尊序列编辑 from './序列编辑'
-import type { 序列行 } from './序列编辑'
+import type { 序列行, 节点预览 } from './序列编辑'
 import 保存循环 from './保存循环'
 import 明尊秒伤曲线 from './秒伤曲线'
 import './index.css'
@@ -82,7 +83,6 @@ function 明尊循环模拟() {
   const [宏方案, 设置宏方案] = useState<明尊宏方案 | undefined>(已选配置?.宏方案)
   const [自动重排, 设置自动重排] = useState(!!已选自动宏)
   const 自动宏 = 自动重排 ? 宏方案 : undefined
-  const 宏团队增益 = 自动宏 ? 团队增益 : undefined
   const [最近宏, 设置最近宏] = useState(读取最近生成宏)
   const [宏表单版本, 更新宏表单版本] = useState(0)
   const 下一个序号 = useRef(手动序列.length)
@@ -135,6 +135,7 @@ function 明尊循环模拟() {
     })) ?? []
   }, [自动宏, 宏配置, 手动序列])
   const 循环指令 = useMemo(() => 宏配置?.序列 ?? 序列.map((行) => 行.指令), [宏配置, 序列])
+  const 宏团队增益 = 获取默认团队增益节点(循环指令, !!自动宏) ? 团队增益 : undefined
   const 宏来源 = useMemo(
     () => 宏配置?.宏来源 ?? (序列.some((行) => 行.宏来源) ? 序列.map((行) => 行.宏来源 ?? null) : undefined),
     [宏配置, 序列],
@@ -169,11 +170,27 @@ function 明尊循环模拟() {
   const 有开场戒火 = 可用开场戒火 && 已戒火
   const 实时结算时长 = 编辑提示 ? undefined : 序列.length ? 编辑预览?.结算时长 : 0
   const 记录秒伤曲线 = 当前结果页 === 'dps'
+  const 有装备 = !!输入.装备信息?.装备列表?.some((项) => 项?.id)
+  const 获取节点预览 = useCallback((序号: number): 节点预览 | undefined => {
+    if (!序列参数 || !编辑预览?.施放列表?.[序号]) return {}
+    if (!编辑提示 && 序号 === 序列.length - 1 && 序列参数.时长 === undefined && 编辑预览.下次施放帧) return
+    const 配置 = { ...序列参数, 截至指令数: 序号 + 1 }
+    const { 技能栏状态, 下次施放帧, 结算时长 } = 预览明尊逐招灵力(装备, 设置, 配置)
+    const 节点结果: 节点预览 = { 技能栏状态, 战斗用时: 下次施放帧 ? 结算时长 : 0 }
+    if (下次施放帧 && 有装备) {
+      try {
+        节点结果.秒伤 = 模拟明尊逐招循环(装备, 设置, { ...配置, 宏团队增益, 仅计算秒伤: true }).秒伤
+      } catch {
+        return 节点结果
+      }
+    }
+    return 节点结果
+  }, [序列参数, 编辑预览, 编辑提示, 序列.length, 装备, 设置, 有装备, 宏团队增益])
 
   const { 结果, 错误 } = useMemo(() => {
     if (!序列.length || 编辑提示) return {}
     if (!序列参数) return { 错误: '请填写起手灵力、网络延迟' }
-    if (!输入.装备信息?.装备列表?.some((项) => 项?.id))
+    if (!有装备)
       return { 错误: '请先在配装器保存一套装备' }
     try {
       return {
@@ -187,7 +204,7 @@ function 明尊循环模拟() {
       return { 错误: error instanceof Error ? error.message : '无法计算当前循环' }
     }
   }, [
-    序列.length, 编辑提示, 序列参数, 输入.装备信息, 装备, 设置, 记录秒伤曲线, 宏团队增益,
+    序列.length, 编辑提示, 序列参数, 有装备, 装备, 设置, 记录秒伤曲线, 宏团队增益,
   ])
   const 定时团队增益窗口 = useMemo(() => 结果?.定时团队施放.flatMap(({ 生效窗口 }) => 生效窗口), [结果])
   const 施放时间轴 = useMemo(() => {
@@ -395,6 +412,7 @@ function 明尊循环模拟() {
         序列={序列}
         设置序列={设置序列}
         添加指令={添加指令}
+        获取节点预览={获取节点预览}
         施放列表={编辑预览?.施放列表}
         定时团队增益窗口={定时团队增益窗口}
         下次施放帧={编辑预览?.下次施放帧}

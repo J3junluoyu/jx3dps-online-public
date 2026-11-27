@@ -15,13 +15,13 @@ import { 计入循环戒火 } from './戒火斩'
 import { 创建逐招增益查询, 生成明尊逐招时间轴 } from './逐招时间轴'
 import { 生成宏团队增益施放 } from './宏团队增益'
 import type { 团队增益选项数据类型 } from '@/@types/团队增益'
-import type { 明尊增益窗口, 明尊循环指令, 明尊宏来源, 明尊时间轴选项 } from './逐招时间轴'
+import type { 明尊增益窗口, 明尊循环指令, 明尊宏来源, 明尊时间轴选项, 明尊时间轴预览选项 } from './逐招时间轴'
 import type { 明尊宏方案 } from './宏循环'
 
 export const 明尊逐招加速帧数 = [15, 14, 13, 12] as const
 export type 明尊逐招加速档位 = (typeof 明尊逐招加速帧数)[number]
 
-export interface 明尊逐招模拟选项 extends 明尊时间轴选项 {
+export interface 明尊逐招模拟选项 extends 明尊时间轴预览选项 {
   启用循环增益?: boolean
   宏团队增益?: readonly 团队增益选项数据类型[]
   已勾选循环增益?: ReadonlySet<string>
@@ -166,7 +166,7 @@ export function 获取逐招环境(装备: EquipmentStats, 初始设置: Setting
 export function 预览明尊逐招灵力(
   装备: EquipmentStats,
   初始设置: Settings,
-  选项: 明尊时间轴选项 & Pick<明尊逐招模拟选项, '加速档位'>,
+  选项: 明尊时间轴预览选项 & Pick<明尊逐招模拟选项, '加速档位'>,
 ) {
   const { 郭氏加速, 规则 } = 获取逐招环境(装备, 初始设置, 选项.加速档位)
   const { 施放列表, 中断, 结算时长, 下次施放帧, 技能栏状态 } = 生成明尊逐招时间轴(

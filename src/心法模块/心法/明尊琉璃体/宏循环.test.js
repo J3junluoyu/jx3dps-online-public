@@ -90,6 +90,26 @@ test('没有可施放招式时等待实际冷却，只结算指定时长内的�
   expect(结果.结算时长).toBe(12)
 })
 
+test('橙武夹在两招之间不延长出招间隔，手动和宏回放同帧生效', () => {
+  const 配置 = 生成('/cast [last_skill=赤日轮] 橙武\n/cast 赤日轮', 3, { 延迟: 40 })
+  expect(配置.序列.slice(0, 3)).toEqual(['赤日轮', '橙武', '赤日轮'])
+  const 手动 = { ...起手, 延迟: 40, 序列: 配置.序列.slice(0, 3) }
+  const 基准 = 预览明尊逐招灵力(装备, 设置, { ...手动, 序列: ['赤日轮', '赤日轮'] })
+  const 预览 = 预览明尊逐招灵力(装备, 设置, 手动)
+  const 同帧 = 基准.施放列表[1].帧
+  expect(预览.施放列表.map(({ 帧 }) => 帧)).toEqual([0, 同帧, 同帧])
+  expect(预览.下次施放帧).toBe(基准.下次施放帧)
+  expect(预览.施放列表[2].施放前.橙武结束帧).toBeCloseTo(同帧 + 80)
+  expect(模拟明尊逐招循环(装备, 设置, 配置).施放列表.slice(0, 3)).toEqual(预览.施放列表)
+})
+
+test('宏的调息条件和回放都允许在橙武还差 0.02 秒时同帧释放', () => {
+  const 配置 = 生成('/cast [nocd:橙武] 橙武\n/cast 赤日轮', 51, { 延迟: 20.5 })
+  const { 施放列表 } = 模拟明尊逐招循环(装备, 设置, 配置)
+  expect(施放列表.filter(({ 技能 }) => 技能 === '橙武').map(({ 帧 }) => 帧 / 16)).toEqual([0, 49.98])
+  expect(施放列表[62].帧).toBe(施放列表[61].帧)
+})
+
 test('默认团队节点使用当前层数，按实际秒数覆盖且不改变玩家施放时间', () => {
   const 配置 = 生成('/cast 赤日轮', 33)
   const 选项 = (增益名称, 层数, 启用 = true) => ({ 增益名称, 层数, 启用, 覆盖率: 0 })
@@ -138,10 +158,9 @@ test('主界面保存的宏使用节点结算，手填覆盖率不参与但改�
   expect(计算(35, 0, true, false)).toEqual(计算(35, 0, false))
   expect(计算(35, 0, true, true, { ...逐招配置, 默认宏团队增益: false })).toEqual(节点计算)
   const 手编循环 = { ...逐招配置, 宏自动重排: false }
-  const 平均计算 = 计算(35, 0, true, true, 手编循环)
-  expect(平均计算.循环内增益).toBeUndefined()
-  expect(平均计算.秒伤).toBeLessThan(节点计算.秒伤)
-  expect(平均计算).toEqual(计算(35, 99, true, true, 手编循环))
+  expect(计算(35, 0, true, true, 手编循环)).toEqual(节点计算)
+  expect(计算(35, 99, true, true, 手编循环)).toEqual(节点计算)
+  expect(计算(35, 99, false, true, 手编循环).循环内增益).toBeUndefined()
 })
 
 test('按孤月无心的层数、保护调息和恢复决定是否释放光明相', () => {

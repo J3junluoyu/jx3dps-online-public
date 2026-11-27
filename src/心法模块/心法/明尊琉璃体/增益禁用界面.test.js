@@ -163,7 +163,7 @@ test('循环和普通增益共用图标，点击可取消，清空后可在设�
   expect(图标列表.getByRole('button', { name: '取消增益 号令三军' }).dataset.coverage).toBe('20')
 })
 
-test('自动宏的四种增益显示节点覆盖并保留层数选项，填写层数后仍需勾选', () => {
+test('自动宏和未插增益的手动循环显示节点覆盖，填写层数后仍需勾选', () => {
   const 循环名称 = '自动宏'
   const 逐招配置 = { 序列: ['赤日轮'], 宏方案: { 循环宏: '/cast 赤日轮' } }
   mockState.data.当前计算循环名称 = 循环名称
@@ -191,6 +191,18 @@ test('自动宏的四种增益显示节点覆盖并保留层数选项，填写�
   expect(getByRole(row('号令三军'), 'combobox').value).toBe('73')
   expect(getByRole(container, 'button', { name: '取消增益 号令三军' }).dataset.stacks).toBe('73')
   mockState.data.自定义循环列表 = [{ 名称: 循环名称, 明尊逐招配置: { ...逐招配置, 宏自动重排: false } }]
+  render()
+  expect(row('号令三军').textContent).toContain('自动覆盖 75%')
+  expect(getByRole(row('号令三军'), 'combobox').value).toBe('73')
+
+  mockState.data.自定义循环列表 = [{
+    名称: 循环名称,
+    明尊逐招配置: {
+      ...逐招配置,
+      宏自动重排: false,
+      序列: [{ 增益: '号令三军', 层数: 73 }, ...逐招配置.序列],
+    },
+  }]
   render()
   expect(row('号令三军').textContent).toContain('固定覆盖率 20%')
   expect(row('号令三军').querySelector('input[type="number"]')).toBeNull()

@@ -56,8 +56,8 @@ const clientDataVersion = database.clientStrainUpdate?.version ?? database.clien
 export const EQUIPMENT_DATA_VERSION = clientDataVersion
   ? `${database.commit}:${clientDataVersion}`
   : database.commit
-// 清尘雨、青云起的无双来自镶嵌孔，按指定装备加入可选范围。
-const 可选无本体无双装备 = new Set(['armors:112482', 'armors:112486'])
+// 清尘雨、青云起的无双来自镶嵌孔，月落影的无双来自进战黄字。
+const 可选无本体无双装备 = new Set(['armors:112482', 'armors:112486', 'trinkets:49936'])
 const eligibleGear = [
   ...database.items,
   ...(waterWindData.items as unknown as GearItem[]),

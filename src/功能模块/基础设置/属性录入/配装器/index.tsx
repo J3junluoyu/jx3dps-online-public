@@ -3,9 +3,10 @@ import React, { useEffect, useRef, useState } from 'react'
 import html2canvas from 'html2canvas'
 import { Alert, Button, Form, message, Modal, ModalProps } from 'antd'
 import { 装备信息数据类型, 装备位置部位枚举, 装备选择范围类型 } from '@/@types/装备'
+import type { 方案数据类型 } from '@/@types/方案'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { 秒伤计算, 触发秒伤计算 } from '@/计算模块/计算函数'
-import { 更新方案数据 } from '@/store/data'
+import { 更新方案数据, 更新选中的方案数据 } from '@/store/data'
 import { 获取页面参数 } from '@/工具函数/help'
 import { 数据埋点 } from '@/工具函数/tools/log'
 import 获取当前数据 from '@/数据/数据工具/获取当前数据'
@@ -25,6 +26,7 @@ import 面板展示 from './功能组件/面板展示'
 import 装备增益展示 from './功能组件/装备增益展示'
 import 秒伤结果对比 from './功能组件/秒伤结果对比'
 import 配装导出 from './功能组件/配装导出'
+import 方案保存 from './功能组件/方案保存'
 import 方案优化 from './功能组件/方案优化'
 import 大附魔选择 from './功能组件/大附魔选择'
 import 渐变特效文字 from './功能组件/装备选择/装备部位选择/渐变特效文字'
@@ -127,17 +129,14 @@ function 配装器(props: ModalProps) {
       大附魔_伤腕: 装备信息?.装备增益?.大附魔_伤腕 || 0,
       大附魔_伤鞋: 装备信息?.装备增益?.大附魔_伤鞋 || 0,
     }
-    Object.keys(装备位置部位枚举).map((item, index) => {
+    const 部位字段 = Object.keys(装备位置部位枚举).map((item, index) => {
       const o = 装备信息.装备列表?.find(
         (a, i) => a.装备部位 === 装备位置部位枚举[item] && index === i,
       )
-      if (o) {
-        // Form合并对象字段时不会删除旧的可选值，必须显式重置未保存的大附魔。
-        newObj[`${item}`] = 明尊模式 ? { ...o, 大附魔: o.大附魔 || 0 } : o
-      }
+      return { name: item, value: o && 明尊模式 ? { ...o, 大附魔: o.大附魔 || 0 } : o }
     })
 
-    form.setFieldsValue(newObj)
+    form.setFields([...Object.entries(newObj).map(([name, value]) => ({ name, value })), ...部位字段])
   }
 
   const 更换装备计算秒伤 = (_, value) => {
@@ -176,17 +175,38 @@ function 配装器(props: ModalProps) {
     更换装备计算秒伤(undefined, values)
   }
 
+  const 获取可应用循环 = (配装: 装备信息数据类型) =>
+    寻优循环 && 获取寻优循环详情(寻优循环, 配装, 增益数据, 增益启用) ? 寻优循环.名称 : undefined
+
   const onOk = () => {
     数据埋点('保存配装计算')
     form.validateFields().then((value) => {
       const 装备信息 = 根据表单选项获取装备信息(value)
-      if (寻优循环 && 获取寻优循环详情(寻优循环, 装备信息, 增益数据, 增益启用)) {
-        dispatch(更新方案数据({ 数据: 寻优循环.名称, 属性: '当前计算循环名称' }))
-      }
+      const 循环名称 = 获取可应用循环(装备信息)
+      if (循环名称) dispatch(更新方案数据({ 数据: 循环名称, 属性: '当前计算循环名称' }))
       dispatch(更新方案数据({ 数据: 装备信息, 属性: '装备信息' }))
       dispatch(触发秒伤计算({ 是否更新显示计算结果: true }))
       onCancel?.({} as any)
     })
+  }
+
+  const 获取待保存配装 = async () => {
+    const 配装 = 根据表单选项获取装备信息(await form.validateFields())
+    return {
+      装备信息: 配装,
+      当前计算循环名称: 获取可应用循环(配装) ?? 当前计算循环名称,
+    }
+  }
+
+  const 载入已保存配装 = (方案: 方案数据类型) => {
+    dispatch(更新选中的方案数据({ 应用到当前配装: 方案.方案名称 }))
+    初始化表单(方案.装备信息)
+    更新当前装备信息(方案.装备信息)
+    设置寻优循环名称(方案.当前计算循环名称)
+    const { 秒伤, 计算错误 } = dispatch(秒伤计算({ 是否更新显示计算结果: true }))
+    设置打开配装器时秒伤(秒伤)
+    设置配装器内动态新秒伤(undefined)
+    设置配装计算错误(计算错误)
   }
 
   const 获取表单信息 = async () => {
@@ -333,6 +353,7 @@ function 配装器(props: ModalProps) {
                 ]}
                 应用方案={应用优化方案}
               />
+              <方案保存 获取当前配装={获取待保存配装} 载入方案={载入已保存配装} />
             </div>
           )}
         </头部组件>

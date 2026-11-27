@@ -20,22 +20,47 @@ const 查询技能: readonly [id: string, 名称: string, 段数?: number, 背�
   ['26708', '净体不畏'],
 ]
 
+// 客户端明尊心法附带的技能修正，以及戒火斩本体脚本中的 nBaseThreat。
+const 基础仇恨公式: Readonly<Partial<Record<string, ((等级: number) => number) | null>>> = {
+  '4028': (等级) => 51 + 等级 * 60,
+  '4029': (等级) => 51 + 等级 * 60,
+  '4030': (等级) => 82 + 等级 * 84,
+  '4024': (等级) => 81 + 等级 * 70,
+  '4025': (等级) => 81 + 等级 * 70,
+  '4026': (等级) => 113 + 等级 * 100,
+  '40088': (等级) => 121 + 等级 * 160,
+  '40089': (等级) => 183 + 等级 * 220,
+  // 14701 自身没有 nBaseThreat，明尊日破旧配方只给 4483–4490 赋值。
+  '14701': null,
+  '4476': (等级) => Math.trunc(105 + 等级 * 100 + (824 / 32) * 等级),
+  // 固定仇恨取戒火斩本体（3980）的第 5 重，伤害子招式按体质调档。
+  '44567': () => 2394,
+}
+
 const 技能表 = 查询技能.map(([id, 名称, 段数 = 1, 背后攻击 = false]) => {
   const 技能 = SKILLS.find((项) => 项.id === id)!
-  return { id: 背后攻击 ? `${id}-back` : id, 名称, 段数, 技能, 背后攻击 }
+  const 仇恨公式 = 基础仇恨公式[id]
+  const [, 基础记录] = 获取技能结算档(技能, 0, 背后攻击)
+  return {
+    id: 背后攻击 ? `${id}-back` : id,
+    名称, 段数,
+    基础系数: Number(基础记录.skill_attribute?.magical_attack_power_cof),
+    戒火斩: id === '44567' ? 技能 : undefined,
+    基础仇恨值: 仇恨公式 === null ? null : 仇恨公式?.(Number(技能.level)),
+  }
 })
 
 export function 获取明尊技能系数(基础体质: number, 增伤: Readonly<Partial<Record<string, number>>> = {}) {
-  return 技能表.map(({ id, 名称, 段数, 技能, 背后攻击 }) => {
-    const [, 基础记录] = 获取技能结算档(技能, 0, 背后攻击)
-    const [, 结算记录] = 获取技能结算档(技能, 基础体质, 背后攻击)
-    const 基础系数 = Number(基础记录.skill_attribute?.magical_attack_power_cof)
-    const 面板系数 = Number(结算记录.skill_attribute?.magical_attack_power_cof)
+  return 技能表.map(({ id, 名称, 段数, 基础系数, 戒火斩, 基础仇恨值 }) => {
+    const 面板系数 = 戒火斩
+      ? Number(获取技能结算档(戒火斩, 基础体质)[1].skill_attribute?.magical_attack_power_cof)
+      : 基础系数
     return {
       id,
       名称,
       段数,
       基础系数,
+      基础仇恨值,
       实际系数: 面板系数 * 段数 * (1 + (增伤[id] ?? 0) / 100),
     }
   })

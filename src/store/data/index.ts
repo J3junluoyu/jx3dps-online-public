@@ -9,6 +9,7 @@ import { 选中秘籍信息 } from '@/@types/秘籍'
 import { 全部方案数据, 更新方案数据入参 } from '@/@types/方案'
 import { 循环数据 } from '@/@types/循环'
 import 获取当前数据 from '@/数据/数据工具/获取当前数据'
+import { DEFAULT_PROJECT_NAME } from '@/数据/常量'
 import { 获取数据默认值 } from '@/工具函数/init'
 import { 获取明尊固定秘籍 } from '@/心法模块/心法/明尊琉璃体/秘籍'
 import { 规范洗髓秘籍 } from '@/心法模块/心法/洗髓经/秘籍'
@@ -156,13 +157,19 @@ export const 数据模块 = createSlice({
         }
       }
     },
-    更新选中的方案数据: (state, action: PayloadAction<string>) => {
-      const 切换的目标方案名称 = action?.payload
-      const 目标方案 = state.全部方案数据?.[切换的目标方案名称]
+    更新选中的方案数据: (state, { payload }: PayloadAction<string | { 应用到当前配装: string }>) => {
+      const 应用到当前配装 = typeof payload !== 'string'
+      const 来源方案名称 = 应用到当前配装 ? payload.应用到当前配装 : payload
+      const 来源方案 = state.全部方案数据?.[来源方案名称]
 
-      if (目标方案) {
-        state.当前方案名称 = 切换的目标方案名称
-        localStorage.setItem(缓存映射.当前方案名称, action.payload)
+      if (来源方案) {
+        const 当前方案名称 = 应用到当前配装 ? DEFAULT_PROJECT_NAME : 来源方案名称
+        if (应用到当前配装) {
+          state.全部方案数据[当前方案名称] = { ...来源方案, 方案名称: 当前方案名称 }
+        }
+        const 目标方案 = state.全部方案数据[当前方案名称]
+        state.当前方案名称 = 当前方案名称
+        localStorage.setItem(缓存映射.当前方案名称, 当前方案名称)
         state.装备信息 = 目标方案.装备信息
         state.增益启用 = 目标方案.增益启用
         state.增益数据 = 目标方案.增益数据
@@ -183,6 +190,9 @@ export const 数据模块 = createSlice({
           目标方案.当前秘籍信息 = state.当前秘籍信息
         } else if (目标方案.当前秘籍信息) {
           state.当前秘籍信息 = 目标方案.当前秘籍信息
+        }
+        if (应用到当前配装) {
+          localStorage.setItem(缓存映射.全部方案数据, JSON.stringify(state.全部方案数据))
         }
       }
     },

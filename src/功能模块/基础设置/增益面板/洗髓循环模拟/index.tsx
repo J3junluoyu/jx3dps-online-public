@@ -12,6 +12,7 @@ import 获取当前数据 from '@/数据/数据工具/获取当前数据'
 import type { 循环数据 } from '@/@types/循环'
 import { TARGETS } from '@/心法模块/心法/明尊琉璃体/计算'
 import { isXisuiOrangeWeapon } from '@/心法模块/心法/明尊琉璃体/装备'
+import { 获取默认团队增益节点 } from '@/心法模块/心法/明尊琉璃体/宏团队增益'
 import 明尊图标 from '@/心法模块/心法/明尊琉璃体/逐招技能图标.json'
 import {
   团队增益基础冷却秒, 获取明尊时间点增益, 明尊团队增益持续秒, 统一明尊循环增益名称,
@@ -107,7 +108,7 @@ export default function 洗髓循环模拟() {
   const 记录命中 = 页 === 'hits'
   const 记录曲线 = 页 === 'curve'
   const 计算详情 = 页 === 'summary'
-  const 宏团队增益 = 宏记录?.宏生成 ? 增益数据?.团队增益 : undefined
+  const 宏团队增益 = 获取默认团队增益节点(配置?.序列, 配置?.宏生成) ? 增益数据?.团队增益 : undefined
   const { 模拟, 错误 } = useMemo(() => {
     if (!配置 || !设置) return { 错误: '请填写起手禅那和网络延迟' }
     try {
@@ -131,11 +132,26 @@ export default function 洗髓循环模拟() {
   const 选中指令 = 选中行?.指令
   const 选中等待 = typeof 选中指令 === 'object' && '等待' in 选中指令 ? 选中指令 : undefined
   const 选中增益 = typeof 选中指令 === 'object' && '增益' in 选中指令 ? 选中指令 : undefined
-  const 状态行 = 模拟?.施放列表[选中位置] ?? (战斗时长 === undefined ? 模拟?.施放列表.at(-1) : undefined)
-  const 资源 = 状态行?.施放后 ?? 模拟?.当前
-  const 当前帧 = 状态行?.结束帧 ?? 模拟?.下次施放帧 ?? 0
+  const 查看节点 = 选中位置 >= 0 && (选中位置 < 序列.length - 1 || 战斗时长 !== undefined || !!模拟?.中断)
+  const 节点模拟 = useMemo(() => {
+    if (!查看节点 || !配置 || !设置 || !模拟?.施放列表[选中位置]) return
+    try {
+      return 模拟洗髓逐招(装备, 设置, 配置, { 宏团队增益, 仅计算秒伤: true, 截至指令数: 选中位置 + 1 })
+    } catch {
+      return undefined
+    }
+  }, [查看节点, 配置, 设置, 模拟, 选中位置, 装备, 宏团队增益])
+  const 当前模拟 = 查看节点 ? 节点模拟 : 模拟
+  const 当前秒伤 = 当前模拟?.下次施放帧 ? 当前模拟.结果?.秒伤 : undefined
+  const 当前用时 = 当前模拟 && !当前模拟.中断
+    ? 当前模拟.下次施放帧 ? 当前模拟.结算时长 : 0
+    : 查看节点 || 模拟?.中断 ? undefined : 0
+  const 状态行 = 选中行 ? 模拟?.施放列表[选中位置] : 战斗时长 === undefined ? 模拟?.施放列表.at(-1) : undefined
+  const 资源 = 状态行?.施放后 ?? 当前模拟?.当前
+  const 当前帧 = 状态行?.结束帧 ?? 当前模拟?.下次施放帧 ?? 0
   const 禅那值 = 资源?.禅那 ?? 禅那 ?? 0
   const 插入位置 = 选中位置 < 0 ? 序列.length : 选中位置 + Number(!!选中等待)
+  const 技能插入位置 = 选中位置 < 0 ? 序列.length : 选中位置 + 1
   const 插入帧 = 模拟?.施放列表[插入位置]?.开始帧 ?? 模拟?.下次施放帧 ?? 0
   const 达到上限 = 序列.length >= 洗髓逐招最多指令
   const 读帧 = (key: keyof NonNullable<typeof 资源>['到期']) => 资源?.到期[key] ?? 0
@@ -146,7 +162,7 @@ export default function 洗髓循环模拟() {
     { 名称: '立地准备', 图标: 420, 到期帧: 读帧('prepared') },
     { 名称: '大善', 图标: 2029, 到期帧: 读帧('dashan'), 层数: 资源?.大善 },
     { 名称: '降魔境', 图标: 28727, 到期帧: 读帧('cw') },
-    ...Object.values(获取明尊时间点增益(模拟?.增益窗口 ?? [], 当前帧)).map((窗口) => ({
+    ...Object.values(获取明尊时间点增益(当前模拟?.增益窗口 ?? [], 当前帧)).map((窗口) => ({
       名称: 窗口.名称, 图标: 明尊图标[窗口.名称].icon, 到期帧: 窗口.结束帧, 层数: 窗口.层数,
     })),
   ].filter(({ 到期帧 }) => 到期帧 > 当前帧)
@@ -277,10 +293,10 @@ export default function 洗髓循环模拟() {
         </div>
         <Buff列表 标题='自身 Buff' 列表={自身增益} 当前帧={当前帧} />
         <Buff列表 标题='目标 Buff' 列表={目标增益} 当前帧={当前帧} />
-        <div className='mingzun-rotation-live-metrics'>
-          <output aria-label='DPS' className='mingzun-rotation-live-dps'>{模拟?.结果 ? 数字.format(模拟.结果.秒伤) : '—'}</output>
+        <div className='mingzun-rotation-live-metrics' title={查看节点 ? `截至第 ${选中位置 + 1} 项的计算结果` : undefined}>
+          <output aria-label='DPS' className='mingzun-rotation-live-dps'>{当前秒伤 === undefined ? '—' : 数字.format(当前秒伤)}</output>
           <div className='mingzun-rotation-live-duration'><label>战斗用时</label>
-            <output aria-label='战斗用时'>{模拟?.中断 ? '—' : 数字.format(模拟?.结算时长 ?? 0) + '秒'}</output>
+            <output aria-label='战斗用时'>{当前用时 === undefined ? '—' : 数字.format(当前用时) + '秒'}</output>
           </div>
         </div>
       </section>
@@ -341,15 +357,15 @@ export default function 洗髓循环模拟() {
           <h3>{组}</h3>
           <div className='mingzun-rotation-skill-buttons'>
             {技能列表.filter((技能) => 洗髓逐招技能[技能].分组 === 组).map((技能) => {
-              const 状态 = 模拟?.技能冷却[技能]
+              const 状态 = 当前模拟?.技能冷却[技能]
               const 冷却 = Math.ceil(状态?.冷却秒 ?? 0)
               const 充能剩余 = 状态?.恢复秒 ? Math.ceil(状态.恢复秒) : 0
               return <button type='button' key={技能} className='mingzun-rotation-skill-button'
                 aria-label={技能} aria-disabled={!!状态?.原因 || undefined}
                 data-blocked={!!状态?.原因 && !冷却} data-cooling={冷却 > 0}
-                disabled={达到上限 || !配置 || !!模拟?.中断}
-                title={状态?.原因 ?? (充能剩余 ? '下一层 ' + 充能剩余 + ' 秒' : undefined)}
-                onClick={() => { if (!状态?.原因) 添加(技能) }}>
+                disabled={达到上限 || !配置 || !!当前模拟?.中断 || (查看节点 && !节点模拟)}
+                title={状态?.原因 ?? (充能剩余 ? '下一层 ' + 充能剩余 + ' 秒' : 选中行 ? '插在所选节点后' : undefined)}
+                onClick={() => { if (!状态?.原因) 添加(技能, 技能插入位置) }}>
                 <span className='mingzun-rotation-skill-art'>
                   <招式图标 指令={技能} />
                   {!!(冷却 || 充能剩余) && <span className='mingzun-rotation-cooldown' data-recharging={!冷却}>{冷却 || 充能剩余}</span>}
@@ -360,7 +376,7 @@ export default function 洗髓循环模拟() {
             })}
           </div>
         </div>)}
-        <button type='button' className='mingzun-rotation-skill-button' disabled={达到上限} onClick={() => 添加({ 等待: 1 })}>
+        <button type='button' className='mingzun-rotation-skill-button' disabled={达到上限} onClick={() => 添加({ 等待: 1 }, 技能插入位置)}>
           <招式图标 指令={{ 等待: 1 }} /><span>等待</span>
         </button>
       </div>

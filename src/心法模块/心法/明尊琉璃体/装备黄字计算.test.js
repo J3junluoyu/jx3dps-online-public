@@ -21,6 +21,7 @@ import { 转换明尊配装, 转换明尊基础属性, 获取五十级装备数�
 import { 获取技能统计数据 } from '@/功能模块/计算结果/结果统计/util'
 import { 优化明尊方案, 获取优化GCD } from './方案优化'
 import { 获取明尊战斗增益, 明尊小药小吃 } from './增益'
+import { 计算洗髓面板 } from '@/心法模块/心法/洗髓经/计算'
 import cycles from './计算循环'
 
 jest.setTimeout(120000)
@@ -50,18 +51,40 @@ const normal = [
   { 技能名称: '武伤', 技能数量: 0 },
 ]
 
-test('当前42件、30种黄字全部有对应结算，未知效果仍明确保留未计入', () => {
+test('当前43件、31种黄字全部有对应结算，未知效果仍明确保留未计入', () => {
   const selected = GEAR_ITEMS.filter((row) => row.specialEffects?.length)
-  expect(selected).toHaveLength(42)
+  expect(selected).toHaveLength(43)
   expect(
     new Set(selected.flatMap((row) => row.specialEffects.map((effect) => effect.key))).size,
-  ).toBe(30)
+  ).toBe(31)
   expect(selected.flatMap((row) => row.specialEffects).every(equipmentEffectSupported)).toBe(true)
   expect(equipmentEffectSupported({ key: 'gain_999_1' })).toBe(false)
   expect(
     calculateLoadout({ belt: { key: gear(112458).key, strength: 6, embeds: [], enchantId: 0 } })
       .warnings,
   ).not.toContain('触发特效')
+})
+
+test('月落影在两心法的配装器可选，进战黄字增加313点无双', () => {
+  for (const 心法 of ['明尊琉璃体', '洗髓经']) {
+    const 条目 = Object.values(获取五十级装备数据(心法))
+      .flat()
+      .find((item) => item.id === 49936)
+    expect(条目).toMatchObject({
+      装备名称: '月落影',
+      装备品级: 1280,
+      装备黄字特效: [{ 标识: 'gain_41065_4', 已计入计算: true }],
+    })
+  }
+  const 戒指 = { key: 'trinkets:49936', strength: 0, embeds: [], enchantId: 0 }
+  const { stats, specialEffects } = calculateLoadout({ ring1: 戒指 })
+  expect(stats).toMatchObject({ haste: 436, strain: 0 })
+  for (const 计算面板 of [calculateAttributes, 计算洗髓面板]) {
+    const 进战 = 计算面板(stats, { ...settings, equipmentEffects: specialEffects })
+    const 基准 = 计算面板(stats, settings)
+    expect(进战.strainRating - 基准.strainRating).toBe(313)
+  }
+  expect(gear(49929)).toBeUndefined()
 })
 
 test.each([

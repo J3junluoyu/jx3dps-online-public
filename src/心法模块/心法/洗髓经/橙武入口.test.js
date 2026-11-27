@@ -85,7 +85,7 @@ test('主界面手编循环使用固定平均覆盖，团队开关控制是否�
   expect(dispatch).toHaveBeenCalledWith({ type: 'test/result', payload: 启用 })
 })
 
-test('保存的洗髓宏按实际节点结算，普通循环用同一组固定平均覆盖', () => {
+test('洗髓手编未插增益时与宏循环共用实际节点，理论循环使用固定平均覆盖', () => {
   const 装备 = calculateLoadout(配装.slots, 配装.stone).stats
   const 配置 = 生成洗髓宏循环('/cast 普渡四方', 40, 装备, 获取洗髓计算设置(), {
     起手禅那: 0, 延迟: 40, 目标等级: 54, 序列: [],
@@ -105,6 +105,11 @@ test('保存的洗髓宏按实际节点结算，普通循环用同一组固定�
     { 名称: '号令三军', 覆盖率: 100 },
     { 名称: '仙王蛊鼎', 覆盖率: 75 },
   ]))
+  state.data.自定义循环列表[0].洗髓逐招配置 = { ...配置, 宏生成: false }
+  expect(计算()).toEqual(宏结果)
+  state.data.增益启用 = false
+  expect(计算().循环内增益).toBeUndefined()
+  state.data.增益启用 = true
   const 预期无双 = 34 * (40 + 20) * 0.1 + 3 * 40 * 0.5 + 26 * 40 * 0.3 + 41 * 40 * 0.08
   expect(获取洗髓计算设置({ 团队增益 }, true).gains.strain_base).toBeCloseTo(预期无双)
   state.data.当前计算循环名称 = '自适应理论循环'

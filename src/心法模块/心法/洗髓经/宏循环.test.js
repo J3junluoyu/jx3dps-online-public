@@ -52,6 +52,20 @@ test('无招可用时合并等待，直到擒龙充能恢复或抵达战斗截�
   expect(模拟.结算时长).toBe(31)
 })
 
+test('降魔境夹在两招之间不延长出招间隔，手动和宏回放同帧生效', () => {
+  const 配置 = 生成('/cast [last_skill=普渡四方] 降魔境\n/cast 普渡四方', 4)
+  expect(配置.序列.slice(0, 3)).toEqual(['普渡四方', '橙武·降魔境', '普渡四方'])
+  const 手动 = { ...起手, 序列: 配置.序列.slice(0, 3) }
+  const 基准 = 回放({ ...手动, 序列: ['普渡四方', '普渡四方'] })
+  const 模拟 = 回放(手动)
+  const 同帧 = 基准.施放列表[1].开始帧
+  expect(模拟.施放列表.map(({ 开始帧 }) => 开始帧)).toEqual([0, 同帧, 同帧])
+  expect(模拟.结算时长).toBe(基准.结算时长)
+  expect(模拟.施放列表[2].施放前).toMatchObject({ 禅那: 3 })
+  expect(模拟.施放列表[2].施放前.到期.cw).toBeCloseTo(同帧 + 96)
+  expect(回放(配置).施放列表.slice(0, 3)).toEqual(模拟.施放列表)
+})
+
 test('洗髓宏按当前层数放入团队节点，旧覆盖率和队友施放不会改变出招顺序', () => {
   const 配置 = JSON.parse(JSON.stringify(生成('/cast 普渡四方', 33)))
   expect(配置.宏生成).toBe(true)

@@ -78,6 +78,8 @@ test('洗髓低档逐招循环支持固定帧，慢档不接受更快的配装',
   expect(result.after.dps).toBeCloseTo(模拟洗髓逐招(实际装备.stats, {
     ...复算设置, equipmentEffects: 实际装备.specialEffects,
   }, 洗髓逐招配置, { 宏团队增益: teamGains }).结果.秒伤, 8)
+  const 手编循环 = { ...cycle, 洗髓逐招配置: { ...洗髓逐招配置, 宏生成: false } }
+  expect(优化明尊方案({ ...input, cycle: 手编循环 }).after.dps).toBeCloseTo(result.after.dps, 8)
   const 关闭团队增益 = 优化明尊方案({ ...input, teamGains: [] })
   const 无团队增益 = 优化明尊方案({ ...input, cycle: { ...cycle, 洗髓逐招配置 }, teamGains: [] })
   expect(关闭团队增益.after.dps).toBe(无团队增益.after.dps)
