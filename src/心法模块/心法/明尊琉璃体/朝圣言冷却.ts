@@ -1,5 +1,5 @@
 import useCycle from '@/hooks/use-cycle'
-import type { 循环对比输入 } from './循环对比'
+import type { 数据模块类型 } from '@/store/data'
 import { isMingzunOrangeWeapon } from './装备'
 import { 自适应光明心循环名称 } from './计算循环/循环联动'
 import 时间轴 from './朝圣言时间轴.json'
@@ -282,7 +282,9 @@ export function 模拟流沙度朝圣言(): 朝圣言模拟结果 {
   return 流沙度缓存
 }
 
-export function 模拟朝圣言冷却(输入: 循环对比输入, 循环名称: string): 朝圣言模拟结果 {
+type 朝圣言模拟输入 = Pick<数据模块类型, '装备信息' | '增益数据' | '增益启用' | '当前奇穴信息'>
+
+export function 模拟朝圣言冷却(输入: 朝圣言模拟输入, 循环名称: string): 朝圣言模拟结果 {
   if (!朝圣言循环选项.some((项) => 项.value === 循环名称)) {
     throw new Error('请选择已有的自适应循环')
   }

@@ -1,7 +1,7 @@
 import type { 循环数据 } from '@/@types/循环'
 import { 小吃类型枚举 } from '@/@types/枚举'
 import type { 团队增益选项数据类型 } from '@/@types/团队增益'
-import type { Settings } from './计算'
+import type { EquipmentStats, Settings } from './计算'
 import { calculateAttributes, ratingScale } from './计算'
 import {
   GEAR_ITEMS,
@@ -24,6 +24,7 @@ import { MAJOR_ENCHANTS, matchMajorEnchant } from './大附魔'
 import type { EquipmentSpecialEffect } from './装备特效'
 import { 计算洗髓面板, 计算洗髓循环, 获取洗髓增益属性 } from '../洗髓经/计算'
 import { 洗髓自适应循环 } from '../洗髓经/循环'
+import { 创建循环节点增益 } from './宏团队增益'
 import { 创建推荐逐招计算, 获取推荐逐招帧数, 获取逐招推荐范围 } from './推荐逐招'
 import 明尊循环列表 from './计算循环'
 import { 获取理论档位循环 } from './计算循环/理论循环'
@@ -345,6 +346,11 @@ function 搜索推荐方案(
   if (逐招帧数.length && (逐招档 === undefined || !支持帧数.includes(逐招档) || !逐招帧数.includes(逐招档)))
     throw new Error(xisui ? '洗髓逐招推荐仅计算3、4、5档' : '明尊逐招推荐仅计算2、3、4档')
   const 逐招计算 = 逐招档 === undefined ? undefined : 创建推荐逐招计算(input, 逐招档)
+  const 节点增益 = !逐招计算 && detail ? 创建循环节点增益(input.teamGains, detail.战斗时间) : undefined
+  const 计算模板秒伤 = (装备: EquipmentStats, 设置: Settings, 详情: 循环数据['循环详情'][number]) =>
+    xisui
+      ? 计算洗髓循环(装备, 设置, 详情.技能详情, 详情.战斗时间, false, undefined, undefined, 节点增益).秒伤
+      : 计算明尊基础循环(装备, 设置, 详情.技能详情, 详情.战斗时间, false, 节点增益).秒伤
   const tier = 逐招计算 ? baseFrames - 逐招档! : Number(detail?.循环加速等级)
   if (!逐招计算 && !(xisui ? [3, 4, 5] : [3, 4]).includes(tier))
     throw new Error(xisui ? '请选择洗髓3、4、5档循环' : '请选择0.81GCD或0.75GCD循环')
@@ -541,7 +547,7 @@ function 搜索推荐方案(
     const gainData = {
       阵眼: plan.formation,
       小吃: plan.consumables,
-      团队增益: 逐招计算?.平均团队增益 ?? input.teamGains ?? [],
+      团队增益: 逐招计算?.平均团队增益 ?? 节点增益?.平均团队增益 ?? input.teamGains ?? [],
     }
     const gains = xisui
       ? 获取洗髓增益属性(gainData, true)
@@ -580,9 +586,7 @@ function 搜索推荐方案(
     const 实际GCD = 获取优化GCD(panel.hasteRating, baseFrames)
     const dps = 逐招计算
       ? 逐招计算.计算秒伤(stats, settings, panel, 实际GCD === gcd)
-      : (xisui ? 计算洗髓循环 : 计算明尊基础循环)(
-          stats, settings, detail.技能详情, detail.战斗时间, false,
-        ).秒伤
+      : 计算模板秒伤(stats, settings, detail)
     const metrics = {
       dps: dps ?? 0,
       ...panelConstraints(panel),
@@ -634,15 +638,7 @@ function 搜索推荐方案(
     const { stats, settings } = panelFor(input.initial)
     before = {
       ...initial.metrics,
-      dps: actual
-        ? (xisui ? 计算洗髓循环 : 计算明尊基础循环)(
-            stats,
-            settings,
-            actual.技能详情,
-            actual.战斗时间,
-            false,
-          ).秒伤
-        : 0,
+      dps: actual ? 计算模板秒伤(stats, settings, actual) : 0,
       ...(input.allowHigherHaste ? { simulatedGcd: initial.metrics.gcd } : {}),
     }
   }

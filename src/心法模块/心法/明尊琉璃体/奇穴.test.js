@@ -13,13 +13,18 @@ import {
   SKILLS,
 } from './index'
 
-test('六层默认方案包含三个固定奇穴，混池单独选择', () => {
-  expect(DEFAULT_TALENTS).toEqual(['14678', '25355', '26717', '25166', '6895', '6760'])
-  expect(TALENT_LAYOUT.map((tier) => tier.ids.length)).toEqual([1, 1, 1, 2, 2, 3])
+test('公开版第六层只提供光明心，混池单独选择', () => {
+  expect(DEFAULT_TALENTS).toEqual(['14678', '25355', '26717', '25166', '6895', '6771'])
+  expect(TALENT_LAYOUT.map((tier) => tier.ids.length)).toEqual([1, 1, 1, 2, 2, 1])
+  expect(require('./奇穴').default[5]).toMatchObject({
+    是否不可编辑: true,
+    奇穴列表: [expect.objectContaining({ id: '6771', 奇穴名称: '光明心' })],
+  })
+  for (const id of ['6760', '21835']) expect(() => selectTierTalent(DEFAULT_TALENTS, 5, id)).toThrow('奇穴不属于该层')
   expect(POOL_TALENT_IDS).toEqual(['18279', '5974', '14698', '44569', '6000', '6766'])
   expect(() => validateSettings(DEFAULT_SETTINGS)).not.toThrow()
 })
-test('第四至六层互斥切换，前三层不能移除或选其他奇穴', () => {
+test('第四层可互斥切换，固定奇穴保持有效', () => {
   const selected = selectTierTalent(DEFAULT_TALENTS, 3, '18296')
   expect(selected).toContain('18296')
   expect(selected).not.toContain('25166')
@@ -49,8 +54,8 @@ test('混池最多三项，不占用六层单选名额', () => {
   ).toThrow('混池')
 })
 test('旧记录迁移保留有效层选和混池，不保留不允许的奇穴或重复项', () => {
-  const migrated = normalizeTalents(['18296', '21835', '18279', '6898', '18279'])
-  expect(migrated).toEqual(['14678', '25355', '26717', '18296', '6895', '21835', '18279'])
+  const migrated = normalizeTalents(['18296', '21835', '6760', '18279', '6898', '18279'])
+  expect(migrated).toEqual(['14678', '25355', '26717', '18296', '6895', '6771', '18279'])
   expect(() => validateSettings({ ...DEFAULT_SETTINGS, talents: migrated })).not.toThrow()
 })
 

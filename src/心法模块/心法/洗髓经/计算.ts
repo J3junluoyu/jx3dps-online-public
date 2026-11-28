@@ -21,6 +21,8 @@ import { 获取洗髓设置, 洗髓气劲 } from './气劲'
 import 参考数据 from './参考数据.json'
 import 橙武神兵 from './橙武神兵.json'
 import { 适配洗髓橙武循环 } from './橙武循环'
+import { 获取节点附加无双 } from '../明尊琉璃体/宏团队增益'
+import type { 循环节点增益 } from '../明尊琉璃体/宏团队增益'
 
 type 状态 = NonNullable<循环技能详情['洗髓技能状态']>
 export type 洗髓伤害行 = 循环技能详情 & { 时间?: number; 团队无双?: number }
@@ -147,6 +149,7 @@ export function 计算洗髓循环(
   details = true,
   记录伤害?: (时间: number, 伤害: number, 命中序号?: number) => void,
   查询团队无双?: (时间: number) => number,
+  节点增益?: 循环节点增益,
 ): 当前计算结果类型 {
   if (!Number.isFinite(duration) || duration <= 0) throw new Error('循环时长必须大于零')
   rows = 适配洗髓橙武循环(rows, settings)
@@ -181,9 +184,22 @@ export function 计算洗髓循环(
   const panels = new Map<string, 面板缓存项[]>()
   const resultRows = new Map<string, 计算结果技能列表类型>()
   let total = 0
-  for (const [序号, { row, skill, flags, weight }] of entries.entries()) {
+  const 时长分组 = 节点增益?.时长分组.map((组) => ({ 无双: 获取节点附加无双(组), 占比: 组.占比 }))
+  const 计伤分项 = 节点增益 ? entries.flatMap((项) => {
+    const { row, flags, weight } = 项
+    const 帧 = flags.命中帧
+    if (!row.技能数量 || !weight) return []
+    if (帧?.length === row.技能数量) {
+      return 节点增益.获取分组(帧).map((组) => ({
+        ...项, weight: weight * 组.数量 / row.技能数量, 节点无双: 获取节点附加无双(组),
+      }))
+    }
+    return 时长分组!.map(({ 无双, 占比 }) => ({ ...项, weight: weight * 占比, 节点无双: 无双 }))
+  }) : entries
+  for (const [序号, 项] of 计伤分项.entries()) {
+    const { row, skill, flags, weight } = 项
     if (!row.技能数量 || !weight) continue
-    const 团队无双 = row.团队无双 ?? 查询团队无双?.(row.时间!) ?? 0
+    const 团队无双 = '节点无双' in 项 ? Number(项.节点无双) : row.团队无双 ?? 查询团队无双?.(row.时间!) ?? 0
     const 水层数 = 水特效?.stacksBeforeHit(row.时间! * 16, 水特效命中掩码[skill.id] ?? 0) ?? 0
     const { qin, gold, ring, lidi, chanyu, cw, dashan } = flags
     const 技能状态 =

@@ -40,8 +40,11 @@ for (const tier of [3, 4, 5]) {
       技能名称: event.name,
       技能数量: 0,
       洗髓自适应档位: tier,
-      洗髓技能状态: { 技能键: event.key, ...event.flags },
+      洗髓技能状态: { 技能键: event.key, ...event.flags, 命中帧: [] },
     }
+    if (!Number.isFinite(event.time) || event.time < 0 || event.time >= result.end)
+      throw new Error(`命中时点超出${tier}档循环范围`)
+    row.洗髓技能状态.命中帧.push(Math.round(event.time * 16 * 1e6) / 1e6)
     row.技能数量++
     rows.set(key, row)
   }
@@ -59,7 +62,8 @@ for (const tier of [3, 4, 5]) {
 }
 fs.writeFileSync(
   path.resolve(__dirname, `../src/心法模块/心法/洗髓经/${orange ? '橙武循环记录' : '循环记录'}.json`),
-  JSON.stringify(output, null, 2) + '\n',
+  JSON.stringify(output, null, 2).replace(/("命中帧": )\[\s*([\d.,\s]+)\]/g,
+    (_, field, frames) => field + '[' + frames.replace(/\s/g, '').replace(/,/g, ', ') + ']') + '\n',
 )
 console.log(
   Object.fromEntries(

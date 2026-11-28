@@ -12,7 +12,6 @@ import 获取当前数据 from '@/数据/数据工具/获取当前数据'
 import type { 循环数据 } from '@/@types/循环'
 import { TARGETS } from '@/心法模块/心法/明尊琉璃体/计算'
 import { isXisuiOrangeWeapon } from '@/心法模块/心法/明尊琉璃体/装备'
-import { 获取默认团队增益节点 } from '@/心法模块/心法/明尊琉璃体/宏团队增益'
 import 明尊图标 from '@/心法模块/心法/明尊琉璃体/逐招技能图标.json'
 import {
   团队增益基础冷却秒, 获取明尊时间点增益, 明尊团队增益持续秒, 统一明尊循环增益名称,
@@ -103,12 +102,12 @@ export default function 洗髓循环模拟() {
     xisuiOrangeWeapon: !!装备信息?.装备列表?.some((项) => isXisuiOrangeWeapon(项?.id)),
   }), [装备信息])
   const 设置 = useMemo(() => 配置 && ({
-    ...获取洗髓逐招设置(配置, 增益数据, 增益启用, 目标, true), ...特效,
+    ...获取洗髓逐招设置(增益数据, 增益启用, 目标, true), ...特效,
   }), [配置, 增益数据, 增益启用, 目标, 特效])
   const 记录命中 = 页 === 'hits'
   const 记录曲线 = 页 === 'curve'
   const 计算详情 = 页 === 'summary'
-  const 宏团队增益 = 获取默认团队增益节点(配置?.序列, 配置?.宏生成) ? 增益数据?.团队增益 : undefined
+  const 宏团队增益 = 增益数据?.团队增益
   const { 模拟, 错误 } = useMemo(() => {
     if (!配置 || !设置) return { 错误: '请填写起手禅那和网络延迟' }
     try {

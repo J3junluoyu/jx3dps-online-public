@@ -25,7 +25,6 @@ interface 宏输入参数<技能 extends string> {
   时长?: number
   有序列: boolean
   禁用: boolean
-  孤月无心?: boolean
   初始方案?: 分段宏方案<技能>
   生成: (方案: 分段宏方案<技能>, 时长: number) => void
 }
@@ -48,7 +47,7 @@ export default function 明尊分段宏生成(props: 宏输入参数<明尊施�
 }
 
 export function 分段宏生成<技能 extends string>({
-  时长, 有序列, 禁用, 孤月无心, 初始方案, 生成, 预设,
+  时长, 有序列, 禁用, 初始方案, 生成, 预设,
 }: 宏输入参数<技能> & { 预设: 宏输入预设<技能> }) {
   const id = useId()
   const 技能选项 = 预设.技能列表.map((技能) => ({ value: 技能, label: 技能 }))
@@ -64,12 +63,10 @@ export function 分段宏生成<技能 extends string>({
   const [爆发宏, 设置爆发宏] = useState(爆发?.宏 ?? '')
   const [起爆技能, 设置起爆技能] = useState(爆发?.起爆技能 ?? 预设.默认起爆技能)
   const [同时就绪, 设置同时就绪] = useState<技能[]>(爆发?.同时就绪 ?? [])
-  const [最低充能, 设置最低充能] = useState<0 | 1 | 2>(爆发?.最低光明相充能 ?? 0)
   const [附加条件, 设置附加条件] = useState(爆发?.附加条件 ?? '')
   const [爆发结束方式, 设置爆发结束方式] = useState<'Buff' | '技能'>(爆发收尾 ? '技能' : 'Buff')
   const [结束Buff, 设置结束Buff] = useState(爆发 && 'Buff' in 爆发.结束 ? 爆发.结束.Buff : 预设.默认结束Buff)
   const [爆发结束技能, 设置爆发结束技能] = useState(爆发收尾 ?? 预设.默认爆发收尾技能)
-  const 显示充能 = 孤月无心 && [起爆技能, ...同时就绪].some((技能) => 技能 === '光明相')
 
   return <宏生成
     时长={时长} 最长时长={预设.最长时长} 有序列={有序列} 禁用={禁用}
@@ -83,7 +80,6 @@ export function 分段宏生成<技能 extends string>({
       设置爆发宏('')
       设置起爆技能(预设.默认起爆技能)
       设置同时就绪([])
-      设置最低充能(0)
       设置附加条件('')
       设置爆发结束方式('Buff')
       设置结束Buff(预设.默认结束Buff)
@@ -133,14 +129,7 @@ export function 分段宏生成<技能 extends string>({
           </Form.Item></Col>
         </Row>
         <Row gutter={12}>
-          {显示充能 && <Col xs={24} sm={12}><Form.Item label='光明相充能要求' htmlFor={id + '-burst-charges'}>
-            <Select id={id + '-burst-charges'} value={最低充能} onChange={设置最低充能} options={[
-              { value: 0, label: '按技能可用状态' },
-              { value: 1, label: '至少 1 层' },
-              { value: 2, label: '至少 2 层' },
-            ]} />
-          </Form.Item></Col>}
-          <Col xs={24} sm={显示充能 ? 12 : 24}><Form.Item label='切换附加条件（可选）' htmlFor={id + '-burst-condition'}
+          <Col span={24}><Form.Item label='切换附加条件（可选）' htmlFor={id + '-burst-condition'}
             extra='这一栏限制何时切宏。单个招式的施放条件可写在对应宏行里。'>
             <Input id={id + '-burst-condition'} value={附加条件} onChange={(事件) => 设置附加条件(事件.target.value)}
               placeholder='留空时按上方就绪设置切换' />
@@ -171,7 +160,7 @@ export function 分段宏生成<技能 extends string>({
         宏: 起手宏, 结束: 起手结束方式 === '时间' ? { 秒数: 起手秒数 ?? 0 } : { 技能: 起手技能 },
       } : undefined,
       爆发: 爆发宏.trim() ? {
-        宏: 爆发宏, 起爆技能, 同时就绪, 最低光明相充能: 显示充能 && 最低充能 ? 最低充能 : undefined, 附加条件,
+        宏: 爆发宏, 起爆技能, 同时就绪, 附加条件,
         结束: 爆发结束方式 === 'Buff' ? { Buff: 结束Buff } : { 技能: 爆发结束技能 },
       } : undefined,
     }, 秒数)}

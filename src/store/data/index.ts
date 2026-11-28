@@ -12,6 +12,7 @@ import 获取当前数据 from '@/数据/数据工具/获取当前数据'
 import { DEFAULT_PROJECT_NAME } from '@/数据/常量'
 import { 获取数据默认值 } from '@/工具函数/init'
 import { 获取明尊固定秘籍 } from '@/心法模块/心法/明尊琉璃体/秘籍'
+import { 规范明尊奇穴 } from '@/计算模块/职业特殊处理/明尊'
 import { 规范洗髓秘籍 } from '@/心法模块/心法/洗髓经/秘籍'
 import { 获取洗髓固定奇穴 } from '@/心法模块/心法/洗髓经/奇穴'
 import { 查找逐招循环 } from '@/心法模块/心法/明尊琉璃体/自定义逐招循环'
@@ -135,13 +136,12 @@ export const 数据模块 = createSlice({
             state.当前计算循环名称 = 规范理论循环名称(数据, 原奇穴)
             const 逐招配置 = 获取明尊逐招(state)
             state.当前奇穴信息 = 根据明尊循环同步奇穴(state.当前计算循环名称, 原奇穴, 逐招配置?.奇穴)
-          } else if (
-            目标属性 === '当前奇穴信息' &&
-            !action.payload.不联动循环 &&
-            !获取明尊逐招(state)
-          ) {
-            const 循环 = 根据明尊奇穴切换循环(原奇穴, 数据 || [])
-            if (循环) state.当前计算循环名称 = 循环
+          } else if (目标属性 === '当前奇穴信息') {
+            state.当前奇穴信息 = 规范明尊奇穴(数据)
+            if (!action.payload.不联动循环 && !获取明尊逐招(state)) {
+              const 循环 = 根据明尊奇穴切换循环(原奇穴, state.当前奇穴信息)
+              if (循环) state.当前计算循环名称 = 循环
+            }
           }
         }
         const 当前方案名称 = state.当前方案名称
@@ -177,6 +177,7 @@ export const 数据模块 = createSlice({
         if (名称 === '洗髓经') 目标方案.当前奇穴信息 = 获取洗髓固定奇穴()
         state.当前计算循环名称 = 目标方案.当前计算循环名称
         if (名称 === '明尊琉璃体') {
+          state.当前奇穴信息 = 规范明尊奇穴(state.当前奇穴信息)
           state.当前计算循环名称 = 规范理论循环名称(state.当前计算循环名称, state.当前奇穴信息)
           state.当前奇穴信息 = 根据明尊循环同步奇穴(
             state.当前计算循环名称, state.当前奇穴信息, 获取明尊逐招(state)?.奇穴,

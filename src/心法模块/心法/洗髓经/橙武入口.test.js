@@ -56,18 +56,18 @@ test('主界面和智能对比入口按每次传入武器重新检测橙武，�
   expect(秒伤计算()(dispatch, () => state).秒伤).toBe(result.秒伤)
 })
 
-test('主界面手编循环使用固定平均覆盖，团队开关控制是否计入', () => {
+test('主界面手编只覆盖同名默认节点，团队开关控制是否计入', () => {
   const 鼓 = { 增益名称: '号令三军', 层数: 100, 启用: true, 覆盖率: 10 }
   const 当前计算循环名称 = '洗髓逐招:起手'
   const state = { data: {
     装备信息: 转换明尊配装(配装.slots, 配装.stone),
-    增益数据: { 团队增益: [鼓] },
+    增益数据: { 团队增益: [鼓, { ...鼓, 增益名称: '寒啸千军' }] },
     增益启用: true,
     当前计算循环名称,
     自定义循环列表: [{
       名称: 当前计算循环名称, 循环详情: [], 洗髓逐招配置: {
         起手禅那: 0, 延迟: 40, 目标等级: 54, 加速帧数: 21,
-        序列: [{ 增益: '号令三军', 层数: 100 }, '擒龙诀', '普渡四方', '韦驮献杵'],
+        序列: ['擒龙诀', '普渡四方', { 增益: '号令三军', 层数: 50 }, '韦驮献杵'],
       },
     }],
   } }
@@ -77,15 +77,17 @@ test('主界面手编循环使用固定平均覆盖，团队开关控制是否�
   expect(启用.计算错误).toBeUndefined()
   expect(启用.秒伤计算时间).toBeCloseTo(2 * 1.3125 + 3 * 0.04)
   expect(启用.秒伤).toBeGreaterThan(关闭.秒伤)
-  expect(启用.循环内增益).toBeUndefined()
-  expect(获取洗髓计算设置(state.data.增益数据, true).gains.strain_base).toBe(510)
-  expect(秒伤计算({ 更新增益数据: { 团队增益: [{ ...鼓, 覆盖率: 0 }] } })(dispatch, () => state)).toEqual(启用)
+  const 覆盖 = Object.fromEntries(启用.循环内增益.覆盖.map(({ 名称, 覆盖率 }) => [名称, 覆盖率]))
+  expect(覆盖.寒啸千军).toBe(100)
+  expect(覆盖.号令三军).toBeGreaterThan(0)
+  expect(覆盖.号令三军).toBeLessThan(100)
+  expect(秒伤计算({ 更新增益数据: { 团队增益: [{ ...鼓, 层数: 5, 覆盖率: 0 }, state.data.增益数据.团队增益[1]] } })(dispatch, () => state)).toEqual(启用)
   expect(关闭.循环内增益).toBeUndefined()
   expect(启用.计算结果技能列表).toEqual(expect.arrayContaining([expect.objectContaining({ 技能名称: '韦驮献杵' })]))
   expect(dispatch).toHaveBeenCalledWith({ type: 'test/result', payload: 启用 })
 })
 
-test('洗髓手编未插增益时与宏循环共用实际节点，理论循环使用固定平均覆盖', () => {
+test('洗髓手编、宏及理论循环均使用实际节点', () => {
   const 装备 = calculateLoadout(配装.slots, 配装.stone).stats
   const 配置 = 生成洗髓宏循环('/cast 普渡四方', 40, 装备, 获取洗髓计算设置(), {
     起手禅那: 0, 延迟: 40, 目标等级: 54, 序列: [],
@@ -113,9 +115,13 @@ test('洗髓手编未插增益时与宏循环共用实际节点，理论循环�
   const 预期无双 = 34 * (40 + 20) * 0.1 + 3 * 40 * 0.5 + 26 * 40 * 0.3 + 41 * 40 * 0.08
   expect(获取洗髓计算设置({ 团队增益 }, true).gains.strain_base).toBeCloseTo(预期无双)
   state.data.当前计算循环名称 = '自适应理论循环'
-  const 平均结果 = 计算()
-  expect(平均结果.秒伤).toBeGreaterThan(0)
-  expect(平均结果.循环内增益).toBeUndefined()
+  const 节点结果 = 计算()
+  expect(节点结果.秒伤).toBeGreaterThan(0)
+  expect(节点结果.循环内增益.覆盖).toEqual(expect.arrayContaining([
+    { 名称: '朝圣言', 覆盖率: 8 }, { 名称: '号令三军', 覆盖率: 20 }, { 名称: '仙王蛊鼎', 覆盖率: 30 },
+  ]))
   for (const 选项 of 团队增益) 选项.覆盖率 = 100
-  expect(计算()).toEqual(平均结果)
+  expect(计算()).toEqual(节点结果)
+  state.data.增益启用 = false
+  expect(计算().秒伤).toBeLessThan(节点结果.秒伤)
 })

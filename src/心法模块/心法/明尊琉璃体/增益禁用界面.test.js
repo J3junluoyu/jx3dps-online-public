@@ -160,7 +160,7 @@ test('循环和普通增益共用图标，点击可取消，清空后可在设�
 
   mockState.data.增益启用 = false
   render()
-  expect(图标列表.getByRole('button', { name: '取消增益 号令三军' }).dataset.coverage).toBe('20')
+  expect(图标列表.getByRole('button', { name: '取消增益 号令三军' }).dataset.coverage).toBeUndefined()
 })
 
 test('自动宏和未插增益的手动循环显示节点覆盖，填写层数后仍需勾选', () => {
@@ -204,7 +204,7 @@ test('自动宏和未插增益的手动循环显示节点覆盖，填写层数�
     },
   }]
   render()
-  expect(row('号令三军').textContent).toContain('固定覆盖率 20%')
+  expect(row('号令三军').textContent).toContain('自动覆盖 75%')
   expect(row('号令三军').querySelector('input[type="number"]')).toBeNull()
 })
 
@@ -226,19 +226,22 @@ test('点击朝圣言图标同步取消旧版朝圣选项', () => {
   expect(container.querySelector('.tuandui-empty').textContent).toBe('当前无团队增益')
 })
 
-test('自适应光明心显示四项固定覆盖率，仍可独立调整层数和勾选', () => {
-  const 固定选项 = [['号令三军', 20], ['寒啸千军', 50], ['仙王蛊鼎', 30], ['圣浴明心', 8]]
+test('自适应光明心显示四项实际节点覆盖，仍可独立调整层数和勾选', () => {
+  const 节点选项 = [['号令三军', 20], ['寒啸千军', 48.8], ['仙王蛊鼎', 30], ['朝圣言', 8]]
   mockState.data.当前计算循环名称 = '自适应光明心循环'
   mockState.data.增益启用 = true
-  mockState.data.增益数据.团队增益.push(...固定选项.map(([增益名称]) => ({
-    增益名称, 启用: true, 层数: 30, 覆盖率: 99,
+  mockState.data.当前计算结果 = { 循环内增益: { 循环名称: mockState.data.当前计算循环名称,
+    覆盖: 节点选项.map(([名称, 覆盖率]) => ({ 名称, 覆盖率 })),
+  } }
+  mockState.data.增益数据.团队增益.push(...节点选项.map(([名称]) => ({
+    增益名称: 名称 === '朝圣言' ? '圣浴明心' : 名称, 启用: true, 层数: 30, 覆盖率: 99,
   })))
   saveChanges()
   render()
   click('设置增益')
-  for (const [名称, 覆盖率] of 固定选项) {
+  for (const [名称, 覆盖率] of 节点选项) {
     const 项 = row(名称)
-    expect(项.textContent).toContain(`固定覆盖率 ${覆盖率}%`)
+    expect(项.textContent).toContain('自动覆盖 ' + 覆盖率 + '%')
     expect(within(项).queryByRole('spinbutton')).toBeNull()
     expect(within(项).getByRole('checkbox').checked).toBe(true)
     expect(within(项).getByRole('combobox').value).toBe('30')

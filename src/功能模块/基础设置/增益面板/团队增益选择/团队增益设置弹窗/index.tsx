@@ -15,8 +15,6 @@ import { useAppSelector } from '@/hooks'
 import 获取当前数据 from '@/数据/数据工具/获取当前数据'
 import type { 团队增益数据类型, 团队增益类型, 团队增益选项数据类型 } from '@/@types/团队增益'
 import { 获取团队增益禁用原因 } from '@/数据/数据工具/团队增益限制'
-import { 获取明尊固定团队覆盖率 } from '@/心法模块/心法/明尊琉璃体/团队增益预设'
-import { 使用五十级装备 } from '@/心法模块/模块工具/心法模式'
 import { 统一明尊循环增益名称 } from '@/心法模块/心法/明尊琉璃体/逐招时间轴'
 import type { 明尊循环增益覆盖 } from '@/心法模块/心法/明尊琉璃体/逐招模拟'
 import 团队增益图标 from '../团队增益图标'
@@ -48,7 +46,6 @@ interface 团队增益设置属性 {
   onChangeZengyi: (启用: boolean | null, 增益: 团队增益数据类型, 层数?: number, 覆盖率?: number | null) => void
   快捷设置团队增益: (增益?: 团队增益选项数据类型[]) => void
   循环覆盖的团队增益?: ReadonlySet<string>
-  使用宏默认节点: boolean
   循环增益覆盖?: readonly 明尊循环增益覆盖[]
   已勾选循环增益: ReadonlySet<string>
 }
@@ -59,7 +56,6 @@ function 团队增益设置弹窗({
   onChangeZengyi,
   快捷设置团队增益,
   循环覆盖的团队增益,
-  使用宏默认节点,
   循环增益覆盖,
   已勾选循环增益,
 }: 团队增益设置属性) {
@@ -202,18 +198,16 @@ function 团队增益设置弹窗({
               {团队增益
                 .filter((item) => item.团队增益类型 === key)
                 .map((item) => {
-                  const 使用循环设置 = 循环覆盖的团队增益?.has(item.增益名称)
-                  const 按宏节点覆盖 = 使用宏默认节点 && 使用循环设置
-                  const 固定覆盖率 = 使用五十级装备(名称) ? 获取明尊固定团队覆盖率(item.增益名称) : undefined
+                  const 使用循环设置 = 循环覆盖的团队增益?.has(统一明尊循环增益名称(item.增益名称))
                   const 显示名称 = 使用循环设置
                     ? 统一明尊循环增益名称(item.增益名称)
                     : item.增益名称
-                  const 节点覆盖率 = 按宏节点覆盖
+                  const 节点覆盖率 = 使用循环设置
                     ? 循环增益覆盖?.find(({ 名称 }) => 名称 === 显示名称)?.覆盖率
                     : undefined
                   const 增益选项 = 增益数据?.团队增益 ?? []
                   const 当前增益选项 = 增益选项.find((a) => item.增益名称 === a.增益名称) ??
-                    (按宏节点覆盖 || 固定覆盖率 !== undefined
+                    (使用循环设置
                     ? 增益选项.find((a) => 统一明尊循环增益名称(a.增益名称) === 统一明尊循环增益名称(item.增益名称))
                     : undefined)
                   const 当前是否存在冲突增益 = !使用循环设置 && (增益数据?.团队增益 || []).find(
@@ -240,10 +234,10 @@ function 团队增益设置弹窗({
                             data={使用循环设置 ? {
                               ...item,
                               增益名称: 显示名称,
-                              增益描述: 按宏节点覆盖 ? '按车神光明心的时间点和所选层数结算。' : '按循环设置的时段与层数结算。',
+                              增益描述: '按循环的实际施放时间和层数结算。',
                             } : item}
-                            当前数据={使用循环设置 || 固定覆盖率 !== undefined
-                              ? { 层数: 当前增益选项?.层数, 覆盖率: 按宏节点覆盖 ? 节点覆盖率 : 固定覆盖率 }
+                            当前数据={使用循环设置
+                              ? { 层数: 当前增益选项?.层数, 覆盖率: 节点覆盖率 }
                               : 当前增益选项}
                             disabled={禁用}
                           />
@@ -267,18 +261,13 @@ function 团队增益设置弹窗({
                         </div>
                       </Checkbox>
                       <Divider className='tuandui-zengyi-detail-divider' />
-                      {使用循环设置 && !按宏节点覆盖 ? (
-                        <span className='tuandui-zengyi-detail-content'>按循环设置</span>
-                      ) : (
-                        <div className='tuandui-zengyi-detail-content'>
-                          {按宏节点覆盖 || 固定覆盖率 !== undefined ? (
+                      <div className='tuandui-zengyi-detail-content'>
+                          {使用循环设置 ? (
                             <div className='tuandui-zengyi-content-item'>
                               <span className='tuandui-zengyi-content-item-title'>
-                                {按宏节点覆盖
-                                  ? 节点覆盖率 === undefined
-                                    ? '覆盖率按时间节点计算'
-                                    : `自动覆盖 ${覆盖数字.format(节点覆盖率)}%`
-                                  : `固定覆盖率 ${固定覆盖率}%`}
+                                {节点覆盖率 === undefined
+                                  ? '覆盖率按时间节点计算'
+                                  : '自动覆盖 ' + 覆盖数字.format(节点覆盖率) + '%'}
                               </span>
                             </div>
                           ) : (
@@ -326,8 +315,7 @@ function 团队增益设置弹窗({
                               </Select>
                             </div>
                           ) : null}
-                        </div>
-                      )}
+                      </div>
                     </div>
                   )
                 })}

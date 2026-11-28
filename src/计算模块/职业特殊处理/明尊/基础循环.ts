@@ -16,12 +16,16 @@ import { equipmentProcStates, equipmentDamageRows } from '@/心法模块/心法/
 import { isMajorEnchant, majorEnchantContext } from '@/心法模块/心法/明尊琉璃体/大附魔'
 import { 炽炎镇恶触发技能, 计入循环戒火 } from '@/心法模块/心法/明尊琉璃体/戒火斩'
 import { 适配明尊橙武循环 } from '@/心法模块/心法/明尊琉璃体/计算循环/橙武循环'
+import { 获取节点附加无双 } from '@/心法模块/心法/明尊琉璃体/宏团队增益'
+import type { 循环节点增益 } from '@/心法模块/心法/明尊琉璃体/宏团队增益'
+import { 获取圣浴常驻层数 } from '@/心法模块/心法/明尊琉璃体/增益'
 
 type 计算行 = Pick<
   基础循环技能类型,
   '技能名称' | '技能' | '命中倍率' | '驱夷' | '光明相' | '五明'
 > & {
   技能数量: number
+  命中帧?: readonly number[]
 }
 
 const 技能键索引 = new Map(SKILLS.map((技能) => [技能.key, 技能]))
@@ -56,6 +60,7 @@ function 获取理论循环行(列表: 循环技能详情[], 设置: Settings): 
         技能名称: '戒火斩',
         技能: 追加戒火技能,
         技能数量: 状态.施放次数,
+        命中帧: 状态.施放帧,
         命中倍率: 1,
         驱夷: false,
         光明相: false,
@@ -105,6 +110,7 @@ export function 计算明尊基础循环(
   列表: 循环技能详情[],
   战斗时间: number,
   计算技能详情 = true,
+  节点增益?: 循环节点增益,
 ): 当前计算结果类型 {
   if (!Number.isFinite(战斗时间) || 战斗时间 <= 0) throw new Error('循环时长必须大于零')
   列表 = 适配明尊橙武循环(列表, 设置)
@@ -128,8 +134,15 @@ export function 计算明尊基础循环(
         技能数量: 次数(行.技能名称) + (行.技能名称 === '戒火斩' ? 追加戒火斩 : 0),
       }))
   const 面板缓存 = new Map<string, ReturnType<typeof calculateAttributes>>()
+  const 期望伤害缓存 = 节点增益 && !计算技能详情
+    ? new WeakMap<ReturnType<typeof calculateAttributes>, Map<Skill, number>>()
+    : undefined
   // 仍由原Generator计算器校验装备及奇穴，分项状态只改变本条技能。
   const 装备面板 = calculateAttributes(属性, { ...设置, equipmentProcGains: {} })
+  const 常驻朝圣无双 = 节点增益?.常驻圣浴 ? 获取圣浴常驻层数(装备面板.baseVitality) * 41 : 0
+  const 时长分组 = 节点增益?.时长分组.map((组) => ({
+    无双: 获取节点附加无双(组, 常驻朝圣无双), 占比: 组.占比,
+  }))
   const 命中总数 = 计算列表.reduce(
     (合计, 行) => 合计 + (skillAvailable(行.技能, 设置) ? 行.技能数量 * 行.命中倍率 : 0),
     0,
@@ -152,11 +165,12 @@ export function 计算明尊基础循环(
     命中总数,
     大附魔事件,
   )
-  const 获取面板 = (状态: Pick<计算行, '驱夷' | '光明相' | '五明'>, 装备状态索引: number) => {
-    const 键 = `${状态.驱夷}:${状态.光明相}:${状态.五明}:${装备状态索引}`
+  const 获取面板 = (状态: Pick<计算行, '驱夷' | '光明相' | '五明'>, 装备状态索引: number, 团队无双: number) => {
+    const 键 = `${状态.驱夷}:${状态.光明相}:${状态.五明}:${装备状态索引}:${团队无双}`
     if (!面板缓存.has(键)) {
       const 面板 = calculateAttributes(属性, {
         ...设置,
+        gains: 团队无双 ? { ...设置.gains, strain_base: (设置.gains?.strain_base ?? 0) + 团队无双 } : 设置.gains,
         drive: 状态.驱夷,
         light: 状态.光明相,
         equipmentProcGains: 装备状态[装备状态索引].gains,
@@ -175,8 +189,9 @@ export function 计算明尊基础循环(
     数量: number,
     状态: Pick<计算行, '驱夷' | '光明相' | '五明'>,
     装备状态索引: number,
+    团队无双: number,
   ) => {
-    const 面板 = 获取面板(状态, 装备状态索引)
+    const 面板 = 获取面板(状态, 装备状态索引, 团队无双)
     const { range, ...结果 } = calculateSkill(技能, 面板, false, true)
     return { ...结果, 数量, 最小: range!.min, 最大: range!.max, 总伤: 结果.expected * 数量 }
   }
@@ -185,26 +200,45 @@ export function 计算明尊基础循环(
   for (const 行 of 计算列表) {
     const 技能数量 = 行.技能数量
     if (!技能数量 || !skillAvailable(行.技能, 设置)) continue
-    const 原分项 =
-      !理论循环 && 行.技能名称 === '武伤'
+    const 节点分组 = 节点增益 && 行.命中帧?.length === 技能数量 ? 节点增益.获取分组(行.命中帧) : undefined
+    const 技能分项 = !理论循环 && 行.技能名称 === '武伤'
         ? 武伤分配.map((项) => ({
             技能: 项.技能,
             数量: 项.次数,
             状态: { 驱夷: false, 光明相: false, 五明: 项.五明 },
+            团队无双: 0,
           }))
-        : [{ 技能: 行.技能, 数量: 技能数量 * 行.命中倍率, 状态: 行 }]
+        : [{ 技能: 行.技能, 数量: 技能数量 * 行.命中倍率, 状态: 行, 团队无双: 0 }]
+    const 原分项 = 节点分组
+      ? 节点分组.map((组) => ({
+          技能: 行.技能, 数量: 组.数量 * 行.命中倍率, 状态: 行,
+          团队无双: 获取节点附加无双(组, 常驻朝圣无双),
+        }))
+      : 时长分组
+        ? 技能分项.flatMap((项) => 时长分组.map(({ 无双, 占比 }) => ({ ...项, 数量: 项.数量 * 占比, 团队无双: 无双 })))
+        : 技能分项
     if (!计算技能详情) {
       let 本行总伤 = 0
       for (const 项 of 原分项)
         for (const [索引, 状态] of 装备状态.entries()) {
-          const { expected } = calculateSkill(项.技能, 获取面板(项.状态, 索引))
-          本行总伤 += expected * (项.数量 * 状态.weight)
+          const 面板 = 获取面板(项.状态, 索引, 项.团队无双)
+          let 缓存 = 期望伤害缓存?.get(面板)
+          if (期望伤害缓存 && !缓存) {
+            缓存 = new Map<Skill, number>()
+            期望伤害缓存.set(面板, 缓存)
+          }
+          let 期望 = 缓存?.get(项.技能)
+          if (期望 === undefined) {
+            期望 = calculateSkill(项.技能, 面板).expected
+            缓存?.set(项.技能, 期望)
+          }
+          本行总伤 += 期望 * (项.数量 * 状态.weight)
         }
       总伤 += 本行总伤
       continue
     }
     const 分项 = 原分项.flatMap((项) =>
-      装备状态.map((状态, 索引) => 计算分项(项.技能, 项.数量 * 状态.weight, 项.状态, 索引)),
+      装备状态.map((状态, 索引) => 计算分项(项.技能, 项.数量 * 状态.weight, 项.状态, 索引, 项.团队无双)),
     )
     const 本行总伤 = 分项.reduce((合计, 项) => 合计 + 项.总伤, 0)
     总伤 += 本行总伤

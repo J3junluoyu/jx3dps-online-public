@@ -19,10 +19,8 @@ function 朝圣言冷却模拟({ 显示 }: { 显示: boolean }) {
     ({ data }) => ({
       装备信息: data.装备信息,
       当前奇穴信息: data.当前奇穴信息,
-      当前秘籍信息: data.当前秘籍信息,
       增益数据: data.增益数据,
       增益启用: data.增益启用,
-      当前输出计算目标名称: data.当前输出计算目标名称,
     }),
     shallowEqual,
   )
@@ -48,7 +46,7 @@ function 朝圣言冷却模拟({ 显示 }: { 显示: boolean }) {
   return (
     <section className='mingzun-chaosheng' aria-label='朝圣言冷却模拟'>
       <h2>朝圣言冷却模拟</h2>
-      <p className='mingzun-cycle-compare-hint'>
+      <p className='mingzun-tool-hint'>
         {独立
           ? '固定0.69GCD、40ms，以朝圣言更早就绪为目标。'
           : '按月尽天明计算，沿用当前配装与已启用增益。'}
@@ -76,7 +74,7 @@ function 朝圣言冷却模拟({ 显示 }: { 显示: boolean }) {
               </strong>
               <p>8秒 ＋ 冷却经过{结果.冷却经过.toFixed(2)}秒</p>
             </div>
-            <p className='mingzun-cycle-compare-meta'>
+            <p className='mingzun-tool-meta'>
               {结果.gcd === 0.6875 ? '0.69' : 结果.gcd === 0.75 ? '0.75' : '0.81'}GCD · 40ms ·{' '}
               {结果.双满收尾
                 ? '流沙度循环'
@@ -96,7 +94,7 @@ function 朝圣言冷却模拟({ 显示 }: { 显示: boolean }) {
             </div>
           </>
         ) : (
-          <p role='alert' className='mingzun-cycle-compare-error'>
+          <p role='alert' className='mingzun-tool-error'>
             {错误}
           </p>
         )}

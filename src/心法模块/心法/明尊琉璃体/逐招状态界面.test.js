@@ -73,7 +73,7 @@ test.each([
   }
 })
 
-test('模拟直接结算队友朝圣和鼓，外部团队勾选不影响预览，也不占玩家出招时间', () => {
+test('模拟保留手动朝圣和鼓，并加入其他已勾选的默认节点，不占玩家出招时间', () => {
   const oldMatchMedia = window.matchMedia
   window.matchMedia = () => ({ matches: false, addListener: jest.fn(), removeListener: jest.fn() })
   mockState = {
@@ -115,7 +115,9 @@ test('模拟直接结算队友朝圣和鼓，外部团队勾选不影响预览�
       团队增益: [{ 增益名称: '仙王蛊鼎', 启用: true, 层数: 100, 覆盖率: 100 }],
     }
     rerender(<明尊循环模拟 />)
-    expect(读秒伤()).toBe(朝鼓秒伤)
+    expect(读秒伤()).toBeGreaterThan(朝鼓秒伤)
+    expect(读用时()).toBe(原用时)
+    expect(自身.getByRole('img', { name: '仙王蛊鼎' })).toBeTruthy()
   } finally {
     unmount()
     window.matchMedia = oldMatchMedia
@@ -196,12 +198,12 @@ test('自身 Buff 显示法镜层数和剩余时长，等待结束时隐藏已�
   expect(自身.queryByRole('img', { name: '法镜' })).toBeNull()
 })
 
-test('孤月图标同时显示可用层数及恢复倒计时，下一层恢复中仍可施放', () => {
+test('发布版光明相在调息中显示倒计时并阻止施放', () => {
   const 指令 = ['光明相', { 等待: 1 }]
   const { 技能栏状态 } = 生成明尊逐招时间轴(
     { 初始日灵: 0, 初始月魂: 0, 开场戒火: false, 延迟: 0, 序列: 指令 },
     0,
-    { 无量妙境: false, 五明乐见: true, 破魔回月: false, 炽炎镇恶: false, 孤月无心: true },
+    { 无量妙境: false, 五明乐见: true, 破魔回月: false, 炽炎镇恶: false },
     true,
   )
   const 添加指令 = jest.fn()
@@ -215,12 +217,10 @@ test('孤月图标同时显示可用层数及恢复倒计时，下一层恢复�
     />,
   )
   const 光明相 = screen.getByRole('button', { name: '光明相' })
-  expect(within(光明相).getByText('1/2')).toBeTruthy()
-  expect(光明相.dataset.cooling).toBe('false')
-  expect(within(光明相).getByText('79').dataset.recharging).toBe('true')
-  expect(光明相.getAttribute('title')).toContain('下一层还需 79 秒')
+  expect(光明相.dataset.cooling).toBe('true')
+  expect(within(光明相).getByText('59')).toBeTruthy()
   fireEvent.click(光明相)
-  expect(添加指令).toHaveBeenCalledWith(['光明相'])
+  expect(添加指令).not.toHaveBeenCalled()
 })
 
 test('目标 Buff 显示日月斩，技能栏区分条件不足和正在冷却', () => {

@@ -1,11 +1,10 @@
 import React, { lazy, Suspense, useState } from 'react'
 import { Button, Modal } from 'antd'
 
-const 明尊循环对比 = lazy(() => import('../明尊循环对比'))
 const 朝圣言冷却模拟 = lazy(() => import('../朝圣言冷却模拟'))
 const 承伤模型计算 = lazy(() => import('../承伤模型计算'))
 const 技能系数查询 = lazy(() => import('./技能系数查询'))
-type 工具 = '对比' | '朝圣' | '承伤' | '系数'
+type 工具 = '朝圣' | '承伤' | '系数'
 
 function 明尊小工具() {
   const [打开, 设置打开] = useState(false)
@@ -48,12 +47,6 @@ function 明尊小工具() {
           </Button>
         ) : (
           <div className='mingzun-tools-list'>
-            <Button className='mingzun-tool-card' block onClick={() => 打开工具('对比')}>
-              <strong>
-                奇穴对比 <span>›</span>
-              </strong>
-              <small>保留当前配装，对比两套奇穴的DPS变化</small>
-            </Button>
             <Button className='mingzun-tool-card' block onClick={() => 打开工具('朝圣')}>
               <strong>
                 朝圣言冷却模拟 <span>›</span>
@@ -75,11 +68,6 @@ function 明尊小工具() {
           </div>
         )}
         <Suspense fallback={<p role='status'>正在加载工具…</p>}>
-          {用过的工具.对比 && (
-            <div hidden={当前工具 !== '对比'}>
-              <明尊循环对比 />
-            </div>
-          )}
           {用过的工具.朝圣 && (
             <div hidden={当前工具 !== '朝圣'}>
               <朝圣言冷却模拟 显示={打开 && 当前工具 === '朝圣'} />

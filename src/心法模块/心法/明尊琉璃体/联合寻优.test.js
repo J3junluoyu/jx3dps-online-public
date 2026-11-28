@@ -3,6 +3,7 @@ import { GEAR_ITEMS, ENCHANTS, STONES, SLOTS, slotPosition, calculateLoadout } f
 import { calculateAttributes } from './计算'
 import { 获取明尊战斗增益, 明尊小药小吃, 明尊团队增益 } from './增益'
 import { 计算明尊基础循环 } from '@/计算模块/职业特殊处理/明尊/基础循环'
+import { 创建循环节点增益 } from './宏团队增益'
 import 循环列表 from './计算循环'
 import { 获取明尊固定秘籍 } from './秘籍'
 import { 获取明尊计算设置 } from '@/计算模块/职业特殊处理/明尊'
@@ -403,6 +404,7 @@ test.each([
       (item) => !['圣浴明心', '圣浴明心（常驻）', '虚弱', '虚弱（强化）'].includes(item.增益名称),
     )
     .map((item) => ({ 增益名称: item.增益名称, 启用: true, 层数: item.层数, 覆盖率: item.覆盖率 }))
+  const 节点增益 = 创建循环节点增益(teamGains, detail.战斗时间)
   const common = [
     ['药品辅助', 'vitality_base', 203],
     ['食品辅助', 'vitality_base', 158],
@@ -417,7 +419,7 @@ test.each([
   const metrics = (plan) => {
     const stats = calculateLoadout(plan.slots, plan.stone).stats
     const gains = 获取明尊战斗增益(
-      { 阵眼: plan.formation, 小吃: plan.consumables, 团队增益: teamGains },
+      { 阵眼: plan.formation, 小吃: plan.consumables, 团队增益: 节点增益.平均团队增益 },
       true,
       stats,
       settings,
@@ -425,7 +427,7 @@ test.each([
     const final = { ...settings, gains }
     const panel = calculateAttributes(stats, final)
     return {
-      dps: 计算明尊基础循环(stats, final, detail.技能详情, detail.战斗时间, false).秒伤,
+      dps: 计算明尊基础循环(stats, final, detail.技能详情, detail.战斗时间, false, 节点增益).秒伤,
       gcd: 获取优化GCD(panel.hasteRating),
       toughness: panel.toughness * 100,
       vitality: panel.vitality,

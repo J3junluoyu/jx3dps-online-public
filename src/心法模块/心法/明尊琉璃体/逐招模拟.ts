@@ -12,7 +12,7 @@ import { createWaterProc, equipmentDamageRows, equipmentProcStates } from './装
 import { isMajorEnchant, majorEnchantContext } from './大附魔'
 import skillEvents from './大附魔技能事件.json'
 import { 计入循环戒火 } from './戒火斩'
-import { 创建逐招增益查询, 生成明尊逐招时间轴 } from './逐招时间轴'
+import { 创建逐招增益查询, 生成明尊逐招时间轴, 获取循环覆盖的团队增益 } from './逐招时间轴'
 import { 生成宏团队增益施放 } from './宏团队增益'
 import type { 团队增益选项数据类型 } from '@/@types/团队增益'
 import type { 明尊增益窗口, 明尊循环指令, 明尊宏来源, 明尊时间轴选项, 明尊时间轴预览选项 } from './逐招时间轴'
@@ -132,9 +132,7 @@ for (const skill of SKILLS) {
 const 命中掩码: Record<string, number> = skillEvents.masks
 
 export function 获取逐招环境(装备: EquipmentStats, 初始设置: Settings, 加速档位?: 明尊逐招加速档位) {
-  const 孤月无心 = 初始设置.talents.includes('21835')
-  if (!孤月无心 && !初始设置.talents.includes('6771'))
-    throw new Error('请选择光明心或孤月无心奇穴后再模拟')
+  if (!初始设置.talents.includes('6771')) throw new Error('请选择光明心奇穴后再模拟')
   const 设置 = { ...初始设置, light: false, drive: false, differentSlash: false }
   let 常规属性 = calculateAttributes(装备, { ...设置, equipmentProcGains: {} })
   if (加速档位 !== undefined) {
@@ -158,7 +156,6 @@ export function 获取逐招环境(装备: EquipmentStats, 初始设置: Setting
     炽炎镇恶: 设置.talents.includes('44569'),
     斩火: 设置.talents.includes('6766'),
     怜世人: 设置.talents.includes('25355'),
-    孤月无心,
   }
   return { 设置, 常规属性, 郭氏加速, 规则 }
 }
@@ -192,8 +189,10 @@ export function 模拟明尊逐招循环(
   const { 已勾选循环增益 } = 选项
   const 团队增益启用 = (名称: 明尊增益窗口['名称']) =>
     选项.启用循环增益 !== false && (!已勾选循环增益 || 已勾选循环增益.has(名称))
-  const 定时团队施放 = 生成宏团队增益施放(选项.宏团队增益, 结算时长)
-    .filter(({ 技能 }) => 团队增益启用(技能))
+  const 定时团队施放 = 选项.启用循环增益 !== false && 选项.宏团队增益?.length
+    ? 生成宏团队增益施放(选项.宏团队增益, 结算时长, 获取循环覆盖的团队增益(选项.序列))
+        .filter(({ 技能 }) => 团队增益启用(技能))
+    : []
   const 增益窗口: 明尊增益窗口[] = []
   if (选项.启用循环增益 !== false) {
     for (const { 生效窗口 } of 时间轴.施放列表) {

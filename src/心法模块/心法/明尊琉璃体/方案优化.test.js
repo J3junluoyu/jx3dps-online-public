@@ -11,10 +11,11 @@ import { 获取明尊增益属性, 明尊小药小吃 } from './增益'
 import { 明尊阵眼 } from './阵眼'
 import 循环列表 from './计算循环'
 import { 计算明尊基础循环 } from '@/计算模块/职业特殊处理/明尊/基础循环'
+import { 创建循环节点增益 } from './宏团队增益'
 import { 转换明尊配装, 获取明尊配装 } from '@/数据/数据工具/明尊数据适配'
 import { 小吃类型枚举 } from '@/@types/枚举'
 import { 获取明尊计算设置 } from '@/计算模块/职业特殊处理/明尊'
-import { 圣浴常驻名称 } from './增益'
+import { 圣浴常驻名称, 获取圣浴常驻层数 } from './增益'
 import * as 装备模块 from './装备'
 import * as 属性模块 from './计算'
 import * as 基础循环模块 from '@/计算模块/职业特殊处理/明尊/基础循环'
@@ -578,7 +579,7 @@ test('不考虑团队增益及外部传入加成，无法达到要求时不返�
   expect(result.after).toBeUndefined()
 })
 
-test('计入团队增益时按原有层数、覆盖率和当前配装的常驻朝圣计算，不修改团队配置', () => {
+test('计入团队增益时使用施放节点、其他覆盖率及常驻朝圣，不修改团队配置', () => {
   const input = 输入(循环列表[0])
   input.slots = []
   input.minToughness = 0
@@ -593,6 +594,8 @@ test('计入团队增益时按原有层数、覆盖率和当前配装的常驻�
   const original = JSON.stringify(input)
   const result = 优化明尊方案(input)
   expect(result.plan).toBeDefined()
+  const detail = input.cycle.循环详情[0]
+  const 节点增益 = 创建循环节点增益(input.teamGains, detail.战斗时间)
   const verify = (plan, metrics) => {
     const stats = calculateLoadout(plan.slots, plan.stone).stats
     const settings = 获取明尊计算设置(
@@ -601,26 +604,27 @@ test('计入团队增益时按原有层数、覆盖率和当前配装的常驻�
         明尊设置: input.settings,
         阵眼: plan.formation,
         小吃: plan.consumables,
-        团队增益: input.teamGains,
+        团队增益: 节点增益.平均团队增益,
       },
       {},
       input.settings.targetLevel,
       true,
       stats,
     )
-    const detail = input.cycle.循环详情[0]
     const panel = calculateAttributes(stats, settings)
-    expect(metrics.dps).toBe(
-      计算明尊基础循环(stats, settings, detail.技能详情, detail.战斗时间).秒伤,
+    expect(metrics.dps).toBeCloseTo(
+      计算明尊基础循环(stats, settings, detail.技能详情, detail.战斗时间, true, 节点增益).秒伤, 8,
     )
     expect(metrics.haste).toBe(panel.hasteRating)
     expect(metrics.toughness).toBe(panel.toughness * 100)
-    expect(settings.gains.strain_base).toBeGreaterThan(369)
+    expect(settings.gains.strain_base).toBe(获取圣浴常驻层数(panel.baseVitality) * 41)
   }
   verify(input.initial, result.before)
   verify(result.plan, result.after)
   expect(result.after.gcd).toBe(0.8125)
   expect(JSON.stringify(input)).toBe(original)
+  const 改旧覆盖率 = input.teamGains.map((项) => 项.增益名称 === '号令三军' ? { ...项, 覆盖率: 100 } : 项)
+  expect(优化明尊方案({ ...input, teamGains: 改旧覆盖率 }).after.dps).toBe(result.after.dps)
 })
 
 test('同袍的已设置覆盖率可以用于满足最低御劲，关闭团队增益后不能借用这部分御劲', () => {

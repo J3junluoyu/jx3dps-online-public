@@ -22,7 +22,6 @@ import { 明尊逐招加速帧数, 模拟明尊逐招循环, 预览明尊逐招�
 import type { 明尊逐招加速档位, 明尊逐招循环配置 } from '@/心法模块/心法/明尊琉璃体/逐招模拟'
 import { 生成明尊宏循环 } from '@/心法模块/心法/明尊琉璃体/宏循环'
 import type { 明尊宏方案 } from '@/心法模块/心法/明尊琉璃体/宏循环'
-import { 获取默认团队增益节点 } from '@/心法模块/心法/明尊琉璃体/宏团队增益'
 import { 保存最近生成宏, 查找逐招循环, 获取自动重排宏, 读取最近生成宏 } from '@/心法模块/心法/明尊琉璃体/自定义逐招循环'
 import 奇穴选择抽屉 from '../../公用设置/奇穴选择/drawer'
 import 分段宏生成 from './分段宏生成'
@@ -72,7 +71,9 @@ function 明尊循环模拟() {
   const [固定延迟, 设置固定延迟] = useState<number | null | undefined>(已选自动宏 ? undefined : 已选配置?.延迟)
   const 延迟 = 固定延迟 === undefined ? 外部延迟 : 固定延迟
   const [加速档位, 设置加速档位] = useState<明尊逐招加速档位 | '随配装'>(已选配置?.加速档位 ?? '随配装')
-  const [自选奇穴, 设置自选奇穴] = useState<string[] | undefined>(已选自动宏 ? undefined : 已选配置?.奇穴)
+  const [自选奇穴, 设置自选奇穴] = useState<string[] | undefined>(() =>
+    已选自动宏 || !已选配置?.奇穴 ? undefined : 规范明尊奇穴(已选配置.奇穴),
+  )
   const [打开奇穴, 设置打开奇穴] = useState(false)
   const [日灵, 设置日灵] = useState<number | null>(已选配置?.初始日灵 ?? 0)
   const [月魂, 设置月魂] = useState<number | null>(已选配置?.初始月魂 ?? 0)
@@ -135,7 +136,7 @@ function 明尊循环模拟() {
     })) ?? []
   }, [自动宏, 宏配置, 手动序列])
   const 循环指令 = useMemo(() => 宏配置?.序列 ?? 序列.map((行) => 行.指令), [宏配置, 序列])
-  const 宏团队增益 = 获取默认团队增益节点(循环指令, !!自动宏) ? 团队增益 : undefined
+  const 宏团队增益 = 团队增益
   const 宏来源 = useMemo(
     () => 宏配置?.宏来源 ?? (序列.some((行) => 行.宏来源) ? 序列.map((行) => 行.宏来源 ?? null) : undefined),
     [宏配置, 序列],
@@ -255,7 +256,7 @@ function 明尊循环模拟() {
     设置月魂(配置.初始月魂)
     设置已戒火(配置.开场戒火)
     设置背后攻击(配置.背后攻击 ?? false)
-    设置自选奇穴(使用自动宏 ? undefined : 配置.奇穴)
+    设置自选奇穴(使用自动宏 ? undefined : 规范明尊奇穴(配置.奇穴))
     加载配置动作(配置)
     更新宏表单版本((旧) => 旧 + 1)
   }
@@ -288,7 +289,6 @@ function 明尊循环模拟() {
         <div className='mingzun-rotation-tools'>
           <分段宏生成 key={宏表单版本} 时长={战斗时长 ?? 最近宏?.时长} 有序列={!!序列.length}
             禁用={!基础配置} 初始方案={宏方案 ?? 最近宏?.宏方案}
-            孤月无心={设置.talents.includes('21835')}
             生成={(宏, 秒数) => {
               if (!基础配置) return
               生成明尊宏循环(宏, 秒数, 装备, 设置, { ...基础配置, 延迟: 外部延迟, 序列: [] })
@@ -490,7 +490,7 @@ function 明尊循环模拟() {
               {设置.talents.includes('6895') ? '起始 GCD' : '实际 GCD'} <strong>{结果.gcd} 秒</strong>
             </div>
           </div>
-          <p className='mingzun-cycle-compare-hint'>
+          <p className='mingzun-tool-hint'>
             {设置.talents.includes('6771') && '光明心按护盾完整结算。'}
             水·封山和水·灭虚按命中叠层，其余装备触发沿用配装计算器的期望模型，附伤汇总在技能统计中。
           </p>

@@ -133,7 +133,7 @@ export const TALENT_LAYOUT: { label: string; ids: string[]; fixed: boolean }[] =
   { label: '第三层', ids: ['26717'], fixed: true },
   { label: '第四层', ids: ['25166', '18296'], fixed: false },
   { label: '第五层', ids: ['6895', '46492'], fixed: false },
-  { label: '第六层', ids: ['6760', '6771', '21835'], fixed: false },
+  { label: '第六层', ids: ['6771'], fixed: true },
 ]
 export const POOL_TALENT_IDS = ['18279', '5974', '14698', '44569', '6000', '6766']
 export const MAX_POOL_TALENTS = 3
@@ -680,6 +680,7 @@ export function calculateCycle(
   counts: Record<string, number>,
   duration: number,
   includeDetails = true,
+  团队无双状态: readonly { 无双: number; 占比: number }[] = [{ 无双: 0, 占比: 1 }],
 ) {
   if (!Number.isFinite(duration) || duration <= 0) throw new Error('循环时长必须大于零')
   const panel = calculateAttributes(equipment, settings)
@@ -696,10 +697,14 @@ export function calculateCycle(
       )
     : undefined
   const states = equipmentProcStates(effects, panel.hasteRating, duration, hits, majorContext)
-  const panels = states.map((state) => ({
-    ...state,
-    panel: calculateAttributes(equipment, { ...cycleSettings, equipmentProcGains: state.gains }),
-  }))
+  const panels = states.flatMap((state) => 团队无双状态.map(({ 无双, 占比 }) => ({
+    weight: state.weight * 占比,
+    panel: calculateAttributes(equipment, {
+      ...cycleSettings,
+      gains: 无双 ? { ...cycleSettings.gains, strain_base: (cycleSettings.gains?.strain_base ?? 0) + 无双 } : cycleSettings.gains,
+      equipmentProcGains: state.gains,
+    }),
+  })))
   let skillTotal = 0
   const rows = SKILLS.flatMap((skill) => {
     const count = counts[skill.key] ?? 0

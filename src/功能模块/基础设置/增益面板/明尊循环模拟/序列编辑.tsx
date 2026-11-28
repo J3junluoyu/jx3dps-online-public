@@ -585,14 +585,7 @@ function 明尊序列编辑({
               {技能.map((招式) => {
                 const 状态 = 当前技能栏?.[招式]
                 const 不可施放 = 状态?.不可施放原因
-                const 充能 = 状态?.充能
                 const 冷却秒 = Math.ceil((状态?.冷却帧 ?? 0) / 16)
-                const 恢复秒 = Math.ceil((充能?.恢复剩余帧 ?? 0) / 16)
-                const 充能提示 = 充能
-                  ? `充能 ${充能.层数}/${充能.上限}，每层 ${充能.每层帧 / 16} 秒` +
-                    (恢复秒 ? `，下一层还需 ${卡片秒数.format(充能.恢复剩余帧 / 16)} 秒` : '')
-                  : undefined
-                const 显示秒 = 充能?.层数 ? (冷却秒 || 恢复秒) : 冷却秒
                 return (
                   <button
                     key={招式}
@@ -602,25 +595,16 @@ function 明尊序列编辑({
                     aria-disabled={!!不可施放 || undefined}
                     data-blocked={!!不可施放 && !冷却秒}
                     data-cooling={冷却秒 > 0}
-                    title={[不可施放, 充能提示, 选中招式 && '插在所选节点后'].filter(Boolean).join('。') || undefined}
+                    title={[不可施放, 选中招式 && '插在所选节点后'].filter(Boolean).join('。') || undefined}
                     onClick={() => {
                       if (!不可施放) 添加并选中(招式)
                     }}
                   >
                     <span className='mingzun-rotation-skill-art'>
                       <招式图标 指令={招式} />
-                      {显示秒 > 0 && (
-                        <span
-                          className='mingzun-rotation-cooldown'
-                          data-recharging={!!充能 && !冷却秒}
-                          aria-hidden='true'
-                        >
-                          {显示秒}
-                        </span>
-                      )}
-                      {充能 && (
-                        <span className='mingzun-rotation-charge' aria-hidden='true'>
-                          {充能.层数}/{充能.上限}
+                      {冷却秒 > 0 && (
+                        <span className='mingzun-rotation-cooldown' aria-hidden='true'>
+                          {冷却秒}
                         </span>
                       )}
                     </span>

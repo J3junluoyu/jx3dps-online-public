@@ -19,7 +19,7 @@ function 承伤模型计算() {
   return (
     <section className='mingzun-damage-taken' aria-label='承伤模型计算'>
       <h2>承伤模型计算</h2>
-      <p className='mingzun-cycle-compare-hint'>
+      <p className='mingzun-tool-hint'>
         按 {LEVEL} 级防御公式换算，额外减伤作用于防御结算后剩余的伤害。
       </p>
       <Radio.Group
